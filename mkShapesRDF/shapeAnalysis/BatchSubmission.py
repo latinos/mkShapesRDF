@@ -6,7 +6,7 @@ import shutil
 
 class BatchSubmission:
     @staticmethod
-    def resubmitJobs(batchFolder, tag, samples, dryRun):
+    def resubmitJobs(batchFolder, tag, samples, dryRun, queue):
         """
         Resubmit failed jobs and rename the old error file to err-1.txt
         Args:
@@ -26,7 +26,9 @@ class BatchSubmission:
             txt = file.read()
         lines = txt.split("\n")
         line = list(filter(lambda k: k.startswith("queue"), lines))[0]
+        jobflavour = list(filter(lambda k: k.startswith("+JobFlavour"), lines))[0]
         lines[lines.index(line)] = f'queue 1 Folder in {", ".join(samples)}\n '
+        lines[lines.index(jobflavour)] = f'+JobFlavour = "{queue}"\n '
         with open(f"{batchFolder}/{tag}/submit.jdl", "w") as file:
             file.write("\n".join(lines))
 
@@ -109,9 +111,9 @@ class BatchSubmission:
         for sample in self.samples:
             self.createBatch(sample)
 
-    def submit(self, dryRun=0):
+    def submit(self, dryRun=0, queue='workday'):
         txtsh = ""
-        with open("../../start.sh") as file:
+        with open(os.environ['STARTPATH']) as file:
             txtsh += file.read()
 
         mE = self.d.get("mountEOS", [])
@@ -156,7 +158,7 @@ class BatchSubmission:
         txtjdl += "log    = $(Folder)/log.txt\n"
 
         txtjdl += "request_cpus   = 1\n"
-        txtjdl += '+JobFlavour = "workday"\n'
+        txtjdl += f'+JobFlavour = "{queue}"\n'
 
         txtjdl += f'queue 1 Folder in {", ".join(self.folders)}\n'
         with open(f"{self.batchFolder}/{self.tag}/submit.jdl", "w") as file:

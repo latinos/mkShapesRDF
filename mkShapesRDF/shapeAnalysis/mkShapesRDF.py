@@ -102,6 +102,14 @@ def defaultParser():
         required=False,
         default="0",
     )
+    parser.add_argument(
+        "-q",
+        "--queue",
+        choices=['espresso', 'microcentury', 'longlunch', 'workday', 'tomorrow', 'testmatch'],
+        help="Condor queue",
+        required=False,
+        default="workday",
+    )
     return parser
 
 
@@ -113,6 +121,7 @@ def main():
     operationMode = args.operationMode
     doBatch = int(args.doBatch)
     dryRun = int(args.dryRun)
+    queue = args.queue
     global folder
     folder = os.path.abspath(args.folder)
     configsFolder = os.path.abspath(args.folder + "/" + args.configsFolder)
@@ -279,6 +288,11 @@ def main():
         Warning in <Snapshot>: A lazy Snapshot action was booked but never triggered.
         cling::DynamicLibraryManager::loadLibrary(): libOpenGL.so.0: cannot open shared object file: No such file or directory
         Error in <AutoloadLibraryMU>: Failed to load library /cvmfs/sft.cern.ch/lcg/releases/ROOT/6.28.00
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::Hash<1> is available
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ParameterSetBlob is available
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ProcessHistory is available
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ProcessConfiguration is available
+        TClass::Init:0: RuntimeWarning: no dictionary for class pair<edm::Hash<1>,edm::ParameterSetBlob> is available         
         """
         normalErrs = normalErrs.split("\n")
         normalErrs = list(map(lambda k: k.strip(" ").strip("\t"), normalErrs))
@@ -319,7 +333,7 @@ def main():
             if resubmit == 1:
                 from mkShapesRDF.shapeAnalysis.BatchSubmission import BatchSubmission
 
-                BatchSubmission.resubmitJobs(batchFolder, tag, toResubmit, dryRun)
+                BatchSubmission.resubmitJobs(batchFolder, tag, toResubmit, dryRun, queue)
 
         if resubmit == 2:
             # resubmit all the jobs that are not finished
@@ -327,7 +341,7 @@ def main():
             print(toResubmit)
             from mkShapesRDF.shapeAnalysis.BatchSubmission import BatchSubmission
 
-            BatchSubmission.resubmitJobs(batchFolder, tag, toResubmit, dryRun)
+            BatchSubmission.resubmitJobs(batchFolder, tag, toResubmit, dryRun, queue)
 
     elif operationMode == 2:
         print(
@@ -353,7 +367,7 @@ def main():
 
         print(f"Hadding files into {folder}/{outputFolder}/{outputFile}")
         process = subprocess.Popen(
-            f'hadd -j {folder}/{outputFolder}/{outputFile} {" ".join(filesToMerge)}',
+            f'hadd -j 10 {folder}/{outputFolder}/{outputFile} {folder}/{outputFolder}/{outputFileTrunc}__ALL__*.root',
             shell=True,
         )
         process.wait()

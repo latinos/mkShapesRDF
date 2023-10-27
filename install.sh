@@ -15,10 +15,10 @@ cat << EOF > start.sh
 #!/bin/bash
 $sourceCommand
 source `pwd`/myenv/bin/activate
+export STARTPATH=`pwd`/start.sh
 EOF
 
 chmod +x start.sh
-
 
 wget https://gpizzati.web.cern.ch/mkShapesRDF/jsonpog-integration.tar.gz
 tar -xzvf jsonpog-integration.tar.gz
