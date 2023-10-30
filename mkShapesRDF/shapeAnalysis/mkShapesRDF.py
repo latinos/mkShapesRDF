@@ -367,7 +367,9 @@ def main():
 
         print(f"Hadding files into {folder}/{outputFolder}/{outputFile}")
         process = subprocess.Popen(
-            f'hadd -j 10 {folder}/{outputFolder}/{outputFile} {folder}/{outputFolder}/{outputFileTrunc}__ALL__*.root',
+            f'echo {" ".join(filesToMerge)} > filesToMerge_{outputFile}.txt; \
+            while read line; do hadd -j 10 {folder}/{outputFolder}/{outputFile} $line; done < filesToMerge_{outputFile}.txt; \
+            rm filesToMerge_{outputFile}.txt',
             shell=True,
         )
         process.wait()
