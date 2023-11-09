@@ -236,7 +236,7 @@ def main():
                 batchVars,
             )
             batch.createBatches()
-            batch.submit(dryRun)
+            batch.submit(dryRun, queue)
 
         else:
             print("#" * 20, "\n\n", " Running on local machine  ", "\n\n", "#" * 20)
