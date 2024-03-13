@@ -9,4 +9,3 @@ dependencies:
   - gcc
   - cmake
   - ninja
-  - vdt

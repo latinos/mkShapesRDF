@@ -4,7 +4,7 @@ Getting Started
 Installation
 ------------
 
-Git clone the project and work with the `v0.0.1`
+Git clone the project and work with the `master` branch
 
 .. code:: bash
 
@@ -66,7 +66,7 @@ Now you can proceed to the simple installation:
 
 .. code:: bash
 
-   pip install -e ".[docs,dev]"
+   pip install -e ".[docs,dev,processor]"
 
 Now to work with ``mkShapes.processor`` one should also install correctionlib and
 compile it:
@@ -117,12 +117,12 @@ Run the analysis
 
 .. code:: bash
 
-   mkShapesRDF -o 0 -f . -b 1
+   mkShapesRDF -o 0 -b 1
 
 `-o` indicates the operationMode: - 0 run analysis - 1 check batch output and errs - 2
 merge root files
 
-For the provided example (2016Real) it's estimated an execution time of ~ 10 mins
+For the provided example (Full2018_v9) it's estimated an execution time of ~ 10 mins
 running on lxbatch (condor on lxplus) @ CERN when disabling nuisances.
 
 It's highly recommended to limit input ROOT files at the first run to check for errors.
@@ -130,15 +130,15 @@ The following command will only take 1 event for each sample type:
 
 .. code:: bash
 
-   mkShapesRDF -o 0 -f . -l 1
+   mkShapesRDF -o 0 -l 1
 
 Check for errors
 ~~~~~~~~~~~~~~~~
 
-After all the jobs finished (or most of them did) you can run ``mkShapesRDF -o 1 -f .``
+After all the jobs finished (or most of them did) you can run ``mkShapesRDF -o 1``
 to know which jobs failed and why.
 
-One can resubmit failed jobs with ``mkShapesRDF -o 1 -f . -r 1``.
+One can resubmit failed jobs with ``mkShapesRDF -o 1 -r 1``.
 
 While if one wants to resubmit jobs that are still running, the option ``-r 2`` should
 be used.
@@ -150,7 +150,7 @@ If all the jobs succeeded run the merger with the option:
 
 .. code:: bash
 
-   mkShapesRDF -o 2 -f .
+   mkShapesRDF -o 2
 
 Plots
 ~~~~~
@@ -167,4 +167,4 @@ which will create the plots to the specified paths provided in ``configuration.p
 Processor: run the post processing
 ----------------------------------
 
-Coming soon
+See the dedicated section

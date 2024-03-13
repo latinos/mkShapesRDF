@@ -51,7 +51,7 @@ python --version
 python -m pip --version
 
 
-python -m pip install -e ".[docs,dev]"
+python -m pip install -e ".[docs,dev,processor]"
 
 python -m pip install --no-binary=correctionlib correctionlib
 
