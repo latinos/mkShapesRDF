@@ -2,9 +2,12 @@ name: cern
 channels:
   - conda-forge
 dependencies:
+  - python == 3.11
   - pip
-  - root
+  - root == 6.28.12
   - boost
   - gcc
   - cmake
   - ninja
+  - vdt
+
