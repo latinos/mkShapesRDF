@@ -21,7 +21,7 @@ def rnp_array(array, copy=True):
         converted numpy array
     """
     if not isinstance(array, ROOT.TArrayD):
-        raise ("Cannot convert ", array, "to TArrayD")
+        raise ValueError("Cannot convert ", array, "to TArrayD")
     dtype = np.double
     nx = len(array)
     arr = np.ndarray((nx,), dtype=dtype, buffer=array.GetArray())

@@ -96,7 +96,6 @@ def update_variables_with_categories(variables, categoriesmap):
             # otherwise we replace the cut with all the categories
             cutspec.extend(categories)
 
-
 def update_nuisances_with_subsamples(nuisances, subsamplesmap):
     """
     Update nuisances dict with the flatten subsamples.
@@ -108,7 +107,7 @@ def update_nuisances_with_subsamples(nuisances, subsamplesmap):
     subsamplesmap : list
         subsamplesmap as returned by flatten_samples
     """
-    for nuisance in nuisances.items():
+    for _,nuisance in nuisances.items():
         if "samples" not in nuisance:
             continue
 
@@ -159,3 +158,37 @@ def update_nuisances_with_categories(nuisances, categoriesmap):
 
             # otherwise we replace the cut with all the categories
             cutspec.extend(categories)
+
+def update_aliases_with_subsamples(aliases, subsamplesmap, samples):
+    """
+    Update aliases dict with the flatten subsamples.
+
+    Parameters
+    ----------
+    aliases : dict
+        aliases dictionary, will be modified in place
+    subsamplesmap : list
+        subsamplesmap as returned by flatten_samples
+    samples : dict
+        samples dictionary, used to assign its keys to aliases that do not specify any sample
+    """
+    parents     = [parent[0] for parent in subsamplesmap]
+    children    = [children[1] for children in subsamplesmap]
+    for _,alias in aliases.items():
+        if "samples" not in alias:
+            alias["samples"] = samples.keys()
+            for parent in parents:
+                if parent in alias["samples"]:
+                    alias["sample"] .remove(parent)
+                    alias["sample"] += children
+            continue
+
+        samplespec = alias["samples"]
+
+        for sname, subsamples in subsamplesmap:
+            if sname not in samplespec:
+                continue
+            else:
+                samplespec.remove(sname)
+                samplespec += subsamples
+

@@ -27,13 +27,7 @@ def fold(h, ifrom, ito):
         shape = (h.GetNbinsX() + 2, h.GetNbinsY() + 2)
     elif isinstance(h, ROOT.TH1):
         shape = (h.GetNbinsX() + 2,)
-    if array.shape != shape:
-        slices = []
-        for axis, bins in enumerate(shape):
-            if array.shape[axis] == bins - 2:
-                slices.append(slice(1, -1))
-            elif array.shape[axis] == bins:
-                slices.append(slice(None))
+    sumw2 = sumw2.reshape(shape)
 
     if h.GetDimension() == 1:
         cont[ito] += cont[ifrom]
@@ -242,10 +236,10 @@ def postProcessNuisances(filename, samples, aliases, variables, cuts, nuisances)
             or nuisances[nuisance].get("kind", "").endswith("square")
         ):
             continue
+        
+        nuisanceKind = nuisances[nuisance]["kind"].split("_")[1]
         print("work for ", nuisance)
-        # categoriesmap = utils.flatten_cuts(cuts)
         subsamplesmap = utils.flatten_samples(samples)
-
         utils.update_variables_with_categories(variables, categoriesmap)
         utils.update_nuisances_with_subsamples(nuisances, subsamplesmap)
         utils.update_nuisances_with_categories(nuisances, categoriesmap)
@@ -255,7 +249,6 @@ def postProcessNuisances(filename, samples, aliases, variables, cuts, nuisances)
             for variable in variables.keys():
                 f.cd(f"/{cut}/{variable}")
                 print("work in ", cut, variable)
-                histos = [k.GetName() for k in ROOT.gDirectory.GetListOfKeys()]
                 for sampleName in _samples:
                     limitSamples = nuisances[nuisance].get("samples", {})
                     if not (
@@ -263,80 +256,43 @@ def postProcessNuisances(filename, samples, aliases, variables, cuts, nuisances)
                         or sampleName in limitSamples.keys()
                     ):
                         continue
-                    histosNameToProcess = list(
-                        filter(
-                            lambda k: k.startswith(
-                                f"histo_{sampleName}_{nuisances[nuisance]['name']}_SPECIAL_NUIS"
-                            ),
-                            histos,
-                        )
-                    )
-                    histosToProcess = list(
-                        map(
-                            lambda k: ROOT.gDirectory.Get(k).Clone(),
-                            histosNameToProcess,
-                        )
-                    )
-                    if len(histosToProcess) == 0:
-                        print(
-                            f'No variations found for {sampleName} in {cut}/{variable} for nuisance {nuisances[nuisance]["name"]}',
-                            file=sys.stderr,
-                        )
-                        continue
-
-                        sys.exit(1)
-                    hNominal = ROOT.gDirectory.Get(f"histo_{sampleName}").Clone()
-
+                    weights = nuisances[nuisance]["samples"][sampleName]
+                    histoNameToProcess = [f"histo_{sampleName}_{nuisances[nuisance]['name']}_SPECIAL_NUIS_{nuisanceKind}" + str(i) for i in range(0, len(weights))]
+                    hNominal = ROOT.gDirectory.Get(f"histo_{sampleName}")
                     hName = f"histo_{sampleName}_{nuisances[nuisance]['name']}"
-                    h_up = histosToProcess[0].Clone()
-                    h_do = histosToProcess[0].Clone()
-                    variations = np.empty(
-                        (
-                            len(histosToProcess),
-                            histosToProcess[0].GetNbinsX() + 2,
-                        ),
-                        dtype=float,
-                    )
-                    for i in range(len(histosToProcess)):
-                        variations[i, :] = rnp_hist2array(
-                            histosToProcess[i], include_overflow=True, copy=True
-                        )
+                    vnominal = rnp_hist2array(hNominal, include_overflow=True, copy=False)
+                    variations = np.empty((len(weights), vnominal.size), dtype=vnominal.dtype)
                     arrup = 0
                     arrdo = 0
-                    if nuisances[nuisance]["kind"].endswith("envelope"):
+                    for ivar in range(len(weights)):
+                        hVar = ROOT.gDirectory.Get(histoNameToProcess[ivar])
+                        variations[ivar, :] = rnp_hist2array(hVar, include_overflow=True, copy=True)
+                    if nuisanceKind == "envelope":
                         arrup = np.max(variations, axis=0)
                         arrdo = np.min(variations, axis=0)
-                    elif nuisances[nuisance]["kind"].endswith("rms"):
-                        vnominal = rnp_hist2array(
-                            hNominal, include_overflow=True, copy=True
-                        )
-                        arrnom = np.tile(vnominal, (variations.shape[0], 1))
+                    elif nuisanceKind == "rms":
+                        arrnom = np.tile(vnominal.flat, (variations.shape[0], 1))
                         arrv = np.sqrt(np.mean(np.square(variations - arrnom), axis=0))
                         arrup = vnominal + arrv
                         arrdo = vnominal - arrv
-                    elif nuisances[nuisance]["kind"].endswith("square"):
+                    elif nuisanceKind == 'square':
                         vnominal = rnp_hist2array(
                             hNominal, include_overflow=True, copy=True
                         )
                         arrnom = np.tile(vnominal, (variations.shape[0], 1))
-                        # up_is_up = variations > arrnom
                         arrv = np.sqrt(np.sum(np.square(variations - arrnom), axis=0))
                         arrup = vnominal + arrv
                         arrdo = vnominal - arrv
-                        # arrup = np.where(up_is_up, vnominal + arrv, vnominal - arrv)
-                        # arrdo = np.where(~up_is_up, vnominal - arrv, vnominal + arrv)
                     else:
                         continue
                     print(arrup)
                     print(arrdo)
-                    for i in range(len(arrup)):  # includes under/over flow
-                        h_up.SetBinContent(i, arrup[i])
-                        h_do.SetBinContent(i, arrdo[i])
-                    print(hName)
-                    h_up.SetName(hName + "Up")
-                    h_up.Write()
-                    h_do.SetName(hName + "Down")
-                    h_do.Write()
-                    for histo in histosNameToProcess:
-                        ROOT.gDirectory.Delete(f"{histo};*")
+                    histoNameUp     = hName + "Up"
+                    histoNameDown   = hName + "Down"
+                    outputHistoUp   = hNominal.Clone(histoNameUp)
+                    outputHistoDown = hNominal.Clone(histoNameDown)
+                    rnp_array2hist(arrup, outputHistoUp)
+                    rnp_array2hist(arrdo, outputHistoDown)
+                    outputHistoUp.Write()
+                    outputHistoDown.Write()
     f.Close()

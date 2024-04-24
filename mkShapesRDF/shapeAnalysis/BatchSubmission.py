@@ -2,7 +2,7 @@ import subprocess
 from pathlib import Path
 import os
 import shutil
-
+from mkShapesRDF.shapeAnalysis.runner import RunAnalysis
 
 class BatchSubmission:
     @staticmethod
@@ -59,6 +59,7 @@ class BatchSubmission:
         self.tag = tag
 
         self.samples = samples
+        self.splitSamples = RunAnalysis.splitSamples(samples)
         self.d = d
         self.batchVars = batchVars
         self.jdlconfigfile = jdlconfigfile
@@ -85,17 +86,15 @@ class BatchSubmission:
         # python file
 
         txtpy = "from collections import OrderedDict\n"
-
-        _samples = [sample]
-
-        txtpy += f"samples = {str(_samples)}\n"
-
+        ## Need to assign dictionary with subset of files to each sample
+        self.d["samples"][sampleName]["name"] = [(sampleName, sample[1], sample[2])]
         for var in self.batchVars:
             _var = var
             if not isinstance(var, str):
                 _var = var[0]
 
             if _var == "samples":
+                txtpy += f"{_var} = {dict([(sampleName, self.d[_var][sampleName])])}\n"
                 continue
             if isinstance(self.d[_var], int) or isinstance(self.d[_var], float):
                 txtpy += f"{_var} = {self.d[_var]}\n"
@@ -114,7 +113,7 @@ class BatchSubmission:
         except Exception as e:
             print("Error removing directory", e)
 
-        for sample in self.samples:
+        for sample in self.splitSamples:
             self.createBatch(sample)
 
     def submit(self, dryRun=0, queue="workday"):

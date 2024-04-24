@@ -4,6 +4,7 @@ import ROOT
 from array import array
 from mkShapesRDF.lib.parse_cpp import ParseCpp
 from mkShapesRDF.shapeAnalysis.histo_utils import postPlot
+import mkShapesRDF.shapeAnalysis.latinos.LatinosUtils as utils
 
 ROOT.gROOT.SetBatch(True)
 ROOT.TH1.SetDefaultSumw2(True)
@@ -77,13 +78,24 @@ class RunAnalysis:
                     # and the product of the special weights that is in common to all of those files (i.e. sampleType[0])
                     # the common special weight can be retrived from the first of the list of files with this weight
                     # remember that the tuple has always size 3 now, the last position is for the special weight
-                    weight = (
-                        "( "
-                        + samples[sampleName]["weight"]
-                        + " ) * ( "
-                        + types[_type][0][2]
-                        + " )"
-                    )
+                    if useFilesPerJob:
+                        # this option is used in BatchSubmission.py, where the splitSamples function is already called
+                        # once. The first time, only the "special weight" is loaded, and when the runner.py is executed
+                        # in condor jobs, the "special weight" will be multiplied by the common weight (else condition)
+                        weight = (
+                            "( "
+                            + types[_type][0][2]
+                            + " )"
+                        )
+                    else:
+                        weight = (
+                            "( "
+                            + samples[sampleName]["weight"]
+                            + " ) * ( "
+                            + types[_type][0][2]
+                            + " )"
+                        )
+
                     isData = samples[sampleName].get("isData", False)
                     sampleType = (
                         sampleName,
@@ -185,7 +197,11 @@ class RunAnalysis:
 
         """
         self.samples = samples
+        self.splitSamples = RunAnalysis.splitSamples(samples, False)
+        subsamplesmap = utils.flatten_samples(self.samples)
+        parents     = [parent[0] for parent in subsamplesmap]
         self.aliases = aliases
+        utils.update_aliases_with_subsamples(aliases, subsamplesmap, samples)
         self.variables = variables
         self.preselections = cuts["preselections"]
         mergedCuts = {}
@@ -203,6 +219,7 @@ class RunAnalysis:
                 mergedCuts[cut] = {"expr": __cutExpr, "parent": cut}
         self.cuts = mergedCuts
         self.nuisances = nuisances
+        utils.update_nuisances_with_subsamples(self.nuisances, subsamplesmap)
         self.lumi = lumi
         self.limit = limit
         self.outputFileMap = outputFileMap
@@ -257,14 +274,22 @@ class RunAnalysis:
         # sample here is a tuple, first el is the sampleName, second list of files,
         # third the special weight, forth is the index of tuple for the same sample,
         # fifth if present the dict of subsamples
-        for sample in samples:
+        for sample in self.splitSamples:
             files = sample[1]
             sampleName = sample[0]
             friendsFiles = []
             usedFolders = []
             for nuisance in self.nuisances.values():
-                if sampleName not in nuisance.get("samples", {sampleName: []}):
+                nuisSamples = nuisance.get("samples", {sampleName: []})
+                # sampleName might not appear in the nuisance samples dictionary for two reasons:
+                # either the nuisance is not supposed to be applied to that sample, or, if there are subsamples,
+                # the name of the parent won't be present, just children'ones.
+                if sampleName not in nuisSamples and sampleName not in parents:
                     continue
+                if sampleName in parents:
+                    nuisChildren = list(filter(lambda x: x.startswith(sampleName), nuisSamples))
+                    if not nuisChildren:
+                        continue
                 if nuisance.get("type", "") == "shape":
                     if nuisance.get("kind", "") == "suffix":
                         if nuisance.get("folderUp", "") != "":
@@ -300,13 +325,7 @@ class RunAnalysis:
 
     def loadAliases(self, afterNuis=False):
         """
-        Load aliases in the dataframes. It does not create the special alias ``weight`` for which a special method is used.
-
-        Parameters
-        ----------
-            afterNuis : bool, optional, default: False
-                if True, only aliases with the key ``afterNuis`` set to True will be loaded
-
+        Load aliases in the dataframes.
         """
         aliases = self.aliases
         for sampleName in self.dfs.keys():
@@ -325,8 +344,13 @@ class RunAnalysis:
                                     ParseCpp.parse(aliases[alias]["expr"])
                                 )
                             )
+                        elif  "args" in aliases[alias]:
+                            usedVariables = usedVariables.union(
+                                    ParseCpp.listOfVariables(
+                                        ParseCpp.parse(aliases[alias]["args"])
+                                        )
+                                    )
                         continue
-
                     if "samples" in list(aliases[alias]):
                         if sampleName not in aliases[alias]["samples"]:
                             continue
@@ -375,15 +399,58 @@ class RunAnalysis:
 
                     elif "class" in list(aliases[alias].keys()):
                         define_string += f".Define('{alias}', '{aliases[alias]['class']} ( {aliases[alias].get('args', '')}  )') \\\n\t"
+                parentName = ""
+                subsampleCut = ""
+                subsampleWeight = "1.0"
+                if "parent" in self.dfs[sampleName][index].keys():
+                    parentName = self.dfs[sampleName][index]["parent"]
+                if not parentName:
+                    sample = list(
+                        filter(lambda k: k[0] == sampleName and k[3] == index, self.splitSamples)
+                    )[0]
+                    weight = sample[2]
+                else:
+                    sample = list(
+                        filter(lambda k: k[0] == parentName and k[3] == index, self.splitSamples)
+                    )[0]
+                    subsampleCut = sample[6][sampleName.replace(parentName + '_', '')]
+                    if isinstance(subsampleCut, tuple) or isinstance(
+                        subsampleCut, list
+                    ):
+                        subsampleCut = sample[6][sampleName.replace(parentName + '_', '')][0]
+                        subsampleWeight = sample[6][sampleName.replace(parentName + '_', '')][1]
+                    weight = sample[2] + '*' + subsampleWeight
 
+                isData = sample[4]
+
+                if not isData:
+                    aliases["weight"] = {"expr": str(self.lumi) + " * " + weight, 'samples': [sampleName]}
+                else:
+                    aliases["weight"] = {"expr": weight, 'samples': [sampleName]}
+
+                print("\n\n", sampleName, "\n\n", aliases["weight"])
+
+                # load the alias weight
+                if not afterNuis:
+                    alias = "weight"
+
+                    if alias in self.dfs[sampleName][index]["columnNames"]:
+                        print(
+                            f"Alias {alias} cannot be defined, column with that name already exists"
+                        )
+                        sys.exit()
+
+                    define_string += (
+                        f".Define('{alias}', '{aliases[alias]['expr']}') \\\n\t"
+                    )
                 df1 = eval(define_string)
+                if parentName:
+                    df1 = df1.Filter(subsampleCut)
+
                 self.dfs[sampleName][index]["df"] = df1
 
-                stringPrint = "before nuisances"
-                if afterNuis:
-                    stringPrint = "after nuisances"
                 print(
-                    f"\n\nLoaded all aliases {stringPrint} for {sampleName} index {index}\n\n"
+                    f"\n\nLoaded all aliases for {sampleName} index {index}\n\n"
                 )
 
                 self.dfs[sampleName][index]["usedVariables"] = list(usedVariables)
@@ -391,64 +458,22 @@ class RunAnalysis:
                 self.dfs[sampleName][index]["columnNames"] = list(
                     map(lambda k: str(k), df1.GetColumnNames())
                 )
+                
+                # Clear alias weight
+                del self.aliases["weight"]
 
-    def loadAliasWeight(self):
+
+    def loadSystematics(self):
         """
-        Loads only the special alias ``weight`` in the dataframes.
+        Loads systematics of type ``shape`` in the dataframes.
         """
-        samples = self.samples
-        aliases = self.aliases
-        for sampleName in self.dfs.keys():
-            for index in self.dfs[sampleName].keys():
-                df = self.dfs[sampleName][index]["df"]  # noqa: F841
-
-                # Define the most importante alias: the weight!
-                sample = list(
-                    filter(lambda k: k[0] == sampleName and k[3] == index, samples)
-                )[0]
-                weight = sample[2]
-                isData = sample[4]
-
-                if not isData:
-                    aliases["weight"] = {"expr": str(self.lumi) + " * " + weight}
-                else:
-                    aliases["weight"] = {"expr": weight}
-
-                print("\n\n", sampleName, "\n\n", aliases["weight"])
-
-                # load the alias weight
-                define_string = "df"
-
-                alias = "weight"
-
-                if alias in self.dfs[sampleName][index]["columnNames"]:
-                    print(
-                        f"Alias {alias} cannot be defined, column with that name already exists"
-                    )
-                    sys.exit()
-
-                define_string += (
-                    f".Define('{alias}', '{aliases[alias]['expr']}') \\\n\t"
-                )
-
-                df1 = eval(define_string)
-                self.dfs[sampleName][index]["df"] = df1
-
-                print(f"\n\nLoaded alias weight for {sampleName} index {index}\n\n")
-
-                self.dfs[sampleName][index]["columnNames"].append("weight")
-
-    def loadSystematicsSuffix(self):
-        """
-        Loads systematics of type ``suffix`` in the dataframes.
-        """
+        print('##########\nLoading Systematics\n##########\n')
         for sampleName in self.dfs.keys():
             for index in self.dfs[sampleName].keys():
                 df = self.dfs[sampleName][index]["df"]
                 columnNames = self.dfs[sampleName][index]["columnNames"]
                 nuisances = self.nuisances
-                # nuisance key is not used
-                for _, nuisance in list(nuisances.items()):
+                for _, nuisance in nuisances.items():
                     if sampleName not in nuisance.get("samples", {sampleName: []}):
                         continue
                     if nuisance.get("type", "") == "shape":
@@ -524,25 +549,6 @@ class RunAnalysis:
                                     variationTags=["Down", "Up"],
                                     variationName=nuisance["name"],
                                 )
-
-                        else:
-                            continue
-                self.dfs[sampleName][index]["df"] = df
-
-    def loadSystematicsReweights(self):
-        """
-        Loads systematics of type ``suffix`` in the dataframes.
-        """
-        for sampleName in self.dfs.keys():
-            for index in self.dfs[sampleName].keys():
-                df = self.dfs[sampleName][index]["df"]
-                columnNames = self.dfs[sampleName][index]["columnNames"]
-                nuisances = self.nuisances
-                # nuisance key is not used
-                for _, nuisance in list(nuisances.items()):
-                    if sampleName not in nuisance.get("samples", {sampleName: []}):
-                        continue
-                    if nuisance.get("type", "") == "shape":
                         if nuisance.get("kind", "") == "weight":
                             weights = nuisance["samples"].get(sampleName, None)
                             if weights is not None:
@@ -590,24 +596,6 @@ class RunAnalysis:
                                     variationTags=["Down", "Up"],
                                     variationName=nuisance["name"],
                                 )
-                        else:
-                            continue
-                self.dfs[sampleName][index]["df"] = df
-
-    def loadSystematicsReweightsEnvelopeRMS(self):
-        """
-        Loads systematics of type ``weight_envelope`` or type ``weight_rms`` in the dataframes.
-        """
-        for sampleName in self.dfs.keys():
-            for index in self.dfs[sampleName].keys():
-                df = self.dfs[sampleName][index]["df"]
-                columnNames = self.dfs[sampleName][index]["columnNames"]
-                nuisances = self.nuisances
-                # nuisance key is not used
-                for _, nuisance in list(nuisances.items()):
-                    if sampleName not in nuisance.get("samples", {sampleName: []}):
-                        continue
-                    if nuisance.get("type", "") == "shape":
                         if (
                             nuisance.get("kind", "") == "weight_envelope"
                             or nuisance.get("kind", "") == "weight_rms"
@@ -847,17 +835,19 @@ class RunAnalysis:
         After this method the ``dfs`` attribute will be modified to contain the subsamples names instead of the original sample name
         """
         sampleNames = set(
-            list(map(lambda k: k[0], list(filter(lambda k: len(k) == 7, self.samples))))
+            list(map(lambda k: k[0], list(filter(lambda k: len(k) == 7, self.splitSamples))))
         )
         for sampleName in sampleNames:
             # select in the samples list only the one with this sampleName
-            _sample = list(filter(lambda k: k[0] == sampleName, self.samples))[0]
+            _sample = list(filter(lambda k: k[0] == sampleName, self.splitSamples))[0]
             for subsample in list(_sample[6].keys()):
+                print('subsample is: ' + subsample)
                 # _sample[5] is the original dict, i.e. samples[sampleName]
                 flatten_samples_map = _sample[5].get(
                     "flatten_samples_map", lambda sname, sub: "%s_%s" % (sname, sub)
                 )
                 new_subsample_name = flatten_samples_map(sampleName, subsample)
+                print('new subsample name is: ' + new_subsample_name)
                 self.dfs[new_subsample_name] = {}
                 for index in self.dfs[sampleName].keys():
                     self.dfs[new_subsample_name][index] = {"parent": sampleName}
@@ -869,10 +859,9 @@ class RunAnalysis:
                         subsampleCut = _sample[6][subsample][0]
                         subsampleWeight = _sample[6][subsample][1]
 
+                    # Create a copy of parent df, that it will be filtered and weighted when aliases will be loaded
                     self.dfs[new_subsample_name][index]["df"] = (
                         self.dfs[sampleName][index]["df"]
-                        .Filter(subsampleCut)
-                        .Redefine("weight", "weight * " + subsampleWeight)
                     )
                     for key in self.dfs[sampleName][index]:
                         if key == "df":
@@ -1232,32 +1221,20 @@ class RunAnalysis:
         """
         Runs the analysis:
 
-        1. load the aliases without the ``afterNuis`` option
-        2. load the ``suffix`` systematics
-
-        3. load the alias ``weight``
-        4. load the reweight systematics (they need the ``weight`` to be defined)
-
-        5. finally load the suffix systematics with the ``afterNuis`` option
-
+        1. split samples in subsamples (dictionaries have been updated accordingly)
+        2. load aliases
+        3. load systematics
 
         After this important procedure it filters with ``preselection`` the many ``dfs``, loads systematics
         loads ``variables``, creates the results dict, splits the samples, creates the cuts/var histos, runs the dataframes
         and saves results.
         """
-        # load all aliases needed before nuisances of type suffix
-        self.loadAliases()
-        self.loadSystematicsSuffix()
-
-        # load alias weight needed before nuisances of type weight
-        self.loadAliasWeight()
+        # split samples in subsamples
         self.splitSubsamples()
-        print("splitted samples")
-
-        self.loadSystematicsReweights()
-        self.loadSystematicsReweightsEnvelopeRMS()
-
-        # load all aliases remaining
+        # load aliases
+        self.loadAliases()
+        # load systematics
+        self.loadSystematics()
         self.loadAliases(True)
 
         # apply preselections
