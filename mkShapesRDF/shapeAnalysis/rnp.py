@@ -30,7 +30,7 @@ def rnp_array(array, copy=True):
     return arr
 
 
-def rnp_hist2array(h, include_overflow=False, copy=True):
+def rnp_hist2array(h, include_overflow=False, copy=True, return_errors=False):
     """
     Converts histogram into a numpy array
 
@@ -55,16 +55,28 @@ def rnp_hist2array(h, include_overflow=False, copy=True):
         shape = (h.GetNbinsY() + 2, h.GetNbinsX() + 2)
     elif isinstance(h, ROOT.TH1):
         shape = (h.GetNbinsX() + 2,)
+
+    if return_errors:
+        errors = np.sqrt(rnp_array(h.GetSumw2(), copy=copy))
+    else:
+        errors = np.zeros_like(arr)
+
     arr = arr.reshape(shape)
+    errors = errors.reshape(shape)
     if not include_overflow:
         slices = []
         for axis, bins in enumerate(shape):
             slices.append(slice(1, -1))
         arr = arr[tuple(slices)]
+        errors = errors[tuple(slices)]
+    arr = np.transpose(arr)
+    errors = np.transpose(errors)
+    if return_errors:
+        return arr, errors
     return arr
 
 
-def rnp_array2hist(array, h):
+def rnp_array2hist(array, h, errors=None):
     """
     Sets bin contents with a numpy array, modifying it in place
 
@@ -82,6 +94,19 @@ def rnp_array2hist(array, h):
         shape = (h.GetNbinsX() + 2, h.GetNbinsY() + 2)
     elif isinstance(h, ROOT.TH1):
         shape = (h.GetNbinsX() + 2,)
+
+    if errors is not None:
+        if errors.shape != array.shape:
+            raise ValueError(
+                "Bin contents and Bin errors have different shapes",
+                array.shape,
+                errors.shape,
+            )
+        _errors = errors
+    else:
+        # dummy vector, it won't be set at the end
+        _errors = np.zeros_like(array)
+
     if array.shape != shape:
         slices = []
         for axis, bins in enumerate(shape):
@@ -92,11 +117,20 @@ def rnp_array2hist(array, h):
             else:
                 raise ValueError("array and histogram are not compatible")
         array_overflow = np.zeros(shape, dtype=dtype)
+        errors_overflow = np.zeros(shape, dtype=dtype)
         array_overflow[tuple(slices)] = array
+        errors_overflow[tuple(slices)] = _errors
         array = array_overflow
+        _errors = errors_overflow
+
     if array.shape != shape:
-        raise "array2hist: Different shape between array and h"
+        raise ValueError("array2hist: Different shape between array and h")
+
     array = np.ravel(np.transpose(array))
+    _errors = np.ravel(np.transpose(_errors))
+
     nx = len(array)
     arr = memoryview(array)
     h.Set(nx, arr)
+    if errors is not None:
+        h.SetError(_errors)
