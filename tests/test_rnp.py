@@ -20,6 +20,13 @@ def test_array2hist():
 
     h = ROOT.TH2D("", "", nbins_x, 0, 1, nbins_y, 0, 1)
 
+    # just for test
+    rnp.rnp_array2hist(bin_content, h)
+    _ = rnp.rnp_hist2array(
+        h, include_overflow=True, copy=True
+    )
+
+    # now the actual set and get method
     rnp.rnp_array2hist(bin_content, h, bin_error)
 
     bin_content2, bin_error2 = rnp.rnp_hist2array(
