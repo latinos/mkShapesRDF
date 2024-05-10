@@ -290,8 +290,8 @@ class DatacardFactory:
                     card.write("-" * 100 + "\n")
                     card.write("bin         %s" % tagNameToAppearInDatacard + "\n")
                     if len(data) == 0:
-                        self._logger.warning("no data, no fun! ")
-                        # raise RuntimeError('No Data found!')
+                        print("no data, no fun! ")
+                        # self._loggraise RuntimeError('No Data found!')
                         yieldsData["data"] = 0
 
                     card.write("observation %.0f\n" % yieldsData["data"])
