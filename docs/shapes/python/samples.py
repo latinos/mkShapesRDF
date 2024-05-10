@@ -90,10 +90,12 @@ Examples
 >>>     + "*( !(Sum(PhotonGen_isPrompt==1 && PhotonGen_pt>15 && abs(PhotonGen_eta)<2.6) > 0)) * ewknloW",
 >>>     "FilesPerJob": 5,
 >>>     "subsamples": dys,
->>>     "flatten_samples_map": lambda sname, sub: "%s" % (sub) 
->>>     # in this way flatten sampled are simply "DY_hardJets", "DY_PUJets", 
->>>     # and "DY_inclusive_rwgt"
->>>     # default flatten_samples_map is lambda sname, sub: '%s_%s' % (sname, sub)
+>>>     "flatten_samples_map": 1 
+>>>     # By default (flatten_samples_map=0), subsamples will carry the sample
+>>>     # name as prefix (e.g. DY_DY_hardJets, DY_DY_PUJets, ...). By specifying 
+>>>     # flatten_samples_map=1 the sample prefix will be dropped and subsamples
+>>>     # names will be the one appearing in the subsamples dictionary keys 
+>>>     # (for this example subsample shape names will be DY_hardJets, DY_PUJets)
 >>> }
 
 
