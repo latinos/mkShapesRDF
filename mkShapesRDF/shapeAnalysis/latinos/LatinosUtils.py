@@ -17,10 +17,12 @@ def flatten_samples(samples):
         sample = samples[sname]
         if "subsamples" not in sample:
             continue
-        flatten_samples_map = samples[sname].get(
-            "flatten_samples_map", lambda sname, sub: "%s_%s" % (sname, sub)
+        active_fsm = samples[sname].get(
+            "flatten_samples_map", 0
         )
-
+        if active_fsm == 0:  flatten_samples_map = lambda sname, sub: "%s_%s" % (sname, sub)
+        else: flatten_samples_map = lambda sname, sub: "%s" % (sub)
+        
         subsamplesmap.append((sname, []))
         for sub in sample["subsamples"]:
             new_subsample_name = flatten_samples_map(sname, sub)
