@@ -289,12 +289,6 @@ class DatacardFactory:
 
                     card.write("-" * 100 + "\n")
                     card.write("bin         %s" % tagNameToAppearInDatacard + "\n")
-                    if len(data) == 0:
-                        print("no data, no fun! ")
-                        # self._loggraise RuntimeError('No Data found!')
-                        yieldsData["data"] = 0
-
-                    card.write("observation %.0f\n" % yieldsData["data"])
 
                     card.write(
                         "shapes  *           * "
@@ -305,14 +299,21 @@ class DatacardFactory:
                         + "\n"
                     )
 
-                    card.write(
-                        "shapes  data_obs           * "
-                        + "shapes/histos_"
-                        + tagNameToAppearInDatacard
-                        + ".root"
-                        + "     histo_Data"
-                        + "\n"
-                    )
+                    if len(data) == 0:
+                        print("no data, no fun! ")
+                        yieldsData["data"] = 0
+
+                    else:
+                        card.write("observation %.0f\n" % yieldsData["data"])
+
+                        card.write(
+                            "shapes  data_obs           * "
+                            + "shapes/histos_"
+                            + tagNameToAppearInDatacard
+                            + ".root"
+                            + "     histo_Data"
+                            + "\n"
+                        )
 
                     #   shapes  *           * shapes/hww-19.36fb.mH125.of_vh2j_shape_mll.root     histo_$PROCESS histo_$PROCESS_$SYSTEMATIC
                     #   shapes  data_obs    * shapes/hww-19.36fb.mH125.of_vh2j_shape_mll.root     histo_Data
