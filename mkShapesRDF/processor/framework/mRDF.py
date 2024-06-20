@@ -571,3 +571,26 @@ class mRDF:
         c = self.Copy()
         c.df = c.df.Range(nEvents)
         return c
+
+    def Range(self, nLow, nHigh):
+        """
+        Filter the dataframe to get a subset of events
+        Parameters
+        ----------
+        *args : list
+        list of arguments to be passed to the ``RDataFrame::Range`` method
+        Returns
+        -------
+        The mRDF objects with a new range of events
+        """
+        c = self.Copy()
+        c.df = c.df.Range(nLow, nHigh)
+        return c
+
+    def Alias(self, alias, colName):
+        """
+        Allow to refer to a column with a different name
+        """
+        c = self.Copy()
+        c.df = c.df.Alias(alias, colName)
+        return c
