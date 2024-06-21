@@ -148,7 +148,7 @@ class addTnPTree(Module):
 
             RVecB getDuplicatedProbes(RVec<std::pair<int,int>> TPPairs, RVec<Float_t> &Cand_pt)
             {
-                RVecB Cand_duplicated(false, Cand_pt.size());
+                RVecB Cand_duplicated(Cand_pt.size(), false);
                 RVecI Cand_index;
                 for (int i=0;i<TPPairs.size();i++){
                     Cand_index.push_back(TPPairs.at(i).second);
@@ -201,24 +201,28 @@ class addTnPTree(Module):
 
         df = df.Filter("TPPairs.size() > 0")
 
-        df = df.Define("pair_mass",  f"All_TPmass[All_TPmass>{self.mass_range[0]} && All_TPmass<{self.mass_range[0]}]")
         df = df.Define("pair_pt",    f"getTPVariables(TPPairs, Tag_pt, Tag_eta, Tag_phi, {collection}_pt, {collection}_eta, {collection}_phi, 1)")
         df = df.Define("pair_eta",   f"getTPVariables(TPPairs, Tag_pt, Tag_eta, Tag_phi, {collection}_pt, {collection}_eta, {collection}_phi, 2)")
         df = df.Define("pair_phi",   f"getTPVariables(TPPairs, Tag_pt, Tag_eta, Tag_phi, {collection}_pt, {collection}_eta, {collection}_phi, 3)")
+        df = df.Define("pair_mass",  f"getTPVariables(TPPairs, Tag_pt, Tag_eta, Tag_phi, {collection}_pt, {collection}_eta, {collection}_phi, 4)")
 
         df = df.Define("npairs",              "TPPairs.size()")
         df = df.Define("nTag",                f"Sum(Tag_{collection}==true)")
-        df = df.Define("probe_isDuplicated",  f"getDuplicatedProbes(TPPairs, {collection}_pt)")
+        df = df.Define(f"{collection}_isDuplicated",  f"getDuplicatedProbes(TPPairs, {collection}_pt)")
+        df = df.Define(f"probe_isDuplicated", f"getVariables(TPPairs, {collection}_isDuplicated, 2)")
 
         ### Create new branches
         variables_to_save = []
+        variables_to_skip = ["vidNestedWPBitmap", "seediEtaOriX"]
         for var in df.GetColumnNames():
             if str(var).startswith(f"{collection}_"):
                 label = var.split(f"{collection}_")[1]
+
+                if label in variables_to_skip: continue
                 df = df.Define(f"probe_{label}", f"getVariables(TPPairs, {var}, 2)")
-                df = df.Define(f"tag_{label}", f"getVariables(TPPairs, {var}, 1)")
-                
                 variables_to_save.append(f"probe_{label}")
+                
+                df = df.Define(f"tag_{label}", f"getVariables(TPPairs, {var}, 1)")
                 variables_to_save.append(f"tag_{label}")
 
         variables_to_save.append("npairs")
@@ -226,8 +230,8 @@ class addTnPTree(Module):
         variables_to_save.append("pair_pt")
         variables_to_save.append("pair_eta")
         variables_to_save.append("pair_phi")
-        variables_to_save.append("nTag")
         variables_to_save.append("probe_isDuplicated")
+        variables_to_save.append("nTag")
         variables_to_save.append("event")
         variables_to_save.append("run")
         variables_to_save.append("luminosityBlock")
@@ -242,7 +246,7 @@ class addTnPTree(Module):
         if not self.saveParquet:
             return df
             
-        chunksize = 10000
+        chunksize = 10_000
         nIterations = max(ceil(df.Count().GetValue() / chunksize), 1)
         branches = variables_to_save
         outName = self.eosPath + "/" + self.outputFilename.split(".root")[0] + ".parquet"
