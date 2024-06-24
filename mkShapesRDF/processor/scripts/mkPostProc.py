@@ -239,6 +239,11 @@ def main():
         run locally
         No TTree was created for
         Warning in <Snapshot>: A lazy Snapshot action was booked but never triggered.
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::Hash<1> is available                                                                                                                   
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ProcessHistory is available                                                                                                            
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ProcessConfiguration is available                                                                                                      
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ParameterSetBlob is available                                                                                                          
+        TClass::Init:0: RuntimeWarning: no dictionary for class pair<edm::Hash<1>,edm::ParameterSetBlob> is available         
         """
         normalErrs = normalErrs.split("\n")
         normalErrs = list(map(lambda k: k.strip(" ").strip("\t"), normalErrs))
