@@ -431,28 +431,64 @@ def main():
         _samples = RunAnalysis.splitSamples(samples)
         print(len(_samples))
         outputFileTrunc = ".".join(outputFile.split(".")[:-1])
-        filesToMerge = list(
-            map(
-                lambda k: f"{folder}/{outputFolder}/{outputFileTrunc}__ALL__{k[0]}_{str(k[3])}.root",
-                _samples,
+        if "/eos/user" in outputFolder:
+            filesToMerge = list(
+               map(
+                   lambda k: f"{outputFolder}/{outputFileTrunc}__ALL__{k[0]}_{str(k[3])}.root",
+                   _samples,
+               )
             )
-        )
-        print("\n\nMerging files\n\n")
-        print("\n\n", filesToMerge, "\n\n")
+           print("\n\nMerging files\n\n")
+           print("\n\n", filesToMerge, "\n\n")
+        
+           print(f"Hadding files into {outputFolder}/{outputFile}")
+       else:
+           filesToMerge = list(
+               map(
+                   lambda k: f"{folder}/{outputFolder}/{outputFileTrunc}__ALL__{k[0]}_{str(k[3])}.root",
+                   _samples,
+               )
+           )
+           print("\n\nMerging files\n\n")
+           print("\n\n", filesToMerge, "\n\n")
 
-        print(f"Hadding files into {outputFileMap}")
+           print(f"Hadding files into {folder}/{outputFolder}/{outputFile}")
+        #filesToMerge = list(
+        #    map(
+        #        lambda k: f"{folder}/{outputFolder}/{outputFileTrunc}__ALL__{k[0]}_{str(k[3])}.root",
+        #        _samples,
+        #    )
+        #)
+        #print("\n\nMerging files\n\n")
+        #print("\n\n", filesToMerge, "\n\n")
+
+        #print(f"Hadding files into {outputFileMap}")
         for fileToMerge in filesToMerge:
             os.system(f"echo {fileToMerge} >> filesToMerge_{outputFile}.txt")
-        process = subprocess.Popen(
-            f"hadd2 -j 10 {outputFileMap} @filesToMerge_{outputFile}.txt; \
-            rm filesToMerge_{outputFile}.txt",
-            shell=True,
-        )
+        #process = subprocess.Popen(
+        #    f"hadd2 -j 10 {outputFileMap} @filesToMerge_{outputFile}.txt; \
+        #    rm filesToMerge_{outputFile}.txt",
+        #    shell=True,
+        #)
+        if "/eos/user" in outputFolder:
+            process = subprocess.Popen(
+                f'hadd2 -j 10 {outputFolder}/{outputFile} @filesToMerge_{outputFile}.txt; \
+                rm filesToMerge_{outputFile}.txt',
+                shell=True,
+            )
+        else:
+            process = subprocess.Popen(
+                f'hadd2 -j 10 {folder}/{outputFolder}/{outputFile} @filesToMerge_{outputFile}.txt; \
+                rm filesToMerge_{outputFile}.txt',
+                shell=True,
+            )
+
         process.communicate()
 
         if process.returncode == 0:
             print("Hadd was successful")
             cuts = cuts["cuts"]
+            print(f"outputFileMap = {outputFileMap}")
             postProcessNuisances(
                 outputFileMap, samples, aliases, variables, cuts, nuisances
             )
