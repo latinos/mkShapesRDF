@@ -208,6 +208,7 @@ class addTnPTree(Module):
 
         df = df.Define("npairs",              "TPPairs.size()")
         df = df.Define("nTag",                f"Sum(Tag_{collection}==true)")
+        df = df.Define("nVertices",           "PV_npvs")
         df = df.Define(f"{collection}_isDuplicated",  f"getDuplicatedProbes(TPPairs, {collection}_pt)")
         df = df.Define(f"probe_isDuplicated", f"getVariables(TPPairs, {collection}_isDuplicated, 2)")
 
@@ -233,6 +234,7 @@ class addTnPTree(Module):
         variables_to_save.append("probe_isDuplicated")
         variables_to_save.append("nTag")
         variables_to_save.append("event")
+        variables_to_save.append("nVertices")
         variables_to_save.append("run")
         variables_to_save.append("luminosityBlock")
         variables_to_save.append(self.passTrig)
