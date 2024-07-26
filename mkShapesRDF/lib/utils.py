@@ -1,3 +1,6 @@
+import os
+
+
 def getFrameworkPath():
     r"""Utility function to get the absolute path to the mkShapesRDF framework
 
@@ -6,15 +9,13 @@ def getFrameworkPath():
         string
             absolute path to the mkShapesRDF framework (ends with ``/``)
     """
-    import os
-    import inspect
 
-    fwPath = os.path.realpath(inspect.getfile(inspect.currentframe()))  # this file
-    fwPath = os.path.dirname(fwPath)  # lib
-    fwPath = os.path.dirname(fwPath)  # mkShapesRDF (source code)
-    fwPath = os.path.dirname(fwPath)  # mkShapesRDF
-    fwPath = os.path.abspath(fwPath)  # abs path to mkShapesRDF
+    try:
+        fwPath = os.environ["STARTPATH"]
+        fwPath = fwPath[: -len("start.sh")]
+    except Exception as _:
+        raise Exception(
+            "STARTPATH is not set! Please be sure you've activated the environment"
+        )
 
-    if not fwPath.endswith("/"):
-        fwPath += "/"
     return fwPath
