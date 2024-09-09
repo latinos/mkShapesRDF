@@ -12,10 +12,11 @@ class JMECalculator(Module):
         JEC_era,
         JER_era,
         jet_object,
-        met_collections=["PuppiMET", "MET", "RawMET"],
+        met_collections=["PuppiMET"],
         do_Jets=True,
         do_MET=True,
         do_JER=True,
+        do_Unclustered=True,
         store_nominal=True,
         store_variations=True,
     ):
@@ -51,6 +52,7 @@ class JMECalculator(Module):
         self.do_Jets = do_Jets
         self.do_MET = do_MET
         self.do_JER = do_JER
+        self.do_Unclustered = do_Unclustered
         self.store_nominal = store_nominal
         self.store_variations = store_variations
 
@@ -84,6 +86,8 @@ class JMECalculator(Module):
         JEC_era = self.JEC_era
         JER_era = self.JER_era
 
+        print("Version for JEC: ", self.JEC_era)
+        
         txtL1JEC = jecDBCache.getPayload(JEC_era, "L1FastJet", self.jet_object)
 
         txtJECs = []
@@ -93,7 +97,7 @@ class JMECalculator(Module):
         txtJECs.append(jecDBCache.getPayload(JEC_era, "L2L3Residual", self.jet_object))
 
         txtUnc = jecDBCache.getPayload(
-            JEC_era, "UncertaintySources", self.jet_object, "Regrouped_"
+            JEC_era, "UncertaintySources", self.jet_object, ""
         )
         txtPtRes = jrDBCache.getPayload(JER_era, "PtResolution", self.jet_object)
         txtSF = jrDBCache.getPayload(JER_era, "SF", self.jet_object)
@@ -102,6 +106,7 @@ class JMECalculator(Module):
         from CMSJMECalculators import loadJMESystematicsCalculators
 
         loadJMESystematicsCalculators()
+
 
         if self.do_MET:
             for MET in self.met_collections:
@@ -132,47 +137,39 @@ class JMECalculator(Module):
                     jcp_unc = ROOT.JetCorrectorParameters(txtUnc, s)
                     calcMET.addJESUncertainty(s, jcp_unc)
 
-                if self.do_JER and "Puppi" not in MET:
+                if self.do_JER and "Puppi" in MET:
                     # Smear jets, with JER uncertainty
                     calcMET.setSmearing(
                         txtPtRes,
                         txtSF,
                         True,
-                        True,
-                        0.2,
-                        3.0,  # decorrelate for different regions
+                        False,
+                        -1.0,
+                        -1.0,  # decorrelate for different regions
                     )  # use hybrid recipe, matching parameters
                     calcMET.setIsT1SmearedMET(True)
 
                 jesSources = calcMET.available()
                 print("DEBUG module")
                 skip = 1
-                if self.do_JER and "Puppi" not in MET:
+                if self.do_JER and "Puppi" in MET:
                     skip += 6 * 2
                 # first are JERs, last two are unclustered unc.
                 jesSources = jesSources[skip:-2][::2]
                 jesSources = list(map(lambda k: str(k)[3:-2], jesSources))
                 # jesSources = sorted(jesSources)
-                jesSources = list(map(lambda k: "JES_" + k, jesSources))
+                jesSources = list(map(lambda k: "JES" + k, jesSources))
                 print(jesSources)
 
                 # list of columns to be passed to myJetVarCal produce
                 cols = []
+
                 JetColl = "newJet"
 
-                # revert the map that takes CleanJet_pt and maps it to CleanJet_pt before JER (CleanJet_cleanJetIdx_preJER)
-                df = df.Define(
-                    "new_sorting",
-                    "revertIndicesMask(CleanJet_cleanJetIdx_preJER, CleanJet_cleanJetIdx_preJER.size())",
-                )
-
-                df = df.Define(
-                    "newJet_pt",
-                    "Take( CleanJet_pt / CleanJet_corr_JER, new_sorting)",
-                )
-                df = df.Define("newJet_eta", "Take( CleanJet_eta , new_sorting)")
-                df = df.Define("newJet_phi", "Take( CleanJet_phi , new_sorting)")
-                df = df.Define("newJet_jetIdx", "Take( CleanJet_jetIdx , new_sorting)")
+                df = df.Define("newJet_pt", "CleanJet_pt")
+                df = df.Define("newJet_eta", "CleanJet_eta")
+                df = df.Define("newJet_phi", "CleanJet_phi")
+                df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
 
                 cols.append(f"{JetColl}_pt")
                 cols.append(f"{JetColl}_eta")
@@ -186,10 +183,9 @@ class JMECalculator(Module):
                 cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
 
                 # rho
-                cols.append("fixedGridRhoFastjetAll")
+                cols.append("Rho_fixedGridRhoFastjetAll")
 
                 cols.append(f"Take(Jet_partonFlavour, {JetColl}_jetIdx)")
-
                 # seed
                 cols.append(
                     f"(run<<20) + (luminosityBlock<<10) + event + 1 + int({JetColl}_eta.size()>0 ? {JetColl}_eta[0]/.01 : 0)"
@@ -202,12 +198,16 @@ class JMECalculator(Module):
                 cols.append("GenJet_mass")
 
                 RawMET = "RawMET" if "Puppi" not in MET else "RawPuppiMET"
+                #RawMET = MET
                 cols.append(f"{RawMET}_phi")
                 cols.append(f"{RawMET}_pt")
 
                 cols.append("MET_MetUnclustEnUpDeltaX")
                 cols.append("MET_MetUnclustEnUpDeltaY")
 
+                df = df.Define('EmptyLowPtJet', 'ROOT::RVecF{}')
+                #for _ in range(5):
+                #    cols.append('EmptyLowPtJet')
                 cols.append("CorrT1METJet_rawPt")
                 cols.append("CorrT1METJet_eta")
                 cols.append("CorrT1METJet_phi")
@@ -231,10 +231,13 @@ class JMECalculator(Module):
                         _sources = [f"JER_{i}" for i in range(6)]
                     _sources += jesSources
                     sources = _sources.copy()
+                    METsources = _sources.copy()
+                    if self.do_Unclustered:
+                        METsources += ["MET"]  # last one is the unclustered variation
 
-                    METsources = _sources.copy() + [
-                        "MET"
-                    ]  # last one is the unclustered variation
+                    print("\n")
+                    print("MET uncertainties: ")
+                    print(METsources)
 
                     for variable in [MET + "_pt", MET + "_phi"]:
                         for i, source in enumerate(METsources):
@@ -243,7 +246,7 @@ class JMECalculator(Module):
                             df = df.Vary(
                                 variable,
                                 "ROOT::RVecD{" + up + ", " + do + "}",
-                                ["up", "down"],
+                                ["up", "do"],
                                 source,
                             )
                 df = df.DropColumns(f"{MET}Vars")
@@ -273,19 +276,17 @@ class JMECalculator(Module):
                     txtPtRes,
                     txtSF,
                     True,
-                    True,
-                    0.2,
-                    3.0,  # decorrelate for different regions
+                    False,
+                    -1.0,
+                    -1.0,  # decorrelate for different regions
                 )  # use hybrid recipe, matching parameters
             jesSources = calc.available()
-            print("DEBUG module")
             skip = 1
             if self.do_JER:
                 skip += 6 * 2
             jesSources = jesSources[skip:][::2]
             jesSources = list(map(lambda k: str(k)[3:-2], jesSources))
-            jesSources = list(map(lambda k: "JES_" + k, jesSources))
-            print(jesSources)
+            jesSources = list(map(lambda k: "JES" + k, jesSources))
 
             # list of columns to be passed to myJetVarCal produce
             cols = []
@@ -293,30 +294,21 @@ class JMECalculator(Module):
             # nre reco jet coll
             JetColl = "newJet"
 
-            # revert the map that takes CleanJet_pt and maps it to CleanJet_pt before JER (CleanJet_cleanJetIdx_preJER)
-            df = df.Define(
-                "new_sorting",
-                "revertIndicesMask(CleanJet_cleanJetIdx_preJER, CleanJet_cleanJetIdx_preJER.size())",
-            )
-
-            df = df.Define(
-                "newJet_pt",
-                "Take( CleanJet_pt / CleanJet_corr_JER, new_sorting)",
-            )
-            df = df.Define("newJet_eta", "Take( CleanJet_eta , new_sorting)")
-            df = df.Define("newJet_phi", "Take( CleanJet_phi , new_sorting)")
-            df = df.Define("newJet_jetIdx", "Take( CleanJet_jetIdx , new_sorting)")
+            df = df.Define("newJet_pt", "CleanJet_pt")
+            df = df.Define("newJet_eta", "CleanJet_eta")
+            df = df.Define("newJet_phi", "CleanJet_phi")
+            df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
 
             cols.append(f"{JetColl}_pt")
             cols.append(f"{JetColl}_eta")
             cols.append(f"{JetColl}_phi")
-            cols.append("Take(CleanJet_mass, new_sorting)")
+            cols.append("CleanJet_mass")
             cols.append(f"Take(Jet_rawFactor, {JetColl}_jetIdx)")
             cols.append(f"Take(Jet_area, {JetColl}_jetIdx)")
             cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
 
             # rho
-            cols.append("fixedGridRhoFastjetAll")
+            cols.append("Rho_fixedGridRhoFastjetAll")
 
             cols.append(f"Take(Jet_partonFlavour, {JetColl}_jetIdx)")
 
@@ -334,30 +326,37 @@ class JMECalculator(Module):
             df = df.Define("jetVars", f'myJetVarCalc.produce({", ".join(cols)})')
 
             if self.store_nominal:
-                ROOT.gInterpreter.Declare(
-                    """
-                    using namespace ROOT;
-                    RVecF propagateVector(RVecI jetIdx, RVecF jetVar, RVecF jetVar_raw) {
-                        RVecF out(jetVar_raw);
-                        for (int i = 0; i < jetIdx.size(); i++) {
-                            out[jetIdx[i]] = jetVar[i];
-                        }
-                        return out;
-                    }
-                    """
-                )
+                # ROOT.gInterpreter.Declare(
+                #     """
+                #     using namespace ROOT;
+                #     RVecF propagateVector(RVecI jetIdx, RVecF jetVar, RVecF jetVar_raw) {
+                #         RVecF out(jetVar_raw);
+                #         for (int i = 0; i < jetIdx.size(); i++) {
+                #             out[jetIdx[i]] = jetVar[i];
+                #         }
+                #         return out;
+                #     }
+                #     """
+                # )
                 df = df.Define("CleanJet_pt", "jetVars.pt(0)")
+                df = df.Define("CleanJet_mass", "jetVars.mass(0)")
 
                 df = df.Define(
                     "CleanJet_sorting",
                     "ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(CleanJet_pt))",
                 )
 
+                df = df.Define("CleanJet_pt", "Take( CleanJet_pt, CleanJet_sorting)")
+                df = df.Define("CleanJet_eta", "Take( CleanJet_eta, CleanJet_sorting)")
+                df = df.Define("CleanJet_phi", "Take( CleanJet_phi, CleanJet_sorting)")
+                df = df.Define("CleanJet_mass", "Take( CleanJet_mass, CleanJet_sorting)")
+                df = df.Define("CleanJet_jetIdx", "Take( CleanJet_jetIdx, CleanJet_sorting)")
+
                 # stores the jet mass after JEC/JER and resorts it based on the new CleanJet_pt
-                df = df.Define(
-                    "Jet_mass",
-                    "propagateVector(CleanJet_jetIdx, Take(jetVars.mass(0), CleanJet_sorting), Jet_mass_raw)",
-                )
+                # df = df.Define(
+                #     "Jet_mass",
+                #     "propagateVector(CleanJet_jetIdx, Take(jetVars.mass(0), CleanJet_sorting), Jet_mass_raw)",
+                # )
 
             else:
                 df = df.Define(
@@ -371,6 +370,10 @@ class JMECalculator(Module):
                     _sources = [f"JER_{i}" for i in range(6)]
                 _sources += jesSources
                 sources = _sources.copy()
+
+                print("\n")
+                print("JES uncertainties: ")
+                print(sources)
 
                 for i, source in enumerate(sources):
                     variations_pt = []
@@ -415,6 +418,7 @@ class JMECalculator(Module):
                             f"Take({JetColl}_eta, tmp_CleanJet_pt__JES_{source}_{tag}_sorting)"
                         )
 
+                    tags = ["up", "do"]
                     df = df.Vary(
                         "CleanJet_pt",
                         "ROOT::RVec<ROOT::RVecF>{"
@@ -422,7 +426,7 @@ class JMECalculator(Module):
                         + ", "
                         + variations_pt[1]
                         + "}",
-                        ["up", "down"],
+                        tags,
                         source,
                     )
 
@@ -433,7 +437,7 @@ class JMECalculator(Module):
                         + ", " + variations_jetIdx[1]
                         # + "CleanJet_jetIdx"
                         + "}",
-                        ["up", "down"],
+                        tags,
                         source,
                     )
 
@@ -444,7 +448,7 @@ class JMECalculator(Module):
                         + ", " + variations_mass[1]
                         # + "CleanJet_mass"
                         + "}",
-                        ["up", "down"],
+                        tags,
                         source,
                     )
 
@@ -455,7 +459,7 @@ class JMECalculator(Module):
                         + ", " + variations_phi[1]
                         # + "CleanJet_phi"
                         + "}",
-                        ["up", "down"],
+                        tags,
                         source,
                     )
 
@@ -466,7 +470,7 @@ class JMECalculator(Module):
                         + ", " + variations_eta[1]
                         # + "CleanJet_eta"
                         + "}",
-                        ["up", "down"],
+                        tags,
                         source,
                     )
 
