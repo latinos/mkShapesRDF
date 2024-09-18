@@ -18,8 +18,8 @@ class mRDF:
         """
         Naming convention for variations.
 
-        Given a variation name and a tag it will return ``variationName_variationTag``.
-        If a column name is provided, it will return ``col__variationName_variationTag``.
+        Given a variation name and a tag it will return ``{variationName}{variationTag}``.
+        If a column name is provided, it will return ``col_{variationName}{variationTag}``.
 
         Parameters
         ----------
@@ -36,9 +36,9 @@ class mRDF:
             formatted string
         """
         if col == "":
-            return variationName + "_" + variationTag
+            return variationName + variationTag
         else:
-            return col + "__" + variationName + "_" + variationTag
+            return col + "_" + variationName + variationTag
 
     def setNode(self, dfNode, cols, cols_d, variations):
         r"""Set internal variables of an ``mRDF`` object to the provided ones
@@ -99,7 +99,10 @@ class mRDF:
             The ``mRDF`` object with the new RDataFrame object stored
 
         """
-        self.df = ROOT.RDataFrame(*ar, **kw).Define("CUT", "true")
+        try:
+            self.df = ROOT.RDataFrame(*ar, **kw).Define("CUT", "true")
+        except:
+            self.df = ROOT.RDataFrame(*ar, **kw).Redefine("CUT", "true")
         self.cols = list(map(lambda k: str(k), self.df.GetColumnNames()))
         return self
 
@@ -132,13 +135,11 @@ class mRDF:
 
         c = self.Copy()
 
-        # store nominal value in a special temporary column
-        colName = a + "_tmp_SPECIAL_NOMINAL"
-        if colName not in (c.cols + c.cols_d):
-            c.df = c.df.Define(colName, b)
+        if a not in (c.cols + c.cols_d):
+            c.df = c.df.Define(a, b)
         else:
-            c.df = c.df.Redefine(colName, b)
-        c.cols = list(set(c.cols + [colName]))
+            c.df = c.df.Redefine(a, b)
+        c.cols = list(set(c.cols + [a]))
 
         # check variations
         depVars = ParseCpp.listOfVariables(ParseCpp.parse(b))
@@ -169,19 +170,11 @@ class mRDF:
                         mRDF.variationNaming(variationName, tag, variable),
                     )
                 varied_bs.append(ParseCpp.format(varied_b))
-            _type = c.df.GetColumnType(colName)
+            _type = c.df.GetColumnType(a)
             expression = (
                 ParseCpp.RVecExpression(_type) + " {" + ", ".join(varied_bs) + "}"
             )
             c = c.Vary(a, expression, variations[variationName]["tags"], variationName)
-
-        # move back nominal value to the right column name -> a
-        if a not in (c.cols + c.cols_d):
-            c.df = c.df.Define(a, colName)
-        else:
-            c.df = c.df.Redefine(a, colName)
-        c = c.DropColumns(colName, includeVariations=False)
-        c.cols = list(set(c.cols + [a]))
 
         return c
 
@@ -227,7 +220,7 @@ class mRDF:
         even if not used here (not compatible with ``Snapshot``).
 
         """
-
+        
         c = self.Copy()
         if variationName not in c.variations.keys():
             c.variations[variationName] = {"tags": variationTags, "variables": []}
@@ -242,20 +235,14 @@ class mRDF:
         c.variations[variationName]["variables"] = list(
             set(c.variations[variationName]["variables"] + [colName])
         )
-
-        # define a column that will contain the two variations in a vector of len 2
-        c = c.Define(
-            colName + "__" + variationName, expression, excludeVariations=["*"]
-        )
-
+        
         for i, variationTag in enumerate(variationTags):
+            
             c = c.Define(
                 mRDF.variationNaming(variationName, variationTag, colName),
-                colName + "__" + variationName + "[" + str(i) + "]",
+                expression + "[" + str(i) + "]",
                 excludeVariations=["*"],
             )
-
-        c = c.DropColumns(colName + "__" + variationName)
 
         return c
 
@@ -440,7 +427,27 @@ class mRDF:
         """
         return self.df.Sum(string)
 
-    def Snapshot(self, *args, **kwargs):
+    # def Snapshot(self, *args, **kwargs):
+    #     """
+    #     Produce a Snapshot of the mRDF and return it
+    #
+    #     Parameters
+    #     ----------
+    #     *args : list
+    #         list of arguments to be passed to the ``RDataFrame::Snapshot`` method
+    #
+    #     **kwargs : dict
+    #         dictionary of keyword arguments to be passed to the ``RDataFrame::Snapshot`` method
+    #
+    #
+    #     Returns
+    #     -------
+    #     `Snapshot` or `Proxy<Snapshot>`
+    #         The ``Snapshot`` object, or a ``Proxy<Snapshot>`` if ``lazy=True`` is passed as a keyword argument
+    #     """
+    #     return self.df.Snapshot(*args, **kwargs)
+    #
+    def Snapshot(self, treeName, fileName, columns, isNominal=True, *args, **kwargs):
         """
         Produce a Snapshot of the mRDF and return it
 
@@ -458,4 +465,109 @@ class mRDF:
         `Snapshot` or `Proxy<Snapshot>`
             The ``Snapshot`` object, or a ``Proxy<Snapshot>`` if ``lazy=True`` is passed as a keyword argument
         """
-        return self.df.Snapshot(*args, **kwargs)
+        # events = ak.from_rdataframe(self.df, columns)
+        # def function(columns, ):
+        import uproot
+        import awkward as ak
+        import numpy as np
+        from math import ceil
+
+        def call(df):
+            chunksize = 10_000
+            nIterations = max(ceil(df.Count().GetValue() / chunksize), 1)
+            outFile = uproot.recreate(fileName, compression=uproot.LZMA(9))
+            branches = columns.copy()
+            print(branches)
+            #####
+            ##### Temporal fix / remove branches with type: string -> incompatbility with awkward/uproot
+            if "BeamSpot_type" in branches:
+                branches.remove("BeamSpot_type")
+            if "Photon_seediEtaOriX" in branches:
+                branches.remove("Photon_seediEtaOriX")
+            if "Electron_seediEtaOriX" in branches:
+                branches.remove("Electron_seediEtaOriX")
+            _branches = branches.copy()
+            CollectionsToZip = ['CleanJet','WH3l_dphilmet','WH3l_mtlmet','MET','Jet','PuppiMET','Lepton_tightMuon','Lepton_tightElectron','Lepton_isTightElectron','Lepton_isTightMuon','Lepton',
+                                'Muon','Electron','Photon','Gen','LHE','HLT','L1','Tau','IsoTrack','GenPart','LHEPart','TrigObj','LepCut2l','LepCut3l','LepCut4l','NeutrinoGen','SubJet',
+                                'ChsMET','LeptonGen','FatJet','LepSF2l','LepSF3l','LepSF4l','PhotonGen','DressedLepton','GenDressedLepton','SubGenJetAK8','LowPtElectron','VetoLepton',
+                                'BeamSpot','LHEWeight','GenIsolatedPhoton','RawMET','TkMET','CorrT1METJet','boostedTau','newJet','GenJet','TriggerEffWeight','TriggerSFWeight',
+                                'GenJetAK8','Flag','puWeight','Pileup','GenProton','HTXS', 'GenVtx','Generator','Trigger','GenVisTau','RawPuppiMET','SoftActivityJet',
+                                'CaloMET','Rho','FsrPhoton','DeepMETResponseTune','PV','SV','GenMET','DeepMETResolutionTune','gen','OtherPV']
+
+            zips = {}            
+            for zipName in CollectionsToZip:
+                zipBranches = list(filter(lambda k: k.startswith(zipName + '_'), branches))
+                zips[zipName] = zipBranches
+                branches = list(set(branches).difference(zipBranches))
+
+            for i in range(nIterations):
+                _df = df.Range( i * chunksize, (i+1) * chunksize)
+                events = ak.from_rdataframe(_df, _branches)
+                def getBranch(events, branch):
+                    if 'float64' in str(events[branch].type):
+                        return ak.values_astype(events[branch],'float32')
+                    return events[branch]
+                
+                d = {}
+                for zipName in zips:
+                    z = {}
+                    for branch in zips[zipName]:
+                        z[branch[len(zipName)+1:]] = getBranch(events, branch)
+
+                    if len(list(z.keys())) == 0:
+                        # print('No columns found to zip for collection', zipName)
+                        continue
+
+                    d[zipName] = ak.zip(z)
+
+                for branch in branches:
+                    d[branch] = getBranch(events, branch).to_list()
+
+                _events = ak.Array(d)                
+                if treeName not in outFile:
+                    if len(_events) == 0:
+                        print("Not needed!!!")
+                        dtypes = {}
+                        for branch in _events.fields:
+                            dtypes[branch] = _events[branch].type
+                        # print(dtypes)
+                        # print('Creating ttree')
+                        outFile.mktree(treeName, dtypes)
+                        continue
+                    else:
+                        outFile[treeName] = d
+                        continue
+
+                outFile[treeName].extend(d)
+
+            outFile.close()
+
+        return (call, columns)
+        
+    def Histo1D(self, *args):
+        """
+        Produce a TH1D of the mRDF and return it 
+        Parameters 
+        ----------
+        *args : list 
+            list of arguments to be passed to the ``RDataFrame::Histo1D`` method  
+        Returns
+        -------   
+        `Proxy<TH1D>` 
+        """
+        return self.df.Histo1D(*args)
+
+    def Range(self, nEvents):
+        """
+        Filter the dataframe to get a subset of events
+        Parameters
+        ----------
+        *args : list
+        list of arguments to be passed to the ``RDataFrame::Range`` method
+        Returns
+        -------
+        The mRDF objects with a new range of events
+        """
+        c = self.Copy()
+        c.df = c.df.Range(nEvents)
+        return c
