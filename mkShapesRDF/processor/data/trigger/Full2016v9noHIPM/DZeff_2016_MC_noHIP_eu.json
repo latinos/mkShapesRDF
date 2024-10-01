@@ -1,0 +1,113 @@
+{
+    "schema_version": 2,
+    "corrections": [
+        {
+            "name": "TriggerEff",
+            "description": "Trigger efficiencies from txt files",
+            "version": 1,
+            "inputs": [
+                {
+                    "name": "key",
+                    "type": "real",
+                    "description": "key"
+                },
+                {
+                    "name": "systematic",
+                    "type": "string",
+                    "description": "Choose nominal efficiency or one of the uncertainties"
+                }
+            ],
+            "output": {
+                "name": "weight",
+                "type": "real",
+                "description": "Output efficiency (nominal) or uncertainty"
+            },
+            "data": {
+                "nodetype": "binning",
+                "input": "key",
+                "edges": [
+                    0.0,
+                    20.0,
+                    30.0,
+                    40.0,
+                    100.0
+                ],
+                "content": [
+                    {
+                        "nodetype": "category",
+                        "input": "systematic",
+                        "content": [
+                            {
+                                "key": "nominal",
+                                "value": 0.9935537901823276
+                            },
+                            {
+                                "key": "error",
+                                "value": 4.991487989114418e-05
+                            },
+                            {
+                                "key": "error2",
+                                "value": 5.0300343508058454e-05
+                            }
+                        ]
+                    },
+                    {
+                        "nodetype": "category",
+                        "input": "systematic",
+                        "content": [
+                            {
+                                "key": "nominal",
+                                "value": 0.9808377479675825
+                            },
+                            {
+                                "key": "error",
+                                "value": 0.00015417573865650347
+                            },
+                            {
+                                "key": "error2",
+                                "value": 0.00015539660423802282
+                            }
+                        ]
+                    },
+                    {
+                        "nodetype": "category",
+                        "input": "systematic",
+                        "content": [
+                            {
+                                "key": "nominal",
+                                "value": 0.9583382578891384
+                            },
+                            {
+                                "key": "error",
+                                "value": 0.0008875747617955732
+                            },
+                            {
+                                "key": "error2",
+                                "value": 0.0009058320852661783
+                            }
+                        ]
+                    },
+                    {
+                        "nodetype": "category",
+                        "input": "systematic",
+                        "content": [
+                            {
+                                "key": "nominal",
+                                "value": 0.9222222222222223
+                            },
+                            {
+                                "key": "error",
+                                "value": 0.008567698255291134
+                            },
+                            {
+                                "key": "error2",
+                                "value": 0.009470790571136978
+                            }
+                        ]
+                    }
+                ],
+                "flow": "error"
+            }
+        }
+    ]
+}

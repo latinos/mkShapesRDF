@@ -1,0 +1,645 @@
+{
+    "schema_version": 2,
+    "corrections": [
+        {
+            "name": "TriggerEff",
+            "description": "Trigger efficiencies from txt files",
+            "version": 1,
+            "inputs": [
+                {
+                    "name": "pt1",
+                    "type": "real",
+                    "description": "pt1"
+                },
+                {
+                    "name": "pt2",
+                    "type": "real",
+                    "description": "pt2"
+                },
+                {
+                    "name": "systematic",
+                    "type": "string",
+                    "description": "Choose nominal efficiency or one of the uncertainties"
+                }
+            ],
+            "output": {
+                "name": "weight",
+                "type": "real",
+                "description": "Output efficiency (nominal) or uncertainty"
+            },
+            "data": {
+                "nodetype": "binning",
+                "input": "pt1",
+                "edges": [
+                    25.0,
+                    30.0,
+                    40.0,
+                    100.0
+                ],
+                "content": [
+                    {
+                        "nodetype": "binning",
+                        "input": "pt2",
+                        "edges": [
+                            10.0,
+                            15.0,
+                            17.0,
+                            18.0,
+                            19.0,
+                            20.0,
+                            22.0,
+                            25.0,
+                            30.0,
+                            40.0,
+                            100.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9570011025358324
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.006750252049838368
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.007839852167090489
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9584870848708487
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.006071396024610931
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.006981315546048306
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9447415329768271
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.009683922508520348
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.01141424226367349
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9611307420494699
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.008123242806688524
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.009928129661362362
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9611650485436893
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.007773443942480696
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.009419842973305004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9679104477611941
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.004817747984188436
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.005570009330732373
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.972529028603795
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0027533107237834864
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.003034711486544772
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.981029810298103
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0021409932869583814
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0023916375061142636
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 1.0
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 1.0
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt2",
+                        "edges": [
+                            10.0,
+                            15.0,
+                            17.0,
+                            18.0,
+                            19.0,
+                            20.0,
+                            22.0,
+                            25.0,
+                            30.0,
+                            40.0,
+                            100.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9554263565891473
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.006440448330044535
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.007389176938027542
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9537313432835821
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.005755408038069287
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.006476399019309187
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.963013698630137
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.006987288059575492
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.008379235592866574
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.957124842370744
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.007207490540158901
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.008460638662627362
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9703087885985748
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.005841657103461628
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.007071488388189384
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9802371541501976
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0030897285943467523
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0036020909360162667
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9817620238270334
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0016231851349103321
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0017713210195285933
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.986221340388007
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0008655711301071012
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0009208742182975627
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9876182614769192
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0008811704610742765
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0009453263329960437
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 1.0
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt2",
+                        "edges": [
+                            10.0,
+                            15.0,
+                            17.0,
+                            18.0,
+                            19.0,
+                            20.0,
+                            22.0,
+                            25.0,
+                            30.0,
+                            40.0,
+                            100.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9699812382739212
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.003699106761631321
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.004167888001217035
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9758585515130908
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.002831302139228331
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0031743112657093286
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9768250289687138
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0036187075329260354
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0042153051070421554
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9786552828175027
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0033351297248465084
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0038866985198761084
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9765976597659766
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.003206561282806275
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0036655773928029323
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.98
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.002000455617593766
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0022063632251348997
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9852336322567595
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.000990629890615713
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0010582928878145603
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9873497388130152
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0006270618338901635
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0006585040847446599
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9896058828389656
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0004123399847691944
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0004288457373424759
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.9906196269614991
+                                    },
+                                    {
+                                        "key": "error",
+                                        "value": 0.0003180335033352577
+                                    },
+                                    {
+                                        "key": "error2",
+                                        "value": 0.0003288942444351628
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    }
+                ],
+                "flow": "error"
+            }
+        }
+    ]
+}

@@ -1,0 +1,132 @@
+{
+    "schema_version": 2,
+    "corrections": [
+        {
+            "name": "TriggerEff",
+            "description": "Trigger efficiencies from txt files",
+            "version": 1,
+            "inputs": [
+                {
+                    "name": "key",
+                    "type": "real",
+                    "description": "key"
+                },
+                {
+                    "name": "systematic",
+                    "type": "string",
+                    "description": "Choose nominal efficiency or one of the uncertainties"
+                }
+            ],
+            "output": {
+                "name": "weight",
+                "type": "real",
+                "description": "Output efficiency (nominal) or uncertainty"
+            },
+            "data": {
+                "nodetype": "binning",
+                "input": "key",
+                "edges": [
+                    0.0,
+                    20.0,
+                    30.0,
+                    40.0,
+                    50.0,
+                    100.0
+                ],
+                "content": [
+                    {
+                        "nodetype": "category",
+                        "input": "systematic",
+                        "content": [
+                            {
+                                "key": "nominal",
+                                "value": 0.9995341214901535
+                            },
+                            {
+                                "key": "error",
+                                "value": 2.9149352395174688e-05
+                            },
+                            {
+                                "key": "error2",
+                                "value": 3.1031874476061816e-05
+                            }
+                        ]
+                    },
+                    {
+                        "nodetype": "category",
+                        "input": "systematic",
+                        "content": [
+                            {
+                                "key": "nominal",
+                                "value": 0.9989570836435178
+                            },
+                            {
+                                "key": "error",
+                                "value": 3.477914190141984e-05
+                            },
+                            {
+                                "key": "error2",
+                                "value": 3.5957460144953046e-05
+                            }
+                        ]
+                    },
+                    {
+                        "nodetype": "category",
+                        "input": "systematic",
+                        "content": [
+                            {
+                                "key": "nominal",
+                                "value": 0.9979392580421136
+                            },
+                            {
+                                "key": "error",
+                                "value": 6.830966225912505e-05
+                            },
+                            {
+                                "key": "error2",
+                                "value": 7.060742016373744e-05
+                            }
+                        ]
+                    },
+                    {
+                        "nodetype": "category",
+                        "input": "systematic",
+                        "content": [
+                            {
+                                "key": "nominal",
+                                "value": 0.9958557086154565
+                            },
+                            {
+                                "key": "error",
+                                "value": 0.00021944367228787787
+                            },
+                            {
+                                "key": "error2",
+                                "value": 0.00023132915946122434
+                            }
+                        ]
+                    },
+                    {
+                        "nodetype": "category",
+                        "input": "systematic",
+                        "content": [
+                            {
+                                "key": "nominal",
+                                "value": 0.9920235824518814
+                            },
+                            {
+                                "key": "error",
+                                "value": 0.0008274225108233502
+                            },
+                            {
+                                "key": "error2",
+                                "value": 0.000917209426209098
+                            }
+                        ]
+                    }
+                ],
+                "flow": "error"
+            }
+        }
+    ]
+}

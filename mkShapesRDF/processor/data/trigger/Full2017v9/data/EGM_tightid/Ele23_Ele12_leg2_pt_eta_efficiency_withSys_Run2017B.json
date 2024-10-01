@@ -1,0 +1,4202 @@
+{
+    "schema_version": 2,
+    "corrections": [
+        {
+            "name": "TriggerEff",
+            "description": "Trigger efficiencies from txt files",
+            "version": 1,
+            "inputs": [
+                {
+                    "name": "eta",
+                    "type": "real",
+                    "description": "eta"
+                },
+                {
+                    "name": "pt",
+                    "type": "real",
+                    "description": "pt"
+                },
+                {
+                    "name": "systematic",
+                    "type": "string",
+                    "description": "Choose nominal efficiency or one of the uncertainties"
+                }
+            ],
+            "output": {
+                "name": "weight",
+                "type": "real",
+                "description": "Output efficiency (nominal) or uncertainty"
+            },
+            "data": {
+                "nodetype": "binning",
+                "input": "eta",
+                "edges": [
+                    -2.5,
+                    -2.1,
+                    -1.57,
+                    -1.44,
+                    -0.8,
+                    0.0,
+                    0.8,
+                    1.44,
+                    1.57,
+                    2.1,
+                    2.5
+                ],
+                "content": [
+                    {
+                        "nodetype": "binning",
+                        "input": "pt",
+                        "edges": [
+                            0.0,
+                            10.0,
+                            12.0,
+                            13.0,
+                            14.0,
+                            15.0,
+                            20.0,
+                            25.0,
+                            30.0,
+                            35.0,
+                            40.0,
+                            45.0,
+                            50.0,
+                            60.0,
+                            100.0,
+                            200.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.064
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.045
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.086
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.046
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.076
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.03
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.025
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.367
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.098
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.108
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.048
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.104
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.609
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.085
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.079
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.079
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.08
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.776
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.024
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.022
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.021
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.02
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.875
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.013
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.012
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.022
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.035
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.894
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.01
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.009
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.008
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.907
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.919
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.01
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.016
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.929
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.938
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.012
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.015
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.935
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.009
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.01
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.025
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.946
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.018
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.014
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.021
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.968
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.07
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.027
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.045
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.032
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt",
+                        "edges": [
+                            0.0,
+                            10.0,
+                            12.0,
+                            13.0,
+                            14.0,
+                            15.0,
+                            20.0,
+                            25.0,
+                            30.0,
+                            35.0,
+                            40.0,
+                            45.0,
+                            50.0,
+                            60.0,
+                            100.0,
+                            200.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.045
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.056
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.026
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.042
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.045
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.034
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.304
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.073
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.083
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.094
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.181
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.547
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.07
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.069
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.077
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.076
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.639
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.072
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.067
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.055
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.084
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.886
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.014
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.013
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.944
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.014
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.011
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.946
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.951
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.001
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.956
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.96
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.958
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.001
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.956
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.001
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.956
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.009
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.015
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.007
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.959
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.031
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.02
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.05
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.006
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt",
+                        "edges": [
+                            0.0,
+                            10.0,
+                            12.0,
+                            13.0,
+                            14.0,
+                            15.0,
+                            20.0,
+                            25.0,
+                            30.0,
+                            35.0,
+                            40.0,
+                            45.0,
+                            50.0,
+                            60.0,
+                            100.0,
+                            200.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.459
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.429
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.222
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.248
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.348
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.348
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.375
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.196
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.235
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.285
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.277
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.857
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.257
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.118
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.469
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.543
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.786
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.165
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.114
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.216
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.222
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.922
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.044
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.03
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.079
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.049
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.93
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.025
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.019
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.035
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.037
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.944
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.016
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.013
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.011
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.014
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.96
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.009
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.014
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.967
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.962
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.957
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.937
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.017
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.014
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.018
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.03
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.97
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.028
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.016
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.018
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.018
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.647
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.151
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.13
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.316
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.42
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt",
+                        "edges": [
+                            0.0,
+                            10.0,
+                            12.0,
+                            13.0,
+                            14.0,
+                            15.0,
+                            20.0,
+                            25.0,
+                            30.0,
+                            35.0,
+                            40.0,
+                            45.0,
+                            50.0,
+                            60.0,
+                            100.0,
+                            200.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.056
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.041
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.022
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.038
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.028
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.017
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.339
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.065
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.071
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.067
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.048
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.676
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.066
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.061
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.054
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.076
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.767
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.055
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.048
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.115
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.119
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.905
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.011
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.01
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.916
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.002
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.924
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.011
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.001
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.942
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.001
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.947
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.949
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.953
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.001
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.96
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.006
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.974
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.016
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.01
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.993
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.009
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.01
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.016
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt",
+                        "edges": [
+                            0.0,
+                            10.0,
+                            12.0,
+                            13.0,
+                            14.0,
+                            15.0,
+                            20.0,
+                            25.0,
+                            30.0,
+                            35.0,
+                            40.0,
+                            45.0,
+                            50.0,
+                            60.0,
+                            100.0,
+                            200.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.035
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.017
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.043
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.037
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.521
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.05
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.05
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.035
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.029
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.867
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.039
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.032
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.074
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.088
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.933
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.024
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.019
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.019
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.014
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.91
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.92
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.015
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.916
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.011
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.925
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.002
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.942
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.001
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.002
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.94
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.001
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.001
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.948
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.009
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.948
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.959
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.971
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.01
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.021
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.011
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt",
+                        "edges": [
+                            0.0,
+                            10.0,
+                            12.0,
+                            13.0,
+                            14.0,
+                            15.0,
+                            20.0,
+                            25.0,
+                            30.0,
+                            35.0,
+                            40.0,
+                            45.0,
+                            50.0,
+                            60.0,
+                            100.0,
+                            200.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.034
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.074
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.027
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.037
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.067
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.038
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.481
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.061
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.062
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.05
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.052
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.769
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.046
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.041
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.059
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.052
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.822
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.034
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.03
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.056
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.058
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.868
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.009
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.013
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.87
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.011
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.01
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.872
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.013
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.893
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.001
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.905
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.904
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.909
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.911
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.925
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.013
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.01
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.935
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.013
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.011
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.012
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.021
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt",
+                        "edges": [
+                            0.0,
+                            10.0,
+                            12.0,
+                            13.0,
+                            14.0,
+                            15.0,
+                            20.0,
+                            25.0,
+                            30.0,
+                            35.0,
+                            40.0,
+                            45.0,
+                            50.0,
+                            60.0,
+                            100.0,
+                            200.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.037
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.038
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.021
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.036
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.026
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.045
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.309
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.067
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.075
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.116
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.07
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.654
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.061
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.057
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.081
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.045
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.74
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.053
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.047
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.018
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.013
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.853
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.013
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.012
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.01
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.026
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.863
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.019
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.02
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.885
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.903
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.009
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.901
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.909
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.909
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.001
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.002
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.916
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.012
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.917
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.924
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.02
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.016
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.018
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt",
+                        "edges": [
+                            0.0,
+                            10.0,
+                            12.0,
+                            13.0,
+                            14.0,
+                            15.0,
+                            20.0,
+                            25.0,
+                            30.0,
+                            35.0,
+                            40.0,
+                            45.0,
+                            50.0,
+                            60.0,
+                            100.0,
+                            200.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.602
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.125
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.104
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.232
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.079
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.023
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.143
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.118
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.257
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.475
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.385
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 1.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.308
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.2
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.571
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.248
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.222
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.144
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.077
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.901
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.042
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.032
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.033
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.013
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.929
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.026
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.02
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.013
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.045
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.957
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.014
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.011
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.017
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.024
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.976
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.015
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.014
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.95
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.015
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.013
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.947
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.011
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.01
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.959
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.957
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.015
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.012
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.008
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.922
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.031
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.024
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.015
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.017
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 1.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.084
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.136
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.083
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt",
+                        "edges": [
+                            0.0,
+                            10.0,
+                            12.0,
+                            13.0,
+                            14.0,
+                            15.0,
+                            20.0,
+                            25.0,
+                            30.0,
+                            35.0,
+                            40.0,
+                            45.0,
+                            50.0,
+                            60.0,
+                            100.0,
+                            200.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.038
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.046
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.025
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.043
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.033
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.045
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.268
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.074
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.087
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.105
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.116
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.597
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.071
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.068
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.091
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.108
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.672
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.067
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.061
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.024
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.077
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.811
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.018
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.017
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.049
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.038
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.926
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.01
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.003
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.94
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.001
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.001
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.941
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.006
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.951
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.002
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.953
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.001
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.956
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.003
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.002
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.958
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.002
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.958
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.007
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.01
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.012
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.969
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.029
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.017
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.02
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.031
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    },
+                    {
+                        "nodetype": "binning",
+                        "input": "pt",
+                        "edges": [
+                            0.0,
+                            10.0,
+                            12.0,
+                            13.0,
+                            14.0,
+                            15.0,
+                            20.0,
+                            25.0,
+                            30.0,
+                            35.0,
+                            40.0,
+                            45.0,
+                            50.0,
+                            60.0,
+                            100.0,
+                            200.0
+                        ],
+                        "content": [
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.066
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.0
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.0
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.028
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.023
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.061
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.04
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.029
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.103
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.056
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.09
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.038
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.039
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.273
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.083
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.099
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.056
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.118
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.576
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.102
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.097
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.161
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.125
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.741
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.025
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.024
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.039
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.016
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.793
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.017
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.016
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.014
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.029
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.841
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.012
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.011
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.872
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.009
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.008
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.011
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.894
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.009
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.004
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.902
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.009
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.005
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.914
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.005
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.004
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.007
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.912
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.01
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.009
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.006
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.016
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.913
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.021
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.018
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.035
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.048
+                                    }
+                                ]
+                            },
+                            {
+                                "nodetype": "category",
+                                "input": "systematic",
+                                "content": [
+                                    {
+                                        "key": "nominal",
+                                        "value": 0.857
+                                    },
+                                    {
+                                        "key": "stat_down",
+                                        "value": 0.12
+                                    },
+                                    {
+                                        "key": "stat_up",
+                                        "value": 0.077
+                                    },
+                                    {
+                                        "key": "syst_down",
+                                        "value": 0.113
+                                    },
+                                    {
+                                        "key": "syst_up",
+                                        "value": 0.15
+                                    }
+                                ]
+                            }
+                        ],
+                        "flow": "error"
+                    }
+                ],
+                "flow": "error"
+            }
+        }
+    ]
+}
