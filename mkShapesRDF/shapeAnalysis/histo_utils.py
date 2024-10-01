@@ -72,7 +72,7 @@ def fold(h, ifrom, ito):
         sumw2[:, :, ifrom] = 0.0
 
 
-def postPlot(hTotal, doFold, unroll=True):
+def postPlot(hTotal, doFold, unroll=True, delete_oldHisto=True):
     """
     Takes TH1, TH2 or TH3, folds if necessary and unrolls
 
@@ -140,7 +140,8 @@ def postPlot(hTotal, doFold, unroll=True):
         stats1d[3] = stats2d[3] + stats2d[5]
         hTotal.PutStats(stats1d.GetArray())
 
-        hTotal_rolled.Delete()
+        if delete_oldHisto:
+            hTotal_rolled.Delete()
 
     if unroll and isinstance(hTotal, ROOT.TH3) and hTotal.GetDimension() == 3:
         # --- transform 2D into 1D
@@ -199,7 +200,8 @@ def postPlot(hTotal, doFold, unroll=True):
         stats1d[3] = stats3d[3] + stats3d[5] + stats3d[8]
         hTotal.PutStats(stats1d.GetArray())
 
-        hTotal_rolled.Delete()
+        if delete_oldHisto:
+            hTotal_rolled.Delete()
 
     return hTotal
 
