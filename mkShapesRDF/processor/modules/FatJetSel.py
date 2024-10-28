@@ -6,7 +6,7 @@ from mkShapesRDF.processor.framework.module import Module
 # Dictionary for FatJet cuts  
 FatJetFilter_dict = {
    'default' : { 'pt_min': 0 , 'pt_max' : 5000, 'max_eta' : 2.4, 'max_tau21': 1000, 'mass_range' : [0 , 10000],
-               'DeltaRlep' : 0.4, 'DeltaRjet' : 0.4, 'jet_id' : 0},
+               'DeltaRlep' : 0.8, 'DeltaRjet' : 0.8, 'jet_id' : 0},
 }
 
 class FatJetSel(Module):

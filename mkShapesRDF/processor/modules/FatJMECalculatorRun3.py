@@ -108,7 +108,7 @@ class FatJMECalculator(Module):
             jesUnc.push_back(jes_var)
         addHEM      = "false"
         smearingTool= "JERSmear"
-        maxDR       = 0.2
+        maxDR       = 0.4
         maxDPT      = 3
         
         if self.do_JER:
