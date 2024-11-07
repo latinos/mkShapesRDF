@@ -12,10 +12,10 @@ echo "Custom install ""$1"
 if [ -z "$1" ]; then 
     if [[ "$OS" == *"centos:7"* ]]; then
         echo centos7
-        sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_103/x86_64-centos7-gcc11-opt/setup.sh"
+        sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-centos7-gcc11-opt/setup.sh"
     elif [[ "$OS" == *"enterprise_linux:9"* ]]; then
         echo el9
-        sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_103/x86_64-centos9-gcc11-opt/setup.sh"	
+        sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-el9-gcc11-opt/setup.sh"	
     else
         echo "$OS"" not supported"
         exit 1
@@ -80,7 +80,5 @@ EOF
 
 chmod +x start.sh
 
-wget https://gpizzati.web.cern.ch/mkShapesRDF/jsonpog-integration.tar.gz
-tar -xzvf jsonpog-integration.tar.gz
-rm -r jsonpog-integration.tar.gz
-mv jsonpog-integration mkShapesRDF/processor/data/
+mkdir mkShapesRDF/processor/data/jsonpog-integration
+cp -r /cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG mkShapesRDF/processor/data/jsonpog-integration/
