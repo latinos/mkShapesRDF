@@ -1,14 +1,20 @@
-import json
 from mkShapesRDF.processor.framework.module import Module
-
+from mkShapesRDF.processor.data.Lumi_cfg import LumiCfg
+import json
+import os
 
 class LumiMask(Module):
-    def __init__(self, jsonFile):
+    def __init__(self, year):
         super().__init__("LumiMask")
-        self.jsonFile = jsonFile
+        self.base_path = ""
+        if "processor" in os.path.dirname(os.path.dirname(__file__)):
+            self.base_path = (
+                os.path.dirname(os.path.dirname(__file__)).split("processor")[0]
+            )
+
+        self.jsonFile = self.base_path + LumiCfg[year]
 
     def runModule(self, df, values):
-        self.jsonFile = self.jsonFile
 
         with open(self.jsonFile) as file:
             d = json.load(file)

@@ -50,8 +50,22 @@ Productions = {
         "isData": True,
         "jsonFile": "../data/certification/Cert_Collisions2022_355100_362760_Golden.json",
         "samples": "../framework/samples/Run2022EE_Prompt_nAODv12.py",
-        "cmssw": "Full2022v12",
+        "cmssw": "Full2022EEv12",
         "year": "2022",
+    },
+    "Run2023_Prompt_nAODv12_Full2023v12": {
+        "isData": True,
+        "jsonFile": "../data/certification/Cert_Collisions2023_366442_370790_Golden.json",
+        "samples": "../framework/samples/Run2023_Prompt_nAODv12.py",
+        "cmssw": "Full2023v12",
+        "year": "2023",
+    },
+    "Run2023BPix_Prompt_nAODv12_Full2023BPixv12": {
+        "isData": True,
+        "jsonFile": "../data/certification/Cert_Collisions2023_366442_370790_Golden.json",
+        "samples": "../framework/samples/Run2023BPix_Prompt_nAODv12.py",
+        "cmssw": "Full2023BPixv12",
+        "year": "2023",
     },
     #################################### nAODv9 MC ##############################################
     # -------- 2016 MC 106X nAODv8: Full2016v8
@@ -111,12 +125,30 @@ Productions = {
         "xsFile": "../framework/samples/samplesCrossSections_13p6TeV.py",
         "YRver": ["YR4", "13p6TeV"],
     },
-    # ------- 2022 MC Prompt v12
+    # ------- 2022 MC Sumer22EE v12
     "Summer22EE_130x_nAODv12_Full2022v12": {
         "isData": False,
         "samples": "../framework/samples/Summer22EE_130x_nAODv12.py",
-        "cmssw": "Full2022v12",
+        "cmssw": "Full2022EEv12",
         "year": "2022",
+        "xsFile": "../framework/samples/samplesCrossSections_13p6TeV.py",
+        "YRver": ["YR4", "13p6TeV"],
+    },
+    # ------- 2023 MC Summer23 v12
+    "Summer23_130x_nAODv12_Full2023v12": {
+        "isData": False,
+        "samples": "../framework/samples/Summer23_130x_nAODv12.py",
+        "cmssw": "Full2023v12",
+        "year": "2023",
+        "xsFile": "../framework/samples/samplesCrossSections_13p6TeV.py",
+        "YRver": ["YR4", "13p6TeV"],
+    },
+    # ------- 2023 MC Summer23BPix v12
+    "Summer23BPix_130x_nAODv12_Full2023BPixv12": {
+        "isData": False,
+        "samples": "../framework/samples/Summer23BPix_130x_nAODv12.py",
+        "cmssw": "Full2023BPixv12",
+        "year": "2023",
         "xsFile": "../framework/samples/samplesCrossSections_13p6TeV.py",
         "YRver": ["YR4", "13p6TeV"],
     },

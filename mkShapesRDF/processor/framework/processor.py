@@ -345,6 +345,7 @@ class Processor:
         """)
         
         self.fPy = self.fPy.replace("RPLME_FW", frameworkPath)
+        self.fPy = self.fPy.replace("RPLME_CMSSW", Productions[self.prodName]["cmssw"])
 
         #: folderPathEos is the output folder path (not ending with ``/`` so that is possible to add suffix to the folder)
         if self.inputFolder == "":

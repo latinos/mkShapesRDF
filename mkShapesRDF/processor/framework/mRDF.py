@@ -571,3 +571,12 @@ class mRDF:
         c = self.Copy()
         c.df = c.df.Range(nEvents)
         return c
+
+    
+    def Alias(self, alias, colName):
+        """
+        Allow to refer to a column with a different name
+        """
+        c = self.Copy()
+        c.df = c.df.Alias(alias, colName)
+        return c

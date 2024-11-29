@@ -1,6 +1,7 @@
 import ROOT
 from mkShapesRDF.processor.framework.module import Module
-
+from mkShapesRDF.processor.data.JetMaker_cfg import JetMakerCfg
+import os
 
 class JMECalculator(Module):
     """
@@ -9,10 +10,7 @@ class JMECalculator(Module):
 
     def __init__(
         self,
-        jsonFile,
-        JEC_era,
-        JER_era,
-        jsonFileSmearingTool,
+        year,
         jet_object,
         jes_unc,
         met_collections=["PuppiMET"],
@@ -52,10 +50,6 @@ class JMECalculator(Module):
             Whether to store the variations (up/down) for JES/JER
         """
         super().__init__("JMECalculator")
-        self.json = jsonFile
-        self.JEC_era = JEC_era
-        self.JER_era = JER_era
-        self.jsonFileSmearingTool = jsonFileSmearingTool
         self.jet_object = jet_object
         self.jes_unc = jes_unc
         self.met_collections = met_collections
@@ -65,6 +59,22 @@ class JMECalculator(Module):
         self.do_Unclustered = do_Unclustered
         self.store_nominal = store_nominal
         self.store_variations = store_variations
+
+        self.base_path = ""
+        self.json = ""
+        self.JEC_era = ""
+        self.JER_era = ""
+        self.jsonFileSmearingTool = ""
+        if "processor" in os.path.dirname(os.path.dirname(__file__)):
+            self.base_path = (
+                os.path.dirname(os.path.dirname(__file__)).split("processor")[0]
+            )
+        
+        if year in JetMakerCfg.keys():
+            self.json = self.base_path + JetMakerCfg[year]["jet_jerc"]
+            self.JEC_era = JetMakerCfg[year]["JEC"]
+            self.JER_era = JetMakerCfg[year]["JER"]
+            self.jsonFileSmearingTool = self.base_path + JetMakerCfg[year]["jer_smear"]
 
     def runModule(self, df, values):
         ROOT.gInterpreter.Declare(

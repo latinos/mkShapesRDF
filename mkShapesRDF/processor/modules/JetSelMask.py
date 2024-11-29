@@ -1,9 +1,11 @@
 from mkShapesRDF.processor.framework.module import Module
+from mkShapesRDF.processor.data.JetMaker_cfg import JetMakerCfg
 import correctionlib
+import os
 correctionlib.register_pyroot_binding()
 
 class JetSelMask(Module):
-    def __init__(self, jetId, puJetId, minPt, maxEta, UL2016fix=False, pathToJson="",globalTag="",eventMask=False):
+    def __init__(self, jetId, puJetId, minPt, maxEta, UL2016fix=False, year="",eventMask=False):
         super().__init__("JetSelMask")
         self.jetId = jetId
         self.puJetId = puJetId
@@ -12,10 +14,17 @@ class JetSelMask(Module):
         self.doMask = True
         self.UL2016fix = UL2016fix
         self.eventMask = eventMask
-        if pathToJson!="":
+
+        self.base_path = ""
+        if "processor" in os.path.dirname(os.path.dirname(__file__)):
+            self.base_path = (
+                os.path.dirname(os.path.dirname(__file__)).split("processor")[0]
+            )
+        
+        if year in JetMakerCfg.keys():
             self.doMask = True
-            self.pathToJson = pathToJson
-            self.globalTag = globalTag
+            self.pathToJson = self.base_path + JetMakerCfg[year]["vetomap"]
+            self.globalTag = JetMakerCfg[year]["vetokey"]        
         
     def runModue(self, df, values):
         # jetId = 2
