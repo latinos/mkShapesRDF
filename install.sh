@@ -13,7 +13,7 @@ if [ -z "$1" ]; then
     if [[ "$OS" == *"centos:7"* ]]; then
         echo centos7
         sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-centos7-gcc11-opt/setup.sh"
-    elif [[ "$OS" == *"enterprise_linux:9"* ]]; then
+    elif [[ "$OS" == *"linux:9"* ]]; then
         echo el9
         sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-el9-gcc11-opt/setup.sh"
     else
