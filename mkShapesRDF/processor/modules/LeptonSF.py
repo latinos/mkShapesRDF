@@ -452,7 +452,7 @@ class LeptonSF(Module):
                     )
                     df = df.Define(
                         f"Lepton_tightElectron_{wp}_TotSF_Down",
-                        f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF + sqrt((ElewpSF_{wp}[0]-ElewpSF_{wp}[2])*(ElewpSF_{wp}[0]-ElewpSF_{wp}[2]) + EleRecoSF_tmp[1]*EleRecoSF_tmp[1])",
+                        f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF + sqrt((ElewpSF_{wp}[0]-ElewpSF_{wp}[2])*(ElewpSF_{wp}[0]-ElewpSF_{wp}[2]) + EleRecoSF_tmp[2]*EleRecoSF_tmp[2])",
                     )
                 else:
                     df = df.Define(

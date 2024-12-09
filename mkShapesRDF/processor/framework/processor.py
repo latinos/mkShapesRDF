@@ -345,6 +345,9 @@ class Processor:
         """)
         
         self.fPy = self.fPy.replace("RPLME_FW", frameworkPath)
+        self.fPy = self.fPy.replace("RPLME_CMSSW", Productions[self.prodName]["cmssw"])
+        if Productions[self.prodName]["isData"]:
+            self.fPy = self.fPy.replace("RPLME_LUMI", Productions[self.prodName]["jsonFile"])
 
         #: folderPathEos is the output folder path (not ending with ``/`` so that is possible to add suffix to the folder)
         if self.inputFolder == "":
