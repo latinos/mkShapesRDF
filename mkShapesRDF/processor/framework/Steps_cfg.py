@@ -106,7 +106,7 @@ Steps = {
             "WGammaStar",
             "DressedLeptons",
             "baseW",
-	    "trigMC",
+	    "trigMCnoSF",
             "puW",
 	    "addTnPMuon",
         ]
@@ -130,7 +130,7 @@ Steps = {
             "WGammaStar",
             "DressedLeptons",
             "baseW",
-            "trigMC",
+            "trigMCnoSF",
             "puW",
 	    "addTnPElectron",
         ]
@@ -291,7 +291,7 @@ Steps = {
             "WGammaStar",
             "DressedLeptons",
             "baseW",
-	    "trigMC",
+	    "trigMCnoSF",
             "puW",
 	    "addTnPMuon",
         ]
@@ -315,7 +315,7 @@ Steps = {
             "WGammaStar",
             "DressedLeptons",
             "baseW",
-	    "trigMC",
+	    "trigMCnoSF",
             "puW",
 	    "addTnPElectron",
         ]
@@ -534,7 +534,7 @@ Steps = {
             "WGammaStar",
             "DressedLeptons",
             "baseW",
-	    "trigMC",
+	    "trigMCnoSF",
             "puW",
 	    "addTnPMuon",
         ]
@@ -557,7 +557,7 @@ Steps = {
             "WGammaStar",
             "DressedLeptons",
             "baseW",
-	    "trigMC",
+	    "trigMCnoSF",
             "puW",
 	    "addTnPElectron",
         ]
@@ -682,7 +682,7 @@ Steps = {
             "WGammaStar",
             "DressedLeptons",
             "baseW",
-	    "trigMC",
+	    "trigMCnoSF",
             "puW",
 	    "addTnPMuon",
         ]
@@ -705,7 +705,7 @@ Steps = {
             "WGammaStar",
             "DressedLeptons",
             "baseW",
-	    "trigMC",
+	    "trigMCnoSF",
             "puW",
 	    "addTnPElectron",
         ]
