@@ -416,6 +416,44 @@ Steps = {
         ],
     },
 
+    "DATAl2loose2022EEv12__addTnPMuon": {
+        "isChain": True,
+        "do4MC": False,
+        "do4Data": True,
+        "selection": '"((nElectron+nMuon)>1)"',
+        "subTargets": [
+            "lumiMask",
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMaskFilter",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "addTnPMuon"
+        ],
+    },
+
+    "DATAl2loose2022EEv12__addTnPElectron": {
+        "isChain": True,
+        "do4MC": False,
+        "do4Data": True,
+        "selection": '"((nElectron+nMuon)>1)"',
+        "subTargets": [
+            "lumiMask",
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMaskFilter",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "addTnPElectron"
+        ],
+    },
+
     # 2023
     "DATAl2loose2023v12__l2tight": {
         "isChain" : True,
