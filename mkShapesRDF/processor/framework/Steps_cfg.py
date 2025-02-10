@@ -1252,6 +1252,22 @@ Steps = {
         "declare" : "formulasDATA = lambda : formulasToAdd_DATA_Full2022v12()",
         "module" : "formulasDATA()",
     },
+    "formulasDATA_2023": {
+        "isChain" : False,
+        "do4MC" : False,
+        "do4Data" : True,
+        "import" : "mkShapesRDF.processor.modules.formulasToAdd_DATA_Full2023v12",
+        "declare" : "formulasDATA = lambda : formulasToAdd_DATA_Full2023v12()",
+        "module" : "formulasDATA()",
+    },
+    "formulasDATA_2023BPix": {
+	"isChain" : False,
+        "do4MC" : False,
+        "do4Data" : True,
+        "import" : "mkShapesRDF.processor.modules.formulasToAdd_DATA_Full2023BPixv12",
+        "declare" : "formulasDATA = lambda : formulasToAdd_DATA_Full2023BPixv12()",
+        "module" : "formulasDATA()",
+    },
     
     "formulasMC": {
         "isChain": False,
@@ -1324,6 +1340,7 @@ Steps = {
         "declare": "formulasFAKE = lambda : formulasToAdd_FAKE_Full2022v12()",
         "module": "formulasFAKE()",
     },
+    
     
     "btagPerJet_DeepCSV_2018UL": {
         "isChain": False,
