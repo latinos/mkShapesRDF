@@ -223,7 +223,13 @@ class Processor:
 
         os.system("chmod +x " + jobDir + "run.sh")
 
-        eosTmpPath = Sites["eosTmpWorkDir"]
+        # Select site
+        uname = os.uname()[1]
+        site = ''
+        if 'portal' in uname:  site = 'kit'
+        elif "lxplus" in uname: site = 'cern'
+
+        eosTmpPath = Sites[site]["eosTmpWorkDir"]
         
         frameworkPath = getFrameworkPath() + "mkShapesRDF"
 
@@ -233,13 +239,14 @@ class Processor:
         self.fPy += dedent(
             """
         files = []
-        eosTmpPath = '"""+eosTmpPath+"""'
+        eosTmpPath = """+eosTmpPath+"""
+        print(f'eosTmpPath = {eosTmpPath}')
         for f in _files:
             filename = f.split('/')[-1]
-            if eosTmpPath=="USEDAS":
+            if eosTmpPath=='USEDAS':
                 filename = os.environ['TMPDIR'] + '/input__' + filename
             else:
-                filename = eosTmpPath + 'input__' + filename
+                filename = eosTmpPath + os.getlogin() + 'input__' + filename
             files.append(filename)
             proc = 0
             if "root://" in f:
@@ -325,7 +332,7 @@ class Processor:
         print(tabulate(data, headers=["desc.", "value"]))
             """)
 
-        if self.inputFolder != "" and eosTmpPath!="USEDAS":
+        if self.inputFolder != "" and eosTmpPath!='USEDAS':
             self.fPy += dedent("""
         for f in files:
             print('Removing input file', f)
@@ -424,7 +431,7 @@ class Processor:
                 if self.inputFolder != "":
                     outputFilename = _files[0].split("/")[-1]
 
-                if eosTmpPath=="USEDAS":
+                if eosTmpPath=='USEDAS':
                     #if not os.path.exists(os.environ['TMPDIR']):
                     #    os.mkdir(os.environ['TMPDIR'])
                     _fPy = _fPy.replace("RPLME_OUTPUTFILENAMETMP", "os.environ['TMPDIR']")
@@ -441,26 +448,54 @@ class Processor:
 
         fJdl = dedent(
             """
-universe = vanilla
-executable = run.sh
-arguments = $(Folder)
-
-should_transfer_files = YES
-transfer_input_files = $(Folder)/script.py
-
-output = $(Folder)/out.txt
-error  = $(Folder)/err.txt
-log    = $(Folder)/log.txt
-
-request_cpus   = 1
-request_memory = 12GB
-request_disk   = 10GB
-requirements = (OpSysAndVer =?= "AlmaLinux9")
-+JobFlavour = "testmatch"
-
-queue 1 Folder in RPLME_ALLSAMPLES
-"""
+            universe = vanilla
+            executable = run.sh
+            arguments = $(Folder)
+            
+            should_transfer_files = YES
+            transfer_input_files = $(Folder)/script.py
+            
+            output = $(Folder)/out.txt
+            error  = $(Folder)/err.txt
+            log    = $(Folder)/log.txt
+            
+            request_cpus   = 1
+            request_memory = 12GB
+            request_disk   = 10GB
+            requirements = (OpSysAndVer =?= "AlmaLinux9")
+            +JobFlavour = "testmatch"
+            
+            queue 1 Folder in RPLME_ALLSAMPLES
+            """
         )
+
+        if site == 'kit':
+            fJdl = dedent(
+                """
+                universe = container
+                container_image = /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cverstege/alma9-gridjob:latest
+
+                executable = run.sh
+                arguments = $(Folder)
+                
+                should_transfer_files = YES
+                transfer_input_files = $(Folder)/script.py
+                
+                output = $(Folder)/out.txt
+                error  = $(Folder)/err.txt
+                log    = $(Folder)/log.txt
+                
+                request_cpus   = 1
+                request_memory = 8000
+                request_disk   = 10000000
+                +JobFlavour = "testmatch"
+                
+                accounting_group = cms.higgs
+
+                queue 1 Folder in RPLME_ALLSAMPLES
+                """
+            )
+        
 
         fJdl = fJdl.replace("RPLME_ALLSAMPLES", " ".join(allSamples))
         with open(jobDir + "/submit.jdl", "w") as f:

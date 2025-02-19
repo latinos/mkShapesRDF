@@ -1,4 +1,5 @@
 from mkShapesRDF.processor.framework.processor import Processor
+from mkShapesRDF.processor.framework.Sites_cfg import Sites
 import argparse
 import os
 from sys import argv
@@ -13,7 +14,15 @@ condorDir = (
 
 #: eosDir is the path to use for eos submission, user might want to change it -> edit ``mkPostProc.py``
 # eosDir = "/eos/cms/store/group/phys_smp/Latinos/vbfz/mkShapesRDF_nanoAOD"
-eosDir = "/eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/"
+# eosDir = "/eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/"
+
+# Select site
+uname = os.uname()[1]
+site = ''
+if 'portal' in uname:  site = 'kit'
+elif "lxplus" in uname: site = 'cern'
+
+eosDir = Sites[site]["eosDir"]
 
 #: defaultRedirector is the redirector used to access files if the option ``--useRedirector 1`` is used, user might want to change it -> edit ``mkPostProc.py``
 defaultRedirector = "root://cms-xrd-global.cern.ch/"
