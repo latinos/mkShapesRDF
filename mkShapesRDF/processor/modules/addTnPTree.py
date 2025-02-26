@@ -256,6 +256,12 @@ class addTnPTree(Module):
         if not os.path.isdir(os.path.dirname(outName)):
             os.makedirs(os.path.dirname(outName))
 
+
+        if self.flavor=="Electron":
+            outName = outName.replace(".parquet", ".root")
+            df.Snapshot("Events", outName, branches)
+            return df
+            
         first = True
 
         print("Total number of iterations -> " + str(nIterations))

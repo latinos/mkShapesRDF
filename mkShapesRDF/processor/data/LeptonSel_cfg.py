@@ -974,7 +974,7 @@ MuonWP = {
              },
     }, 
 },
-"Full2023Bpixv12": {
+"Full2023BPixv12": {
         # ------------                                                                                                                                                  
         "VetoObjWP": {
             "HLTsafe": {
