@@ -259,7 +259,8 @@ class addTnPTree(Module):
 
         if self.flavor=="Electron":
             outName = outName.replace(".parquet", ".root")
-            df.Snapshot("Events", outName, branches)
+            snapshot = df.Snapshot("Events", outName, branches)[0]
+            snapshot(df.df)
             return df
             
         first = True
