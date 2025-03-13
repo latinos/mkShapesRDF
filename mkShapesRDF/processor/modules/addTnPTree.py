@@ -225,7 +225,7 @@ class addTnPTree(Module):
                 
                 df = df.Define(f"tag_{label}", f"getVariables(TPPairs, {var}, 1)")
                 variables_to_save.append(f"tag_{label}")
-
+                
         variables_to_save.append("npairs")
         variables_to_save.append("pair_mass")
         variables_to_save.append("pair_pt")
@@ -278,7 +278,7 @@ class addTnPTree(Module):
         for i in range(nIterations):
             print("Iteration: " + str(i))
             _df = df.df.Range(i * chunksize, (i+1) * chunksize)
-            events = ak.from_rdataframe(_df, branches)
+            events = ak.from_rdataframe(_df, branches)            
         
             def getBranchFlatten(events, branch):
                 ak_array = [ak.Array(v) for v in events[branch]]

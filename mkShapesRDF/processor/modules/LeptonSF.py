@@ -3,6 +3,7 @@ from mkShapesRDF.processor.framework.module import Module
 from mkShapesRDF.processor.data.LeptonSel_cfg import *
 import correctionlib
 import os
+import re
 
 correctionlib.register_pyroot_binding()
 
@@ -12,17 +13,14 @@ class LeptonSF(Module):
     def __init__(self, era):
         super().__init__("LeptonSF")
         self.era = era
-        if ("Full2022EEv11" in era) or ("Full2022EEv12" in era):
-            self.egamma_era = "2022FG"
-        elif ("Full2022v12" in era):
-            self.egamma_era = "2022Re-recoBCD"
+        self.year = re.findall(r'\d+', era)[0]
         
-        self.mu_maxPt = 199.9
-        self.mu_minPt = 15.001
+        self.mu_maxPt = 199.99
+        self.mu_minPt = 10.001
         self.mu_maxEta = 2.3999
         self.mu_minEta = -2.3999
 
-        self.el_maxPt = 499.99
+        self.el_maxPt = 199.99
         self.el_minPt = 10.001
         self.el_maxEta = 2.4999
         self.el_minEta = -2.4999
@@ -47,6 +45,7 @@ class LeptonSF(Module):
                     self.SF_dict["electron"][wp]["hasTrk"] = True
                     self.SF_dict["electron"][wp]["tkSF"]["data"] = []
                     self.SF_dict["electron"][wp]["tkSF"]["key"] = []
+                    self.SF_dict["electron"][wp]["tkSF"]["era"] = []
                     self.SF_dict["electron"][wp]["tkSF"]["beginRP"] = []
                     self.SF_dict["electron"][wp]["tkSF"]["endRP"] = []
                     for rpr in self.ElectronWP[self.era]["TightObjWP"][wp]["tkSF"]:
@@ -59,15 +58,21 @@ class LeptonSF(Module):
                         temp_file = (
                             self.cfg_path
                             + "/processor/"
-                            + self.ElectronWP[self.era]["TightObjWP"][wp]["tkSF"][rpr][1]
+                            + self.ElectronWP[self.era]["TightObjWP"][wp]["tkSF"][rpr][2]
                         )
                         self.SF_dict["electron"][wp]["tkSF"]["data"].append(temp_file)
-                        self.SF_dict["electron"][wp]["tkSF"]["key"].append(
+                        self.SF_dict["electron"][wp]["tkSF"]["era"].append(
                             self.ElectronWP[self.era]["TightObjWP"][wp]["tkSF"][rpr][0]
                         )
+                        self.SF_dict["electron"][wp]["tkSF"]["key"].append(
+                            self.ElectronWP[self.era]["TightObjWP"][wp]["tkSF"][rpr][1]
+                        )
+                        
                 if SFkey == "wpSF":
                     self.SF_dict["electron"][wp]["wpSF"]["data"] = []
                     self.SF_dict["electron"][wp]["wpSF"]["key"] = []
+                    self.SF_dict["electron"][wp]["wpSF"]["era"] = []
+                    self.SF_dict["electron"][wp]["wpSF"]["label"] = []
                     self.SF_dict["electron"][wp]["wpSF"]["beginRP"] = []
                     self.SF_dict["electron"][wp]["wpSF"]["endRP"] = []
                     for rpr in self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"]:
@@ -80,13 +85,17 @@ class LeptonSF(Module):
                         temp_file = (
                             self.cfg_path
                             + "/processor/"
-                            + self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"][rpr][
-                                1
-                            ]
+                            + self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"][rpr][3]
                         )
                         self.SF_dict["electron"][wp]["wpSF"]["data"].append(temp_file)
-                        self.SF_dict["electron"][wp]["wpSF"]["key"].append(
+                        self.SF_dict["electron"][wp]["wpSF"]["era"].append(
                             self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"][rpr][0]
+                        )
+                        self.SF_dict["electron"][wp]["wpSF"]["key"].append(
+                            self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"][rpr][1]
+                        )
+                        self.SF_dict["electron"][wp]["wpSF"]["label"].append(
+                            self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"][rpr][2]
                         )
 
         # muon setup
@@ -174,10 +183,8 @@ class LeptonSF(Module):
         columnsToDrop = []
         did_reco = False
 
-        df = df.Define("Lepton_RecoSF", "ROOT::RVecF(Lepton_pt.size(), 1.0)")
-
-        df = df.Define("Lepton_RecoSF_Up", "ROOT::RVecF(Lepton_pt.size(), 1.0)")
-
+        df = df.Define("Lepton_RecoSF",      "ROOT::RVecF(Lepton_pt.size(), 1.0)")
+        df = df.Define("Lepton_RecoSF_Up",   "ROOT::RVecF(Lepton_pt.size(), 1.0)")
         df = df.Define("Lepton_RecoSF_Down", "ROOT::RVecF(Lepton_pt.size(), 1.0)")
 
         ### Electrons
@@ -194,7 +201,8 @@ class LeptonSF(Module):
                         endRP = self.SF_dict["electron"][wp]["tkSF"]["endRP"][i]
 
                         key = self.SF_dict["electron"][wp]["tkSF"]["key"][i]
-
+                        egamma_era = self.SF_dict["electron"][wp]["tkSF"]["era"][i]
+                        
                         ROOT.gROOT.ProcessLine(
                             f'auto csetEl_Reco_{beginRP}_{endRP} = correction::CorrectionSet::from_file("{pathToJson}");'
                         )
@@ -211,8 +219,9 @@ class LeptonSF(Module):
                             + str(endRP)
                             + """){
                             cset_electron_Reco = cset_electron_Reco_%s_%s;
+                            Egamma_era = "%s";
                         }
-                        """ % (beginRP, endRP)
+                        """ % (beginRP, endRP, egamma_era)
                         )
 
                     else:
@@ -221,14 +230,17 @@ class LeptonSF(Module):
                 
                 ROOT.gInterpreter.Declare(
                     """
-                    std::vector<ROOT::RVecF> getSF_Reco(ROOT::RVecF ele_pt, ROOT::RVecF ele_eta, ROOT::RVecI ele_pdgId, int runP){
+                    std::vector<ROOT::RVecF> getSF_Reco(ROOT::RVecF ele_pt, ROOT::RVecF ele_eta, ROOT::RVecF ele_phi, ROOT::RVecI ele_pdgId, int runP){
 
                         std::vector<ROOT::RVecF> SFTot;
                         ROOT::RVecF SF;
                         ROOT::RVecF SFup;
                         ROOT::RVecF SFdown;
                         float sf,sfup,sfdown;
-                        float pt,eta;
+                        float pt,eta,phi;
+                        int year = """ + str(self.year) + """;
+
+                        string Egamma_era;
 
                         correction::Correction::Ref cset_electron_Reco;
 
@@ -249,23 +261,43 @@ class LeptonSF(Module):
                                 + """}), """
                                 + str(self.el_minEta)
                                 + """});
-                                    
+
+                                phi = ele_phi[i];
+
                                 if (pt< 20){
                                     pt = ROOT::VecOps::Min(ROOT::RVecF{pt, 19.99});
-                                    sf     = cset_electron_Reco->evaluate({"%s", "sf", "RecoBelow20", eta, pt});
-                                    sfup   = cset_electron_Reco->evaluate({"%s", "sfup", "RecoBelow20", eta, pt});
-                                    sfdown = cset_electron_Reco->evaluate({"%s", "sfdown", "RecoBelow20", eta, pt});
+                                    if (year>2022){
+                                        sf     = cset_electron_Reco->evaluate({Egamma_era, "sf", "RecoBelow20", eta, pt, phi});
+                                        sfup   = cset_electron_Reco->evaluate({Egamma_era, "sfup", "RecoBelow20", eta, pt, phi});
+                                        sfdown = cset_electron_Reco->evaluate({Egamma_era, "sfdown", "RecoBelow20", eta, pt, phi});
+                                    }else{
+                                        sf     = cset_electron_Reco->evaluate({Egamma_era, "sf", "RecoBelow20", eta, pt});
+                                        sfup   = cset_electron_Reco->evaluate({Egamma_era, "sfup", "RecoBelow20", eta, pt});
+                                        sfdown = cset_electron_Reco->evaluate({Egamma_era, "sfdown", "RecoBelow20", eta, pt});
+                                    }
                                 }else if (pt>=20.0 && pt<=75.0){
                                     pt = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{pt, 74.99}), 20.0001});
-                                    sf = cset_electron_Reco->evaluate({"%s", "sf", "Reco20to75", eta, pt});
-                                    sfup = cset_electron_Reco->evaluate({"%s", "sfup", "Reco20to75", eta, pt});
-                                    sfdown = cset_electron_Reco->evaluate({"%s", "sfdown", "Reco20to75", eta, pt});
+                                    if (year>2022){
+                                        sf     = cset_electron_Reco->evaluate({Egamma_era, "sf", "Reco20to75", eta, pt, phi});
+                                        sfup   = cset_electron_Reco->evaluate({Egamma_era, "sfup", "Reco20to75", eta, pt, phi});
+                                        sfdown = cset_electron_Reco->evaluate({Egamma_era, "sfdown", "Reco20to75", eta, pt, phi});
+                                    }else{
+                                        sf = cset_electron_Reco->evaluate({Egamma_era, "sf", "Reco20to75", eta, pt});
+                                        sfup = cset_electron_Reco->evaluate({Egamma_era, "sfup", "Reco20to75", eta, pt});
+                                        sfdown = cset_electron_Reco->evaluate({Egamma_era, "sfdown", "Reco20to75", eta, pt});
+                                    }
                                 }else{
-                                    sf     = cset_electron_Reco->evaluate({"%s", "sf", "RecoAbove75", eta, pt});
-                                    sfup   = cset_electron_Reco->evaluate({"%s", "sfup", "RecoAbove75", eta, pt});
-                                    sfdown = cset_electron_Reco->evaluate({"%s", "sfdown", "RecoAbove75", eta, pt});
+                                    pt = ROOT::VecOps::Max(ROOT::RVecF{pt, 75.001});
+                                    if (year>2022){
+                                        sf     = cset_electron_Reco->evaluate({Egamma_era, "sf", "RecoAbove75", eta, pt, phi});
+                                        sfup   = cset_electron_Reco->evaluate({Egamma_era, "sfup", "RecoAbove75", eta, pt, phi});
+                                        sfdown = cset_electron_Reco->evaluate({Egamma_era, "sfdown", "RecoAbove75", eta, pt, phi});
+                                    }else{
+                                        sf     = cset_electron_Reco->evaluate({Egamma_era, "sf", "RecoAbove75", eta, pt});
+                                        sfup   = cset_electron_Reco->evaluate({Egamma_era, "sfup", "RecoAbove75", eta, pt});
+                                        sfdown = cset_electron_Reco->evaluate({Egamma_era, "sfdown", "RecoAbove75", eta, pt});
+                                    }
                                 }
-                                    
                                 SF.push_back(sf);
                                 SFup.push_back(sfup-sf);
                                 SFdown.push_back(sf-sfdown);
@@ -282,25 +314,18 @@ class LeptonSF(Module):
                         return SFTot;
                     }
                     """
-                    % (self.egamma_era, self.egamma_era, self.egamma_era, self.egamma_era, self.egamma_era, self.egamma_era, self.egamma_era, self.egamma_era, self.egamma_era)
                 )
 
                 df = df.Define(
                     "EleRecoSF_tmp",
-                    f"getSF_Reco(Lepton_pt, Lepton_eta, Lepton_pdgId, run_period)",
+                    f"getSF_Reco(Lepton_pt, Lepton_eta, Lepton_phi, Lepton_pdgId, run_period)",
                 )
 
                 columnsToDrop.append("EleRecoSF_tmp")
 
-                df = df.Redefine("Lepton_RecoSF", "EleRecoSF_tmp[0]")
-
-                df = df.Redefine(
-                    "Lepton_RecoSF_Up", "EleRecoSF_tmp[0] + EleRecoSF_tmp[1]"
-                )
-
-                df = df.Redefine(
-                    "Lepton_RecoSF_Down", "EleRecoSF_tmp[0] - EleRecoSF_tmp[2]"
-                )
+                df = df.Redefine("Lepton_RecoSF",      "EleRecoSF_tmp[0]")
+                df = df.Redefine("Lepton_RecoSF_Up",   "EleRecoSF_tmp[0] + EleRecoSF_tmp[1]")
+                df = df.Redefine("Lepton_RecoSF_Down", "EleRecoSF_tmp[0] - EleRecoSF_tmp[2]")
 
                 did_reco = True
 
@@ -309,11 +334,13 @@ class LeptonSF(Module):
             for i in range(len(self.SF_dict["electron"][wp]["wpSF"]["data"])):
                 if os.path.exists(self.SF_dict["electron"][wp]["wpSF"]["data"][i]):
                     
-                    pathToJson = self.SF_dict["electron"][wp]["wpSF"]["data"][i]
-                    key = self.SF_dict["electron"][wp]["wpSF"]["key"][i]
+                    pathToJson  = self.SF_dict["electron"][wp]["wpSF"]["data"][i]
+                    key         = self.SF_dict["electron"][wp]["wpSF"]["key"][i]
+                    egamma_era  = self.SF_dict["electron"][wp]["wpSF"]["era"][i]
+                    label       = self.SF_dict["electron"][wp]["wpSF"]["label"][i]
 
                     beginRP = self.SF_dict["electron"][wp]["wpSF"]["beginRP"][i]
-                    endRP = self.SF_dict["electron"][wp]["wpSF"]["endRP"][i]
+                    endRP   = self.SF_dict["electron"][wp]["wpSF"]["endRP"][i]
 
                     ROOT.gROOT.ProcessLine(
                         f'auto csetEl{wp}_wpSF_{beginRP}_{endRP} = correction::CorrectionSet::from_file("{pathToJson}");'
@@ -322,27 +349,15 @@ class LeptonSF(Module):
                         f'correction::Correction::Ref cset_electron_{wp}_wpSF_{beginRP}_{endRP} = (correction::Correction::Ref) csetEl{wp}_wpSF_{beginRP}_{endRP}->at("{key}");'
                     )
 
-                    evaluator = """"""
-                    if "POG" in pathToJson:
-                        isPOGFormat = True
-                        evaluator = """
-                        pt = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{ele_pt[i], """ + str(self.el_maxPt) + """}), """ + str(self.el_minPt) + """});
-                        eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{ele_eta[i], """ + str(self.el_maxEta) + """}), """ + str(self.el_minEta) + """});  
+                    evaluator = """
+                    pt = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{ele_pt[i], """ + str(self.el_maxPt) + """}), """ + str(self.el_minPt) + """});
+                    eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{ele_eta[i], """ + str(self.el_maxEta) + """}), """ + str(self.el_minEta) + """});  
+                    
+                    sf     = cset_electron_""" + wp + """_wpSF->evaluate({"%s", "sf", "%s", eta, pt});
+                    sfup   = cset_electron_""" % (egamma_era, label) + wp + """_wpSF->evaluate({"%s", "sfup", "%s", eta, pt}); 
+                    sfdown = cset_electron_""" % (egamma_era, label) + wp + """_wpSF->evaluate({"%s", "sfdown", "%s", eta, pt}); """ % (egamma_era, label)
 
-                        sf     = cset_electron_""" + wp + """_wpSF->evaluate({"%s", "sf", "%s", eta, pt});
-                        sfstat = cset_electron_""" % (self.egamma_era, wp) + wp + """_wpSF->evaluate({"%s", "sfup", "%s", eta, pt}); 
-                        sfsyst = cset_electron_""" % (self.egamma_era, wp) + wp + """_wpSF->evaluate({"%s", "sfdown", "%s", eta, pt}); """ % (self.egamma_era, wp)
-                        
-                    else:
-                        evaluator = """
-                        pt = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{ele_pt[i], """ + str(self.mu_maxPt) + """}), """ + str(self.mu_minPt) + """});
-                        eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{ele_eta[i], """ + str(self.mu_maxEta) + """}), """ + str(self.mu_minEta) + """});  
-
-                        sf     = cset_electron_""" + wp + """_wpSF->evaluate({eta, pt, "nominal"});
-                        sfstat = cset_electron_""" + wp + """_wpSF->evaluate({eta, pt, "stat"});
-                        sfsyst = cset_electron_""" + wp + """_wpSF->evaluate({eta, pt, "syst"});
-                        """
-                        
+                    
                     interpret_runP = (
                         interpret_runP
                         + """ 
@@ -371,9 +386,9 @@ class LeptonSF(Module):
 
                         std::vector<ROOT::RVecF> SFTot;
                         ROOT::RVecF SF;
-                        ROOT::RVecF SFstat;
-                        ROOT::RVecF SFsyst;
-                        float sf,sfstat,sfsyst;
+                        ROOT::RVecF SFup;
+                        ROOT::RVecF SFdown;
+                        float sf,sfup,sfdown;
                         float pt,eta;
 
                         correction::Correction::Ref cset_electron_"""
@@ -392,17 +407,17 @@ class LeptonSF(Module):
                                 + """
                                 
                                 SF.push_back(sf);
-                                SFstat.push_back(sfstat);
-                                SFsyst.push_back(sfsyst);
+                                SFup.push_back(sfup);
+                                SFdown.push_back(sfdown);
                             }else{
                                 SF.push_back(1.0);
-                                SFstat.push_back(0.0);
-                                SFsyst.push_back(0.0);
+                                SFup.push_back(0.0);
+                                SFdown.push_back(0.0);
                             }
                         }
                         SFTot.push_back(SF);
-                        SFTot.push_back(SFstat);
-                        SFTot.push_back(SFsyst);
+                        SFTot.push_back(SFup);
+                        SFTot.push_back(SFdown);
                         return SFTot;
                     }
                 """
@@ -415,77 +430,37 @@ class LeptonSF(Module):
 
             columnsToDrop.append(f"ElewpSF_{wp}")
             
-            df = df.Define(f"Lepton_tightElectron_{wp}_IdIsoSF", f"ElewpSF_{wp}[0]")
+            df = df.Define(f"Lepton_tightElectron_{wp}_IdIsoSF",      f"ElewpSF_{wp}[0]")            
+            df = df.Define(f"Lepton_tightElectron_{wp}_IdIsoSF_Up",   f"ElewpSF_{wp}[1]")
+            df = df.Define(f"Lepton_tightElectron_{wp}_IdIsoSF_Down", f"ElewpSF_{wp}[2]")
             
-            if isPOGFormat:
-                df = df.Define(
-                    f"Lepton_tightElectron_{wp}_IdIsoSF_Up",
-                    f"ElewpSF_{wp}[1]",
-                )
-                df = df.Define(
-                    f"Lepton_tightElectron_{wp}_IdIsoSF_Down",
-                    f"ElewpSF_{wp}[2]",
-                )
-            else:
-                df = df.Define(
-                    f"Lepton_tightElectron_{wp}_IdIsoSF_Up",
-                    f"ElewpSF_{wp}[0] + ElewpSF_{wp}[1]",
-                )
-                df = df.Define(
-                    f"Lepton_tightElectron_{wp}_IdIsoSF_Down",
-                    f"ElewpSF_{wp}[0] - ElewpSF_{wp}[1]",
-                )
-                df = df.Define(
-                    f"Lepton_tightElectron_{wp}_IdIsoSF_Syst",
-                    f"ElewpSF_{wp}[0] + ElewpSF_{wp}[2]",
-                )
-
             if self.SF_dict["electron"][wp]["hasTrk"]:
                 df = df.Define(
                     f"Lepton_tightElectron_{wp}_TotSF",
                     f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF",
                 )
-                if isPOGFormat:
-                    df = df.Define(
-                        f"Lepton_tightElectron_{wp}_TotSF_Up",
-                        f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF + sqrt((ElewpSF_{wp}[1]-ElewpSF_{wp}[0])*(ElewpSF_{wp}[1]-ElewpSF_{wp}[0]) + EleRecoSF_tmp[1]*EleRecoSF_tmp[1])",
-                    )
-                    df = df.Define(
-                        f"Lepton_tightElectron_{wp}_TotSF_Down",
-                        f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF + sqrt((ElewpSF_{wp}[0]-ElewpSF_{wp}[2])*(ElewpSF_{wp}[0]-ElewpSF_{wp}[2]) + EleRecoSF_tmp[2]*EleRecoSF_tmp[2])",
-                    )
-                else:
-                    df = df.Define(
-                        f"Lepton_tightElectron_{wp}_TotSF_Up",
-                        f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF + sqrt(ElewpSF_{wp}[1]*ElewpSF_{wp}[1] + ElewpSF_{wp}[2]*ElewpSF_{wp}[2] + EleRecoSF_tmp[1]*EleRecoSF_tmp[1])",
-                    )
-                    df = df.Define(
-                        f"Lepton_tightElectron_{wp}_TotSF_Down",
-                        f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF - sqrt(ElewpSF_{wp}[1]*ElewpSF_{wp}[1] + ElewpSF_{wp}[2]*ElewpSF_{wp}[2] + EleRecoSF_tmp[2]*EleRecoSF_tmp[2])",
-                    )
+                df = df.Define(
+                    f"Lepton_tightElectron_{wp}_TotSF_Up",
+                    f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF + sqrt((ElewpSF_{wp}[1]-ElewpSF_{wp}[0])*(ElewpSF_{wp}[1]-ElewpSF_{wp}[0]) + EleRecoSF_tmp[1]*EleRecoSF_tmp[1])",
+                )
+                df = df.Define(
+                    f"Lepton_tightElectron_{wp}_TotSF_Down",
+                    f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF + sqrt((ElewpSF_{wp}[0]-ElewpSF_{wp}[2])*(ElewpSF_{wp}[0]-ElewpSF_{wp}[2]) + EleRecoSF_tmp[2]*EleRecoSF_tmp[2])",
+                )
             else:
                 df = df.Define(
                     f"Lepton_tightElectron_{wp}_TotSF",
                     f"Lepton_tightElectron_{wp}_IdIsoSF",
                 )
-                if isPOGFormat:
-                    df = df.Define(
-                        f"Lepton_tightElectron_{wp}_TotSF_Up",
-                        f"Lepton_tightElectron_{wp}_IdIsoSF_Up",
-                    )
-                    df = df.Define(
-                        f"Lepton_tightElectron_{wp}_TotSF_Down",
-			f"Lepton_tightElectron_{wp}_IdIsoSF_Down",
-		    )
-                else:
-                    df = df.Define(
-                        f"Lepton_tightElectron_{wp}_TotSF_Up",
-                        f"Lepton_tightElectron_{wp}_IdIsoSF + sqrt(ElewpSF_{wp}[1]*ElewpSF_{wp}[1] + ElewpSF_{wp}[2]*ElewpSF_{wp}[2])",
-                    )
-                    df = df.Define(
-                        f"Lepton_tightElectron_{wp}_TotSF_Down",
-                        f"Lepton_tightElectron_{wp}_IdIsoSF - sqrt(ElewpSF_{wp}[1]*ElewpSF_{wp}[1] + ElewpSF_{wp}[2]*ElewpSF_{wp}[2])",
-                    )
+                df = df.Define(
+                    f"Lepton_tightElectron_{wp}_TotSF_Up",
+                    f"Lepton_tightElectron_{wp}_IdIsoSF_Up",
+                )
+                df = df.Define(
+                    f"Lepton_tightElectron_{wp}_TotSF_Down",
+		    f"Lepton_tightElectron_{wp}_IdIsoSF_Down",
+		)
+                
 
         ### Muons
         for wp in self.SF_dict["muon"]:

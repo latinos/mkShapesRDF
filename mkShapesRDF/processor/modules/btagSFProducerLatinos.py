@@ -1,5 +1,6 @@
 import ROOT
 from mkShapesRDF.processor.framework.module import Module
+import re
 import correctionlib
 
 correctionlib.register_pyroot_binding()
@@ -9,7 +10,6 @@ def makeCPPString(string):
     s = str(string)
     return s.replace(".", "_").replace("-", "m").replace("+", "p")
 
-
 class btagSFProducerLatinos(Module):
     def __init__(
         self,
@@ -17,7 +17,7 @@ class btagSFProducerLatinos(Module):
         algo="deepJet",
         selectedWPs=["shape"],
         mode="shape",
-        pathToJson="",
+        framework_path=None,
         jesSystsForShape=[],
     ):
         super().__init__("btagSFProducerLatinos")
@@ -30,6 +30,22 @@ class btagSFProducerLatinos(Module):
         self.max_abs_eta = """2.49999"""
         self.min_pt = """20.0001"""
 
+        if "2022" or "2023" in era:
+            self.prodTime = "Summer"
+        else:
+            print("btagSFProducerLatinos")
+            print("-------------------")
+            print("Warning: Production season unknown for " + era)
+            print("Please check!!")
+
+        year = re.findall(r'\d+', era)[0]
+        key = era.split("Full20")[1].split("v")[0]
+        
+        if framework_path:
+            pathToJson = framework_path.split("framework")[0] + "/processor/data/jsonpog-integration/POG/BTV/" + year + "_" + self.prodTime + key + "/btagging.json.gz"
+        else:
+            pathToJson = os.path.dirname(os.path.dirname(__file__)).split("processor")[0] + "/processor/data/jsonpog-integration/POG/BTV/" + year + "_" + self.prodTime + key + "/btagging.json.gz"
+        
         self.inputFileName = pathToJson
         self.measurement_types = None
         self.supported_wp = None

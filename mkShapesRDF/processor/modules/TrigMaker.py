@@ -36,7 +36,7 @@ class TrigMaker(Module):
         self.mu_maxEta = 2.3999
         self.mu_minEta = -2.3999
 
-        self.el_maxPt = 99.9
+        self.el_maxPt = 79.9
         self.el_minPt = 9.999
         self.el_maxEta = 2.4999
         self.el_minEta = -2.4999
