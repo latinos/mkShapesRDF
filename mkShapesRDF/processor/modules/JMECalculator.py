@@ -64,6 +64,8 @@ class JMECalculator(Module):
         self.JEC_era = ""
         self.JER_era = ""
         self.jsonFileSmearingTool = ""
+
+        self.year = year
         
         if year in JetMakerCfg.keys():
             self.json = JetMakerCfg[year]["jet_jerc"]
@@ -152,7 +154,10 @@ class JMECalculator(Module):
                 cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
     
                 # rho
-                cols.append("Rho_fixedGridRhoFastjetAll")
+                if "201" in self.year:
+                    cols.append("fixedGridRhoFastjetAll")
+                else:
+                    cols.append("Rho_fixedGridRhoFastjetAll")
 
                 cols.append(f"Take(Jet_genJetIdx, {JetColl}_jetIdx)")
                 cols.append(f"Take(Jet_partonFlavour, {JetColl}_jetIdx)")
@@ -235,7 +240,10 @@ class JMECalculator(Module):
             cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
 
             # rho
-            cols.append("Rho_fixedGridRhoFastjetAll")
+            if "201" in self.year:
+                cols.append("fixedGridRhoFastjetAll")
+            else:
+                cols.append("Rho_fixedGridRhoFastjetAll")
 
             cols.append(f"Take(Jet_genJetIdx, {JetColl}_jetIdx)")
             cols.append(f"Take(Jet_partonFlavour, {JetColl}_jetIdx)")

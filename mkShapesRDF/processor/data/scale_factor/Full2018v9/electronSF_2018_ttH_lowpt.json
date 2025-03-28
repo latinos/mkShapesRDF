@@ -1,0 +1,211 @@
+{
+    "schema_version": 2,
+    "description": "ttH electron scale factors",
+    "corrections": [
+        {
+            "name": "Electron-ptlt20-SF",
+            "description": "Electron reco scale factors for pt below 20 GeV for the 2018 era",
+            "version": 2,
+            "inputs": [
+                {
+                    "name": "year",
+                    "type": "string",
+                    "description": "year/scenario: example, 2017, 2022FG etc"
+                },
+                {
+                    "name": "ValType",
+                    "type": "string",
+                    "description": "sf/sfup/sfdown (sfup = sf + syst, sfdown = sf - syst) "
+                },
+                {
+                    "name": "WorkingPoint",
+                    "type": "string",
+                    "description": "Working Point of choice : Loose, Medium etc."
+                },
+                {
+                    "name": "eta",
+                    "type": "real",
+                    "description": "supercluster eta"
+                },
+                {
+                    "name": "pt",
+                    "type": "real",
+                    "description": "electron pT"
+                }
+            ],
+            "output": {
+                "name": "weight",
+                "type": "real",
+                "description": "value of scale factor (nominal, up or down)"
+            },
+            "data": {
+                "nodetype": "category",
+                "input": "year",
+                "content": [
+                    {
+                        "key": "2018",
+                        "value": {
+                            "nodetype": "category",
+                            "input": "ValType",
+                            "content": [
+                                {
+                                    "key": "sf",
+                                    "value": {
+                                        "nodetype": "category",
+                                        "input": "WorkingPoint",
+                                        "content": [
+                                            {
+                                                "key": "RecoBelow20",
+                                                "value": {
+                                                    "nodetype": "multibinning",
+                                                    "inputs": [
+                                                        "eta",
+                                                        "pt"
+                                                    ],
+                                                    "edges": [
+                                                        [
+                                                            -2.5,
+                                                            -2.0,
+                                                            -1.566,
+                                                            -1.444,
+                                                            -1.0,
+                                                            0.0,
+                                                            1.0,
+                                                            1.444,
+                                                            1.566,
+                                                            2.0,
+                                                            2.5
+                                                        ],
+                                                        [
+                                                            10.0,
+                                                            20.0
+                                                        ]
+                                                    ],
+                                                    "content": [
+                                                        0.99895179271698,
+                                                        0.99895179271698,
+                                                        1.1436463594436646,
+                                                        0.9888888597488403,
+                                                        1.0768293142318726,
+                                                        1.0768293142318726,
+                                                        0.9888888597488403,
+                                                        1.1436463594436646,
+                                                        0.99895179271698,
+                                                        0.99895179271698
+                                                    ],
+                                                    "flow": "error"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "key": "sfup",
+                                    "value": {
+                                        "nodetype": "category",
+                                        "input": "WorkingPoint",
+                                        "content": [
+                                            {
+                                                "key": "RecoBelow20",
+                                                "value": {
+                                                    "nodetype": "multibinning",
+                                                    "inputs": [
+                                                        "eta",
+                                                        "pt"
+                                                    ],
+                                                    "edges": [
+                                                        [
+                                                            -2.5,
+                                                            -2.0,
+                                                            -1.566,
+                                                            -1.444,
+                                                            -1.0,
+                                                            0.0,
+                                                            1.0,
+                                                            1.444,
+                                                            1.566,
+                                                            2.0,
+                                                            2.5
+                                                        ],
+                                                        [
+                                                            10.0,
+                                                            20.0
+                                                        ]
+                                                    ],
+                                                    "content": [
+                                                        1.0088961124420166,
+                                                        1.0221787691116333,
+                                                        1.5437911748886108,
+                                                        1.0238844156265259,
+                                                        1.1384116411209106,
+                                                        1.1384116411209106,
+                                                        1.0238844156265259,
+                                                        1.5437911748886108,
+                                                        1.0221787691116333,
+                                                        1.0088961124420166
+                                                    ],
+                                                    "flow": "error"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "key": "sfdown",
+                                    "value": {
+                                        "nodetype": "category",
+                                        "input": "WorkingPoint",
+                                        "content": [
+                                            {
+                                                "key": "RecoBelow20",
+                                                "value": {
+                                                    "nodetype": "multibinning",
+                                                    "inputs": [
+                                                        "eta",
+                                                        "pt"
+                                                    ],
+                                                    "edges": [
+                                                        [
+                                                            -2.5,
+                                                            -2.0,
+                                                            -1.566,
+                                                            -1.444,
+                                                            -1.0,
+                                                            0.0,
+                                                            1.0,
+                                                            1.444,
+                                                            1.566,
+                                                            2.0,
+                                                            2.5
+                                                        ],
+                                                        [
+                                                            10.0,
+                                                            20.0
+                                                        ]
+                                                    ],
+                                                    "content": [
+                                                        0.9890075325965881,
+                                                        0.9757248163223267,
+                                                        0.7435015439987183,
+                                                        0.95389324426651,
+                                                        1.0152469873428345,
+                                                        1.0152469873428345,
+                                                        0.95389324426651,
+                                                        0.7435015439987183,
+                                                        0.9757248163223267,
+                                                        0.9890075325965881
+                                                    ],
+                                                    "flow": "error"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

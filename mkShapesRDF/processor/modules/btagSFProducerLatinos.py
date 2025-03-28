@@ -43,6 +43,41 @@ class btagSFProducerLatinos(Module):
     def runModule(self, df, values):
         ### Correctionlib JSON structure and allowed chains  # noqa: E266
         supported_algos = {
+            "deepCSV": {
+                "light": {
+                    "inputs": ["systematic", "working_point", "flavor", "abseta", "pt"],
+                    "systematic": [
+                        "central",
+                        "down",
+                        "down_correlated",
+                        "down_uncorrelated",
+                        "up",
+                        "up_correlated",
+                        "up_uncorrelated",
+                    ],
+                    "working_point": ["L", "M", "T"],
+                    "flavor": {"b": 5, "c": 4, "udsg": 0},
+                    "abseta": "abs(Jet_eta)",
+                    "pt": "Jet_pt",
+                },
+                "shape": {
+                    "inputs": ["systematic", "flavor", "abseta", "pt"],
+                    "systematic": [
+                        "hf",
+                        "lf",
+                        "hfstats1",
+                        "hfstats2",
+                        "lfstats1",
+                        "lfstats2",
+                        "cferr1",
+                        "cferr2",
+                    ],
+                    "flavor": {"b": 5, "c": 4, "udsg": 0},
+                    "abseta": "abs(Jet_eta)",
+                    "pt": "Jet_pt",
+                    "Discriminant": "Jet_btagDeepB",
+                },
+            },
             "deepJet": {
                 "light": {
                     "inputs": ["systematic", "working_point", "flavor", "abseta", "pt"],
@@ -172,10 +207,19 @@ class btagSFProducerLatinos(Module):
 
         print("Compute b-tag scale factors for -> Algorithm: " + self.algo + "   Mode: " + self.mode)
 
-        branch_algo = {"deepJet": "Jet_btagDeepFlavB", "particleNet": "Jet_btagPNetB", "robustParticleTransformer": "Jet_btagRobustParTAK4B"}
-        branch_sfalgo = {"deepJet": "deepjet", "particleNet": "partNet", "robustParticleTransformer": "partTransformer"}
+        branch_algo = {
+            "deepCSV" : "Jet_btagDeepB",
+            "deepJet" : "Jet_btagDeepFlavB",
+            "particleNet" : "Jet_btagPNetB",
+            "robustParticleTransformer" : "Jet_btagRobustParTAK4B"
+        }
+        branch_sfalgo = {
+            "deepCSV" : "deepcsv",
+            "deepJet" : "deepjet",
+            "particleNet" : "partNet",
+            "robustParticleTransformer" : "partTransformer"}
 
-        branch_name = branch_algo[self.algo]
+        branch_name   = branch_algo[self.algo]
         branch_sfname = branch_sfalgo[self.algo]
         
         # define systematic uncertainties

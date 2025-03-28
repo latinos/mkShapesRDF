@@ -5,22 +5,67 @@ Steps = {
     ##############
     
     # 2018
-    "DATAl1loose2018v9": {
-        "isChain" : True,
-        "do4MC" : False,
-        "do4Data" : True,
-        "selection" : '"((nElectron+nMuon)>0)"',
+
+    # mkPostProc -o 0 -p Run2018_UL2018_nAODv9_Full2018v9 -s DATAl2loose2018v9
+    "DATAl2loose2018v9": {
+        "isChain"    : True,
+        "do4MC"      : False,
+        "do4Data"    : True,
+        "selection"  : '"((nElectron+nMuon)>1)"',
         "subTargets" : [
             "lumiMask",
+            "lepFiller_tthMVA_UL",
             "leptonMaker",
+            # "rochesterDATA",  --> not available yet
             "lepSel",
             "jetSelUL",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "trigData",
+            "formulasDATA_2018v9",
             "finalSnapshot_DATA",
         ],
     },
 
+    # mkPostProc -o 0 -p Summer20UL18_106x_nAODv9_Full2018v9 -s MCl2loose2018v9__MCCorr2018v9NoJERInHorn__l2tight -T DYJetsToLL_M-50 -dR 1
+    # python condor/Summer20UL18_106x_nAODv9_Full2018v9/MCl2loose2018v9__MCCorr2018v9NoJERInHorn__l2tight/DYJetsToLL_M-50__part0/script.py
+    # 'CleanFatJet','wwNLL','ggHTheoryUncertainty', 'qqHTheoryUncertainty','EFTGen',
+    # 'JERsMCUL_highPt','FatJERsMCUL_highPt','JetPUID_SF_UL', 'rochesterMC','EmbeddingVeto','wwNLOEWK','wwNLOEWK2','wzNLOEWK','zzNLOEWK','zNLOEWK', 'wNLOEWK','qqHTheoryUncertainty','BoostedWtagSF', 'leptonMVAFiller'
+    "MCl2loose2018v9__MCCorr2018v9NoJERInHorn__l2tight": {
+        "isChain"    : True,
+        "do4MC"      : True,
+        "do4Data"    : False,
+        "selection"  : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lepFiller_tthMVA_UL",
+            "leptonMaker",
+            "lepSel",
+            "jetSelUL",
+            # # "jetSelMask",
+            "PromptParticlesGenVars",
+            "GenVar",
+            "GenLeptonMatch",
+            "HiggsGenVars",
+            "TopGenVars",
+            "WGammaStar",
+            "DressedLeptons",
+            "baseW",
+            "btagPerJet_DeepCSV_2018UL",
+            "btagPerJet_DeepJet_2018UL",
+            "trigMC",
+            "leptonSF",
+            "puW",
+            "JES_modules_UL",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "formulasMC_2018v9",
+            "l2tight",
+            "finalSnapshot_JES",
+        ],
+    },
+    
     # 2022
     "MCl2loose2022v12__MCCorr2022v12JetScaling__l2tight": {
         "isChain" : True,
@@ -681,6 +726,16 @@ Steps = {
         "module": "leptonMaker()",
     },
 
+    # mkShapesRDF/processor/modules/LeptonFiller_ttHMVA_UL.py
+    "lepFiller_tthMVA_UL": {
+        "isChain" : False,
+        "do4MC"   : True,
+        "do4Data" : True,
+        "import"  : "mkShapesRDF.processor.modules.LeptonFiller_ttHMVA_UL",                                                                              
+        "declare" : 'leptonFill_tthMVA_UL = lambda : LeptonFiller_ttHMVA_UL("RPLME_FW/processor/data/ttH-UL-LeptonMVA", "UL20_mu_TTH-like_2018_BDTG.weights.xml", "UL20_el_TTH-like_2018_BDTG.weights.xml")',
+        "module"  : "leptonFill_tthMVA_UL()",
+    },
+
     "lepFiller_hwwMVA": {
         "isChain": False,
         "do4MC": True,
@@ -747,12 +802,12 @@ Steps = {
     },
     
     "lumiMask": {
-        "isChain": False,
-        "do4MC": False,
-        "do4Data": True,
-        "import": "mkShapesRDF.processor.modules.LumiMask",
-        "declare": 'lumiMask = lambda : LumiMask("RPLME_FW","RPLME_LUMI")',
-        "module": "lumiMask()",
+        "isChain" : False,
+        "do4MC"   : False,
+        "do4Data" : True,
+        "import"  : "mkShapesRDF.processor.modules.LumiMask",
+        "declare" : 'lumiMask = lambda : LumiMask("RPLME_FW","RPLME_LUMI")',
+        "module"  : "lumiMask()",
     },
     
     "PromptParticlesGenVars": {
@@ -827,6 +882,60 @@ Steps = {
         "module": "baseW()",
     },
     
+    "JES_modules_16HIPMUL": {
+        "isChain": False,
+        "do4MC": True,
+        "do4Data": False,
+        "import": "mkShapesRDF.processor.modules.JMECalculator",
+        "declare": 'jmeCalculator = lambda : JMECalculator("Summer19UL16APV_V7_MC", "Summer20UL16APV_JRV3_MC", \
+            jet_object="AK4PFchs", do_Jets=True, do_MET=True, do_Unclustered=False, met_collections = ["PuppiMET", "MET", "RawMET"],\
+            do_JER=False, store_nominal=False, store_variations=True)',
+        "module": "jmeCalculator()",
+    },
+
+    "JES_modules_16noHIPMUL": {
+        "isChain": False,
+        "do4MC": True,
+        "do4Data": False,
+        "import": "mkShapesRDF.processor.modules.JMECalculator",
+        "declare": 'jmeCalculator = lambda : JMECalculator("Summer19UL16_V7_MC", "Summer20UL16_JRV3_MC", \
+            jet_object="AK4PFchs", do_Jets=True, do_MET=True, do_Unclustered=False, met_collections = ["PuppiMET", "MET", "RawMET"],\
+            do_JER=False, store_nominal=False, store_variations=True)',
+        "module": "jmeCalculator()",
+    },
+
+    "JES_modules_17UL": {
+        "isChain": False,
+        "do4MC": True,
+        "do4Data": False,
+        "import": "mkShapesRDF.processor.modules.JMECalculator",
+        "declare": 'jmeCalculator = lambda : JMECalculator("Summer19UL17_V5_MC", "Summer19UL17_JRV2_MC", \
+            jet_object="AK4PFchs", do_Jets=True, do_MET=True, do_Unclustered=False, met_collections = ["PuppiMET", "MET", "RawMET"],\
+            do_JER=False, store_nominal=False, store_variations=True)',
+        "module": "jmeCalculator()",
+    },
+
+    "JES_modules_18UL": {
+        "isChain": False,
+        "do4MC": True,
+        "do4Data": False,
+        "import": "mkShapesRDF.processor.modules.JMECalculator",
+        "declare": 'jmeCalculator = lambda : JMECalculator("Summer19UL18_V5_MC", "Summer19UL18_JRV2_MC", \
+            jet_object="AK4PFchs", do_Jets=True, do_MET=True, do_Unclustered=False, met_collections = ["PuppiMET", "MET", "RawMET"],\
+            do_JER=False, store_nominal=False, store_variations=True)',
+        "module": "jmeCalculator()",
+    },
+
+    "JES_modules_UL": {
+        "isChain" : False,
+        "do4MC"   : True,
+        "do4Data" : False,
+        "import"  : "mkShapesRDF.processor.modules.JMECalculator",
+        "declare" : 'jmeCalculator = lambda : JMECalculator("RPLME_CMSSW", jet_object="AK4PFchs", jes_unc=["Total"], \
+            do_Jets=True, do_MET=True, do_Unclustered=True, met_collections = ["PuppiMET", "MET", "RawMET"], do_JER=True, store_nominal=True, store_variations=True)',
+        "module"  : "jmeCalculator()",
+    },
+
     "JES_modules": {
         "isChain" : False,
         "do4MC"   : True,
@@ -882,6 +991,22 @@ Steps = {
         "module": "leptonSF()",
     },
     
+   'ggHTheoryUncertainty':  {
+       'isChain'    : False ,
+       'do4MC'      : True  ,
+       'do4Data'    : False  ,
+       'import'     : 'mkShapesRDF.modules.GGHUncertaintyProducer' ,
+       'declare'    : 'ggHUncertaintyProducer = lambda : GGHUncertaintyProducer()',
+       'module'     : 'ggHUncertaintyProducer()',
+       'onlySample' : [
+           'GluGluHToWWTo2L2NuPowheg_M125_PrivateNano',
+           'GluGluHToWWTo2L2NuPowheg_M125',
+           'GluGluHToWWTo2L2NuPowhegNNLOPS_M125_private',
+           'GluGluHToWWTo2L2NuPowhegNNLOPS_M125',
+           'GGHjjToWWTo2L2Nu_minloHJJ_M125'
+       ]
+   },
+
     # "formulasDATA": {
     #     "isChain": False,
     #     "do4MC": False,
@@ -908,6 +1033,24 @@ Steps = {
         "declare" : "formulasDATA = lambda : formulasToAdd_DATA_Full2022v12()",
         "module" : "formulasDATA()",
     },
+
+    "formulasDATA_2018v9": {
+        "isChain" : False,
+        "do4MC"   : False,
+        "do4Data" : True,
+        "import"  : "mkShapesRDF.processor.modules.formulasToAdd_DATA_Full2018v9",
+        "declare" : "formulasDATA = lambda : formulasToAdd_DATA_Full2018v9()",
+        "module"  : "formulasDATA()",
+    },
+    "formulasMC_2018v9": {
+        "isChain" : False,
+        "do4MC"   : True,
+        "do4Data" : False,
+        "import"  : "mkShapesRDF.processor.modules.formulasToAdd_MC_Full2018v9",
+        "declare" : "formulasDATA = lambda : formulasToAdd_MC_Full2018v9()",
+        "module"  : "formulasDATA()",
+    },
+
     
     "formulasMC": {
         "isChain": False,
@@ -1124,7 +1267,7 @@ Steps = {
         "do4MC": True,
         "do4Data": True,
         "import": "mkShapesRDF.processor.modules.L2TightSelection",
-        "declare": "l2tightFilter = lambda : L2TightSelection('Full2022v12')",
+        "declare": "l2tightFilter = lambda : L2TightSelection('RPLME_CMSSW')",
         "module": "l2tightFilter()",
     },
     
@@ -1155,16 +1298,16 @@ Steps = {
     },
     
     "finalSnapshot_DATA": {
-        "isChain": False,
-        "do4MC": False,
-        "do4Data": True,
-        "import": "mkShapesRDF.processor.modules.Snapshot",
-        "declare": "snapshot = lambda : Snapshot( \
+        "isChain" : False,
+        "do4MC"   : False,
+        "do4Data" : True,
+        "import"  : "mkShapesRDF.processor.modules.Snapshot",
+        "declare" : "snapshot = lambda : Snapshot( \
                 tmpOutputFilename=RPLME_OUTPUTFILENAMETMP+'/RPLME_OUTPUTFILENAME', \
                 columns=['*'], \
                 eosPath='RPLME_EOSPATH', outputFilename='RPLME_OUTPUTFILENAME', \
                 includeVariations=False, splitVariations=False, storeNominals=True )",
-        "module": "snapshot()",
+        "module" : "snapshot()",
     },
     
     "finalSnapshot_JES": {

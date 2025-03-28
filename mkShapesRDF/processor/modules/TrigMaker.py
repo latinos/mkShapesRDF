@@ -62,14 +62,7 @@ class TrigMaker(Module):
 
         self.Trigger = var["Trigger"]
 
-        print(
-            "TrigMaker: Era = "
-            + self.era
-            + ", isData = "
-            + str(self.isData)
-            + ", keepRunPeriod = "
-            + str(self.keepRunP)
-        )
+        print("TrigMaker: Era = " + self.era + ", isData = " + str(self.isData) + ", keepRunPeriod = " + str(self.keepRunP))
 
         if cfg_path != "processor/data/TrigMaker_cfg.py":
             print("TrigMaker: loaded trigger configuration from " + cfg_path)
@@ -259,20 +252,25 @@ class TrigMaker(Module):
                 self.TM_DRllSF[RunP][Tname] = temp_file
 
         # Set some run/event specific var
+        self.EMTFbug = {}
         self.TM_runPeriods.sort()
         self.total_lum = 0.0
         for RunP in self.Trigger[self.era]:
             self.total_lum += self.Trigger[self.era][RunP]["lumi"]
+            self.EMTFbug[RunP] = self.Trigger[self.era][RunP]['EMTFBug']
+        print(f"EMTFbug: {self.EMTFbug}")
+           
 
         self.RunFrac = [0.0]
         for RunP in self.Trigger[self.era]:
             self.RunFrac.append(
                 self.RunFrac[-1] + self.Trigger[self.era][RunP]["lumi"] / self.total_lum
             )
-
+            
         if self.keepRunP:
             self.run_p = "run_period"
 
+            
     def runModule(self, df, values):
         if self.seeded:
             toss_coin = "TRandom3(event).Uniform()"
@@ -288,6 +286,7 @@ class TrigMaker(Module):
 
         if not self.keepRunP:
             if self.isData:
+                print("Running on data and not keepRunP")
                 run_p_interprate = """"""
                 for RunP in self.TM_runInt:
                     begin = str(self.TM_runInt[RunP]["b"])
@@ -297,13 +296,9 @@ class TrigMaker(Module):
                     run_p_interprate = (
                         run_p_interprate
                         + """
-                    if(run>"""
-                        + begin
-                        + """ && run<="""
-                        + end
-                        + """){run_period = """
-                        + RunP_tmp
-                        + """;}
+                    if(run > """ + begin + """ && run <= """ + end + """){
+                        run_period = """ + RunP_tmp + """;
+                        }
                     """
                     )
 
@@ -321,7 +316,40 @@ class TrigMaker(Module):
 
                 df = df.Define("run_p", "run_p(run)")
 
+                # # EMTF bug veto definition
+                # ROOT.gInterpreter.Declare(
+                #     """
+                #     int get_EMTFbug_veto(ROOT::RVecF Lepton_pdgId, ROOT::RVecF Lepton_pt, ROOT::RVecF Lepton_eta, ROOT::RVecF Lepton_phi, int EMTFbug_flag){
+                #         if (EMTFbug_flag){
+                #             std::vector<float> temp_phi;
+                #             std::vector<float> temp_eta;
+                #             float PI = 3.14159265359;
+                #             for (int i=0; i < Lepton_pt.size(); i++){
+                #                 if (abs(Lepton_pdgId[i]) == 13 and Lepton_pt[i] >= 10 and abs(Lepton_eta[i]) >= 1.24){
+                #                     temp_eta.push_back(Lepton_eta[i]);
+                #                     temp_phi.push_back(Lepton_phi[i]);
+                #                 }
+                #             }
+                #             if (temp_eta.size() > 1){
+                #                 for (int i=0; i < Lepton_eta.size(); i++){
+                #                     for (int j=0; j < Lepton_eta.size(); j++){
+                #                         if (i == j && temp_eta[i]*temp_eta[j] > 0) continue;
+                #                         float delta_phi = abs(temp_phi[i]-temp_phi[j]) * 180 / PI;
+                #                         if (delta_phi > 180) delta_phi = 360 - delta_phi;
+                #                         if (delta_phi < 80) return 0;
+                #                     }
+                #                 }
+                #             }
+                #         }
+                #         return 1;
+                #     }
+                #     """
+                # )
+
+                # df = df.Define("EMTFbug_veto","get_EMTFbug_veto(Lepton_pdgId, Lepton_pt, Lepton_eta, Lepton_phi, self.EMTFbug[RunP])")
+        
             else:
+                print("Running on MC and not keepRunP")
                 run_p_interprate = """"""
                 for iPeriod in range(1, len(self.RunFrac)):
                     begin = str(self.RunFrac[iPeriod - 1])
@@ -329,16 +357,10 @@ class TrigMaker(Module):
                     RunP_tmp = str(self.TM_runPeriods[iPeriod - 1])
 
                     run_p_interprate = (
-                        run_p_interprate
-                        + """                                                                                                                                             
-                    if(toss>="""
-                        + begin
-                        + """ && toss<"""
-                        + end
-                        + """){run_period = """
-                        + RunP_tmp
-                        + """;}                                                                                                                           
-                    """
+                        run_p_interprate + """
+                        if(toss >= """ + begin + """ && toss < """ + end + """){
+                            run_period = """ + RunP_tmp + """;}                                                                                                                           
+                        """
                     )
 
                 ROOT.gInterpreter.Declare(
@@ -346,24 +368,56 @@ class TrigMaker(Module):
                     double run_p(int event){
                         int run_period = 0;
                         double toss;
-                        toss = """
-                    + toss_coin
-                    + """;
-                        """
-                    + run_p_interprate
-                    + """
-                        if (toss==1.0){
-                                run_period = """
-                    + str(self.TM_runPeriods[len(self.RunFrac) - 2])
-                    + """;
+                        toss = """ + toss_coin + """; 
+                        """ + run_p_interprate + """
+                        if (toss == 1.0){
+                            run_period = """ + str(self.TM_runPeriods[len(self.RunFrac) - 2]) + """;
                         }
                         return run_period;
                     }
                     """
                 )
-                
+
                 df = df.Define("run_p", "run_p(event)")
 
+                # EMTF bug veto definition
+                ROOT.gInterpreter.Declare(
+                    """
+                    int get_EMTFbug_veto(ROOT::RVecF Lepton_pdgId, ROOT::RVecF Lepton_pt, ROOT::RVecF Lepton_eta, ROOT::RVecF Lepton_phi, bool EMTFbug_flag){
+                        if (EMTFbug_flag){
+                            std::vector<float> temp_phi;
+                            std::vector<float> temp_eta;
+                            float PI = 3.14159265359;
+                            for (int i=0; i < Lepton_pt.size(); i++){
+                                if (abs(Lepton_pdgId[i]) == 13 and Lepton_pt[i] >= 10 and abs(Lepton_eta[i]) >= 1.24){
+                                    temp_eta.push_back(Lepton_eta[i]);
+                                    temp_phi.push_back(Lepton_phi[i]);
+                                }
+                            }
+                            if (temp_eta.size() > 1){
+                                for (int i=0; i < Lepton_eta.size(); i++){
+                                    for (int j=0; j < Lepton_eta.size(); j++){
+                                        if (i == j && temp_eta[i]*temp_eta[j] > 0) continue;
+                                        float delta_phi = abs(temp_phi[i]-temp_phi[j]) * 180 / PI;
+                                        if (delta_phi > 180) delta_phi = 360 - delta_phi;
+                                        if (delta_phi < 80) return 0;
+                                    }
+                                }
+                            }
+                        }
+                        return 1;
+                    }
+                    """
+                )
+
+                # run_p_temp = run_p(event)
+                if self.keepRunP == True:
+                    EMTFbug_flag = self.EMTFbug[self.run_p]
+                else:
+                    EMTFbug_flag = False
+                
+                df = df.Define("EMTFbug_veto",f"get_EMTFbug_veto(Lepton_pdgId, Lepton_pt, Lepton_eta, Lepton_phi, {int(EMTFbug_flag)})")
+                
         ########################################################################
         #                                                                      #
         #                                                                      #

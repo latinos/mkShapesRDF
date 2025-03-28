@@ -480,6 +480,10 @@ class mRDF:
             print(branches)
             #####
             ##### Temporal fix / remove branches with type: string -> incompatbility with awkward/uproot
+            if "nProton_multiRP" in branches: 
+                branches.remove("nProton_multiRP")
+            if "nProton_singleRP" in branches: 
+                branches.remove("nProton_singleRP")
             if "BeamSpot_type" in branches:
                 branches.remove("BeamSpot_type")
             if "Photon_seediEtaOriX" in branches:
@@ -523,7 +527,7 @@ class mRDF:
                 for branch in branches:
                     d[branch] = getBranch(events, branch).to_list()
 
-                _events = ak.Array(d)                
+                _events = ak.Array(d)
                 if treeName not in outFile:
                     if len(_events) == 0:
                         print("Not needed!!!")
@@ -573,10 +577,10 @@ class mRDF:
         return c
 
     
-    def Alias(self, alias, colName):
-        """
-        Allow to refer to a column with a different name
-        """
-        c = self.Copy()
-        c.df = c.df.Alias(alias, colName)
-        return c
+    # def Alias(self, alias, colName):
+    #     """
+    #     Allow to refer to a column with a different name
+    #     """
+    #     c = self.Copy()
+    #     c.df = c.df.Alias(alias, colName)
+    #     return c

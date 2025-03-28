@@ -33,7 +33,6 @@ class runDependentPuW(Module):
 
     def runModule(self, df, values):
 
-
         targeth = {}
         targeth['beginRP']    = []
         targeth['endRP']      = []

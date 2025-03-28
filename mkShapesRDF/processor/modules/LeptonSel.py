@@ -73,7 +73,11 @@ class LeptonSel(Module):
 
 
         ### Electron veto
+        # for key, cuts in ElectronWP[self.era][Clean_TagWP]["HLTsafe"]["cuts"].items():
+        # df = df.Redefine("comb", "ROOT::RVecB(Electron_pt.size(), true)")
+
         for key, cuts in ElectronWP[self.era][Clean_TagWP]["HLTsafe"]["cuts"].items():
+            print(f"{key=}")
             df = df.Redefine("tmp1", key)
             df = df.Redefine("tmp2", "(" + cuts[0] + ")")
             for cut in cuts[1:]:
