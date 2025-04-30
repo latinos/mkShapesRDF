@@ -181,7 +181,7 @@ class addTnPTree(Module):
         
         df = df.Define(f"{collection}_trigIdx",    f"CreateTrigIndex({collection}_eta, {collection}_phi, {collection}_pdgId, TrigObj_eta, TrigObj_phi, TrigObj_id, 0.1)")
         df = df.Define(f"{collection}_isTrig",     f"{collection}_trigIdx < 950")
-        df = df.Define(f"{collection}_filterBits", f"Take(TrigObj_filterBits, {collection}_trigIdx, 0)")
+        df = df.Define(f"{collection}_filterBits", f"Take(TrigObj_filterBits, {collection}_trigIdx)")
 
         df = df.Alias("Tag_pt",     f"{collection}_pt")
         df = df.Alias("Tag_eta",    f"{collection}_eta")
