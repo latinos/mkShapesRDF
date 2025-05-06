@@ -1,5 +1,7 @@
 ####################### PU Weight CFG ##################################
 
+# The files stored in the PUweights folder are taken from here: https://twiki.cern.ch/twiki/bin/view/CMS/PileupJSONFileforData
+
 PUCfg = {
     'Full2022v12': {
         'srcfile'     : "auto" ,
@@ -14,7 +16,7 @@ PUCfg = {
     } ,
     'Full2022EEv12': {
         'srcfile'     : "auto" ,
-        'targetfiles' : { '1-2' : '/processor/data/PUweights/2022/2022EFG_LUM.root' } ,
+        'targetfiles' : { '1-1' : '/processor/data/PUweights/2022/2022EFG_LUM.root' } ,
         'srchist'     : "pileup",
         'targethist'  : "pileup",
         'name'        : "puWeight" ,
@@ -32,7 +34,7 @@ PUCfg = {
         'norm'        : True       ,
         'verbose'     : False      ,
         'nvtx_var'    : "Pileup_nTrueInt",
-        'doSysVar'    : False ,
+        'doSysVar'    : True ,
     } ,
     'Full2023BPixv12': {
         'srcfile'     : "auto" ,
@@ -43,7 +45,7 @@ PUCfg = {
         'norm'        : True       ,
         'verbose'     : False      ,
         'nvtx_var'    : "Pileup_nTrueInt",
-        'doSysVar'    : False ,
+        'doSysVar'    : True ,
     } ,
     'Full2022EEv11': {
         'srcfile'     : "auto" ,

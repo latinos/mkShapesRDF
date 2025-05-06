@@ -25,10 +25,6 @@ Samples["Muon1_Run2023C-Prompt-v3"] = {
 Samples["Muon1_Run2023C-Prompt-v4"] = {
     "nanoAOD": '/Muon1/Run2023C-22Sep2023_v4-v2/NANOAOD'
 }
-Samples["Muon1_Run2023C-Prompt-v5"] = {
-    "nanoAOD": '/Muon1/Run2023C-22Sep2023_v4-v2/NANOAOD'
-}
-
 
 Samples["EGamma0_Run2023C-Prompt-v1"] = {
     "nanoAOD": '/EGamma0/Run2023C-22Sep2023_v1-v1/NANOAOD'
