@@ -105,6 +105,22 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
+            "wp80iso":{
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_mvaIso_WP80",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "data/jsonpog-integration/POG/EGM/2022_Summer22/electron.json.gz"]
+                } ,
+                'wpSF':  {
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "wp80iso", 'data/jsonpog-integration/POG/EGM/2022_Summer22/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                } ,
+                'fakeW' : 'data/fake_prompt_rates/Full2022v12/wp80iso/',
+            },
             "wp90iso": {
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
@@ -207,6 +223,22 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
+            "wp80iso":{
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_mvaIso_WP80",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "data/jsonpog-integration/POG/EGM/2022_Summer22EE/electron.json.gz"]
+                } ,
+                'wpSF':  {
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "wp80iso", 'data/jsonpog-integration/POG/EGM/2022_Summer22EE/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                } ,
+                'fakeW' : 'data/fake_prompt_rates/Full2022EEv12/wp80iso/',
+            },
             "wp90iso": {
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
@@ -309,6 +341,22 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
+            "wp80iso":{
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_mvaIso_WP80",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "data/jsonpog-integration/POG/EGM/2023_Summer23/electron.json.gz"]
+                } ,
+                'wpSF':  {
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "wp80iso", 'data/jsonpog-integration/POG/EGM/2023_Summer23/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                } ,
+                'fakeW' : 'data/fake_prompt_rates/Full2023v12/wp80iso/',
+            },
             "wp90iso": {
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
@@ -411,6 +459,22 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
+            "wp80iso":{
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_mvaIso_WP80",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "data/jsonpog-integration/POG/EGM/2023_Summer23BPix/electron.json.gz"]
+                } ,
+                'wpSF':  {
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "wp80iso", 'data/jsonpog-integration/POG/EGM/2023_Summer23BPix/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                } ,
+                'fakeW' : 'data/fake_prompt_rates/Full2023BPixv12/wp80iso/',
+            },
             "wp90iso": {
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
@@ -883,6 +947,21 @@ MuonWP = {
         },
         # ------------                                                                                                                                                  
         "TightObjWP": {
+            "cut_TightID_POG": {
+                "cuts": {
+                    "ROOT::RVecB (Muon_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                        "Muon_tightId",
+                    ],
+                },
+                "idSF": {
+                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "data/jsonpog-integration/POG/MUO/2023_Summer23/muon_Z.json.gz"],
+                },
+                "isoSF": {
+                    "1-1": ["NUM_TightPFIso_DEN_TightID", "data/jsonpog-integration/POG/MUO/2023_Summer23/muon_Z.json.gz"],
+                },
+                "fakeW": "data/fake_prompt_rates/Full2023v12/cut_Tight_HWW/",
+            },
             "cut_Tight_HWW": {
                 "cuts": {
                     # Common cuts                                                                                                                                       
@@ -1002,6 +1081,21 @@ MuonWP = {
         },
         # ------------                                                                                                                                                  
         "TightObjWP": {
+            "cut_TightID_POG": {
+                "cuts": {
+                    "ROOT::RVecB (Muon_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                        "Muon_tightId",
+                    ],
+                },
+                "idSF": {
+                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "data/jsonpog-integration/POG/MUO/2023_Summer23BPix/muon_Z.json.gz"],
+                },
+                "isoSF": {
+                    "1-1": ["NUM_TightPFIso_DEN_TightID", "data/jsonpog-integration/POG/MUO/2023_Summer23BPix/muon_Z.json.gz"],
+                },
+                "fakeW": "data/fake_prompt_rates/Full2023BPixv12/cut_Tight_HWW/",
+            },
             "cut_Tight_HWW": {
                 "cuts": {
                     # Common cuts                                                                                                                                       
@@ -1085,4 +1179,3 @@ MuonWP = {
         }, 
     },
 }
-
