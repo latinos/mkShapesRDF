@@ -445,7 +445,7 @@ class LeptonSF(Module):
                 )
                 df = df.Define(
                     f"Lepton_tightElectron_{wp}_TotSF_Down",
-                    f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF + sqrt((ElewpSF_{wp}[0]-ElewpSF_{wp}[2])*(ElewpSF_{wp}[0]-ElewpSF_{wp}[2]) + EleRecoSF_tmp[2]*EleRecoSF_tmp[2])",
+                    f"Lepton_tightElectron_{wp}_IdIsoSF * Lepton_RecoSF - sqrt((ElewpSF_{wp}[0]-ElewpSF_{wp}[2])*(ElewpSF_{wp}[0]-ElewpSF_{wp}[2]) + EleRecoSF_tmp[2]*EleRecoSF_tmp[2])",
                 )
             else:
                 df = df.Define(
@@ -585,14 +585,27 @@ class LeptonSF(Module):
 
             ROOT.gInterpreter.Declare(
                 """
-                    std::vector<ROOT::RVecF> getSF_"""
+                    std::map<std::string, std::vector<ROOT::RVecF> > getSF_"""
                     + wp
                     + """_Muon(ROOT::RVecF mu_pt, ROOT::RVecF mu_eta, ROOT::RVecI mu_pdgId, int runP, bool hasTTHMVA){
-                        
-                        std::vector<ROOT::RVecF> SFTot;
+                       
+ 
+                        std::map<std::string, std::vector<ROOT::RVecF> > SFTot;
                         ROOT::RVecF SF;
                         ROOT::RVecF SFstat;
                         ROOT::RVecF SFsyst;
+                        
+                        ROOT::RVecF SFid;
+                        ROOT::RVecF SFid_stat;
+                        ROOT::RVecF SFid_syst;
+
+                        ROOT::RVecF SFiso;
+                        ROOT::RVecF SFiso_stat;
+                        ROOT::RVecF SFiso_syst;
+
+                        ROOT::RVecF SFtth;
+                        ROOT::RVecF SFtth_stat;
+                        ROOT::RVecF SFtth_syst;
                         
                         float sf,sfstat,sfsyst,sf_id,sf_idstat,sf_idsyst,sf_iso,sf_isostat,sf_isosyst,sf_tth,sf_tthstat,sf_tthsyst;
                         float pt,eta;
@@ -624,9 +637,9 @@ class LeptonSF(Module):
                             if (abs(mu_pdgId[i])==13){
 
                                 pt = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{mu_pt[i], """
-                                + str(self.mu_maxPt)
+                                + (str(self.mu_maxPt) if "POG" not in wp else str(99999))
                                 + """}), """
-                                + str(self.mu_minPt)
+                                + (str(self.mu_minPt) if "POG" not in wp else str(15))
                                 + """}); 
                                                                                                                                                                     
                                 eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{mu_eta[i], """
@@ -679,15 +692,48 @@ class LeptonSF(Module):
                                 SFstat.push_back(sfstat);
                                 SFsyst.push_back(sfsyst);
 
+                                SFid.push_back(sf_id);
+                                SFid_stat.push_back(sf_idstat);
+                                SFid_syst.push_back(sf_idsyst);	
+    
+                                SFiso.push_back(sf_iso);
+                                SFiso_stat.push_back(sf_isostat);
+                                SFiso_syst.push_back(sf_isosyst);	
+
+                                SFtth.push_back(sf_tth);
+                                SFtth_stat.push_back(sf_tthstat);
+                                SFtth_syst.push_back(sf_tthsyst);	
+
                             }else{
                                 SF.push_back(1.0);
                                 SFstat.push_back(0.0);
                                 SFsyst.push_back(0.0);
+                                SFid.push_back(1.0);
+                                SFid_stat.push_back(0.0);
+                                SFid_syst.push_back(0.0);	
+                                SFiso.push_back(1.0);
+                                SFiso_stat.push_back(0.0);
+                                SFiso_syst.push_back(0.0);	
+                                SFtth.push_back(1.0);
+                                SFtth_stat.push_back(0.0);
+                                SFtth_syst.push_back(0.0);	
                             }
                         }
-                        SFTot.push_back(SF);
-                        SFTot.push_back(SFstat);
-                        SFTot.push_back(SFsyst);
+                        SFTot["total"].push_back(SF);
+                        SFTot["total"].push_back(SFstat);
+                        SFTot["total"].push_back(SFsyst);
+
+                        SFTot["id"].push_back(SFid);
+                        SFTot["id"].push_back(SFid_stat);
+                        SFTot["id"].push_back(SFid_syst);
+							
+                        SFTot["iso"].push_back(SFiso);
+                        SFTot["iso"].push_back(SFiso_stat);
+                        SFTot["iso"].push_back(SFiso_syst);
+                        
+                        SFTot["tth"].push_back(SFtth);
+                        SFTot["tth"].push_back(SFtth_stat);
+                        SFTot["tth"].push_back(SFtth_syst);
                         return SFTot;
                     }
                 """
@@ -699,34 +745,36 @@ class LeptonSF(Module):
             )
 
             columnsToDrop.append(f"MuonSF_{wp}_tmp")
+            for item in ['total', 'id', 'iso', 'tth']:
+              appendString = 'IdIso' if item == 'total' else item
 
-            df = df.Define(f"Lepton_tightMuon_{wp}_IdIsoSF", f"MuonSF_{wp}_tmp[0]")
+              df = df.Define(f"Lepton_tightMuon_{wp}_{appendString}SF", f"MuonSF_{wp}_tmp[\"{item}\"][0]")
 
-            df = df.Define(
-                f"Lepton_tightMuon_{wp}_IdIsoSF_Up",
-                f"MuonSF_{wp}_tmp[0] + MuonSF_{wp}_tmp[1]",
-            )
+              df = df.Define(
+                f"Lepton_tightMuon_{wp}_{appendString}SF_Up",
+                f"MuonSF_{wp}_tmp[\"{item}\"][0] + MuonSF_{wp}_tmp[\"{item}\"][1]",
+              )
 
-            df = df.Define(
-                f"Lepton_tightMuon_{wp}_IdIsoSF_Down",
-                f"MuonSF_{wp}_tmp[0] - MuonSF_{wp}_tmp[1]",
-            )
+              df = df.Define(
+                f"Lepton_tightMuon_{wp}_{appendString}SF_Down",
+                f"MuonSF_{wp}_tmp[\"{item}\"][0] - MuonSF_{wp}_tmp[\"{item}\"][1]",
+              )
 
-            df = df.Define(
-                f"Lepton_tightMuon_{wp}_IdIsoSF_Syst",
-                f"MuonSF_{wp}_tmp[0] + MuonSF_{wp}_tmp[2]",
-            )
+              df = df.Define(
+                  f"Lepton_tightMuon_{wp}_{appendString}SF_Syst",
+                  f"MuonSF_{wp}_tmp[\"{item}\"][0] + MuonSF_{wp}_tmp[\"{item}\"][2]",
+              )
 
-            df = df.Define(f"Lepton_tightMuon_{wp}_TotSF", f"MuonSF_{wp}_tmp[0]")
+            df = df.Define(f"Lepton_tightMuon_{wp}_TotSF", f"MuonSF_{wp}_tmp[\"total\"][0]")
 
             df = df.Define(
                 f"Lepton_tightMuon_{wp}_TotSF_Up",
-                f"MuonSF_{wp}_tmp[0] + sqrt(MuonSF_{wp}_tmp[1]*MuonSF_{wp}_tmp[1] + MuonSF_{wp}_tmp[2]*MuonSF_{wp}_tmp[2])",
+                f"MuonSF_{wp}_tmp[\"total\"][0] + sqrt(MuonSF_{wp}_tmp[\"total\"][1]*MuonSF_{wp}_tmp[\"total\"][1] + MuonSF_{wp}_tmp[\"total\"][2]*MuonSF_{wp}_tmp[\"total\"][2])",
             )
 
             df = df.Define(
                 f"Lepton_tightMuon_{wp}_TotSF_Down",
-                f"MuonSF_{wp}_tmp[0] - sqrt(MuonSF_{wp}_tmp[1]*MuonSF_{wp}_tmp[1] + MuonSF_{wp}_tmp[2]*MuonSF_{wp}_tmp[2])",
+                f"MuonSF_{wp}_tmp[\"total\"][0] - sqrt(MuonSF_{wp}_tmp[\"total\"][1]*MuonSF_{wp}_tmp[\"total\"][1] + MuonSF_{wp}_tmp[\"total\"][2]*MuonSF_{wp}_tmp[\"total\"][2])",
             )
 
         for col in columnsToDrop:

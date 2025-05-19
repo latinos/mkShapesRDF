@@ -134,4 +134,4 @@ class SearchFiles:
             files = self.cached_list_of_files[process]
 
         files = list(map(lambda k: redirector + k, files))
-        return files[1:]
+        return files

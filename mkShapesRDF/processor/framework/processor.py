@@ -111,10 +111,22 @@ class Processor:
         """
         if self.inputFolder == "":
             # if no inputFolder is given -> DAS
-            d = {
-                "process": self.Samples[sampleName]["nanoAOD"],
-                "instance": self.Samples[sampleName].get("instance", ""),
-            }
+            try:
+                d = {
+                    "process": self.Samples[sampleName]["nanoAOD"],
+                    "instance": self.Samples[sampleName].get("instance", ""),
+                }
+            except KeyError:
+               	d = {
+                    "process": sampleName,
+                    "folder": self.Samples[sampleName]["folder"],
+                    'isLatino': False
+                }
+                if self.inputFolder != "":
+                     raise RuntimeError(f"When specifying the sample via an input folder for sample {sampleName}, you cannot, at the same time, set an inputFolder")
+                self.inputFolder = d['folder']
+            except KeyError:
+                raise KeyError(f"You need to specify either \"nanoAOD\" or \"folder\" keys for sample {sampleName}")
             if self.redirector != "":
                 d["redirector"] = self.redirector
         else:

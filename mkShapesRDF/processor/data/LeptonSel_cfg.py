@@ -618,6 +618,21 @@ MuonWP = {
             },
         },
         "TightObjWP": {
+            "cut_TightID_POG": {
+                "cuts": {
+                    "ROOT::RVecB (Muon_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                        "Muon_tightId",
+                    ],
+                },
+                "idSF": {
+                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "data/jsonpog-integration/POG/MUO/2022_Summer22/muon_Z.json.gz"],
+                },
+                "isoSF": {
+                    "1-1": ["NUM_TightPFIso_DEN_TightID", "data/jsonpog-integration/POG/MUO/2022_Summer22/muon_Z.json.gz"],
+                },
+                "fakeW": "data/fake_prompt_rates/Full2022v12/cut_Tight_HWW/",
+            },
             "cut_Tight_HWW": {
                 "cuts": {
                     "ROOT::RVecB (Muon_pt.size(), true)": [
@@ -734,6 +749,21 @@ MuonWP = {
         },
         # ------------                                                                                                                                                  
         "TightObjWP": {
+            "cut_TightID_POG": {
+                "cuts": {
+                    "ROOT::RVecB (Muon_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                        "Muon_tightId",
+                    ],
+                },
+                "idSF": {
+                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "data/jsonpog-integration/POG/MUO/2022_Summer22EE/muon_Z.json.gz"],
+                },
+                "isoSF": {
+                    "1-1": ["NUM_TightPFIso_DEN_TightID", "data/jsonpog-integration/POG/MUO/2022_Summer22EE/muon_Z.json.gz"],
+                },
+                "fakeW": "data/fake_prompt_rates/Full2022EEv12/cut_Tight_HWW/",
+            },
             "cut_Tight_HWW": {
                 "cuts": {
                     # Common cuts                                                                                                                                       

@@ -5,11 +5,12 @@ from mkShapesRDF.processor.framework.module import Module
 
 
 class LeptonSel(Module):
-    def __init__(self, LepFilter, nLF, era):
+    def __init__(self, LepFilter, nLF, era, filter=True):
         super().__init__("LeptonSel")
         self.era = era
         self.LepFilter = LepFilter
         self.nLF = nLF
+        self.filter = filter
 
     def runModule(self, df, values):
         Clean_Tag = LepFilter_dict[self.LepFilter]
@@ -176,8 +177,8 @@ class LeptonSel(Module):
 
 
         # TODO add VetoLeptons and dmZll
-
-        df = df.Filter("Lepton_pt[LeptonMask_minPt_pass].size() >= 1")
+        if self.filter:
+            df = df.Filter("Lepton_pt[LeptonMask_minPt_pass].size() >= 1")
 
         values.append(
             [
