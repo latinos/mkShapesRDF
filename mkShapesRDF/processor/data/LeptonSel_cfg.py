@@ -105,12 +105,12 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
-            "wp80iso":{
+            "wp80iso_POG":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
-                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        #"ROOT::VecOps::abs(Electron_eta) < 2.5",
                         "Electron_mvaIso_WP80",
-                        "Electron_convVeto",
+                        #"Electron_convVeto",
                     ],
                 },
                 'tkSF':  {
@@ -223,12 +223,12 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
-            "wp80iso":{
+            "wp80iso_POG":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
-                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        #"ROOT::VecOps::abs(Electron_eta) < 2.5",
                         "Electron_mvaIso_WP80",
-                        "Electron_convVeto",
+                        #"Electron_convVeto",
                     ],
                 },
                 'tkSF':  {
@@ -341,12 +341,12 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
-            "wp80iso":{
+            "wp80iso_POG":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
-                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        #"ROOT::VecOps::abs(Electron_eta) < 2.5",
                         "Electron_mvaIso_WP80",
-                        "Electron_convVeto",
+                        #"Electron_convVeto",
                     ],
                 },
                 'tkSF':  {
@@ -459,12 +459,12 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
-            "wp80iso":{
+            "wp80iso_POG":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
-                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        #"ROOT::VecOps::abs(Electron_eta) < 2.5",
                         "Electron_mvaIso_WP80",
-                        "Electron_convVeto",
+                        #"Electron_convVeto",
                     ],
                 },
                 'tkSF':  {
