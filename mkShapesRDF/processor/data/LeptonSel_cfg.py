@@ -687,6 +687,7 @@ MuonWP = {
                     "ROOT::RVecB (Muon_pt.size(), true)": [
                         "ROOT::VecOps::abs(Muon_eta) < 2.4",
                         "Muon_tightId",
+                        "Muon_pt > 15.0"
                     ],
                 },
                 "idSF": {
@@ -818,6 +819,7 @@ MuonWP = {
                     "ROOT::RVecB (Muon_pt.size(), true)": [
                         "ROOT::VecOps::abs(Muon_eta) < 2.4",
                         "Muon_tightId",
+                        "Muon_pt > 15.0"
                     ],
                 },
                 "idSF": {
@@ -952,6 +954,7 @@ MuonWP = {
                     "ROOT::RVecB (Muon_pt.size(), true)": [
                         "ROOT::VecOps::abs(Muon_eta) < 2.4",
                         "Muon_tightId",
+                        "Muon_pt > 15.0"
                     ],
                 },
                 "idSF": {
@@ -1086,6 +1089,7 @@ MuonWP = {
                     "ROOT::RVecB (Muon_pt.size(), true)": [
                         "ROOT::VecOps::abs(Muon_eta) < 2.4",
                         "Muon_tightId",
+                        "Muon_pt > 15.0"
                     ],
                 },
                 "idSF": {
