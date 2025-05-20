@@ -1236,7 +1236,7 @@ Steps = {
         "do4MC": True,
         "do4Data": True,
         "import": "mkShapesRDF.processor.modules.LeptonSel",
-        "declare": 'leptonSel = lambda : LeptonSel("Loose", 1, "RPLME_CMSSW", False)',
+        "declare": 'leptonSel = lambda : LeptonSel("Loose", 1, "RPLME_CMSSW", True)',
         "module": "leptonSel()",
     },
     

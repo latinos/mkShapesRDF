@@ -108,8 +108,9 @@ ElectronWP = {
             "wp80iso_POG":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "Electron_pt>10",
                         #"ROOT::VecOps::abs(Electron_eta) < 2.5",
-                        "Electron_mvaIso_WP80",
+                        #"Electron_mvaIso_WP80",
                         #"Electron_convVeto",
                     ],
                 },
@@ -226,8 +227,9 @@ ElectronWP = {
             "wp80iso_POG":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "Electron_pt>10",
                         #"ROOT::VecOps::abs(Electron_eta) < 2.5",
-                        "Electron_mvaIso_WP80",
+                        #"Electron_mvaIso_WP80",
                         #"Electron_convVeto",
                     ],
                 },
@@ -344,8 +346,9 @@ ElectronWP = {
             "wp80iso_POG":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "Electron_pt>10",
                         #"ROOT::VecOps::abs(Electron_eta) < 2.5",
-                        "Electron_mvaIso_WP80",
+                        #"Electron_mvaIso_WP80",
                         #"Electron_convVeto",
                     ],
                 },
@@ -462,8 +465,9 @@ ElectronWP = {
             "wp80iso_POG":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "Electron_pt>10",
                         #"ROOT::VecOps::abs(Electron_eta) < 2.5",
-                        "Electron_mvaIso_WP80",
+                        #"Electron_mvaIso_WP80",
                         #"Electron_convVeto",
                     ],
                 },
@@ -584,7 +588,7 @@ MuonWP = {
         },
         # ------------
         "TightObjWP": {
-            "cut_Tight_HWWW": {
+            "cut_Tight_HWW": {
                 "cuts": {
                     # Common cuts
                     "ROOT::RVecB (Muon_pt.size(), true)": [
