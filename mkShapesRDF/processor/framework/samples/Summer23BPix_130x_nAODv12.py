@@ -185,13 +185,21 @@ Samples['DYto2L-2Jets_MLL-50'] = {
 
 #### Single Top !!!!
 
-#Samples['ST_t-channel_top'] = {
-#    'nanoAOD' :''
-#}
+Samples['ST_t-channel_top'] = {
+    'nanoAOD' :'/TBbarQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2/NANOAODSIM'
+}
 
-#Samples['ST_t-channel_antitop'] = {
-#    'nanoAOD' :''
-#}
+Samples['ST_t-channel_antitop'] = {
+    'nanoAOD' :'/TbarBQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2/NANOAODSIM'
+}
+
+Samples['TWminusto2L2Nu'] = {
+    'nanoAOD' :'/TWminusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM'
+}
+
+Samples['TbarWplusto2L2Nu'] = {
+    'nanoAOD' :'/TbarWplusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2/NANOAODSIM'
+}
 
 Samples['ST_tW_top'] = {
     'nanoAOD' :'/TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM'
@@ -209,3 +217,7 @@ Samples['ST_s-channel_minus'] = {
     'nanoAOD' :'/TbarBtoLminusNuB-s-channel-4FS_TuneCP5_13p6TeV_amcatnlo-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2/NANOAODSIM'
 }
 
+#### Analysis recipes ####
+Samples['TTTo2L2Nu_10k_nano'] = {
+    'folder': '/eos/cms/store/group/cat/datasets/recipes/2023_Summer23BPix/'
+}

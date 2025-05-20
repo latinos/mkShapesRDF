@@ -349,13 +349,24 @@ class LeptonSF(Module):
                         f'correction::Correction::Ref cset_electron_{wp}_wpSF_{beginRP}_{endRP} = (correction::Correction::Ref) csetEl{wp}_wpSF_{beginRP}_{endRP}->at("{key}");'
                     )
 
-                    evaluator = """
-                    pt = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{ele_pt[i], """ + str(self.el_maxPt) + """}), """ + str(self.el_minPt) + """});
-                    eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{ele_eta[i], """ + str(self.el_maxEta) + """}), """ + str(self.el_minEta) + """});  
-                    
-                    sf     = cset_electron_""" + wp + """_wpSF->evaluate({"%s", "sf", "%s", eta, pt});
-                    sfup   = cset_electron_""" % (egamma_era, label) + wp + """_wpSF->evaluate({"%s", "sfup", "%s", eta, pt}); 
-                    sfdown = cset_electron_""" % (egamma_era, label) + wp + """_wpSF->evaluate({"%s", "sfdown", "%s", eta, pt}); """ % (egamma_era, label)
+                    evaluator = f"""
+                    pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}});
+                    eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
+                    """
+
+                    if int(self.year) > 2022 and "POG" in wp:
+                        evaluator += f"""
+                    sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt, phi}});
+                    sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt, phi}});
+                    sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt, phi}});
+                    """
+                    else:
+                        evaluator += f"""
+                    sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
+                    sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}});
+                    sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}});
+                    """
+
 
                     
                     interpret_runP = (
@@ -382,14 +393,14 @@ class LeptonSF(Module):
                 """
                     std::vector<ROOT::RVecF> getSF_"""
                     + wp
-                    + """_wpSF(ROOT::RVecF ele_pt, ROOT::RVecF ele_eta, ROOT::RVecI ele_pdgId, int runP){
+                    + """_wpSF(ROOT::RVecF ele_pt, ROOT::RVecF ele_eta, ROOT::RVecF ele_phi, ROOT::RVecI ele_pdgId, int runP){
 
                         std::vector<ROOT::RVecF> SFTot;
                         ROOT::RVecF SF;
                         ROOT::RVecF SFup;
                         ROOT::RVecF SFdown;
                         float sf,sfup,sfdown;
-                        float pt,eta;
+                        float pt,eta,phi;
 
                         correction::Correction::Ref cset_electron_"""
                         + wp
@@ -425,7 +436,7 @@ class LeptonSF(Module):
 
             df = df.Define(
                 f"ElewpSF_{wp}",
-                f"getSF_{wp}_wpSF(Lepton_pt, Lepton_eta, Lepton_pdgId, run_period)",
+                f"getSF_{wp}_wpSF(Lepton_pt, Lepton_eta, Lepton_phi, Lepton_pdgId, run_period)",
             )
 
             columnsToDrop.append(f"ElewpSF_{wp}")

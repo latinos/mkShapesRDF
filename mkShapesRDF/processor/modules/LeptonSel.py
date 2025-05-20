@@ -5,12 +5,12 @@ from mkShapesRDF.processor.framework.module import Module
 
 
 class LeptonSel(Module):
-    def __init__(self, LepFilter, nLF, era, filter=True):
+    def __init__(self, LepFilter, nLF, era, isPOG=False):
         super().__init__("LeptonSel")
         self.era = era
         self.LepFilter = LepFilter
         self.nLF = nLF
-        self.filter = filter
+        self.isPOG = isPOG
 
     def runModule(self, df, values):
         Clean_Tag = LepFilter_dict[self.LepFilter]
@@ -72,33 +72,60 @@ class LeptonSel(Module):
         df = df.Define("tmp2", "true")
         columnsToDrop.append("tmp2")
 
+        if not self.isPOG:
+            ### Electron veto
+            for key, cuts in ElectronWP[self.era][Clean_TagWP]["HLTsafe"]["cuts"].items():
+                df = df.Redefine("tmp1", key)
+                df = df.Redefine("tmp2", "(" + cuts[0] + ")")
+                for cut in cuts[1:]:
+                    df = df.Redefine("tmp2", "tmp2 && (" + cut + ")")
+                #df = df.Redefine("comb", "comb && !(tmp1 && !tmp2)")
+                df = df.Redefine("comb", "comb && (! tmp1 || tmp2)")
 
-        ### Electron veto
-        for key, cuts in ElectronWP[self.era][Clean_TagWP]["HLTsafe"]["cuts"].items():
-            df = df.Redefine("tmp1", key)
-            df = df.Redefine("tmp2", "(" + cuts[0] + ")")
-            for cut in cuts[1:]:
-                df = df.Redefine("tmp2", "tmp2 && (" + cut + ")")
-            #df = df.Redefine("comb", "comb && !(tmp1 && !tmp2)")
-            df = df.Redefine("comb", "comb && (! tmp1 || tmp2)")
-                
-        df = df.Define("LeptonMaskHyg_Ele", "propagateMask(Lepton_electronIdx, comb, true)")
-        columnsToDrop.append("LeptonMaskHyg_Ele")
+            df = df.Define("LeptonMaskHyg_Ele", "propagateMask(Lepton_electronIdx, comb, true)")
+            columnsToDrop.append("LeptonMaskHyg_Ele")
 
-        
-        ### Muon veto
-        df = df.Redefine("comb", "ROOT::RVecB(Muon_pt.size(), true)")
 
-        for key, cuts in MuonWP[self.era][Clean_TagWP]["HLTsafe"]["cuts"].items():
-            df = df.Redefine("tmp1", key)
-            df = df.Redefine("tmp2", "(" + cuts[0] + ")")
-            for cut in cuts[1:]:
-                df = df.Redefine("tmp2", "tmp2 && (" + cut + ")")
-            #df = df.Redefine("comb", "comb && !(tmp1 && !tmp2)")
-            df = df.Redefine("comb", "comb && (! tmp1 || tmp2)")
+            ### Muon veto
+            df = df.Redefine("comb", "ROOT::RVecB(Muon_pt.size(), true)")
 
-        df = df.Define("LeptonMaskHyg_Mu", "propagateMask(Lepton_muonIdx, comb, true)")
-        columnsToDrop.append("LeptonMaskHyg_Mu")
+            for key, cuts in MuonWP[self.era][Clean_TagWP]["HLTsafe"]["cuts"].items():
+                df = df.Redefine("tmp1", key)
+                df = df.Redefine("tmp2", "(" + cuts[0] + ")")
+                for cut in cuts[1:]:
+                    df = df.Redefine("tmp2", "tmp2 && (" + cut + ")")
+                #df = df.Redefine("comb", "comb && !(tmp1 && !tmp2)")
+                df = df.Redefine("comb", "comb && (! tmp1 || tmp2)")
+
+            df = df.Define("LeptonMaskHyg_Mu", "propagateMask(Lepton_muonIdx, comb, true)")
+            columnsToDrop.append("LeptonMaskHyg_Mu")
+        else:
+            ### Electron veto
+            for key, cuts in ElectronWP[self.era]["TightObjWP"]["wp80iso_POG"]["cuts"].items():
+                df = df.Redefine("tmp1", key)
+                df = df.Redefine("tmp2", "(" + cuts[0] + ")")
+                for cut in cuts[1:]:
+                    df = df.Redefine("tmp2", "tmp2 && (" + cut + ")")
+                #df = df.Redefine("comb", "comb && !(tmp1 && !tmp2)")
+                df = df.Redefine("comb", "comb && (! tmp1 || tmp2)")
+
+            df = df.Define("LeptonMaskHyg_Ele", "propagateMask(Lepton_electronIdx, comb, true)")
+            columnsToDrop.append("LeptonMaskHyg_Ele")
+
+
+            ### Muon veto
+            df = df.Redefine("comb", "ROOT::RVecB(Muon_pt.size(), true)")
+
+            for key, cuts in MuonWP[self.era]["TightObjWP"]["cut_TightID_POG"]["cuts"].items():
+                df = df.Redefine("tmp1", key)
+                df = df.Redefine("tmp2", "(" + cuts[0] + ")")
+                for cut in cuts[1:]:
+                    df = df.Redefine("tmp2", "tmp2 && (" + cut + ")")
+                #df = df.Redefine("comb", "comb && !(tmp1 && !tmp2)")
+                df = df.Redefine("comb", "comb && (! tmp1 || tmp2)")
+
+            df = df.Define("LeptonMaskHyg_Mu", "propagateMask(Lepton_muonIdx, comb, true)")
+            columnsToDrop.append("LeptonMaskHyg_Mu")
 
 
         if Clean_TagWP=="FakeObjWP":
@@ -177,7 +204,7 @@ class LeptonSel(Module):
 
 
         # TODO add VetoLeptons and dmZll
-        if self.filter:
+        if not self.isPOG:
             df = df.Filter("Lepton_pt[LeptonMask_minPt_pass].size() >= 1")
 
         values.append(
@@ -223,6 +250,7 @@ class LeptonSel(Module):
         columnsToDrop.append("CleanJet_pass")
 
         branches = ["pt", "eta", "phi", "pdgId", "electronIdx", "muonIdx"]
+        
         for prop in branches:
             df = df.Redefine(
                 f"Lepton_{prop}",

@@ -389,3 +389,8 @@ Samples['QCD_PT-170to250_bcToE'] = {
 Samples['QCD_PT-250toInf_bcToE'] = {
     'nanoAOD' : '/QCD_PT-250toInf_bcToE_TuneCP5_13p6TeV_pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
 }
+
+#### Analysis recipes ####
+Samples['TTTo2L2Nu_10k_nano'] = {
+    'folder': '/eos/cms/store/group/cat/datasets/recipes/2022_Summer22/'
+}
