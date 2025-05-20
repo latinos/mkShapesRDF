@@ -343,6 +343,14 @@ Samples['DYto2L-2Jets_MLL-50'] = {
 
 #### Single Top !!!!
 
+Samples['TWminusto2L2Nu'] = {
+    'nanoAOD' :'/TWminusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6_ext1-v2/NANOAODSIM'
+}
+
+Samples['TbarWplusto2L2Nu'] = {
+    'nanoAOD' :'/TbarWplusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6_ext1-v2/NANOAODSIM'
+}
+
 Samples['ST_t-channel_top'] = {
     'nanoAOD' :'/TBbarQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
 }
