@@ -4,7 +4,7 @@ sourceCommand="echo 'first source of start.sh'"
 
 env=$(hostname)
 
-OS=$(hostnamectl | grep "CPE OS Name")
+OS=$(grep CPE_NAME /etc/os-release | cut -d'=' -f2 | tr -d '"')
 echo "OS ""$OS"
 
 echo "Custom install ""$1"
