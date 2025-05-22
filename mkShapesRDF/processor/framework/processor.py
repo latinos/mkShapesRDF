@@ -242,6 +242,7 @@ class Processor:
         if 'portal'   in uname: site = 'kit'
         elif "bms"    in uname: site = 'kit'
         elif "lxplus" in uname: site = 'cern'
+        else : site = 'pipeline'
 
         eosTmpPath = Sites[site]["eosTmpWorkDir"]
         
