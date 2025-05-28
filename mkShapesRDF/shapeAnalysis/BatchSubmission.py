@@ -171,9 +171,13 @@ class BatchSubmission:
         )
         process.wait()
 
-        txtjdl = "universe = vanilla \n"
+        txtjdl = "universe    = vanilla \n"
+        if 'portal' or 'bms' in os.uname()[1]:
+            txtjdl =  "universe = container \n"
+            txtjdl += "container_image = /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cverstege/alma9-gridjob:latest \n"
+            
         txtjdl += "executable = run.sh\n"
-        txtjdl += "arguments = $(Folder)\n"
+        txtjdl += "arguments  = $(Folder)\n"
 
         txtjdl += "should_transfer_files = YES\n"
 
@@ -193,6 +197,9 @@ class BatchSubmission:
 
         txtjdl += "request_cpus   = 1\n"
         txtjdl += f'+JobFlavour = "{queue}"\n'
+
+        if 'portal' or 'bms' in os.uname()[1]:
+            txtjdl += "accounting_group = cms.higgs \n"
 
         txtjdl += f'queue 1 Folder in {", ".join(self.folders)}\n'
         with open(f"{self.batchFolder}/{self.tag}/submit.jdl", "w") as file:
