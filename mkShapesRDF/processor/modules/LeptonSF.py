@@ -423,6 +423,7 @@ class LeptonSF(Module):
                             if (abs(ele_pdgId[i])==11){
                                 
                                 detasc = ele_detasc[Lepton_electronIdx[i]];
+                                phi = ele_phi[i];
 
                                 """
                                 + evaluator
