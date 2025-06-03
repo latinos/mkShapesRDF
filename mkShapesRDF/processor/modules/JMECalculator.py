@@ -203,7 +203,7 @@ class JMECalculator(Module):
                     cols.append("GenJet_phi")
                     cols.append("GenJet_mass")
                 else:
-                    # Basically, this variables are nedded for the smearing and don't exist for data, so we set those to empty vectors
+                    # Basically, these variables are nedded for the smearing and don't exist for data, so we set those to empty vectors
                     cols.append("ROOT::RVecI{}") # Jet_genJetIdx
                     cols.append("ROOT::RVecI{}") # Jet_partonFlavour
                     cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
@@ -227,6 +227,9 @@ class JMECalculator(Module):
                 
                 cols.append("MET_MetUnclustEnUpDeltaX")
                 cols.append("MET_MetUnclustEnUpDeltaY")
+
+                #cols.append("PuppiMET_ptUnclusteredUp")
+                #cols.append("PuppiMET_phiUnclusteredUp")
 
                 df = df.Define(
                     f"{MET}Vars", f"my{MET}VarCalc.produce({', '.join(cols)})"
@@ -308,6 +311,33 @@ class JMECalculator(Module):
 
             df = df.Define("jetVars", f'myJetVariationsCalculator.produce({", ".join(cols)})')
 
+            if "TTTo2L2Nu_10k_nano" == self.sampleName: # the sample name used for recipe is "TTTo2L2Nu_10k_nano" so this condition is basically saying if isrecipe:...
+                cols_recipe = []
+
+                cols_recipe.append("Jet_pt")
+                cols_recipe.append("Jet_eta")
+                cols_recipe.append("Jet_phi")
+                cols_recipe.append("Jet_mass")
+                cols_recipe.append("Jet_rawFactor")
+                cols_recipe.append("Jet_area")
+                cols_recipe.append("Jet_jetId")
+
+                # rho
+                cols_recipe.append("Rho_fixedGridRhoFastjetAll")
+
+                cols_recipe.append("Jet_genJetIdx")
+                cols_recipe.append("Jet_partonFlavour")
+
+                # seed
+                cols_recipe.append("(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)")
+
+                # gen jet coll
+                cols_recipe.append("GenJet_pt")
+                cols_recipe.append("GenJet_eta")
+                cols_recipe.append("GenJet_phi")
+                cols_recipe.append("GenJet_mass")
+
+                df = df.Define("jetVarsrecipe", f'myJetVariationsCalculator.produce({", ".join(cols_recipe)})')
 
             if self.store_nominal:
                 df = df.Define("CleanJet_pt", "jetVars.pt(0)")
@@ -319,6 +349,10 @@ class JMECalculator(Module):
                 df = df.Define("CleanJet_phi", "Take( CleanJet_phi, CleanJet_sorting)")
                 df = df.Define("CleanJet_mass", "Take( CleanJet_mass, CleanJet_sorting)")
                 df = df.Define("CleanJet_jetIdx", "Take( CleanJet_jetIdx, CleanJet_sorting)")
+                if "TTTo2L2Nu_10k_nano" == self.sampleName: # the sample name used for recipe is "TTTo2L2Nu_10k_nano" so this condition is basically saying if isrecipe:...
+                    df = df.Define("Jet_pt_recipe", "jetVarsrecipe.pt(0)")
+                    df = df.Define("Jet_mass_recipe", "jetVarsrecipe.mass(0)")
+                
             else:
                 df = df.Define("CleanJet_sorting", "Range(CleanJet_pt.size())")
 
