@@ -24,7 +24,13 @@ class l2KinProducer(Module):
         df = df.Define(
             "MET_4DV", "ROOT::Math::PtEtaPhiMVector" "(PuppiMET_pt, 0, PuppiMET_phi, 0)"
         )
-
+        
+        # Since 2024 NanoAODv15: TkMET -> TrkMET
+        # Homogenize
+        if "TkMET_pt" not in df.GetColumnNames():
+            df = df.Define("TkMET_pt", "TrkMET_pt")
+            df = df.Define("TkMET_phi", "TrkMET_phi")
+            
         df = df.Define(
             "TkMET_4DV", "ROOT::Math::PtEtaPhiMVector" "(TkMET_pt, 0, TkMET_phi, 0)"
         )

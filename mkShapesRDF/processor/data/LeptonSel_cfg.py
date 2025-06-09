@@ -547,6 +547,108 @@ ElectronWP = {
             },
         },
     },
+    "Full2024v15": {
+        "VetoObjWP": {
+            "HLTsafe": {
+                "cuts": {
+                    "True": ["False"],
+                },
+            },
+        },
+        # ------------
+        "FakeObjWP": {
+            "HLTsafe": {
+                "cuts": {
+                    # Common cuts
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_cutBased >= 3",
+                        "Electron_convVeto == 1",
+                    ],
+                    # Barrel
+                    "ROOT::VecOps::abs(Electron_eta)  <= 1.479": [
+                        "ROOT::VecOps::abs(Electron_dxy) < 0.05",
+                        "ROOT::VecOps::abs(Electron_dz)  < 0.1",
+                    ],
+                    # EndCap
+                    "ROOT::VecOps::abs(Electron_eta)  > 1.479": [
+                        "Electron_sieie  < 0.03",
+                        "ROOT::VecOps::abs(Electron_eInvMinusPInv) < 0.014",
+                        "ROOT::VecOps::abs(Electron_dxy) < 0.1",
+                        "ROOT::VecOps::abs(Electron_dz)  < 0.2",
+                    ],
+                },
+            },
+        },
+        "TightObjWP": {
+            "wp90iso": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_mvaIso_WP90",
+                        "Electron_convVeto",
+                    ],
+                },
+                #'tkSF':  {
+                #    '1-1' : ["2024XXXX", "Electron-ID-SF", "data/jsonpog-integration/POG/EGM/2023_Summer24/electron.json.gz"]
+                #} ,
+                #'wpSF':  {
+                #    '1-1' : ["2024XXXX", "Electron-ID-SF", "passingMVA90", 'data/scale_factor/Full2024v15/electron.json'],
+                #} ,
+                #'fakeW' : 'data/fake_prompt_rates/',
+            },
+            "mvaWinter22V2Iso_WP90": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_mvaIso_WP90",
+                        "Electron_convVeto",
+                        "Electron_pfRelIso03_all < 0.06",
+                    ],
+                    "ROOT::VecOps::abs(Electron_eta) <= 1.479": [
+                        "ROOT::VecOps::abs(Electron_dxy) < 0.05",
+                        "ROOT::VecOps::abs(Electron_dz)  < 0.1",
+                    ],
+                    "ROOT::VecOps::abs(Electron_eta) > 1.479": [
+                        "ROOT::VecOps::abs(Electron_dxy) < 0.1",
+                        "ROOT::VecOps::abs(Electron_dz) <  0.2",
+                    ],
+                },
+                #'tkSF':  { 
+                #    '1-1' : ["2024XXXX", "Electron-ID-SF", "data/jsonpog-integration/POG/EGM/2023_Summer24/electron.json.gz"]
+                #}
+                #'wpSF':  { 
+                #    '1-1' : ["2024XXXX", "Electron-ID-SF", "passingMVA90_HWW", 'data/scale_factor/Full2024v15/electron.json'],
+                #} ,
+                #'fakeW' : 'data/fake_prompt_rates/',  
+            },
+            "cutBased__LooseID_tthMVA_Run3": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_cutBased >= 2",
+                        "Electron_promptMVA > 0.90",
+                        "Electron_convVeto",
+                    ],
+                    "ROOT::VecOps::abs(Electron_eta) <= 1.479": [
+                        "ROOT::VecOps::abs(Electron_dxy) < 0.05",
+                        "ROOT::VecOps::abs(Electron_dz)  < 0.1",
+                    ],
+                    "ROOT::VecOps::abs(Electron_eta) > 1.479": [
+                        "ROOT::VecOps::abs(Electron_dxy) < 0.1",
+                        "ROOT::VecOps::abs(Electron_dz) <  0.2",
+                    ],
+                },
+                #'tkSF':  { 
+                #    '1-1' : ["2024XXXX", "Electron-ID-SF", "data/jsonpog-integration/POG/EGM/2023_Summer24/electron.json.gz"]
+                #}
+                #'wpSF':  { 
+                #    '1-1' : ["2024XXXX", "Electron-ID-SF", "passingTTHMVA", 'data/scale_factor/Full2024v15/electron.json'],
+                #} ,
+                #'fakeW' : 'data/fake_prompt_rates/',  
+            },
+        },
+    },
 }
 
 MuonWP = {
@@ -1185,5 +1287,141 @@ MuonWP = {
                  "fakeW": "data/fake_prompt_rates/Full2023BPixv12/cut_TightID_HWW_LoosePFIso_tthMVA/",
              },
         }, 
+    },
+    "Full2024v15": {
+        # ------------
+        "VetoObjWP": {
+            "HLTsafe": {
+                "cuts": {
+                    # Common cuts
+                    "ROOT::RVecB (Muon_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                        "Muon_pt > 10.0",
+                    ]
+                },
+            }
+        },
+        # ------------
+        "FakeObjWP": {
+            "HLTsafe": {
+                "cuts": {
+                    # Common cuts
+                    "ROOT::RVecB (Muon_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                        "Muon_tightId",
+                        "ROOT::VecOps::abs(Muon_dz) < 0.1",
+                        "Muon_pfRelIso04_all < 0.4",
+                    ],
+                    # dxy for pT < 20 GeV
+                    "Muon_pt <= 20.0": [
+                        "ROOT::VecOps::abs(Muon_dxy) < 0.01",
+                    ],
+                    # dxy for pT > 20 GeV
+                    "Muon_pt > 20.0": [
+                        "ROOT::VecOps::abs(Muon_dxy) < 0.02",
+                    ],
+                },
+            },
+        },
+        "TightObjWP": {
+            "cut_Tight_HWW": {
+                "cuts": {
+                    # Common cuts
+                    "ROOT::RVecB (Muon_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                        "Muon_tightId",
+                        "ROOT::VecOps::abs(Muon_dz) < 0.1",
+                        "Muon_pfIsoId >= 4",
+                    ],
+                    # dxy for pT < 20 GeV
+                    "Muon_pt <= 20.0": [
+                        "ROOT::VecOps::abs(Muon_dxy) < 0.01",
+                    ],
+                    # dxy for pT > 20 GeV
+                    "Muon_pt > 20.0": [
+                        "ROOT::VecOps::abs(Muon_dxy) < 0.02",
+                    ],
+                },
+                #"idSF": {
+                #    "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                #},
+                #"isoSF": {
+                #    "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                #},
+                #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_Tight_HWW/",
+            },
+            "cut_TightID_pfIsoTight_HWW_tthmva_67": {
+                "cuts": {
+                    "ROOT::RVecB (Muon_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                        "Muon_tightId",
+                        "ROOT::VecOps::abs(Muon_dz) < 0.1",
+                        "Muon_pfIsoId >= 4",
+                        "Muon_promptMVA > 0.67",
+                    ],
+                    "Muon_pt <= 20.0": [
+                        "ROOT::VecOps::abs(Muon_dxy) < 0.01",
+                    ],
+                    "Muon_pt > 20.0": [
+                        "ROOT::VecOps::abs(Muon_dxy) < 0.02",
+                    ],
+                },
+                #"idSF": {
+                #    "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                #},
+                #"isoSF": {
+                #    "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                #},
+                #"tthSF": {
+                #    "1-1": ["NUM_TightID_HWW_TightIso_tthMVA_DEN_TightPFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                #},
+                #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_TightPFIso_tthMVA/",
+             },
+             "cut_TightID_pfIsoLoose_HWW_tthmva_67": {
+                 "cuts": {
+                     "ROOT::RVecB (Muon_pt.size(), true)": [
+                         "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                         "Muon_tightId",
+                         "ROOT::VecOps::abs(Muon_dz) < 0.1",
+                         "Muon_pfIsoId >= 2",
+                         "Muon_promptMVA > 0.67",
+                     ],
+                     "Muon_pt <= 20.0": [
+                         "ROOT::VecOps::abs(Muon_dxy) < 0.01",
+                     ],
+                     "Muon_pt > 20.0": [
+                         "ROOT::VecOps::abs(Muon_dxy) < 0.02",
+                     ],
+                 },
+                 #"idSF": {
+                 #    "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 #},
+                 #"isoSF": {
+                 #    "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 #},
+                 #"tthSF": {
+                 #    "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 #},
+                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA/",
+             },
+             "cut_TightID_pfIsoLoose_HWW_PNet": {
+                 "cuts": {
+                     "ROOT::RVecB (Muon_pt.size(), true)": [
+                         "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                         "Muon_tightId",
+                         "ROOT::VecOps::abs(Muon_dz) < 0.1",
+                         "Muon_pfIsoId >= 2",
+                     ],
+                     "Muon_pt <= 20.0": [
+                         "ROOT::VecOps::abs(Muon_dxy) < 0.01",
+                         "Muon_pnScore_prompt > 0.31",
+                     ],
+                     "Muon_pt > 20.0": [
+                         "ROOT::VecOps::abs(Muon_dxy) < 0.02",
+                         "Muon_pnScore_prompt > 0.6",
+                     ],
+                 },
+             },
+        },
     },
 }

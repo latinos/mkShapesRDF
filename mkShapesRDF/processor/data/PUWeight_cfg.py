@@ -47,6 +47,17 @@ PUCfg = {
         'nvtx_var'    : "Pileup_nTrueInt",
         'doSysVar'    : True ,
     } ,
+    'Full2024v15': {
+        'srcfile'     : "auto" ,
+        'targetfiles' : { '1-1' : '/processor/data/PUweights/2024/2024_693mb.root' } ,
+        'srchist'     : "pileup",
+        'targethist'  : "pileup",
+        'name'        : "puWeight" ,
+        'norm'        : True       ,
+        'verbose'     : False      ,
+        'nvtx_var'    : "Pileup_nTrueInt",
+        'doSysVar'    : False ,
+    } ,
     'Full2022EEv11': {
         'srcfile'     : "auto" ,
         'targetfiles' : { '1-1' : '/processor/data/PUweights/2022/2022_PU.root' } ,

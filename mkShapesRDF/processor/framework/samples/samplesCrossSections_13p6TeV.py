@@ -10,6 +10,7 @@
 # E: https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHWG136TeVxsec_extrap
 # F: https://cms-gen.gitbook.io/cms-generator-central-place/about-cross-sections
 # G: https://xsecdb-xsdb-official.app.cern.ch/xsdb/
+# H: http://cms.cern.ch/iCMS/jsp/openfile.jsp?tp=draft&files=AN2023_179_v6.pdf
 #
 # X: reference unknown. Please provide a valid reference!
 
@@ -111,7 +112,19 @@ xs_db["WToLNu-2Jets"] = ["xsec=67710.0", "kfact=1.000", "ref=G"]
 # DY
 xs_db["DYJetsToLL_M-50-LO"]      = ["xsec=6275.1",  "kfact=1.000", "ref=A"] # 2091.7 * 3
 xs_db["DYto2L-2Jets_MLL-50"]     = ["xsec=6275.1",  "kfact=1.000", "ref=A"] # 2091.7 * 3
-xs_db["DYto2L-2Jets_MLL-10to50"] = ["xsec=19982.5", "kfact=1.000", "ref=X"]
+xs_db["DYto2L-2Jets_MLL-10to50"] = ["xsec=19982.5", "kfact=1.000", "ref=H"]
+
+xs_db["DYto2E-2Jets_MLL-10to50"] = ["xsec=6660.8", "kfact=1.000", "ref=H"] # 19982.5 / 3 
+xs_db["DYto2E-2Jets_MLL-50"]     = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
+xs_db["DYto2E-2Jets_MLL-50-LO"]  = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
+
+xs_db["DYto2Mu-2Jets_MLL-10to50"] = ["xsec=6660.8", "kfact=1.000", "ref=H"]
+xs_db["DYto2Mu-2Jets_MLL-50"]     = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
+xs_db["DYto2Mu-2Jets_MLL-50-LO"]  = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
+
+xs_db["DYto2Tau-2Jets_MLL-10to50"] = ["xsec=6660.8", "kfact=1.000", "ref=H"]
+xs_db["DYto2Tau-2Jets_MLL-50"]     = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
+xs_db["DYto2Tau-2Jets_MLL-50-LO"]  = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
 
 # QCD
 xs_db["QCD_PT-15to20_MuEnrichedPt5"]    = ["xsec=2960000.0", "kfact=1.000", "ref=G"]

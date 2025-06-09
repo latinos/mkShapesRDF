@@ -67,6 +67,13 @@ Productions = {
         "cmssw": "Full2023BPixv12",
         "year": "2023",
     },
+    "Run2024_ReRecoCDE_PromptFGHI_nAODv15_Full2024v15": {
+        "isData": True,
+        "jsonFile": "/processor/data/certification/Cert_Collisions2024_378981_386951_Golden.json",
+        "samples": "../framework/samples/Run2024_ReRecoCDE_PromptFGHI_nAODv15.py",
+        "cmssw": "Full2024v15",
+        "year": "2024",
+    },
     #################################### nAODv9 MC ##############################################
     # -------- 2016 MC 106X nAODv8: Full2016v8
     "Summer20UL16_106x_nAODv9_HIPM_Full2016v9": {
@@ -149,6 +156,15 @@ Productions = {
         "samples": "../framework/samples/Summer23BPix_130x_nAODv12.py",
         "cmssw": "Full2023BPixv12",
         "year": "2023",
+        "xsFile": "../framework/samples/samplesCrossSections_13p6TeV.py",
+        "YRver": ["YR4", "13p6TeV"],
+    },
+    # ------- 2024 MC Summer24 v15
+    "Summer24_150x_nAODv15_Full2024v15": {
+        "isData": False,
+        "samples": "../framework/samples/Summer24_150x_nAODv15.py",
+        "cmssw": "Full2024v15",
+        "year": "2024",
         "xsFile": "../framework/samples/samplesCrossSections_13p6TeV.py",
         "YRver": ["YR4", "13p6TeV"],
     },

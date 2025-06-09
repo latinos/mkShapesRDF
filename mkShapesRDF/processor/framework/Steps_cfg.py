@@ -901,6 +901,91 @@ Steps = {
 	    "addTnPElectron",
         ]
     },
+
+    ######
+    ###### 2024
+    ######
+    
+    "DATAl2loose2024v15__addTnPMuon": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepSel",
+            "jetSelMask",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "addTnPMuon",
+        ],
+    },
+    "DATAl2loose2024v15__addTnPElectron": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepSel",
+            "jetSelMask",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "addTnPElectron",
+        ],
+    },
+    "MCl2loose2024v15__addTnPMuon": {
+        "isChain": True,
+        "do4MC": True,
+        "do4Data": False,
+        "selection": '"((nElectron+nMuon)>1)"',
+        "subTargets": [
+            "leptonMaker",
+            "lepSel",
+            "jetSelMask",
+            "PromptParticlesGenVars",
+            "GenVar",
+            "GenLeptonMatch",
+            "HiggsGenVars",
+            "TopGenVars",
+            "WGammaStar",
+            "DressedLeptons",
+            "baseW",
+            "trigMCnoSF",
+            "puW",
+            "addTnPMuon",
+        ]
+    },
+    "MCl2loose2024v15__addTnPElectron": {
+        "isChain": True,
+        "do4MC": True,
+        "do4Data": False,
+        "selection": '"((nElectron+nMuon)>1)"',
+        "subTargets": [
+            "leptonMaker",
+            "lepSel",
+            "jetSelMask",
+            "PromptParticlesGenVars",
+            "GenVar",
+            "GenLeptonMatch",
+            "HiggsGenVars",
+            "TopGenVars",
+            "WGammaStar",
+            "DressedLeptons",
+            "baseW",
+            "trigMCnoSF",
+            "puW",
+            "addTnPElectron",
+        ]
+    },
 	
 
     # "fakeSel": {
