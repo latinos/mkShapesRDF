@@ -486,13 +486,15 @@ class mRDF:
                 branches.remove("Photon_seediEtaOriX")
             if "Electron_seediEtaOriX" in branches:
                 branches.remove("Electron_seediEtaOriX")
+            if "nisLoose" in branches:
+                branches.remove("nisLoose")
             _branches = branches.copy()
             CollectionsToZip = ['CleanJet','WH3l_dphilmet','WH3l_mtlmet','MET','Jet','PuppiMET','Lepton_tightMuon','Lepton_tightElectron','Lepton_isTightElectron','Lepton_isTightMuon','Lepton',
                                 'Muon','Electron','Photon','Gen','LHE','HLT','L1','Tau','IsoTrack','GenPart','LHEPart','TrigObj','LepCut2l','LepCut3l','LepCut4l','NeutrinoGen','SubJet',
                                 'ChsMET','LeptonGen','FatJet','LepSF2l','LepSF3l','LepSF4l','PhotonGen','DressedLepton','GenDressedLepton','SubGenJetAK8','LowPtElectron','VetoLepton',
                                 'BeamSpot','LHEWeight','GenIsolatedPhoton','RawMET','TkMET','CorrT1METJet','boostedTau','newJet','GenJet','TriggerEffWeight','TriggerSFWeight',
                                 'GenJetAK8','Flag','puWeight','Pileup','GenProton','HTXS', 'GenVtx','Generator','Trigger','GenVisTau','RawPuppiMET','SoftActivityJet',
-                                'CaloMET','Rho','FsrPhoton','DeepMETResponseTune','PV','SV','GenMET','DeepMETResolutionTune','gen','OtherPV']
+                                'CaloMET','Rho','FsrPhoton','DeepMETResponseTune','PV','SV','GenMET','DeepMETResolutionTune','gen','OtherPV','TrackGenJetAK4','FatJetPFCand','PFCand','Proton_multiRP','PPSLocalTrack','Proton_singleRP','TauProd']
 
             zips = {}            
             for zipName in CollectionsToZip:

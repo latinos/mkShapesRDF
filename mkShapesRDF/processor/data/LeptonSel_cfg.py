@@ -592,9 +592,9 @@ ElectronWP = {
                 #'tkSF':  {
                 #    '1-1' : ["2024XXXX", "Electron-ID-SF", "data/jsonpog-integration/POG/EGM/2023_Summer24/electron.json.gz"]
                 #} ,
-                #'wpSF':  {
-                #    '1-1' : ["2024XXXX", "Electron-ID-SF", "passingMVA90", 'data/scale_factor/Full2024v15/electron.json'],
-                #} ,
+                'wpSF':  {
+                    '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "passingMVA90", 'data/scale_factor/Full2024v15/electron.json'],
+                } ,
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
             "mvaWinter22V2Iso_WP90": {
@@ -617,9 +617,9 @@ ElectronWP = {
                 #'tkSF':  { 
                 #    '1-1' : ["2024XXXX", "Electron-ID-SF", "data/jsonpog-integration/POG/EGM/2023_Summer24/electron.json.gz"]
                 #}
-                #'wpSF':  { 
-                #    '1-1' : ["2024XXXX", "Electron-ID-SF", "passingMVA90_HWW", 'data/scale_factor/Full2024v15/electron.json'],
-                #} ,
+                'wpSF':  { 
+                    '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "passingMVA90_HWW", 'data/scale_factor/Full2024v15/electron.json'],
+                } ,
                 #'fakeW' : 'data/fake_prompt_rates/',  
             },
             "cutBased__LooseID_tthMVA_Run3": {
@@ -642,9 +642,9 @@ ElectronWP = {
                 #'tkSF':  { 
                 #    '1-1' : ["2024XXXX", "Electron-ID-SF", "data/jsonpog-integration/POG/EGM/2023_Summer24/electron.json.gz"]
                 #}
-                #'wpSF':  { 
-                #    '1-1' : ["2024XXXX", "Electron-ID-SF", "passingTTHMVA", 'data/scale_factor/Full2024v15/electron.json'],
-                #} ,
+                'wpSF':  { 
+                    '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "passingTTHMVA", 'data/scale_factor/Full2024v15/electron.json'],
+                } ,
                 #'fakeW' : 'data/fake_prompt_rates/',  
             },
         },
@@ -1342,12 +1342,12 @@ MuonWP = {
                         "ROOT::VecOps::abs(Muon_dxy) < 0.02",
                     ],
                 },
-                #"idSF": {
-                #    "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                #},
-                #"isoSF": {
-                #    "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                #},
+                "idSF": {
+                    "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                },
+                "isoSF": {
+                    "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                },
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_Tight_HWW/",
             },
             "cut_TightID_pfIsoTight_HWW_tthmva_67": {
@@ -1366,15 +1366,15 @@ MuonWP = {
                         "ROOT::VecOps::abs(Muon_dxy) < 0.02",
                     ],
                 },
-                #"idSF": {
-                #    "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                #},
-                #"isoSF": {
-                #    "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                #},
-                #"tthSF": {
-                #    "1-1": ["NUM_TightID_HWW_TightIso_tthMVA_DEN_TightPFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                #},
+                "idSF": {
+                    "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                },
+                "isoSF": {
+                    "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                },
+                "tthSF": {
+                    "1-1": ["NUM_TightID_HWW_TightIso_tthMVA_DEN_TightPFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                },
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_TightPFIso_tthMVA/",
              },
              "cut_TightID_pfIsoLoose_HWW_tthmva_67": {
@@ -1393,16 +1393,16 @@ MuonWP = {
                          "ROOT::VecOps::abs(Muon_dxy) < 0.02",
                      ],
                  },
-                 #"idSF": {
-                 #    "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                 #},
-                 #"isoSF": {
-                 #    "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                 #},
-                 #"tthSF": {
-                 #    "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                 #},
-                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA/",
+                 "idSF": {
+                     "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 },
+                 "isoSF": {
+                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 },
+                 "tthSF": {
+                     "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 },
+                #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA/",
              },
              "cut_TightID_pfIsoLoose_HWW_PNet": {
                  "cuts": {
@@ -1421,6 +1421,16 @@ MuonWP = {
                          "Muon_pnScore_prompt > 0.6",
                      ],
                  },
+                 "idSF": {
+                     "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 },
+                 "isoSF": {
+                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 },
+                 "tthSF": {
+                     "1-1": ["NUM_TightID_HWW_LooseIso_PNet_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 },
+                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_PNet/",  
              },
         },
     },
