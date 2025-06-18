@@ -46,11 +46,11 @@ Samples['GluGlutoContintoWWtoTauNuTauNu'] = {
 Samples['WZTo3LNu'] = {
     'nanoAOD' :''
 }
-
+"""
 Samples['WZ'] = {
-    'nanoAOD' :''
+    'nanoAOD' :'/WZ_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
-
+"""
 Samples['WZG'] = {
     'nanoAOD' :''
 }
@@ -62,11 +62,12 @@ Samples['WZtoLNu2Q'] = {
 Samples['WZto3LNu'] = {
     'nanoAOD' :''
 }
-
+"""
 #### ZZ !!!!
 Samples['ZZ'] = {
-    'nanoAOD' :''
+    'nanoAOD' :'/ZZ_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
+"""
 Samples['ZZTo2L2Nu'] = {
     'nanoAOD' :''
 }
@@ -87,17 +88,17 @@ Samples['ZZTo4Q'] = {
     'nanoAOD' :''
 }
 
-
+"""
 ###### WW !!!!
 
 Samples['WWTo2L2Nu'] = {
-    'nanoAOD' :''
+    'nanoAOD' :'/WWto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 
 Samples['WW'] = {
-    'nanoAOD' :''
+    'nanoAOD' :'/WW_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
-
+"""
 ##### ZGamma !!!!!
 
 Samples['ZG2JtoG2L2J'] = {  
@@ -149,16 +150,18 @@ Samples['ZZZ'] = {
 Samples['WWG'] = {
     'nanoAOD' :''
 }
+"""
+
 
 ##### Top !!!!
 
 Samples['TTTo2L2Nu'] = {
-    'nanoAOD' :''
+    'nanoAOD' :'/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3/NANOAODSIM'
 }
 Samples['TTToSemiLeptonic'] = {
-    'nanoAOD' :''
+    'nanoAOD' :'/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
-"""
+
 
 #### WJets !!!!
 
@@ -205,13 +208,13 @@ Samples['DYto2Tau-2Jets_MLL-50-LO'] = {
 
 #### Single Top !!!!
 
-#Samples['ST_t-channel_top'] = {
-#    'nanoAOD' :''
-#}
+Samples['ST_t-channel_top'] = {
+    'nanoAOD' :'/TBbarQtoLNu-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
+}
 
-#Samples['ST_t-channel_antitop'] = {
-#    'nanoAOD' :''
-#}
+Samples['ST_t-channel_antitop'] = {
+    'nanoAOD' :'/TbarBQtoLNu-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
+}
 
 #Samples['ST_tW_top'] = {
 #    'nanoAOD' :''

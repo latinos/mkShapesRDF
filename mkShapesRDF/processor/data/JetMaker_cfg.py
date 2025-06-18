@@ -33,10 +33,23 @@ JetMakerCfg = {
     'Full2023BPixv12': {
         "vetomap": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/2023_Summer23BPix/jetvetomaps.json.gz",
         "vetokey": "Summer23BPixPrompt23_RunD_V1",
-	"JEC": "Summer23BPixPrompt23_V1_MC",
+        "JEC": "Summer23BPixPrompt23_V1_MC",
         "JEC_data" : "Summer23BPixPrompt23_RunD_V1_DATA",
         "JER": "Summer23BPixPrompt23_RunD_JRV1_MC",
         "jet_jerc" : frameworkPath + "/processor/data/jsonpog-integration/POG/JME/2023_Summer23BPix/jet_jerc.json.gz",
         "jer_smear": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/jer_smear.json.gz",
     },
+    'Full2024v15': {
+        "vetomap": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/2024_Winter24/jetvetomaps.json.gz",
+        "vetokey": "Winter24Prompt2024BCDEFGHI_V1",
+        "JEC": "Winter24Prompt24_V3_MC",
+        "JER": "Summer23BPixPrompt23_RunD_JRV1_MC",
+        "jet_jerc" : frameworkPath + "/processor/data/jsonpog-integration/POG/JME/2024_Winter24/jet_jerc.json.gz",
+        "jer_smear": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/jer_smear.json.gz",
+        "jetId": {
+            "json": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/2024_Summer24/jetid.json.gz",
+            "key" : "AK4PUPPI_Tight",
+        }
+    },
 }
+
