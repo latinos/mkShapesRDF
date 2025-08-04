@@ -207,7 +207,7 @@ def main():
 
     batchFolder = f"{folder}/{batchFolder}"
 
-    if "/eos/user" in outputFolder:
+    if "/eos/user" in outputFolder or "/ceph/" in outputFolder:
         Path(f"{outputFolder}").mkdir(parents=True, exist_ok=True)
         outputPath = os.path.abspath(f"{outputFolder}")
         outputFileMap = f"{outputPath}/{outputFile}"
@@ -433,7 +433,7 @@ def main():
         _samples = RunAnalysis.splitSamples(samples)
         print(len(_samples))
         outputFileTrunc = ".".join(outputFile.split(".")[:-1])
-        if "/eos/user" in outputFolder:
+        if "/eos/user" in outputFolder or "/ceph/" in outputFolder:
             filesToMerge = list(
                 map(
                     lambda k: f"{outputFolder}/{outputFileTrunc}__ALL__{k[0]}_{str(k[3])}.root",
@@ -472,7 +472,7 @@ def main():
         #    rm filesToMerge_{outputFile}.txt",
         #    shell=True,
         #)
-        if "/eos/user" in outputFolder:
+        if "/eos/user" in outputFolder or "/ceph/" in outputFolder:
             process = subprocess.Popen(
                 f'hadd2 -j 10 {outputFolder}/{outputFile} @filesToMerge_{outputFile}.txt; \
                 rm filesToMerge_{outputFile}.txt',
