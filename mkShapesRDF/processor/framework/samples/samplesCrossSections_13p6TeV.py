@@ -133,6 +133,10 @@ xs_db["DYto2Tau-2Jets_MLL-10to50"] = ["xsec=6660.8", "kfact=1.000", "ref=H"]
 xs_db["DYto2Tau-2Jets_MLL-50"]     = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
 xs_db["DYto2Tau-2Jets_MLL-50-LO"]  = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
 
+xs_db['DYto2Tau-2Jets_MLL-50_0J'] = ["xsec=1792.0",  "kfact=1.000", "ref=G"]
+xs_db['DYto2Tau-2Jets_MLL-50_1J'] = ["xsec=337.7",  "kfact=1.000", "ref=G"]
+xs_db['DYto2Tau-2Jets_MLL-50_2J'] = ["xsec=127.2",  "kfact=1.000", "ref=G"]
+
 # QCD
 xs_db["QCD_PT-15to20_MuEnrichedPt5"]    = ["xsec=2960000.0", "kfact=1.000", "ref=G"]
 xs_db["QCD_PT-20to30_MuEnrichedPt5"]    = ["xsec=2679000.0", "kfact=1.000", "ref=G"]

@@ -1,4 +1,9 @@
 from mkShapesRDF.processor.framework.module import Module
+from mkShapesRDF.processor.data.JetMaker_cfg import JetMakerCfg
+import correctionlib
+import os
+import ROOT
+correctionlib.register_pyroot_binding()
 
 
 class JetSel(Module):
@@ -10,7 +15,7 @@ class JetSel(Module):
         self.maxEta = maxEta
         self.UL2016fix = UL2016fix
 
-    def runModue(self, df, values):
+    def runModule(self, df, values):
         # jetId = 2
         # wp = "loose"
         # minPt = 15.0

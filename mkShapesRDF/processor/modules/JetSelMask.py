@@ -2,6 +2,7 @@ from mkShapesRDF.processor.framework.module import Module
 from mkShapesRDF.processor.data.JetMaker_cfg import JetMakerCfg
 import correctionlib
 import os
+import ROOT
 correctionlib.register_pyroot_binding()
 
 class JetSelMask(Module):
@@ -20,7 +21,7 @@ class JetSelMask(Module):
             self.pathToJson = JetMakerCfg[year]["vetomap"]
             self.globalTag = JetMakerCfg[year]["vetokey"]        
         
-    def runModue(self, df, values):
+    def runModule(self, df, values):
         # jetId = 2
         # wp = "loose"
         # minPt = 15.0

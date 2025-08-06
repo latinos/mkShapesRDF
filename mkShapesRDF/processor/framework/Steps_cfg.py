@@ -1802,8 +1802,8 @@ Steps = {
         "isChain": False,
         "do4MC": False,
         "do4Data": True,
-        "import": "mkShapesRDF.processor.modules.LeptonFakeWMaker",
-        "declare": "fakeW = lambda : LeptonFakeWMaker('RPLME_CMSSW')",
+        "import": "mkShapesRDF.processor.modules.fakeWMaker",
+        "declare": "fakeW = lambda : fakeWMaker('RPLME_CMSSW', 'RPLME_FW')",
         "module": "fakeW()",
     },
 

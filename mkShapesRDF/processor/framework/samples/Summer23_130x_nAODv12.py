@@ -183,6 +183,20 @@ Samples['DYto2L-2Jets_MLL-50'] = {
     'nanoAOD' :'/DYto2L-2Jets_MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v1/NANOAODSIM'
 }
 
+### DY -> tau tau
+
+Samples['DYto2Tau-2Jets_MLL-50_0J'] = {
+    'nanoAOD' :'/DYto2Tau-2Jets_MLL-50_0J_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v1/NANOAODSIM'
+}
+
+Samples['DYto2Tau-2Jets_MLL-50_1J'] = {
+    'nanoAOD' :'/DYto2Tau-2Jets_MLL-50_1J_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v1/NANOAODSIM'
+}
+
+#Samples['DYto2Tau-2Jets_MLL-50_2J'] = {
+#    'nanoAOD' :'/DYto2Tau-2Jets_MLL-50_2J_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v1/NANOAODSIM'
+#}
+
 #### Top !!!!
 
 Samples['ST_t-channel_top'] = {

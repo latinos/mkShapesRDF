@@ -5,7 +5,7 @@ Sites = {
     'cern' : {
         "eosTmpWorkDir": "'USEDAS'", ### Optional to redirect the input samples
         "eosDir"       : "/eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/",
-        "redirector"    : "root://cmsxrootd.fnal.gov/", # xrootd-cms.infn.it. # cmsxrootd.fnal.gov
+        "redirector"    : "root://xrootd-cms.infn.it/", # cmsxrootd.fnal.gov
     },
 
     'kit' : {

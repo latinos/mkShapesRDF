@@ -520,7 +520,7 @@ ElectronWP = {
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2023BPixv12/mvaWinter22V2Iso_WP90/',
             },
-            "cutBased__LooseID_tthMVA_Run3": {
+            "cutBased_LooseID_tthMVA_Run3": {
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
                         "ROOT::VecOps::abs(Electron_eta) < 2.5",
@@ -622,7 +622,7 @@ ElectronWP = {
                 #} ,
                 #'fakeW' : 'data/fake_prompt_rates/',  
             },
-            "cutBased__LooseID_tthMVA_Run3": {
+            "cutBased_LooseID_tthMVA_Run3": {
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
                         "ROOT::VecOps::abs(Electron_eta) < 2.5",
