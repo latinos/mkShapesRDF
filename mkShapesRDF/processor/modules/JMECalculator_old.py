@@ -52,7 +52,7 @@ class JMECalculator(Module):
             Whether to store the variations (up/down) for JES/JER
         """
         super().__init__("JMECalculator")
-        self.jet_object = jet_object        
+        self.jet_object = jet_object
         self.jes_unc = jes_unc
         self.year = year
         self.met_collections = met_collections
@@ -123,12 +123,7 @@ class JMECalculator(Module):
         ROOT.gROOT.ProcessLine("std::vector<string> jesUnc{}")
         jesUnc = getattr(ROOT, "jesUnc")
         for jes_var in jes_unc:
-            if "YEAR" in jes_var:
-                print(jes_var.replace("YEAR", self.year.split("Full")[1].split("v")[0]))
-                jesUnc.push_back(jes_var.replace("YEAR", self.year.split("Full")[1].split("v")[0]))
-            else:
-                print(jes_var)
-                jesUnc.push_back(jes_var)
+            jesUnc.push_back(jes_var)
         addHEM      = "false"
         smearingTool= "JERSmear"
         maxDR       = 0.2
@@ -151,6 +146,68 @@ class JMECalculator(Module):
                 jecTag = self.JEC_era[2]
 
         print(f"Final JEC tag: {jecTag}")
+
+
+        #### Validation
+        '''
+        ROOT.gInterpreter.Declare(
+            """
+            bool makeVal(RVecF CleanJet_pt,
+                         RVecF CleanJet_eta,
+                         RVecF CleanJet_phi,
+                         RVecI CleanJet_jetIdx,
+                         RVecF Jet_mass,
+                         RVecF Jet_rawFactor,
+                         RVecF Jet_area,
+                         RVecF Jet_muonSubtrFactor,
+                         RVecI Jet_neEmEF,
+                         RVecI Jet_chEmEF,
+                         float PuppiMET_pt,
+                         float PuppiMET_phi,
+                         float Rho_fixedGridRhoFastjetAll,
+                         float RawPuppiMET_pt,
+                         float RawPuppiMET_phi,
+                         RVecF CorrT1METJet_rawPt,
+                         RVecF CorrT1METJet_eta,
+                         RVecF CorrT1METJet_phi,
+                         RVecF CorrT1METJet_area,
+                         RVecF CorrT1METJet_muonSubtrFactor,
+                         float PuppiMET_ptUnclusteredUp,
+                         float PuppiMET_phiUnclusteredUp
+                         ) {
+                             
+                             std::cout << CleanJet_pt << std::endl;
+                             std::cout << CleanJet_eta << std::endl;
+                             std::cout << CleanJet_phi << std::endl;
+                             std::cout << Take(Jet_mass,CleanJet_jetIdx) << std::endl;
+                             std::cout << Take(Jet_rawFactor,CleanJet_jetIdx) << std::endl;
+                             std::cout << Take(Jet_area,CleanJet_jetIdx) << std::endl;
+                             std::cout << Take(Jet_muonSubtrFactor,CleanJet_jetIdx) << std::endl;
+                             std::cout << Take(Jet_neEmEF,CleanJet_jetIdx) << std::endl;
+                             std::cout << Take(Jet_chEmEF,CleanJet_jetIdx) << std::endl;
+                             std::cout << PuppiMET_pt << std::endl;
+                             std::cout << PuppiMET_phi << std::endl;
+                             std::cout << Rho_fixedGridRhoFastjetAll << std::endl;
+                             std::cout << RawPuppiMET_pt << std::endl;
+                             std::cout << RawPuppiMET_phi << std::endl;
+                             std::cout << CorrT1METJet_rawPt << std::endl;
+                             std::cout << CorrT1METJet_eta << std::endl;
+                             std::cout << CorrT1METJet_phi << std::endl;
+                             std::cout << CorrT1METJet_area << std::endl;
+                             std::cout << CorrT1METJet_muonSubtrFactor << std::endl;
+                             std::cout << PuppiMET_ptUnclusteredUp << std::endl;
+                             std::cout << PuppiMET_phiUnclusteredUp  << std::endl;
+                             
+                             return true;
+                             
+                         }
+            """
+        )
+
+        df = df.Define("test", "makeVal(CleanJet_pt,CleanJet_eta,CleanJet_phi,CleanJet_jetIdx,Jet_mass,Jet_rawFactor,Jet_area,Jet_muonSubtrFactor,Jet_neEmEF,Jet_chEmEF,PuppiMET_pt,PuppiMET_phi,Rho_fixedGridRhoFastjetAll,RawPuppiMET_pt,RawPuppiMET_phi,CorrT1METJet_rawPt,CorrT1METJet_eta,CorrT1METJet_phi,CorrT1METJet_area,CorrT1METJet_muonSubtrFactor,PuppiMET_ptUnclusteredUp,PuppiMET_phiUnclusteredUp)")
+        df = df.Filter("test")
+        ##### --------------
+        '''
         
         if self.do_MET:
             L1JecTag        = "L1FastJet"
@@ -158,6 +215,9 @@ class JMECalculator(Module):
             emEnFracThr     = 0.9
             isT1smearedMET  = "false"
             for MET in self.met_collections:
+
+                print(MET)
+                
                 if self.do_JER and "Puppi" in MET:
                     jerTag          = self.JER_era
                     isT1smearedMET  = "true"
@@ -174,11 +234,18 @@ class JMECalculator(Module):
                 cols = []
 
                 JetColl = "newJet"
+                jetCond = "ROOT::RVecB(CleanJet_pt.size(), true)"
 
-                df = df.Define("newJet_pt", "CleanJet_pt")
-                df = df.Define("newJet_eta", "CleanJet_eta")
-                df = df.Define("newJet_phi", "CleanJet_phi")
-                df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
+                if "newJet_pt" in df.GetColumnNames():
+                    df = df.Redefine("newJet_pt", f"CleanJet_pt[{jetCond}]")
+                    df = df.Redefine("newJet_eta", f"CleanJet_eta[{jetCond}]")
+                    df = df.Redefine("newJet_phi", f"CleanJet_phi[{jetCond}]")
+                    df = df.Redefine("newJet_jetIdx", f"CleanJet_jetIdx[{jetCond}]")
+                else:
+                    df = df.Define("newJet_pt", f"CleanJet_pt[{jetCond}]")
+                    df = df.Define("newJet_eta", f"CleanJet_eta[{jetCond}]")
+                    df = df.Define("newJet_phi", f"CleanJet_phi[{jetCond}]")
+                    df = df.Define("newJet_jetIdx", f"CleanJet_jetIdx[{jetCond}]")
 
                 cols.append(f"{JetColl}_pt")
                 cols.append(f"{JetColl}_eta")
@@ -189,7 +256,9 @@ class JMECalculator(Module):
                 cols.append(f"Take(Jet_muonSubtrFactor, {JetColl}_jetIdx)")
                 cols.append(f"Take(Jet_neEmEF, {JetColl}_jetIdx)")
                 cols.append(f"Take(Jet_chEmEF, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
+
+                #cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)") # No longer in v15?
+                cols.append("ROOT::RVecF{}")
     
                 # rho
                 cols.append("Rho_fixedGridRhoFastjetAll")
@@ -221,7 +290,10 @@ class JMECalculator(Module):
                 cols.append(f"{RawMET}_phi")
                 cols.append(f"{RawMET}_pt")
 
-                df = df.Define('EmptyLowPtJet', 'ROOT::RVecF{}')
+                if "EmptyLowPtJet" in df.GetColumnNames():
+                    df = df.Redefine('EmptyLowPtJet', 'ROOT::RVecF{}')
+                else:
+                    df = df.Define('EmptyLowPtJet', 'ROOT::RVecF{}')
                 cols.append("CorrT1METJet_rawPt")
                 cols.append("CorrT1METJet_eta")
                 cols.append("CorrT1METJet_phi")
@@ -230,24 +302,23 @@ class JMECalculator(Module):
                 cols.append("ROOT::RVecF {}")
                 cols.append("ROOT::RVecF {}")
                 
-                cols.append("MET_MetUnclustEnUpDeltaX")
-                cols.append("MET_MetUnclustEnUpDeltaY")
+                #cols.append("MET_MetUnclustEnUpDeltaX")
+                #cols.append("MET_MetUnclustEnUpDeltaY")
 
-                if not self.isMC:
-                    cols.append("(float)run")
-                else:
-                    cols.append("(float)-1.0")
-                                       
-                #cols.append("PuppiMET_ptUnclusteredUp")
-                #cols.append("PuppiMET_phiUnclusteredUp")
+                cols.append("PuppiMET_ptUnclusteredUp")
+                cols.append("PuppiMET_phiUnclusteredUp")
 
                 df = df.Define(
                     f"{MET}Vars", f"my{MET}VarCalc.produce({', '.join(cols)})"
                 )
                 
                 if self.store_nominal:
-                    df = df.Define(f"{MET}_pt", f"CleanJet_pt.size() > 0 ? {MET}Vars.pt(0) : {RawMET}_pt")
-                    df = df.Define(f"{MET}_phi", f"CleanJet_pt.size() > 0 ? {MET}Vars.phi(0) : {RawMET}_phi")
+                    if f"{MET}_pt" in df.GetColumnNames():
+                        df = df.Redefine(f"{MET}_pt", f"CleanJet_pt.size() > 0 ? {MET}Vars.pt(0) : {RawMET}_pt")
+                        df = df.Redefine(f"{MET}_phi", f"CleanJet_pt.size() > 0 ? {MET}Vars.phi(0) : {RawMET}_phi")
+                    else:
+                        df = df.Define(f"{MET}_pt", f"CleanJet_pt.size() > 0 ? {MET}Vars.pt(0) : {RawMET}_pt")
+                        df = df.Define(f"{MET}_phi", f"CleanJet_pt.size() > 0 ? {MET}Vars.phi(0) : {RawMET}_phi")
                 
                 if self.store_variations:
                     for variable in [MET + "_pt", MET + "_phi"]:
@@ -260,7 +331,8 @@ class JMECalculator(Module):
                                 ["up", "do"],
                                 source,
                             )
-                df = df.DropColumns(f"{MET}Vars*")
+                if "mRDF" in str(type(df)):
+                    df = df.DropColumns(f"{MET}Vars*")
                 print("MET variables run succesfully!")
 
         if self.do_Jets:
@@ -281,10 +353,16 @@ class JMECalculator(Module):
             # nre reco jet coll
             JetColl = "newJet"
 
-            df = df.Define("newJet_pt", "CleanJet_pt")
-            df = df.Define("newJet_eta", "CleanJet_eta")
-            df = df.Define("newJet_phi", "CleanJet_phi")
-            df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
+            if "newJet_pt" in df.GetColumnNames():
+                df = df.Redefine("newJet_pt", "CleanJet_pt")
+                df = df.Redefine("newJet_eta", "CleanJet_eta")
+                df = df.Redefine("newJet_phi", "CleanJet_phi")
+                df = df.Redefine("newJet_jetIdx", "CleanJet_jetIdx")
+            else:
+                df = df.Define("newJet_pt", "CleanJet_pt")
+                df = df.Define("newJet_eta", "CleanJet_eta")
+                df = df.Define("newJet_phi", "CleanJet_phi")
+                df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
 
             cols.append(f"{JetColl}_pt")
             cols.append(f"{JetColl}_eta")
@@ -292,7 +370,9 @@ class JMECalculator(Module):
             cols.append("CleanJet_mass")
             cols.append(f"Take(Jet_rawFactor, {JetColl}_jetIdx)")
             cols.append(f"Take(Jet_area, {JetColl}_jetIdx)")
-            cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
+
+            #cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
+            cols.append("ROOT::RVecF{}")
 
             # rho
             cols.append("Rho_fixedGridRhoFastjetAll")
@@ -304,9 +384,6 @@ class JMECalculator(Module):
                 # seed
                 cols.append(f"(run<<20) + (luminosityBlock<<10) + event + 1 + int({JetColl}_eta.size()>0 ? {JetColl}_eta[0]/.01 : 0)")
 
-                # run
-                cols.append("(float)-1.0")
-                
                 # gen jet coll
                 cols.append("GenJet_pt")
                 cols.append("GenJet_eta")
@@ -317,7 +394,6 @@ class JMECalculator(Module):
                 cols.append("ROOT::RVecI{}") # Jet_genJetIdx
                 cols.append("ROOT::RVecI{}") # Jet_partonFlavour
                 cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
-                cols.append("(float)run")
                 cols.append("ROOT::RVecF{}") # GenJet_pt
                 cols.append("ROOT::RVecF{}") # GenJet_eta
                 cols.append("ROOT::RVecF{}") # GenJet_phi
@@ -344,7 +420,6 @@ class JMECalculator(Module):
 
                 # seed
                 cols_recipe.append("(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)")
-                cols_recipe.append("(float)-1.0")
 
                 # gen jet coll
                 cols_recipe.append("GenJet_pt")
@@ -355,15 +430,26 @@ class JMECalculator(Module):
                 df = df.Define("jetVarsrecipe", f'myJetVariationsCalculator.produce({", ".join(cols_recipe)})')
 
             if self.store_nominal:
-                df = df.Define("CleanJet_pt", "jetVars.pt(0)")
-                df = df.Define("CleanJet_mass", "jetVars.mass(0)")
-                df = df.Define("CleanJet_sorting", "ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(CleanJet_pt))")
+                if "CleanJet_pt" in df.GetColumnNames():
+                    df = df.Redefine("CleanJet_pt", "jetVars.pt(0)")
+                    df = df.Redefine("CleanJet_mass", "jetVars.mass(0)")
+                    df = df.Define("CleanJet_sorting", "ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(CleanJet_pt))")
 
-                df = df.Define("CleanJet_pt", "Take( CleanJet_pt, CleanJet_sorting)")
-                df = df.Define("CleanJet_eta", "Take( CleanJet_eta, CleanJet_sorting)")
-                df = df.Define("CleanJet_phi", "Take( CleanJet_phi, CleanJet_sorting)")
-                df = df.Define("CleanJet_mass", "Take( CleanJet_mass, CleanJet_sorting)")
-                df = df.Define("CleanJet_jetIdx", "Take( CleanJet_jetIdx, CleanJet_sorting)")
+                    df = df.Redefine("CleanJet_pt", "Take( CleanJet_pt, CleanJet_sorting)")
+                    df = df.Redefine("CleanJet_eta", "Take( CleanJet_eta, CleanJet_sorting)")
+                    df = df.Redefine("CleanJet_phi", "Take( CleanJet_phi, CleanJet_sorting)")
+                    df = df.Redefine("CleanJet_mass", "Take( CleanJet_mass, CleanJet_sorting)")
+                    df = df.Redefine("CleanJet_jetIdx", "Take( CleanJet_jetIdx, CleanJet_sorting)")
+                else:
+                    df = df.Define("CleanJet_pt", "jetVars.pt(0)")
+                    df = df.Define("CleanJet_mass", "jetVars.mass(0)")
+                    df = df.Define("CleanJet_sorting", "ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(CleanJet_pt))")
+                    
+                    df = df.Define("CleanJet_pt", "Take( CleanJet_pt, CleanJet_sorting)")
+                    df = df.Define("CleanJet_eta", "Take( CleanJet_eta, CleanJet_sorting)")
+                    df = df.Define("CleanJet_phi", "Take( CleanJet_phi, CleanJet_sorting)")
+                    df = df.Define("CleanJet_mass", "Take( CleanJet_mass, CleanJet_sorting)")
+                    df = df.Define("CleanJet_jetIdx", "Take( CleanJet_jetIdx, CleanJet_sorting)")
                 if "TTTo2L2Nu_10k_nano" == self.sampleName: # the sample name used for recipe is "TTTo2L2Nu_10k_nano" so this condition is basically saying if isrecipe:...
                     df = df.Define("Jet_pt_recipe", "jetVarsrecipe.pt(0)")
                     df = df.Define("Jet_mass_recipe", "jetVarsrecipe.mass(0)")
@@ -462,9 +548,11 @@ class JMECalculator(Module):
                         tags,
                         source,
                     )
-
-                    df = df.DropColumns("tmp_*")
-
-            df = df.DropColumns("jetVars*")
-            df = df.DropColumns("CleanJet_sorting")
+                    if "mRDF" in str(type(df)):
+                        df = df.DropColumns("tmp_*")
+                        
+            if "mRDF" in str(type(df)):
+                df = df.DropColumns("jetVars*")
+                df = df.DropColumns("CleanJet_sorting")
+                
         return df

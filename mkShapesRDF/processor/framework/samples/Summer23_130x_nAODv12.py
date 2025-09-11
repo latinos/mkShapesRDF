@@ -99,9 +99,9 @@ Samples['WW'] = {
 
 ##### ZGamma !!!!!
 
-#Samples['ZG2JtoG2L2J'] = {  
-#    'nanoAOD' :''
-#}
+Samples['ZG2JtoG2L2J'] = {  
+    'nanoAOD' :'/ZG2JtoG2L2J_EWK_MLL-50_MJJ-120_TuneCP5_13p6TeV_madgraph-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2/NANOAODSIM'
+}
     
 ##### WGamma !!!!
 

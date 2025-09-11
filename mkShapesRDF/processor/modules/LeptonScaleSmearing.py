@@ -32,7 +32,7 @@ class LeptonScaleSmearing(Module):
             self.elescale_path = os.path.dirname(os.path.dirname(__file__)).split("processor")[0] + "/processor/data/jsonpog-integration/POG/EGM"
             self.macroele_path = os.path.dirname(os.path.dirname(__file__)).split("processor")[0] + "/processor/data/electron_scale"      
             
-        if "2022" in era or "2023" in era:
+        if "2022" in era or "2023" in era or "2024" in era:
             self.prodTime = "Summer"
         else:
             print("LeptonScaleSmearing")

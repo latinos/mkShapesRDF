@@ -128,8 +128,7 @@ class runDependentPuW(Module):
             #TH1D* hist = tmp_df.Histo1D(myModel, "{nvtxVar}").GetPtr();
             #"""
 
-        
-        ROOT.gROOT.ProcessLine(s)
+            ROOT.gROOT.ProcessLine(s)
         
         ROOT.gInterpreter.Declare(
             """

@@ -32,7 +32,7 @@ class JetSelMask(Module):
         # minPt = 15.0
         # maxEta = 4.7
         # UL2016fix = False
-
+        
         if self.doJetId:
 
             jetIdJson = self.jetIdJson
@@ -61,6 +61,7 @@ class JetSelMask(Module):
                     for (int i=0; i<Jet_eta.size(); i++){
 
                         int multiplicity = Jet_chMultiplicity[i] + Jet_neMultiplicity[i];
+
                         Jet_JetId[i] = cset_jet_id->evaluate({Jet_eta[i], Jet_chHEF[i], Jet_neHEF[i], Jet_chEmEF[i], Jet_neEmEF[i], Jet_muEF[i], Jet_chMultiplicity[i], Jet_neMultiplicity[i], multiplicity});
                     }
 
@@ -74,14 +75,18 @@ class JetSelMask(Module):
                 "Jet_ID(Jet_eta,Jet_chHEF,Jet_neHEF,Jet_chEmEF,Jet_neEmEF,Jet_muEF,Jet_chMultiplicity,Jet_neMultiplicity)"
             )
             df = df.Define(
-                "CleanJetMask",
-                f"CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= 1",
+                "BaseCleanJetMask",
+                f"(CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= 1)",
             )
+            print(f"CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= 1")
+            print("Mask applied")
         else:                
             df = df.Define(
-                "CleanJetMask",
-                f"CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= {self.jetId}",
+                "BaseCleanJetMask",
+                f"(CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= {self.jetId})",
             )
+            print(f"CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= {self.jetId}")
+            print("Mask applied")
 
         if self.doMask:
 
@@ -98,7 +103,7 @@ class JetSelMask(Module):
                     float tmp_value;
                     float cleanJet_EM;
                     float eta, phi;
-                    RVecB CleanJet_isNotVeto = RVecB(CleanJet_pt.size(), true);
+                    RVecB CleanJet_isNotVeto = RVecB(CleanJet_pt.size(), false);
                     for (int i=0; i<CleanJet_pt.size(); i++){
                         phi = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{CleanJet_phi[i], 3.1415}), -3.1415});
                         eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{CleanJet_eta[i], 5.19}), -5.19});
@@ -106,8 +111,8 @@ class JetSelMask(Module):
                         cleanJet_EM = Jet_neEmEF[CleanJet_jetIdx[i]] + Jet_chEmEF[CleanJet_jetIdx[i]];
                         tmp_value = cset_jet_Map->evaluate({"jetvetomap", eta, phi});
                     
-                        if (cleanJet_EM<0.9 && CleanJet_pt[i]>15.0 && tmp_value!=0.0){
-                            CleanJet_isNotVeto[i] = false;
+                        if (cleanJet_EM<0.9 && CleanJet_pt[i]>=15.0 && tmp_value!=0.0){
+                            CleanJet_isNotVeto[i] = true;
                         }
                     }
                     return CleanJet_isNotVeto;
@@ -145,18 +150,32 @@ class JetSelMask(Module):
             
             df = df.Define(
                 "CleanJetMask",
-                "CleanJetMask && getJetMask(CleanJet_pt,CleanJet_eta,CleanJet_phi,Jet_neEmEF,Jet_chEmEF,CleanJet_jetIdx)"
+                "BaseCleanJetMask && getJetMask(CleanJet_pt,CleanJet_eta,CleanJet_phi,Jet_neEmEF,Jet_chEmEF,CleanJet_jetIdx)"
+            )
+
+        else:
+
+            df = df.Define(
+                "CleanJetMask",
+                "BaseCleanJetMask"
             )
             
         values.append(
             [
                 df.Define("test", "CleanJet_pt.size()").Sum("test"),
                 "Original size of CleanJet",
+            ]            
+        )
+        values.append(
+            [
+                df.Define("test", "CleanJet_pt[CleanJet_pt<15].size()").Sum("test"),
+                "Size of CleanJets with pT lower than 15 GeV",
             ]
         )
         
         branches = ["jetIdx", "pt", "eta", "phi", "mass"]
-        for prop in branches:
+        print("Branch redefinition!")
+        for prop in branches:            
             df = df.Redefine(f"CleanJet_{prop}", f"CleanJet_{prop}[CleanJetMask]")
 
         df = df.DropColumns("CleanJetMask")

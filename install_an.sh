@@ -15,8 +15,8 @@ if [ -z "$1" ]; then
         sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-centos7-gcc11-opt/setup.sh"
     elif [[ "$OS" == *"linux:9"* ]]; then
         echo el9
-        #sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-el9-gcc11-opt/setup.sh"
-	sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_107/x86_64-el9-gcc11-opt/setup.sh"
+        sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-el9-gcc11-opt/setup.sh"
+	#sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_107/x86_64-el9-gcc11-opt/setup.sh"
     else
         echo "$OS"" not supported"
         exit 1
@@ -38,8 +38,8 @@ if [ "$1" == "docker" ]; then
     python --version
 fi
 
-python -m venv --system-site-packages myenv
-source myenv/bin/activate
+python -m venv --system-site-packages myenv2
+source myenv2/bin/activate
 
 if [ "$1" == "docker" ]; then
     python -m pip --version
@@ -72,9 +72,9 @@ cd ..
 cat <<EOF > start.sh
 #!/bin/bash
 $sourceCommand
-source `pwd`/myenv/bin/activate
+source `pwd`/myenv2/bin/activate
 export STARTPATH=`pwd`/start.sh 
-export PYTHONPATH=`pwd`/myenv/lib64/python3.11/site-packages:\$PYTHONPATH
+export PYTHONPATH=`pwd`/myenv2/lib64/python3.9/site-packages:\$PYTHONPATH
 export PATH=`pwd`/utils/bin:\$PATH
 EOF
 

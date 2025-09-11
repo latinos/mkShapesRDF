@@ -406,9 +406,10 @@ class TrigMaker(Module):
             else:
                 if "run_period" in name and not self.keepRunP:
                     df = df.Define(name, "run_p")
-        
+
         if self.isData or (self.computeSF==False):
             df = df.DropColumns("run_p")
+            
             return df
         
         ########################################################################

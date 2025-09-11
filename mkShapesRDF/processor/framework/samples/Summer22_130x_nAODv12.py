@@ -219,9 +219,12 @@ Samples['ggWW_TL'] = {
 ##### ZGamma
 
 Samples['ZG2JtoG2L2J'] = {  
-    'nanoAOD' :'/ZG2JtoG2L2J_EWK_MLL-50_MJJ-120_TuneCP5_withDipoleRecoil_13p6TeV_madgraph-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v3/NANOAODSIM'
+    'nanoAOD' :'/ZG2JtoG2L2J_EWK_MLL-50_MJJ-120_TuneCP5_withDipoleRecoil_13p6TeV_madgraph-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
 }
 
+Samples['ZG'] = {
+    'nanoAOD' :'/ZGto2LG-1Jets_ntgc_5f_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
 
 ##### WGamma
 
@@ -234,11 +237,11 @@ Samples['WGtoLNuG-1J_PTG100to200'] = {
 }
 
 Samples['WGtoLNuG-1J_PTG200to400'] = {
-    'nanoAOD' :'/WGtoLNuG-1Jets_PTG-200to400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v3/NANOAODSIM'
+    'nanoAOD' :'/WGtoLNuG-1Jets_PTG-200to400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv13-133X_mcRun3_2022_realistic_ForNanov13_v1-v1/NANOAODSIM'
 }
 
 Samples['WGtoLNuG-1J_PTG400to600'] = {
-    'nanoAOD' :'/WGtoLNuG-1Jets_PTG-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v3/NANOAODSIM'
+    'nanoAOD' :'/WGtoLNuG-1Jets_PTG-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v1/NANOAODSIM'
 }
 
 Samples['WGtoLNuG-1J_PTG600'] = {
