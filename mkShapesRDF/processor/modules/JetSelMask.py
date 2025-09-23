@@ -103,7 +103,7 @@ class JetSelMask(Module):
                     float tmp_value;
                     float cleanJet_EM;
                     float eta, phi;
-                    RVecB CleanJet_isNotVeto = RVecB(CleanJet_pt.size(), false);
+                    RVecB CleanJet_isNotVeto = RVecB(CleanJet_pt.size(), true);
                     for (int i=0; i<CleanJet_pt.size(); i++){
                         phi = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{CleanJet_phi[i], 3.1415}), -3.1415});
                         eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{CleanJet_eta[i], 5.19}), -5.19});
@@ -112,7 +112,7 @@ class JetSelMask(Module):
                         tmp_value = cset_jet_Map->evaluate({"jetvetomap", eta, phi});
                     
                         if (cleanJet_EM<0.9 && CleanJet_pt[i]>=15.0 && tmp_value!=0.0){
-                            CleanJet_isNotVeto[i] = true;
+                            CleanJet_isNotVeto[i] = false;
                         }
                     }
                     return CleanJet_isNotVeto;
