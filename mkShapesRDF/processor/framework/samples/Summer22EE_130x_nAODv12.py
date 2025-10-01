@@ -332,7 +332,7 @@ Samples['WToLNu-2Jets'] = {
 #### DY !!!!!
 
 Samples['DYJetsToLL_M-50-LO'] = {
-    'nanoAOD' :'/DYto2L-4Jets_MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
+    'nanoAOD' :'/DYto2L-4Jets_MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v3/NANOAODSIM'
 }
 
 Samples['DYto2L-2Jets_MLL-10to50'] = {
