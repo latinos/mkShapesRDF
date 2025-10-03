@@ -217,7 +217,10 @@ class JMECalculator(Module):
                     cols.append("ROOT::RVecF{}") # GenJet_phi
                     cols.append("ROOT::RVecF{}") # GenJet_mass
 
-                RawMET = "RawMET" if "Puppi" not in MET else "RawPuppiMET"
+                if "v15" in self.year:
+                    RawMET = "RawPFMET" if "Puppi" not in MET else "RawPuppiMET"
+                else:
+                    RawMET = "RawMET" if "Puppi" not in MET else "RawPuppiMET"
                 cols.append(f"{RawMET}_phi")
                 cols.append(f"{RawMET}_pt")
 
@@ -229,18 +232,40 @@ class JMECalculator(Module):
                 cols.append("CorrT1METJet_muonSubtrFactor")
                 cols.append("ROOT::RVecF {}")
                 cols.append("ROOT::RVecF {}")
-                
-                cols.append("MET_MetUnclustEnUpDeltaX")
-                cols.append("MET_MetUnclustEnUpDeltaY")
+
+                ## Not available in nanoAODv15
+                if "v15" in self.year:
+                    if "Puppi" not in MET:
+                        df = df.Define(
+                            "PFMET_MetUnclustEnUpDeltaX",
+                            "PFMET_ptUnclusteredUp * std::cos(PFMET_phi)"
+                        )
+                        df = df.Define(
+                            "PFMET_MetUnclustEnUpDeltaY",
+                            "PFMET_ptUnclusteredUp * std::sin(PFMET_phi)"
+                        )
+                        cols.append("PFMET_MetUnclustEnUpDeltaX")
+                        cols.append("PFMET_MetUnclustEnUpDeltaY")
+                    else:
+                        df = df.Define(
+                            "PuppiMET_MetUnclustEnUpDeltaX",
+                            "PuppiMET_ptUnclusteredUp * std::cos(PuppiMET_phi)"
+                        )
+                        df = df.Define(
+                            "PuppiMET_MetUnclustEnUpDeltaY",
+                            "PuppiMET_ptUnclusteredUp * std::sin(PuppiMET_phi)"
+                        )
+                        cols.append("PuppiMET_MetUnclustEnUpDeltaX")
+                        cols.append("PuppiMET_MetUnclustEnUpDeltaY")
+                else:                
+                    cols.append("MET_MetUnclustEnUpDeltaX")
+                    cols.append("MET_MetUnclustEnUpDeltaY")
 
                 if not self.isMC:
                     cols.append("(float)run")
                 else:
                     cols.append("(float)-1.0")
                                        
-                #cols.append("PuppiMET_ptUnclusteredUp")
-                #cols.append("PuppiMET_phiUnclusteredUp")
-
                 df = df.Define(
                     f"{MET}Vars", f"my{MET}VarCalc.produce({', '.join(cols)})"
                 )

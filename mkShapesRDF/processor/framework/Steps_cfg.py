@@ -167,7 +167,7 @@ Steps = {
             "puW",
             "formulasMC",
             "l2tight",
-            "JES_modules_reduced_MC",
+            "JES_modules_reducedv15_MC",
             "leptonScale_mc",
             "l2Kin",
             "finalSnapshot_JES",
@@ -266,7 +266,7 @@ Steps = {
             "lepFiller_tthMVA",
             "lepSel",
             "jetSelMask",
-            "JES_modules_DATA",
+            "JES_modules_reduced_DATA",
             "leptonScale_data",
             "l2Kin_HWWFilter",
             #"l3Kin",
@@ -287,7 +287,7 @@ Steps = {
             "lepFiller_tthMVA",
             "lepSel",
             "jetSelMask",
-            "JES_modules_DATA",
+            "JES_modules_reduced_DATA",
             "leptonScale_data",
             "l2Kin_HWWFilter",
             "trigData",
@@ -306,7 +306,7 @@ Steps = {
             "lepFiller_tthMVA",
             "lepSel",
             "jetSelMask",
-            "JES_modules_DATA",
+            "JES_modules_reduced_DATA",
             "leptonScale_data",
             "l2Kin_HWWFilter",
             "trigData",
@@ -325,9 +325,27 @@ Steps = {
             "lepFiller_tthMVA",
             "lepSel",
             "jetSelMask",
-            "JES_modules_DATA",
+            "JES_modules_reduced_DATA",
             "leptonScale_data",
             "l2Kin_HWWFilter",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
+    "DATAl2loose2024v15__sblancof__l2loose": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepSel",
+            "jetSelMask",
+            "JES_modules_reducedv15_DATA",
+            "leptonScale_data",
+            "l2Kin",
             "trigData",
             "formulasDATA",
             "finalSnapshot_DATA",
@@ -1738,6 +1756,16 @@ Steps = {
         "module"  : "jmeCalculator()",
     },
 
+    "JES_modules_reducedv15_MC": {
+        "isChain" : False,
+        "do4MC"   : True,
+        "do4Data" : False,
+        "import"  : "mkShapesRDF.processor.modules.JMECalculator",
+        "declare" : 'jmeCalculator = lambda : JMECalculator(jet_object="AK4PFPuppi", jes_unc=["Regrouped_Absolute", "Regrouped_Absolute_YEAR", "Regrouped_FlavorQCD", "Regrouped_BBEC1", "Regrouped_EC2", "Regrouped_HF", "Regrouped_BBEC1_YEAR", "Regrouped_EC2_YEAR", "Regrouped_RelativeBal", "Regrouped_RelativeSample_YEAR", "Regrouped_HF_YEAR"], \
+        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_Unclustered=True, met_collections = ["PuppiMET", "PFMET"],do_JER=True, store_nominal=True, store_variations=True, isMC=True, sampleName = "RPLME_SAMPLENAME")',
+        "module"  : "jmeCalculator()",
+    },
+
     "JES_modules_DATA": {
         "isChain" : False,
         "do4MC"   : False,
@@ -1756,6 +1784,16 @@ Steps = {
         "declare" : 'jmeCalculator = lambda : JMECalculator(jet_object="AK4PFPuppi", jes_unc=["Regrouped_Absolute", "Regrouped_Absolute_YEAR", "Regrouped_FlavorQCD", "Regrouped_BBEC1", "Regrouped_EC2", "Regrouped_HF", "Regrouped_BBEC1_YEAR", "Regrouped_EC2_YEAR", "Regrouped_RelativeBal", "Regrouped_RelativeSample_YEAR", "Regrouped_HF_YEAR"], \
         year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_Unclustered=True, met_collections = ["PuppiMET", "MET", "RawMET"],do_JER=False, store_nominal=True, store_variations=False, isMC=False, sampleName = "RPLME_SAMPLENAME")',
 	"module"  : "jmeCalculator()",
+    },
+
+    "JES_modules_reducedv15_DATA": {
+        "isChain" : False,
+        "do4MC"   : False,
+        "do4Data" : True,
+        "import"  : "mkShapesRDF.processor.modules.JMECalculator",
+        "declare" : 'jmeCalculator = lambda : JMECalculator(jet_object="AK4PFPuppi", jes_unc=["Regrouped_Absolute", "Regrouped_Absolute_YEAR", "Regrouped_FlavorQCD", "Regrouped_BBEC1", "Regrouped_EC2", "Regrouped_HF", "Regrouped_BBEC1_YEAR", "Regrouped_EC2_YEAR", "Regrouped_RelativeBal", "Regrouped_RelativeSample_YEAR", "Regrouped_HF_YEAR"], \
+        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_Unclustered=True, met_collections = ["PuppiMET", "PFMET"],do_JER=False, store_nominal=True, store_variations=False, isMC=False, sampleName = "RPLME_SAMPLENAME")',
+        "module"  : "jmeCalculator()",
     },
     
     "l2Kin": {

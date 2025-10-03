@@ -42,10 +42,18 @@ class LeptonScaleSmearing(Module):
             
         year = re.findall(r'\d+', era)[0]
         key = era.split("Full20")[1].split("v")[0]
-        self.muoncorrection_file = self.muonscale_path + "/" + year + "_" + self.prodTime + key + ".json"
-        # We use the EtDependent corrections, as recommended here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgammSFandSSRun3
-        self.elecorrection_file = self.elescale_path + "/" + year + "_" + self.prodTime + key + "/electronSS_EtDependent.json.gz"
 
+        if "2024" in year:
+            self.muoncorrection_file = self.muonscale_path + "/2023_Summer23BPix.json"
+        else:
+            self.muoncorrection_file = self.muonscale_path + "/" + year + "_" + self.prodTime + key + ".json"
+            
+        # We use the EtDependent corrections, as recommended here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgammSFandSSRun3
+        if "2024" in year:
+            self.elecorrection_file = self.elescale_path + "/" + year + "_" + self.prodTime + key + "/electronSS_EtDependent_v1.json.gz"
+        else:
+            self.elecorrection_file = self.elescale_path + "/" + year + "_" + self.prodTime + key + "/electronSS_EtDependent.json.gz"
+        
         # This section computes the `year_key` needed to access the correct part of the correction files.  
         # Since valid year_keys are ['2022preEE', '2022postEE', '2023preBPIX', '2023postBPIX'],  
         # the `year_key` must include at least one letter.  
@@ -56,7 +64,11 @@ class LeptonScaleSmearing(Module):
             year_key = key.split('_')[-1]            
             if any(c.isalpha() for c in year_key):  
                 self.year_key = year_key  
-                break 
+                break
+            else:
+                self.year_key = year_key
+                
+        print(self.elecorrection_file)
         print(self.year_key) 
 
         print(f"LeptonScaleSmearing: running scale and smearing corrections for leptons from {era}")
@@ -72,7 +84,10 @@ class LeptonScaleSmearing(Module):
 
         ROOT.gROOT.ProcessLine(f'#include "{self.muonscale_path}/MuonScaRe.cc"')
         ROOT.gROOT.ProcessLine(f'#include "{self.macroele_path}/scEta.cc"')
-        ROOT.gROOT.ProcessLine(f'#include "{self.macroele_path}/EleScaRe.cc"')
+        if "2024" in self.year_key:
+            ROOT.gROOT.ProcessLine(f'#include "{self.macroele_path}/EleScaRe_2024.cc"')
+        else:
+            ROOT.gROOT.ProcessLine(f'#include "{self.macroele_path}/EleScaRe.cc"')
         ROOT.gROOT.ProcessLine('#include <TRandom3.h>')
 
         # Function to loop over leptons and run the scale corrections. For more details, refer to the macros.
