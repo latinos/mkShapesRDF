@@ -148,11 +148,14 @@ Samples['TTToSemiLeptonic'] = {
 
 #### WJets !!!!
 
-Samples['WToLNu-1Jet-LO'] = {
-    'nanoAOD' :'/WtoLNu-4Jets_Bin-1J_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM' # LO
+Samples['WToENu-2Jet'] = {
+    'nanoAOD' : '/WtoENu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3/NANOAODSIM'
 }
-Samples['WToLNu-2Jet-LO'] = {
-    'nanoAOD' :'/WtoLNu-4Jets_Bin-2J_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM' 
+Samples['WToMuNu-2Jet'] = {
+    'nanoAOD' : '/WtoMuNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3/NANOAODSIM'
+}
+Samples['WToTauNu-2Jet'] = {
+    'nanoAOD' : '/WtoTauNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3/NANOAODSIM'
 }
 
 #### DY !!!!!
