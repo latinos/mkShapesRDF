@@ -49,6 +49,28 @@ def defaultParser():
         required=False,
         default=-1,
     )
+    
+    parser.add_argument(
+        "--check",
+        action='store_true'
+        help="Check status of batch submission"
+        required=False,
+    )
+
+    parser.add_argument(
+        "--submit",
+        action='store_true'
+        help="Submit jobs for histograms creation to batch system"
+        required=False,
+    )
+
+    parser.add_argument(
+        "--histoadd",
+        action='store_true'
+        help="Hadd root files"
+        required=False,
+    )
+
     parser.add_argument(
         "-b",
         "--doBatch",
@@ -103,7 +125,7 @@ def defaultParser():
         type=int,
         help="Resubmit jobs, 1 resubmit finished jobs with errors, 2 resubmit running jobs",
         required=False,
-        default="0",
+        default="0", # default 0 ?? Why not "1" as default?
     )
     parser.add_argument(
         "-q",
@@ -132,6 +154,30 @@ def main():
     doBatch = int(args.doBatch)
     dryRun = int(args.dryRun)
     queue = args.queue
+
+    #
+    # if "check" is triggered, override the operation mode and just "check" the status of the submission of jobs
+    #    "operationMode = 1" means check jobs
+    #
+    if args.check :
+      operationMode = 1
+
+    #
+    # if "submit" is triggered, override the operation mode and just "submit" to batch system the creation of histograms
+    #    "operationMode = 1" means check jobs
+    #
+    if args.submit :
+      operationMode = 0
+
+    #
+    # if "histoadd" is triggered, override the operation mode and just "hadd" the histograms
+    #    "operationMode = 2" means perform hadd of the histograms
+    #
+    if args.histoadd :
+      operationMode = 2
+
+
+
 
     global folder
     global batchFolder
@@ -335,13 +381,22 @@ def main():
             )
         print(tabulate.tabulate(tabulated, headers="firstrow", tablefmt="fancy_grid"))
 
+        #
+        # Change colour depending if running jobs is 0 or not, it will help spotting problematic jobs
+        #   ANSI color codes
+        #   RED = "\033[91m"
+        #   GREEN = "\033[92m"
+        #   YELLOW = "\033[93m"
+        #   RESET = "\033[0m"
+        #
+
         tabulated = []
         tabulated.append(["Total jobs", "Finished jobs", "Running jobs"])
         tabulated.append(
             [
                 len(files),
                 "\033[92m " + str(len(errs)) + "\033[00m",
-                "\033[93m " + str(len(notFinished)) + "\033[00m",
+                "\033[91m " + str(len(notFinished)) + "\033[00m",
             ]
         )
 
