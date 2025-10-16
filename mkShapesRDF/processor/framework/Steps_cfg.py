@@ -994,7 +994,7 @@ Steps = {
     ######
     ###### 2024
     ######
-    
+
     "DATAl2loose2024v15__addTnPMuon": {
         "isChain" : True,
         "do4MC" : False,
@@ -1032,7 +1032,43 @@ Steps = {
             "addTnPElectron",
         ],
     },
-	
+    "DATAl1loose2024v15__fakeSel": {
+        "isChain": True,
+        "do4MC": False,
+        "do4Data": True,
+        "selection": '"((nElectron+nMuon)>0)"',
+        "subTargets": [
+            "lumiMask",
+            "leptonMaker",
+            "lepSel",
+            "jetSelMask",
+            "l2Kin",
+            "l3Kin",
+            "trigData",
+            "formulasDATA",
+            "fakeSel",
+            "finalSnapshot_DATA",
+        ],
+    },
+    "DATAl2loose2024v15__l2tight": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepSel",
+            "jetSelMask",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "l2tight",
+            "finalSnapshot_DATA",
+        ],
+    },
     "MCl2loose2024v15__addTnPMuon": {
         "isChain": True,
         "do4MC": True,
@@ -1078,7 +1114,57 @@ Steps = {
             "addTnPElectron",
         ]
     },
-	
+    "MCl1loose2024v15__fakeSel": {
+        "isChain" : True,
+        "do4MC" : True,
+        "do4Data" : False,
+        "selection" : '"((nElectron+nMuon)>0)"',
+        "subTargets" : [
+            "leptonMaker",
+            "lepSel",
+            "jetSelMask",
+            "PromptParticlesGenVars",
+            "GenVar",
+            "GenLeptonMatch",
+            "HiggsGenVars",
+            "TopGenVars",
+            "WGammaStar",
+            "DressedLeptons",
+            "baseW",
+            "trigMCnoSF",
+            "puW",
+            "formulasMCnoSF",
+            "l2Kin",
+            "fakeSel",
+            "finalSnapshot_MC",
+        ]
+    },
+    "MCl2loose2024v15__MCCorr2024v15LeptonOnly__l2tight": {
+        "isChain" : True,
+        "do4MC" : True,
+        "do4Data" : False,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "leptonMaker",
+            "lepSel",
+            "jetSelMask",
+            "PromptParticlesGenVars",
+            "GenVar",
+            "GenLeptonMatch",
+            "HiggsGenVars",
+            "TopGenVars",
+            "WGammaStar",
+            "DressedLeptons",
+            "baseW",
+            "trigMC",
+            "leptonSF",
+            "puW",
+            "formulasMC",
+            "l2tight",
+            "l2Kin",
+            "finalSnapshot_JES",
+        ]
+    },	
 
     # "fakeSel": {
     #     "isChain": True,
