@@ -37,6 +37,19 @@ The first step is always to setup the environment. After that, you need to creat
 
     voms-proxy-init --voms cms -valid 192:0
 
+If you have already installed mkShapesRDF and you are having problems creating the proxy, modify the file `start.sh` so that it looks like this:
+
+    #!/bin/bash
+    echo 'first source of start.sh'; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-el9-gcc11-opt/setup.sh
+    source `pwd`/myenv/bin/activate
+    export STARTPATH=`pwd`/start.sh
+    export JAVA_HOME=/cvmfs/sft.cern.ch/lcg/releases/java/11.0.21p9-cabd2/x86_64-el9-gcc13-opt
+    export PATH=$JAVA_HOME/bin:$PATH
+    export PYTHONPATH=`pwd`/myenv/lib64/python3.9/site-packages:\$PYTHONPATH
+    export PATH=`pwd`/utils/bin:\$PATH
+    
+where `pwd` represents the path in which you have installed the framework.
+
 The actual command to post-process files will look like the following:
 
     mkPostProc -o 0 -p Summer22EE_130x_nAODv12_Full2022v12 -s MCl2loose2022EEv12__MCCorr2022EEv12JetScaling__l2tight -T <sample_name>

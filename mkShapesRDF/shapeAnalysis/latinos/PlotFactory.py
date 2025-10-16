@@ -1817,7 +1817,7 @@ class PlotFactory:
                 CMS_lumi.writeExtraText = 1
                 CMS_lumi.extraText = "Preliminary"
                 if not self._preliminary:
-                    CMS_lumi.extraText = ""
+                    CMS_lumi.extraText = "Work in progress"
                 CMS_lumi.relPosX = 0.14
                 CMS_lumi.lumi_sqrtS = "13 TeV"  # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
                 if "sqrt" in legend.keys():

@@ -406,6 +406,25 @@ def main():
     # energy = '13TeV'
     # sys.exit()
     # =====================
+    
+    for vname, var in variables.items():
+        r = var.get('range')
+        n = var.get('name', '')
+        # Erkennen: name hat 3 Achsen (A:B:C) und range besteht aus 3 Listen
+        if isinstance(r, (list, tuple)) and len(r) == 3 and all(isinstance(x, (list, tuple)) for x in r) and n.count(':') == 2:
+            nx = len(r[0]) - 1
+            ny = len(r[1]) - 1
+            nz = len(r[2]) - 1
+            nb = nx * ny * nz
+            # Original zur Sicherheit merken (falls du es später brauchst)
+            var['_orig_range_3d'] = r
+            # Nur zur Plot-Zeit: 1D-Range setzen
+            var['range'] = (nb, 0.5, nb + 0.5)
+            # Optional die Achse kennzeichnen
+            xa = var.get('xaxis', '')
+            var['xaxis'] = (xa + ' (unrolled)').strip()
+            
+            
     def launch_plot(
         inputFile,
         outputDirPlots,

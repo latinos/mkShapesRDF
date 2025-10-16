@@ -21,7 +21,7 @@ Steps = {
         ],
     },
 
-    # 2022
+    ### 2022
     "MCl2loose2022v12__MCCorr2022v12JetScaling__l2tight": {
         "isChain" : True,
         "do4MC" : True,
@@ -220,6 +220,24 @@ Steps = {
         ],
     },
 
+    "DATAl1loose2022v12": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>0)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMask",
+            "l2Kin",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
+	
     "DATAl1loose2022v12__fakeW": {
         "isChain": True,
         "do4MC": False,
@@ -244,7 +262,7 @@ Steps = {
         ],
     },
 
-    # 2022 EE
+    ### 2022 EE
     "MCl2loose2022EEv12__MCCorr2022EEv12JetScaling__l2tight": {
         "isChain" : True,
         "do4MC" : True,
@@ -404,6 +422,26 @@ Steps = {
         ],
     },
 
+    "DATAl1loose2022EEv12": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>0)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMaskFilter",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
+	
     "DATAl1loose2022EEv12__fakeW": {
         "isChain": True,
         "do4MC": False,
@@ -465,7 +503,7 @@ Steps = {
         ],
     },
 
-    # 2023
+    ### 2023
     "DATAl2loose2023v12__l2tight": {
         "isChain" : True,
         "do4MC" : False,
@@ -509,6 +547,27 @@ Steps = {
             "finalSnapshot_DATA",
         ],
     },
+
+    "DATAl1loose2023v12": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>0)"',
+        "subTargets": [
+            "lumiMask",
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMask",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
+	
     "DATAl2loose2023v12__addTnPMuon": {
         "isChain" : True,
         "do4MC" : False,
@@ -570,6 +629,7 @@ Steps = {
             "finalSnapshot_DATA",
         ],
     },
+	
     "MCl2loose2023v12__MCCorr2023v12JetScaling__l2tight": {
         "isChain" : True,
         "do4MC" : True,
@@ -604,6 +664,7 @@ Steps = {
             "finalSnapshot_JES",
         ]
     },
+	
     "MCl1loose2023v12__MCCorr2023v12JetScaling__fakeSel": {
         "isChain" : True,
         "do4MC" : True,
@@ -629,10 +690,10 @@ Steps = {
             "leptonSF",
             "puW",
             "formulasMC",
-            "fakeSel",
             "JES_modules_MC",
             "leptonScale_mc",
             "l2Kin",
+            "fakeSel",
             "finalSnapshot_MC",
         ]
     },
@@ -660,6 +721,7 @@ Steps = {
 	    "addTnPMuon",
         ]
     },
+	
     "MCl2loose2023v12__addTnPElectron": {
         "isChain": True,
         "do4MC": True,
@@ -684,7 +746,7 @@ Steps = {
         ]
     },	
 
-    # 2023BPix
+    ### 2023BPix
     "DATAl2loose2023BPixv12__l2tight": {
         "isChain" : True,
         "do4MC" : False,
@@ -707,6 +769,7 @@ Steps = {
             "finalSnapshot_DATA",
         ],
     },
+	
     "DATAl1loose2023BPixv12__fakeSel": {
         "isChain": True,
         "do4MC": False,
@@ -727,6 +790,27 @@ Steps = {
             "finalSnapshot_DATA",
         ],
     },
+
+    "DATAl1loose2023BPixv12": {
+        "isChain": True,
+        "do4MC": False,
+        "do4Data": True,
+        "selection": '"((nElectron+nMuon)>0)"',
+        "subTargets": [
+            "lumiMask",
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMask",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
+	
     "DATAl1loose2023BPixv12__fakeW": {
         "isChain": True,
         "do4MC": False,
@@ -750,6 +834,7 @@ Steps = {
             "finalSnapshot_DATA",
         ],
     },
+	
     "DATAl2loose2023BPixv12__addTnPMuon": {
         "isChain" : True,
         "do4MC" : False,
@@ -769,6 +854,7 @@ Steps = {
             "addTnPMuon",
         ],
     },
+	
     "DATAl2loose2023BPixv12__addTnPElectron": {
         "isChain" : True,
         "do4MC" : False,
@@ -788,6 +874,7 @@ Steps = {
             "addTnPElectron",
         ],
     },
+	
     "MCl2loose2023BPixv12__MCCorr2023BPixv12JetScaling__l2tight": {
         "isChain" : True,
         "do4MC" : True,
@@ -822,6 +909,7 @@ Steps = {
             "finalSnapshot_JES",
 	]
     },
+	
     "MCl1loose2023BPixv12__MCCorr2023BPixv12JetScaling__fakeSel": {
         "isChain" : True,
         "do4MC" : True,
@@ -847,10 +935,10 @@ Steps = {
             "leptonSF",
             "puW",
             "formulasMC",
-            "fakeSel",
             "JES_modules_MC",
             "leptonScale_mc",
             "l2Kin",
+            "fakeSel",
             "finalSnapshot_MC",
         ]
     },
@@ -878,6 +966,7 @@ Steps = {
 	    "addTnPMuon",
         ]
     },
+	
     "MCl2loose2023BPixv12__addTnPElectron": {
         "isChain": True,
         "do4MC": True,
@@ -924,6 +1013,7 @@ Steps = {
             "addTnPMuon",
         ],
     },
+	
     "DATAl2loose2024v15__addTnPElectron": {
         "isChain" : True,
         "do4MC" : False,
@@ -1001,6 +1091,7 @@ Steps = {
             "addTnPMuon",
         ]
     },
+	
     "MCl2loose2024v15__addTnPElectron": {
         "isChain": True,
         "do4MC": True,
@@ -1233,6 +1324,39 @@ Steps = {
             "formulasMC",
             "l2tight",
             "finalSnapshot_JES",
+        ]
+    },
+
+    "MCl1loose2022EEv12__MCCorr2022EEv12JetScaling__fakeSel": {
+        "isChain" : True,
+        "do4MC" : True,
+        "do4Data" : False,
+        "selection" : '"((nElectron+nMuon)>0)"',
+        "subTargets" : [
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMask",
+            "PromptParticlesGenVars",
+            "GenVar",
+            "GenLeptonMatch",
+            "HiggsGenVars",
+            "TopGenVars",
+            "WGammaStar",
+            "DressedLeptons",
+            "baseW",
+            "btagPerJet_DeepJet_shape",
+            "btagPerJet_PNet_shape",
+            "btagPerJet_PTransformer_shape",
+            "trigMC",
+            "leptonSF",
+            "puW",
+            "formulasMC",
+            "JES_modules_MC",
+            "leptonScale_mc",
+            "l2Kin",
+            "fakeSel",
+            "finalSnapshot_MC",
         ]
     },
 

@@ -72,7 +72,9 @@ cat <<EOF > start.sh
 #!/bin/bash
 $sourceCommand
 source `pwd`/myenv/bin/activate
-export STARTPATH=`pwd`/start.sh 
+export STARTPATH=`pwd`/start.sh
+export JAVA_HOME=/cvmfs/sft.cern.ch/lcg/releases/java/11.0.21p9-cabd2/x86_64-el9-gcc13-opt
+export PATH=\$JAVA_HOME/bin:\$PATH
 export PYTHONPATH=`pwd`/myenv/lib64/python3.9/site-packages:\$PYTHONPATH
 export PATH=`pwd`/utils/bin:\$PATH
 EOF
