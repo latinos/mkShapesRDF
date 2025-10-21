@@ -22,7 +22,28 @@ Steps = {
     },
 
     # 2022
-    "MCl2loose2022v12__MCCorr2022v12JetScaling__sblancof__l2tight": {
+    "DATAl2loose2022v12__l2loose": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMask",
+            "JES_modules_reduced_DATA",
+            "leptonScale_data",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
+    "MCl2loose2022v12__MCCorr2022v12JetScaling__l2tight": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
@@ -48,16 +69,37 @@ Steps = {
             "puW",
             "formulasMC",
             "l2tight",
-            #"JES_modules_MC",
             "JES_modules_reduced_MC",
             "leptonScale_mc",
             "l2Kin",
-            #"l3Kin",
-            #"l4Kin",
+            "l3Kin",
+            "l4Kin",
             "finalSnapshot_JES",
         ]
     },
-    "MCl2loose2022EEv12__MCCorr2022EEv12JetScaling__sblancof__l2tight": {
+    # 2022EE
+    "DATAl2loose2022EEv12__l2loose": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMask",
+            "JES_modules_reduced_DATA",
+            "leptonScale_data",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
+    "MCl2loose2022EEv12__MCCorr2022EEv12JetScaling__l2tight": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
@@ -83,10 +125,34 @@ Steps = {
             "JES_modules_reduced_MC",
             "leptonScale_mc",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "finalSnapshot_JES",
 	]
     },
-    "MCl2loose2023v12__MCCorr2023v12JetScaling__sblancof__l2tight": {
+    # 2023
+    "DATAl2loose2023v12__l2loose": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMask",
+            "JES_modules_reduced_DATA",
+            "leptonScale_data",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
+    "MCl2loose2023v12__MCCorr2023v12JetScaling__l2tight": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
@@ -112,10 +178,34 @@ Steps = {
             "JES_modules_reduced_MC",
             "leptonScale_mc",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "finalSnapshot_JES",
         ]
     },
-    "MCl2loose2023BPixv12__MCCorr2023BPixv12JetScaling__sblancof__l2tight": {
+    # 2023BPix
+    "DATAl2loose2023BPixv12__l2loose": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepFiller_tthMVA",
+            "lepSel",
+            "jetSelMask",
+            "JES_modules_reduced_DATA",
+            "leptonScale_data",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
+    "MCl2loose2023BPixv12__MCCorr2023BPixv12JetScaling__l2tight": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
@@ -141,10 +231,32 @@ Steps = {
             "JES_modules_reduced_MC",
             "leptonScale_mc",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "finalSnapshot_JES",
         ]
     },
-
+    # 2024
+    "DATAl2loose2024v15__l2loose": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepSel",
+            "jetSelMask",
+            "JES_modules_reducedv15_DATA",
+            "leptonScale_data",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
     "MCl2loose2024v15__MCCorr2024v15__JERFrom23BPix__l2tight": {
         "isChain" : True,
         "do4MC" : True,
@@ -170,9 +282,13 @@ Steps = {
             "JES_modules_reducedv15_MC",
             "leptonScale_mc",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "finalSnapshot_JES",
         ]
     },
+
+    #### 2022 -------
 
     "MCl1loose2022v12__MCCorr2022v12JetScaling__fakeSel": {
         "isChain" : True,
@@ -253,103 +369,6 @@ Steps = {
             "puW",
 	    "addTnPElectron",
         ]
-    },
-
-    "DATAl2loose2022v12__sblancof__l2loose": {
-        "isChain" : True,
-        "do4MC" : False,
-        "do4Data" : True,
-        "selection" : '"((nElectron+nMuon)>1)"',
-        "subTargets" : [
-            "lumiMask",
-            "leptonMaker",
-            "lepFiller_tthMVA",
-            "lepSel",
-            "jetSelMask",
-            "JES_modules_reduced_DATA",
-            "leptonScale_data",
-            "l2Kin_HWWFilter",
-            #"l3Kin",
-            #"l4Kin",
-            "trigData",
-            "formulasDATA",
-            "finalSnapshot_DATA",
-        ],
-    },
-    "DATAl2loose2022EEv12__sblancof__l2loose": {
-        "isChain" : True,
-	"do4MC" : False,
-        "do4Data" : True,
-        "selection" : '"((nElectron+nMuon)>1)"',
-        "subTargets" : [
-            "lumiMask",
-            "leptonMaker",
-            "lepFiller_tthMVA",
-            "lepSel",
-            "jetSelMask",
-            "JES_modules_reduced_DATA",
-            "leptonScale_data",
-            "l2Kin_HWWFilter",
-            "trigData",
-            "formulasDATA",
-            "finalSnapshot_DATA",
-        ],
-    },
-    "DATAl2loose2023v12__sblancof__l2loose": {
-        "isChain" : True,
-        "do4MC" : False,
-        "do4Data" : True,
-        "selection" : '"((nElectron+nMuon)>1)"',
-        "subTargets" : [
-            "lumiMask",
-            "leptonMaker",
-            "lepFiller_tthMVA",
-            "lepSel",
-            "jetSelMask",
-            "JES_modules_reduced_DATA",
-            "leptonScale_data",
-            "l2Kin_HWWFilter",
-            "trigData",
-            "formulasDATA",
-            "finalSnapshot_DATA",
-        ],
-    },
-    "DATAl2loose2023BPixv12__sblancof__l2loose": {
-        "isChain" : True,
-        "do4MC" : False,
-        "do4Data" : True,
-        "selection" : '"((nElectron+nMuon)>1)"',
-        "subTargets" : [
-            "lumiMask",
-            "leptonMaker",
-            "lepFiller_tthMVA",
-            "lepSel",
-            "jetSelMask",
-            "JES_modules_reduced_DATA",
-            "leptonScale_data",
-            "l2Kin_HWWFilter",
-            "trigData",
-            "formulasDATA",
-            "finalSnapshot_DATA",
-        ],
-    },
-    "DATAl2loose2024v15__sblancof__l2loose": {
-        "isChain" : True,
-        "do4MC" : False,
-        "do4Data" : True,
-        "selection" : '"((nElectron+nMuon)>1)"',
-        "subTargets" : [
-            "lumiMask",
-            "leptonMaker",
-            "lepSel",
-            "jetSelMask",
-            "JES_modules_reducedv15_DATA",
-            "leptonScale_data",
-            "l2Kin",
-            "trigData",
-            "formulasDATA",
-            "finalSnapshot_DATA",
-        ],
     },
 
    "DATAl2loose2022v12__addTnPMuon": {
@@ -435,7 +454,8 @@ Steps = {
         ],
     },
 
-    # 2022 EE
+    #### 2022 EE -------
+    
     "MCl2loose2022EEv12__MCCorr2022EEv12JetScaling__l2tight": {
         "isChain" : True,
         "do4MC" : True,
@@ -656,7 +676,8 @@ Steps = {
         ],
     },
 
-    # 2023
+    #### 2023 -------
+    
     "DATAl2loose2023v12__l2tight": {
         "isChain" : True,
         "do4MC" : False,
@@ -875,7 +896,8 @@ Steps = {
         ]
     },	
 
-    # 2023BPix
+    #### 2023 BPix -------
+    
     "DATAl2loose2023BPixv12__l2tight": {
         "isChain" : True,
         "do4MC" : False,
@@ -1093,10 +1115,8 @@ Steps = {
         ]
     },
 
-    ######
-    ###### 2024
-    ######
-
+    #### 2024 -------
+    
     "DATAl2loose2024v15__addTnPMuon": {
         "isChain" : True,
         "do4MC" : False,

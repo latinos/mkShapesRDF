@@ -5,6 +5,8 @@
 PUCfg = {
     'Full2022v12': {
         'srcfile'     : "auto" ,
+        'jsonSrc'     : "/cvmfs/cms-griddata.cern.ch/cat/metadata/LUM/Run3-22CDSep23-Summer22-NanoAODv12/latest/puWeights.json.gz",
+        'jsonKey'     : "Collisions2022_355100_357900_eraBCD_GoldenJson",
         'targetfiles' : { '1-1' : '/processor/data/PUweights/2022/2022BCD_LUM.root' } ,
         'srchist'     : "pileup",
         'targethist'  : "pileup",
@@ -16,6 +18,8 @@ PUCfg = {
     } ,
     'Full2022EEv12': {
         'srcfile'     : "auto" ,
+        'jsonSrc'     : "/cvmfs/cms-griddata.cern.ch/cat/metadata/LUM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/puWeights.json.gz",
+        'jsonKey'     : "Collisions2022_359022_362760_eraEFG_GoldenJson",
         'targetfiles' : { '1-1' : '/processor/data/PUweights/2022/2022EFG_LUM.root' } ,
         'srchist'     : "pileup",
         'targethist'  : "pileup",
@@ -27,6 +31,8 @@ PUCfg = {
     } ,
     'Full2023v12': {
         'srcfile'     : "auto" ,
+        'jsonSrc'     :	"/cvmfs/cms-griddata.cern.ch/cat/metadata/LUM/Run3-23CSep23-Summer23-NanoAODv12/latest/puWeights.json.gz",
+	'jsonKey'     : "Collisions2023_366403_369802_eraBC_GoldenJson",
         'targetfiles' : { '1-1' : '/processor/data/PUweights/2023/2023BC_LUM.root' } ,
         'srchist'     : "pileup",
         'targethist'  : "pileup",
@@ -38,6 +44,8 @@ PUCfg = {
     } ,
     'Full2023BPixv12': {
         'srcfile'     : "auto" ,
+        'jsonSrc'     :	"/cvmfs/cms-griddata.cern.ch/cat/metadata/LUM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/puWeights.json.gz",
+	'jsonKey'     : "Collisions2023_369803_370790_eraD_GoldenJson",
         'targetfiles' : { '1-1' : '/processor/data/PUweights/2023/2023D_LUM.root' } ,
         'srchist'     : "pileup",
         'targethist'  : "pileup",

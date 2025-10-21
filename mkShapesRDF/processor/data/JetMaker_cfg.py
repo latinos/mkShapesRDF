@@ -6,8 +6,8 @@ JetMakerCfg = {
     'Full2022v12': {
         "vetomap": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-22CDSep23-Summer22-NanoAODv12/latest/jetvetomaps.json.gz",
         "vetokey": "Summer22_23Sep2023_RunCD_V1",
-        "JEC": "Summer22_22Sep2023_V2_MC",
-        "JEC_data" : "Summer22_22Sep2023_RunCD_V2_DATA",
+        "JEC": "Summer22_22Sep2023_V3_MC",
+        "JEC_data" : "Summer22_22Sep2023_RunCD_V3_DATA",
         "JER": "Summer22_22Sep2023_JRV1_MC",
         "jet_jerc" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-22CDSep23-Summer22-NanoAODv12/latest/jet_jerc.json.gz",
         "jer_smear": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/jer_smear.json.gz",
@@ -15,8 +15,8 @@ JetMakerCfg = {
     'Full2022EEv12': {
         "vetomap": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/jetvetomaps.json.gz",
         "vetokey": "Summer22EE_23Sep2023_RunEFG_V1",
-	"JEC": "Summer22EE_22Sep2023_V2_MC",
-        "JEC_data" : ["Summer22EE_22Sep2023_RunE_V2_DATA", 'Summer22EE_22Sep2023_RunF_V2_DATA', 'Summer22EE_22Sep2023_RunG_V2_DATA'],
+	"JEC": "Summer22EE_22Sep2023_V3_MC",
+        "JEC_data" : ["Summer22EE_22Sep2023_RunE_V3_DATA", 'Summer22EE_22Sep2023_RunF_V3_DATA', 'Summer22EE_22Sep2023_RunG_V3_DATA'],
         "JER": "Summer22EE_22Sep2023_JRV1_MC",
         "jet_jerc" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/jet_jerc.json.gz",
         "jer_smear": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/jer_smear.json.gz",

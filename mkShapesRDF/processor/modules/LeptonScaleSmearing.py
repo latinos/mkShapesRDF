@@ -1,4 +1,5 @@
 from mkShapesRDF.processor.framework.module import Module
+from mkShapesRDF.processor.data.LeptonSel_cfg import *
 import os
 import re
 import ROOT
@@ -43,16 +44,9 @@ class LeptonScaleSmearing(Module):
         year = re.findall(r'\d+', era)[0]
         key = era.split("Full20")[1].split("v")[0]
 
-        if "2024" in year:
-            self.muoncorrection_file = self.muonscale_path + "/2023_Summer23BPix.json"
-        else:
-            self.muoncorrection_file = self.muonscale_path + "/" + year + "_" + self.prodTime + key + ".json"
-            
-        # We use the EtDependent corrections, as recommended here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgammSFandSSRun3
-        if "2024" in year:
-            self.elecorrection_file = self.elescale_path + "/" + year + "_" + self.prodTime + key + "/electronSS_EtDependent_v1.json.gz"
-        else:
-            self.elecorrection_file = self.elescale_path + "/" + year + "_" + self.prodTime + key + "/electronSS_EtDependent.json.gz"
+        # We use the EtDependent corrections, as recommended here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgammSFandSSRun3 
+        self.muoncorrection_file = MuonWP[era]["ScaleAndSmearing"]
+        self.elecorrection_file = ElectronWP[era]["ScaleAndSmearing"]        
         
         # This section computes the `year_key` needed to access the correct part of the correction files.  
         # Since valid year_keys are ['2022preEE', '2022postEE', '2023preBPIX', '2023postBPIX'],  

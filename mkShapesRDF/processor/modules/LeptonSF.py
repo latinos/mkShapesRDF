@@ -55,11 +55,14 @@ class LeptonSF(Module):
                         self.SF_dict["electron"][wp]["tkSF"]["endRP"].append(
                             int(rpr.split("-")[1])
                         )
-                        temp_file = (
-                            self.cfg_path
-                            + "/processor/"
-                            + self.ElectronWP[self.era]["TightObjWP"][wp]["tkSF"][rpr][2]
-                        )
+                        if self.ElectronWP[self.era]["TightObjWP"][wp]["tkSF"][rpr][2].startswith("/cvmfs"):
+                            temp_file = self.ElectronWP[self.era]["TightObjWP"][wp]["tkSF"][rpr][2]
+                        else:                        
+                            temp_file = (
+                                self.cfg_path
+                                + "/processor/"
+                                + self.ElectronWP[self.era]["TightObjWP"][wp]["tkSF"][rpr][2]
+                            )
                         self.SF_dict["electron"][wp]["tkSF"]["data"].append(temp_file)
                         self.SF_dict["electron"][wp]["tkSF"]["era"].append(
                             self.ElectronWP[self.era]["TightObjWP"][wp]["tkSF"][rpr][0]
@@ -82,11 +85,14 @@ class LeptonSF(Module):
                         self.SF_dict["electron"][wp]["wpSF"]["endRP"].append(
                             int(rpr.split("-")[1])
                         )
-                        temp_file = (
-                            self.cfg_path
-                            + "/processor/"
-                            + self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"][rpr][3]
-                        )
+                        if self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"][rpr][3].startswith("/cvmfs"):
+                            temp_file = self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"][rpr][3]
+                        else:
+                            temp_file = (
+                                self.cfg_path
+                                + "/processor/"
+                                + self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"][rpr][3]
+                            )
                         self.SF_dict["electron"][wp]["wpSF"]["data"].append(temp_file)
                         self.SF_dict["electron"][wp]["wpSF"]["era"].append(
                             self.ElectronWP[self.era]["TightObjWP"][wp]["wpSF"][rpr][0]
@@ -120,11 +126,14 @@ class LeptonSF(Module):
                         self.SF_dict["muon"][wp]["idSF"]["endRP"].append(
                             int(rpr.split("-")[1])
                         )
-                        temp_file = (
-                            self.cfg_path
-                            + "/processor/"
-                            + self.MuonWP[self.era]["TightObjWP"][wp]["idSF"][rpr][1]
-                        )
+                        if self.MuonWP[self.era]["TightObjWP"][wp]["idSF"][rpr][1].startswith("/cvmfs"):
+                            temp_file = self.MuonWP[self.era]["TightObjWP"][wp]["idSF"][rpr][1]
+                        else:
+                            temp_file = (
+                                self.cfg_path
+                                + "/processor/"
+                                + self.MuonWP[self.era]["TightObjWP"][wp]["idSF"][rpr][1]
+                            )
                         self.SF_dict["muon"][wp]["idSF"]["data"].append(temp_file)
                         self.SF_dict["muon"][wp]["idSF"]["key"].append(
                             self.MuonWP[self.era]["TightObjWP"][wp]["idSF"][rpr][0]
@@ -142,11 +151,14 @@ class LeptonSF(Module):
                         self.SF_dict["muon"][wp]["isoSF"]["endRP"].append(
                             int(rpr.split("-")[1])
                         )
-                        temp_file = (
-                            self.cfg_path
-                            + "/processor/"
-                            + self.MuonWP[self.era]["TightObjWP"][wp]["isoSF"][rpr][1]
-                        )
+                        if self.MuonWP[self.era]["TightObjWP"][wp]["isoSF"][rpr][1].startswith("/cvmfs"):
+                            temp_file = self.MuonWP[self.era]["TightObjWP"][wp]["isoSF"][rpr][1]
+                        else:
+                            temp_file = (
+                                self.cfg_path
+                                + "/processor/"
+                                + self.MuonWP[self.era]["TightObjWP"][wp]["isoSF"][rpr][1]
+                            )
                         self.SF_dict["muon"][wp]["isoSF"]["data"].append(temp_file)
                         self.SF_dict["muon"][wp]["isoSF"]["key"].append(
                             self.MuonWP[self.era]["TightObjWP"][wp]["isoSF"][rpr][0]
@@ -165,13 +177,16 @@ class LeptonSF(Module):
                         self.SF_dict["muon"][wp]["tthMvaSF"]["endRP"].append(
                             int(rpr.split("-")[1])
                         )
-                        temp_file = (
-                            self.cfg_path
-                            + "/processor/"
-                            + self.MuonWP[self.era]["TightObjWP"][wp]["tthMvaSF"][rpr][
-                                1
-                            ]
-                        )
+                        if self.MuonWP[self.era]["TightObjWP"][wp]["tthMvaSF"][rpr][1].startswith("/cvmfs"):
+                            temp_file = self.MuonWP[self.era]["TightObjWP"][wp]["tthMvaSF"][rpr][1]
+                        else:
+                            temp_file = (
+                                self.cfg_path
+                                + "/processor/"
+                                + self.MuonWP[self.era]["TightObjWP"][wp]["tthMvaSF"][rpr][
+                                    1
+                                ]
+                            )
                         self.SF_dict["muon"][wp]["tthMvaSF"]["data"].append(temp_file)
                         self.SF_dict["muon"][wp]["tthMvaSF"]["key"].append(
                             self.MuonWP[self.era]["TightObjWP"][wp]["tthMvaSF"][rpr][0]
@@ -267,7 +282,12 @@ class LeptonSF(Module):
 
                                 if (pt< 20){
                                     pt = ROOT::VecOps::Min(ROOT::RVecF{pt, 19.99});
-                                    if (year==2023){
+                                    if (year==2024){
+                                        sf     = cset_electron_Reco->evaluate({Egamma_era, "sf", "Reco20to75", eta, 20.01});
+                                        sfup   = cset_electron_Reco->evaluate({Egamma_era, "sfup", "Reco20to75", eta, 20.01});
+                                        sfdown = cset_electron_Reco->evaluate({Egamma_era, "sfdown", "Reco20to75", eta, 20.01});
+                                    }
+                                    else if (year==2023){
                                         sf     = cset_electron_Reco->evaluate({Egamma_era, "sf", "RecoBelow20", eta, pt, phi});
                                         sfup   = cset_electron_Reco->evaluate({Egamma_era, "sfup", "RecoBelow20", eta, pt, phi});
                                         sfdown = cset_electron_Reco->evaluate({Egamma_era, "sfdown", "RecoBelow20", eta, pt, phi});
@@ -350,12 +370,18 @@ class LeptonSF(Module):
                         f'correction::Correction::Ref cset_electron_{wp}_wpSF_{beginRP}_{endRP} = (correction::Correction::Ref) csetEl{wp}_wpSF_{beginRP}_{endRP}->at("{key}");'
                     )
 
-                    evaluator = f"""
-                    pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}});
-                    eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
-                    """
+                    if int(self.year) == 2024 and pathToJson.startswith("/cvmfs"):
+                        evaluator = f"""
+                        pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), 20.01}}); 
+                        eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
+                        """
+                    else:  
+                        evaluator = f"""
+                        pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}});
+                        eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
+                        """
 
-                    if "POG" in wp:
+                    if pathToJson.startswith("/cvmfs"):
                         if int(self.year) == 2023 :
                             evaluator += f""" 
                             sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta+detasc, pt, phi}});
