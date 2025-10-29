@@ -624,6 +624,12 @@ ElectronWP = {
                 'wpSF':  { 
                     '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "passingMVA90_HWW", 'data/scale_factor/Full2024v15/electron.json'],
                 } ,
+                'wpSF':  {
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "wp90iso", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz"]
+                },
+                'tthMvaSF':  {
+                    '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "NUM_passingMVA90_HWW_DEN_wp90iso", 'data/scale_factor/Full2024v15/electron.json'],
+                },
                 #'fakeW' : 'data/fake_prompt_rates/',  
             },
             "cutBased__LooseID_tthMVA_Run3": {
@@ -646,10 +652,46 @@ ElectronWP = {
                 'tkSF':  { 
                     '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz"]
                 },
-                'wpSF':  { 
-                    '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "passingTTHMVA", 'data/scale_factor/Full2024v15/electron.json'],
-                } ,
+                'wpSF':  {
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "Loose", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz"]
+                },
+                'tthMvaSF':  {
+                    '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "NUM_passingTTHMVA_DEN_LooseID", 'data/scale_factor/Full2024v15/electron.json'],
+                },
                 #'fakeW' : 'data/fake_prompt_rates/',  
+            },
+            "cutBased__LooseID_tthMVA_HWW": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_cutBased >= 2",
+                        "Electron_convVeto",
+                    ],
+                    "ROOT::VecOps::abs(Electron_eta) <= 1.479": [
+                        "ROOT::VecOps::abs(Electron_dxy) < 0.05",
+                        "ROOT::VecOps::abs(Electron_dz)  < 0.1",
+                    ],
+                    "ROOT::VecOps::abs(Electron_eta) > 1.479": [
+                        "ROOT::VecOps::abs(Electron_dxy) < 0.1",
+                        "ROOT::VecOps::abs(Electron_dz) <  0.2",
+                    ],
+                    "Electron_pt <= 20.0": [
+                        "Electron_promptMVA > 0.35",
+                    ],
+                    "Electron_pt > 20.0": [
+                        "Electron_promptMVA > 0.90",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz"]
+                },
+                'wpSF':  {
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "Loose", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz"]
+                },
+                'tthMvaSF':  {
+                    '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "passingTTHMVA_HWW", 'data/scale_factor/Full2024v15/electron.json'],
+                },
+                #'fakeW' : 'data/fake_prompt_rates/',
             },
         },
         "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electronSS_EtDependent.json.gz",
@@ -854,7 +896,7 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2022v12/muonSF_latinos_HWW.json"],
                 },
-                "tthSF": {
+                "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_TightIso_tthMVA_DEN_TightPFIso", "data/scale_factor/Full2022v12/muonSF_latinos_HWW.json"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2022v12/cut_TightID_HWW_TightPFIso_tthMVA/",
@@ -881,7 +923,7 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2022v12/muonSF_latinos_HWW.json"],
                 },
-                "tthSF": {
+                "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2022v12/muonSF_latinos_HWW.json"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2022v12/cut_TightID_HWW_LoosePFIso_tthMVA/",
@@ -990,7 +1032,7 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2022EEv12/muonSF_latinos_HWW.json"],
                 },
-                "tthSF": {
+                "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_TightIso_tthMVA_DEN_TightPFIso", "data/scale_factor/Full2022EEv12/muonSF_latinos_HWW.json"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2022EEv12/cut_TightID_HWW_TightPFIso_tthMVA/",
@@ -1017,7 +1059,7 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2022EEv12/muonSF_latinos_HWW.json"],
                 },
-                "tthSF": {
+                "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2022EEv12/muonSF_latinos_HWW.json"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2022EEv12/cut_TightID_HWW_LoosePFIso_tthMVA/",
@@ -1126,7 +1168,7 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2023v12/muonSF_latinos_HWW.json"],
                 },
-                "tthSF": {
+                "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_TightIso_tthMVA_DEN_TightPFIso", "data/scale_factor/Full2023v12/muonSF_latinos_HWW.json"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2023v12/cut_TightID_HWW_TightPFIso_tthMVA/",
@@ -1153,7 +1195,7 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2023v12/muonSF_latinos_HWW.json"],
                 },
-                "tthSF": {
+                "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2023v12/muonSF_latinos_HWW.json"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2023v12/cut_TightID_HWW_LoosePFIso_tthMVA/",
@@ -1262,7 +1304,7 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2023BPixv12/muonSF_latinos_HWW.json"],
                 },
-                "tthSF": {
+                "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_TightIso_tthMVA_DEN_TightPFIso", "data/scale_factor/Full2023BPixv12/muonSF_latinos_HWW.json"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2023BPixv12/cut_TightID_HWW_TightPFIso_tthMVA/",
@@ -1289,7 +1331,7 @@ MuonWP = {
                  "isoSF": {
                      "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2023BPixv12/muonSF_latinos_HWW.json"],
                  },
-                 "tthSF": {
+                 "tthMvaSF": {
                      "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2023BPixv12/muonSF_latinos_HWW.json"],
                  },
                  "fakeW": "data/fake_prompt_rates/Full2023BPixv12/cut_TightID_HWW_LoosePFIso_tthMVA/",
@@ -1397,7 +1439,7 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
                 },
-                "tthSF": {
+                "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_TightIso_tthMVA_DEN_TightPFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
                 },
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_TightPFIso_tthMVA/",
@@ -1424,7 +1466,35 @@ MuonWP = {
                  "isoSF": {
                      "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
                  },
-                 "tthSF": {
+                 "tthMvaSF": {
+                     "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 },
+                #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA/",
+             },
+            "cut_TightID_pfIsoLoose_HWW_tthmva_HWW": {
+                 "cuts": {
+                     "ROOT::RVecB (Muon_pt.size(), true)": [
+                         "ROOT::VecOps::abs(Muon_eta) < 2.4",
+                         "Muon_tightId",
+                         "ROOT::VecOps::abs(Muon_dz) < 0.1",
+                         "Muon_pfIsoId >= 2",
+                     ],
+                     "Muon_pt <= 20.0": [
+                         "ROOT::VecOps::abs(Muon_dxy) < 0.01",
+                         "Muon_promptMVA > 0.20",
+                     ],
+                     "Muon_pt > 20.0": [
+                         "ROOT::VecOps::abs(Muon_dxy) < 0.02",
+                         "Muon_promptMVA > 0.67",
+                     ],
+                 },
+                 "idSF": {
+                     "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 },
+                 "isoSF": {
+                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                 },
+                 "tthMvaSF": {
                      "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
                  },
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA/",
@@ -1452,7 +1522,7 @@ MuonWP = {
                  "isoSF": {
                      "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
                  },
-                 "tthSF": {
+                 "tthMvaSF": {
                      "1-1": ["NUM_TightID_HWW_LooseIso_PNet_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
                  },
                  #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_PNet/",  
