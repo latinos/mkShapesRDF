@@ -477,7 +477,6 @@ class mRDF:
             nIterations = max(ceil(df.Count().GetValue() / chunksize), 1)
             outFile = uproot.recreate(fileName, compression=uproot.LZMA(9))
             branches = columns.copy()
-            print(branches)
             #####
             ##### Temporal fix / remove branches with type: string -> incompatbility with awkward/uproot
             if "BeamSpot_type" in branches:
@@ -489,21 +488,23 @@ class mRDF:
             if "nisLoose" in branches:
                 branches.remove("nisLoose")
             _branches = branches.copy()
-            CollectionsToZip = ['CleanJet','WH3l_dphilmet','WH3l_mtlmet','MET','Jet','PuppiMET','Lepton_tightMuon','Lepton_tightElectron','Lepton_isTightElectron','Lepton_isTightMuon','Lepton',
+            CollectionsToZip = ['CleanJet','WH3l_dphilmet','WH3l_mtlmet','PFMET','Jet','PuppiMET','Lepton_tightMuon','Lepton_tightElectron','Lepton_isTightElectron','Lepton_isTightMuon','Lepton',
                                 'Muon','Electron','Photon','Gen','LHE','HLT','L1','Tau','IsoTrack','GenPart','LHEPart','TrigObj','LepCut2l','LepCut3l','LepCut4l','NeutrinoGen','SubJet',
                                 'ChsMET','LeptonGen','FatJet','LepSF2l','LepSF3l','LepSF4l','PhotonGen','DressedLepton','GenDressedLepton','SubGenJetAK8','LowPtElectron','VetoLepton',
-                                'BeamSpot','LHEWeight','GenIsolatedPhoton','RawMET','TkMET','CorrT1METJet','boostedTau','newJet','GenJet','TriggerEffWeight','TriggerSFWeight',
+                                'BeamSpot','LHEWeight','GenIsolatedPhoton','RawPFMET','TkMET','CorrT1METJet','boostedTau','newJet','GenJet','TriggerEffWeight','TriggerSFWeight',
                                 'GenJetAK8','Flag','puWeight','Pileup','GenProton','HTXS', 'GenVtx','Generator','Trigger','GenVisTau','RawPuppiMET','SoftActivityJet',
                                 'CaloMET','Rho','FsrPhoton','DeepMETResponseTune','PV','SV','GenMET','DeepMETResolutionTune','gen','OtherPV','TrackGenJetAK4','FatJetPFCand','PFCand','Proton_multiRP','PPSLocalTrack','Proton_singleRP','TauProd']
 
             zips = {}            
             for zipName in CollectionsToZip:
                 zipBranches = list(filter(lambda k: k.startswith(zipName + '_'), branches))
+                if len(zipBranches) == 0: # Names might change over NanoAOD versions
+                    continue
                 zips[zipName] = zipBranches
                 branches = list(set(branches).difference(zipBranches))
 
             for i in range(nIterations):
-                _df = df.Range( i * chunksize, (i+1) * chunksize)
+                _df = df.Range( i * chunksize, (i+1) * chunksize)                
                 events = ak.from_rdataframe(_df, _branches)
                 def getBranch(events, branch):
                     if 'float64' in str(events[branch].type):

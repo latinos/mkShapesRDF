@@ -409,10 +409,10 @@ class LeptonSF(Module):
 
                     if int(self.year) == 2024 and pathToJson.startswith("/cvmfs"):
                         evaluator = f"""
-                        pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), 20.01}}); 
+                        pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), 20.001}});
                         eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
                         """
-                    else:  
+                    else:
                         evaluator = f"""
                         pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}});
                         eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
@@ -464,7 +464,6 @@ class LeptonSF(Module):
 
             ###### tthMVA-SF
             interpret_runP_tthSF = """"""
-            evaluator_tth = """"""
             if ElehasTTHmva:
                 
                 for i in range(len(self.SF_dict["electron"][wp]["tthMvaSF"]["data"])):
@@ -477,7 +476,7 @@ class LeptonSF(Module):
                         
                         beginRP = self.SF_dict["electron"][wp]["tthMvaSF"]["beginRP"][i]
                         endRP   = self.SF_dict["electron"][wp]["tthMvaSF"]["endRP"][i]
-                        
+
                         ROOT.gROOT.ProcessLine(
                             f'auto csetEl{wp}_tthMvaSF_{beginRP}_{endRP} = correction::CorrectionSet::from_file("{pathToJson}");'
                         )
@@ -486,8 +485,8 @@ class LeptonSF(Module):
                         )
 
                         if int(self.year) == 2024 and pathToJson.startswith("/cvmfs"):
-                            evaluator_tth = f"""
-                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), 20.01}});
+                            evaluator_tth = f"""  
+                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), 20.001}});   
                             eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
                             """
                         else:
@@ -519,22 +518,25 @@ class LeptonSF(Module):
                         interpret_runP = (
                             interpret_runP
                             + """
-                            if (runP>="""
+                    if (runP>="""
                             + str(beginRP)
                             + """ && runP<="""
                             + str(endRP)
                             + """){    
-                            cset_electron_"""
+                        cset_electron_"""
                             + wp
                             + """_tthMvaSF = cset_electron_%s_tthMvaSF_%s_%s;
-                            }
+                    }
                             """
                             % (wp, beginRP, endRP)
                         )
                     else:
                         print("Path does not exist for " + wp + " at:")
                         print(self.SF_dict["electron"][wp]["tthMvaSF"]["data"][i])
-            
+
+            else:
+                evaluator_tth = """"""                
+                        
             ROOT.gInterpreter.Declare(
                 """
                     std::vector<ROOT::RVecF> getSF_"""
@@ -570,19 +572,25 @@ class LeptonSF(Module):
                             if (abs(ele_pdgId[i])==11){
                                 
                                 detasc = ele_detasc[Lepton_electronIdx[i]];
-
+                                
                                 """
                                 + evaluator
                                 + evaluator_tth
                                 + """
-                
-                                sf_tot = sf * sf_tth;
-                                sfup_tot = sf_tot * ( ((sfup - sf)/sf)*((sfup - sf)/sf) +
-                                                      ((sfup_tth - sf_tth)/sf_tth)*((sfup_tth - sf_tth)/sf_tth) );
                                 
-                                sfdown_tot = sf_tot * ( ((sfdown - sf)/sf)*((sfdown - sf)/sf) +
-                                                        ((sfdown_tth - sf_tth)/sf_tth)*((sfdown_tth - sf_tth)/sf_tth) );
+                                sf_tot = sf * sf_tth;
                 
+                                if (sf == 0.0 || sf_tth == 0.0){
+                                    sfup_tot = 0.0;
+                                    sfdown_tot = 0.0;
+                                }else{
+                                    sfup_tot = sf_tot * ( ((sfup - sf)/sf)*((sfup - sf)/sf) +
+                                                          ((sfup_tth - sf_tth)/sf_tth)*((sfup_tth - sf_tth)/sf_tth) );
+                                
+                                    sfdown_tot = sf_tot * ( ((sfdown - sf)/sf)*((sfdown - sf)/sf) +
+                                                            ((sfdown_tth - sf_tth)/sf_tth)*((sfdown_tth - sf_tth)/sf_tth) );
+                                }
+
                                 SF.push_back(sf_tot);
                                 SFup.push_back(sfup_tot);
                                 SFdown.push_back(sfdown_tot);
