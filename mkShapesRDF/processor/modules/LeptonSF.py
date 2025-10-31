@@ -406,33 +406,40 @@ class LeptonSF(Module):
                     ROOT.gROOT.ProcessLine(
                         f'correction::Correction::Ref cset_electron_{wp}_wpSF_{beginRP}_{endRP} = (correction::Correction::Ref) csetEl{wp}_wpSF_{beginRP}_{endRP}->at("{key}");'
                     )
-
-                    if int(self.year) == 2024 and pathToJson.startswith("/cvmfs"):
-                        evaluator = f"""
-                        pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), 20.001}});
-                        eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
-                        """
-                    else:
-                        evaluator = f"""
-                        pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}});
-                        eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
-                        """
-
+                    
                     if pathToJson.startswith("/cvmfs"):
                         if int(self.year) == 2023 :
-                            evaluator += f""" 
-                            sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta+detasc, pt, phi}});
-                            sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta+detasc, pt, phi}});
-                            sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta+detasc, pt, phi}});
+                            evaluator = f""" 
+                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_maxPt}}});   
+                            eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}});
+
+                            sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt, phi}});
+                            sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt, phi}});
+                            sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt, phi}});
+                            """
+                        elif int(self.year) == 2024:
+                            evaluator = f"""   
+                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), 20.001}}); 
+                            eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}});
+
+                            sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}}); 
+                            sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}}); 
+                            sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}}); 
                             """
                         else:
-                            evaluator += f"""
-                            sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta+detasc, pt}});
-                            sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta+detasc, pt}});
-                            sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta+detasc, pt}});
+                            evaluator = f"""
+                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_maxPt}}});
+                            eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}}); 
+
+                            sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
+                            sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}});
+                            sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}});
                             """
                     else:
-                        evaluator += f"""
+                        evaluator = f"""
+                        pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_maxPt}}});
+                        eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}}); 
+
                         sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
                         sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}});
                         sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}});
@@ -484,32 +491,39 @@ class LeptonSF(Module):
                             f'correction::Correction::Ref cset_electron_{wp}_tthMvaSF_{beginRP}_{endRP} = (correction::Correction::Ref) csetEl{wp}_tthMvaSF_{beginRP}_{endRP}->at("{key}");'
                         )
 
-                        if int(self.year) == 2024 and pathToJson.startswith("/cvmfs"):
-                            evaluator_tth = f"""  
-                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), 20.001}});   
-                            eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
-                            """
-                        else:
-                            evaluator_tth = f"""
-                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}});
-                            eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
-                            """
-
                         if pathToJson.startswith("/cvmfs"):
                             if int(self.year) == 2023 :
-                                evaluator_tth += f"""
-                                sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sf", "{label}", eta+detasc, pt, phi}});
-                                sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta+detasc, pt, phi}});
-                                sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta+detasc, pt, phi}});
+                                evaluator_tth = f"""
+                                pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_maxPt}}});
+                                eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}}); 
+
+                                sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt, phi}});
+                                sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt, phi}});
+                                sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt, phi}});
+                                """
+                            elif int(self.year) == 2024:
+                                evaluator_tth = f"""
+                                pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), 20.001}});
+                                eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}});
+
+                                sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}}); 
+                                sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}}); 
+                                sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}});
                                 """
                             else:
-                                evaluator_tth += f"""
-                                sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sf", "{label}", eta+detasc, pt}});
-                                sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta+detasc, pt}});
-                                sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta+detasc, pt}});
+                                evaluator_tth = f"""
+                                pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_maxPt}}}); 
+                                eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}});
+
+                                sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
+                                sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}});
+                                sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}});
                                 """
                         else:
-                            evaluator_tth += f"""
+                            evaluator_tth = f"""
+                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}}); 
+                            eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
+
                             sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
                             sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}});
                             sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}});
@@ -535,7 +549,11 @@ class LeptonSF(Module):
                         print(self.SF_dict["electron"][wp]["tthMvaSF"]["data"][i])
 
             else:
-                evaluator_tth = """"""                
+                evaluator_tth = """"""
+
+
+            #print(evaluator)
+            #print(evaluator_tth)
                         
             ROOT.gInterpreter.Declare(
                 """
@@ -603,6 +621,7 @@ class LeptonSF(Module):
                         SFTot.push_back(SF);
                         SFTot.push_back(SFup);
                         SFTot.push_back(SFdown);
+
                         return SFTot;
                     }
                 """
