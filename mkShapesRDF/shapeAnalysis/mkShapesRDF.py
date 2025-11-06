@@ -52,22 +52,22 @@ def defaultParser():
     
     parser.add_argument(
         "--check",
-        action='store_true'
-        help="Check status of batch submission"
+        action='store_true',
+        help="Check status of batch submission",
         required=False,
     )
 
     parser.add_argument(
         "--submit",
-        action='store_true'
-        help="Submit jobs for histograms creation to batch system"
+        action='store_true',
+        help="Submit jobs for histograms creation to batch system",
         required=False,
     )
 
     parser.add_argument(
         "--histoadd",
-        action='store_true'
-        help="Hadd root files"
+        action='store_true',
+        help="Hadd root files",
         required=False,
     )
 
@@ -161,13 +161,16 @@ def main():
     #
     if args.check :
       operationMode = 1
+      print ("check jobs")
 
     #
     # if "submit" is triggered, override the operation mode and just "submit" to batch system the creation of histograms
-    #    "operationMode = 1" means check jobs
+    #    "operationMode = 0" means submit
     #
     if args.submit :
       operationMode = 0
+      doBatch = 1       # if "submit" it means on the batch system!
+      print ("submit jobs on the batch system")
 
     #
     # if "histoadd" is triggered, override the operation mode and just "hadd" the histograms
@@ -175,6 +178,7 @@ def main():
     #
     if args.histoadd :
       operationMode = 2
+      print ("hadd histograms")
 
 
 
