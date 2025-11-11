@@ -241,7 +241,7 @@ Samples['WGtoLNuG-1J_PTG200to400'] = {
 }
 
 Samples['WGtoLNuG-1J_PTG400to600'] = {
-    'nanoAOD' :'/WGtoLNuG-1Jets_PTG-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v1/NANOAODSIM'
+    'nanoAOD' :'/WGtoLNuG-1Jets_PTG-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v3/NANOAODSIM'
 }
 
 Samples['WGtoLNuG-1J_PTG600'] = {
