@@ -151,142 +151,6 @@ class JMECalculator(Module):
                 jecTag = self.JEC_era[2]
 
         print(f"Final JEC tag: {jecTag}")
-        
-        if self.do_MET:
-            L1JecTag        = "L1FastJet"
-            unclEnThr       = 15.
-            emEnFracThr     = 0.9
-            isT1smearedMET  = "false"
-            for MET in self.met_collections:
-                if self.do_JER and "Puppi" in MET:
-                    jerTag          = self.JER_era
-                    isT1smearedMET  = "true"
-                    ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc}, {addHEM}, {isT1smearedMET}, \"{jerTag}\", \"{jsonFileSmearingTool}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
-                else:
-                    ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, std::vector<std::string>{{}}, {addHEM}, {isT1smearedMET}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
-                calcMET = getattr(ROOT, f"my{MET}VarCalc")
-                METSources = calcMET.available()
-                METSources = calcMET.available()[1:][::2]
-                METSources = [str(source).replace('up', '') for source in METSources]
-                print(METSources)
-                
-                # list of columns to be passed to myJetVarCal produce
-                cols = []
-
-                JetColl = "newJet"
-
-                df = df.Define("newJet_pt", "CleanJet_pt")
-                df = df.Define("newJet_eta", "CleanJet_eta")
-                df = df.Define("newJet_phi", "CleanJet_phi")
-                df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
-
-                cols.append(f"{JetColl}_pt")
-                cols.append(f"{JetColl}_eta")
-                cols.append(f"{JetColl}_phi")
-                cols.append(f"Take(Jet_mass, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_rawFactor, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_area, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_muonSubtrFactor, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_neEmEF, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_chEmEF, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
-    
-                # rho
-                cols.append("Rho_fixedGridRhoFastjetAll")
-
-                if self.isMC: 
-                    cols.append(f"Take(Jet_genJetIdx, {JetColl}_jetIdx)")
-                    cols.append(f"Take(Jet_partonFlavour, {JetColl}_jetIdx)")
-                    # seed
-                    cols.append(
-                        f"(run<<20) + (luminosityBlock<<10) + event + 1 + int({JetColl}_eta.size()>0 ? {JetColl}_eta[0]/.01 : 0)"
-                    )
-    
-                    # gen jet coll
-                    cols.append("GenJet_pt")
-                    cols.append("GenJet_eta")
-                    cols.append("GenJet_phi")
-                    cols.append("GenJet_mass")
-                else:
-                    # Basically, these variables are nedded for the smearing and don't exist for data, so we set those to empty vectors
-                    cols.append("ROOT::RVecI{}") # Jet_genJetIdx
-                    cols.append("ROOT::RVecI{}") # Jet_partonFlavour
-                    cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
-                    cols.append("ROOT::RVecF{}") # GenJet_pt
-                    cols.append("ROOT::RVecF{}") # GenJet_eta
-                    cols.append("ROOT::RVecF{}") # GenJet_phi
-                    cols.append("ROOT::RVecF{}") # GenJet_mass
-
-                if "v15" in self.year:
-                    RawMET = "RawPFMET" if "Puppi" not in MET else "RawPuppiMET"
-                else:
-                    RawMET = "RawMET" if "Puppi" not in MET else "RawPuppiMET"
-                cols.append(f"{RawMET}_phi")
-                cols.append(f"{RawMET}_pt")
-
-                df = df.Define('EmptyLowPtJet', 'ROOT::RVecF{}')
-                cols.append("CorrT1METJet_rawPt")
-                cols.append("CorrT1METJet_eta")
-                cols.append("CorrT1METJet_phi")
-                cols.append("CorrT1METJet_area")
-                cols.append("CorrT1METJet_muonSubtrFactor")
-                cols.append("ROOT::RVecF {}")
-                cols.append("ROOT::RVecF {}")
-
-                ## Not available in nanoAODv15
-                if "v15" in self.year:
-                    if "Puppi" not in MET:
-                        df = df.Define(
-                            "PFMET_MetUnclustEnUpDeltaX",
-                            "PFMET_ptUnclusteredUp * std::cos(PFMET_phi)"
-                        )
-                        df = df.Define(
-                            "PFMET_MetUnclustEnUpDeltaY",
-                            "PFMET_ptUnclusteredUp * std::sin(PFMET_phi)"
-                        )
-                        cols.append("PFMET_MetUnclustEnUpDeltaX")
-                        cols.append("PFMET_MetUnclustEnUpDeltaY")
-                    else:
-                        df = df.Define(
-                            "PuppiMET_MetUnclustEnUpDeltaX",
-                            "PuppiMET_ptUnclusteredUp * std::cos(PuppiMET_phi)"
-                        )
-                        df = df.Define(
-                            "PuppiMET_MetUnclustEnUpDeltaY",
-                            "PuppiMET_ptUnclusteredUp * std::sin(PuppiMET_phi)"
-                        )
-                        cols.append("PuppiMET_MetUnclustEnUpDeltaX")
-                        cols.append("PuppiMET_MetUnclustEnUpDeltaY")
-                else:                
-                    cols.append("MET_MetUnclustEnUpDeltaX")
-                    cols.append("MET_MetUnclustEnUpDeltaY")
-
-                if not self.isMC:
-                    cols.append("(float)run")
-                else:
-                    cols.append("(float)-1.0")
-                                       
-                df = df.Define(
-                    f"{MET}Vars", f"my{MET}VarCalc.produce({', '.join(cols)})"
-                )
-                
-                if self.store_nominal:
-                    df = df.Define(f"{MET}_pt", f"CleanJet_pt.size() > 0 ? {MET}Vars.pt(0) : {RawMET}_pt")
-                    df = df.Define(f"{MET}_phi", f"CleanJet_pt.size() > 0 ? {MET}Vars.phi(0) : {RawMET}_phi")
-                
-                if self.store_variations:
-                    for variable in [MET + "_pt", MET + "_phi"]:
-                        for i, source in enumerate(METSources):
-                            up = f"{MET}Vars.{variable.split('_')[-1]}({2*i+1})"
-                            do = f"{MET}Vars.{variable.split('_')[-1]}({2*i+1+1})"
-                            df = df.Vary(
-                                variable,
-                                "ROOT::RVecD{" + up + ", " + do + "}",
-                                ["up", "do"],
-                                source,
-                            )
-                df = df.DropColumns(f"{MET}Vars*")
-                print("MET variables run succesfully!")
 
         if self.do_Jets:
             if self.do_JER:
@@ -492,4 +356,140 @@ class JMECalculator(Module):
 
             df = df.DropColumns("jetVars*")
             df = df.DropColumns("CleanJet_sorting")
+        
+        if self.do_MET:
+            L1JecTag        = "L1FastJet"
+            unclEnThr       = 15.
+            emEnFracThr     = 0.9
+            isT1smearedMET  = "false"
+            for MET in self.met_collections:
+                if self.do_JER and "Puppi" in MET:
+                    jerTag          = self.JER_era
+                    isT1smearedMET  = "true"
+                    ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc}, {addHEM}, {isT1smearedMET}, \"{jerTag}\", \"{jsonFileSmearingTool}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
+                else:
+                    ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, std::vector<std::string>{{}}, {addHEM}, {isT1smearedMET}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                calcMET = getattr(ROOT, f"my{MET}VarCalc")
+                METSources = calcMET.available()
+                METSources = calcMET.available()[1:][::2]
+                METSources = [str(source).replace('up', '') for source in METSources]
+                print(METSources)
+                
+                # list of columns to be passed to myJetVarCal produce
+                cols = []
+
+                JetColl = "newJet"
+
+                df = df.Define("newJet_pt", "CleanJet_pt")
+                df = df.Define("newJet_eta", "CleanJet_eta")
+                df = df.Define("newJet_phi", "CleanJet_phi")
+                df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
+
+                cols.append(f"{JetColl}_pt")
+                cols.append(f"{JetColl}_eta")
+                cols.append(f"{JetColl}_phi")
+                cols.append(f"Take(Jet_mass, {JetColl}_jetIdx)")
+                cols.append(f"Take(Jet_rawFactor, {JetColl}_jetIdx)")
+                cols.append(f"Take(Jet_area, {JetColl}_jetIdx)")
+                cols.append(f"Take(Jet_muonSubtrFactor, {JetColl}_jetIdx)")
+                cols.append(f"Take(Jet_neEmEF, {JetColl}_jetIdx)")
+                cols.append(f"Take(Jet_chEmEF, {JetColl}_jetIdx)")
+                cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
+    
+                # rho
+                cols.append("Rho_fixedGridRhoFastjetAll")
+
+                if self.isMC: 
+                    cols.append(f"Take(Jet_genJetIdx, {JetColl}_jetIdx)")
+                    cols.append(f"Take(Jet_partonFlavour, {JetColl}_jetIdx)")
+                    # seed
+                    cols.append(
+                        f"(run<<20) + (luminosityBlock<<10) + event + 1 + int({JetColl}_eta.size()>0 ? {JetColl}_eta[0]/.01 : 0)"
+                    )
+    
+                    # gen jet coll
+                    cols.append("GenJet_pt")
+                    cols.append("GenJet_eta")
+                    cols.append("GenJet_phi")
+                    cols.append("GenJet_mass")
+                else:
+                    # Basically, these variables are nedded for the smearing and don't exist for data, so we set those to empty vectors
+                    cols.append("ROOT::RVecI{}") # Jet_genJetIdx
+                    cols.append("ROOT::RVecI{}") # Jet_partonFlavour
+                    cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
+                    cols.append("ROOT::RVecF{}") # GenJet_pt
+                    cols.append("ROOT::RVecF{}") # GenJet_eta
+                    cols.append("ROOT::RVecF{}") # GenJet_phi
+                    cols.append("ROOT::RVecF{}") # GenJet_mass
+
+                if "v15" in self.year:
+                    RawMET = "RawPFMET" if "Puppi" not in MET else "RawPuppiMET"
+                else:
+                    RawMET = "RawMET" if "Puppi" not in MET else "RawPuppiMET"
+                cols.append(f"{RawMET}_phi")
+                cols.append(f"{RawMET}_pt")
+
+                df = df.Define('EmptyLowPtJet', 'ROOT::RVecF{}')
+                cols.append("CorrT1METJet_rawPt")
+                cols.append("CorrT1METJet_eta")
+                cols.append("CorrT1METJet_phi")
+                cols.append("CorrT1METJet_area")
+                cols.append("CorrT1METJet_muonSubtrFactor")
+                cols.append("ROOT::RVecF {}")
+                cols.append("ROOT::RVecF {}")
+
+                ## Not available in nanoAODv15
+                if "v15" in self.year:
+                    if "Puppi" not in MET:
+                        df = df.Define(
+                            "PFMET_MetUnclustEnUpDeltaX",
+                            "PFMET_ptUnclusteredUp * std::cos(PFMET_phi)"
+                        )
+                        df = df.Define(
+                            "PFMET_MetUnclustEnUpDeltaY",
+                            "PFMET_ptUnclusteredUp * std::sin(PFMET_phi)"
+                        )
+                        cols.append("PFMET_MetUnclustEnUpDeltaX")
+                        cols.append("PFMET_MetUnclustEnUpDeltaY")
+                    else:
+                        df = df.Define(
+                            "PuppiMET_MetUnclustEnUpDeltaX",
+                            "PuppiMET_ptUnclusteredUp * std::cos(PuppiMET_phi)"
+                        )
+                        df = df.Define(
+                            "PuppiMET_MetUnclustEnUpDeltaY",
+                            "PuppiMET_ptUnclusteredUp * std::sin(PuppiMET_phi)"
+                        )
+                        cols.append("PuppiMET_MetUnclustEnUpDeltaX")
+                        cols.append("PuppiMET_MetUnclustEnUpDeltaY")
+                else:                
+                    cols.append("MET_MetUnclustEnUpDeltaX")
+                    cols.append("MET_MetUnclustEnUpDeltaY")
+
+                if not self.isMC:
+                    cols.append("(float)run")
+                else:
+                    cols.append("(float)-1.0")
+                                       
+                df = df.Define(
+                    f"{MET}Vars", f"my{MET}VarCalc.produce({', '.join(cols)})"
+                )
+                
+                if self.store_nominal:
+                    df = df.Define(f"{MET}_pt", f"CleanJet_pt.size() > 0 ? {MET}Vars.pt(0) : {RawMET}_pt")
+                    df = df.Define(f"{MET}_phi", f"CleanJet_pt.size() > 0 ? {MET}Vars.phi(0) : {RawMET}_phi")
+                
+                if self.store_variations:
+                    for variable in [MET + "_pt", MET + "_phi"]:
+                        for i, source in enumerate(METSources):
+                            up = f"{MET}Vars.{variable.split('_')[-1]}({2*i+1})"
+                            do = f"{MET}Vars.{variable.split('_')[-1]}({2*i+1+1})"
+                            df = df.Vary(
+                                variable,
+                                "ROOT::RVecD{" + up + ", " + do + "}",
+                                ["up", "do"],
+                                source,
+                            )
+                df = df.DropColumns(f"{MET}Vars*")
+                print("MET variables run succesfully!")
         return df
