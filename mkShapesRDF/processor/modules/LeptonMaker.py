@@ -24,7 +24,7 @@ class LeptonMaker(Module):
         df = df.Define("Lepton_sorting", "sortedIndices(Lepton_pt)")
         df = df.Redefine("Lepton_pt", "Take(Lepton_pt, Lepton_sorting)")
 
-        Lepton_var = ["eta", "phi", "pdgId"]
+        Lepton_var = ["eta", "phi", "pdgId", "mass"]
         for prop in Lepton_var:
             df = df.Define(
                 f"Lepton_{prop}",
