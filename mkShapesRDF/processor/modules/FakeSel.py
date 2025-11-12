@@ -11,7 +11,7 @@ class FakeSel(Module):
         if "MET_pt" not in df.GetColumnNames():
             df = df.Define("MET_pt", "PuppiMET_pt")
         
-        df = df.Filter("((MET_pt < 20 || PuppiMET_pt < 20) && mtw1 < 20)")
+        df = df.Filter("(MET_pt < 20 || PuppiMET_pt < 20)") # mtw1 < 20 To be applied at analysis level
 
         return df
 
