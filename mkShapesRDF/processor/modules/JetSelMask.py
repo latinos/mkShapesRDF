@@ -6,7 +6,7 @@ import os
 correctionlib.register_pyroot_binding()
 
 class JetSelMask(Module):
-    def __init__(self, jetId, puJetId, minPt, maxEta, UL2016fix=False, year="",eventMask=False):
+    def __init__(self, jetId, puJetId, minPt, maxEta, UL2016fix=False, year="",eventMask=True):
         super().__init__("JetSelMask")
         self.jetId = jetId
         self.minPt = minPt
