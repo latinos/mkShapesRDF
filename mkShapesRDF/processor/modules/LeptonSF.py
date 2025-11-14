@@ -602,11 +602,11 @@ class LeptonSF(Module):
                                     sfup_tot = 0.0;
                                     sfdown_tot = 0.0;
                                 }else{
-                                    sfup_tot = sf_tot * ( ((sfup - sf)/sf)*((sfup - sf)/sf) +
-                                                          ((sfup_tth - sf_tth)/sf_tth)*((sfup_tth - sf_tth)/sf_tth) );
+                                    sfup_tot = sf_tot + sf_tot * ( ((sfup - sf)/sf)*((sfup - sf)/sf) +
+                                                                   ((sfup_tth - sf_tth)/sf_tth)*((sfup_tth - sf_tth)/sf_tth) );
                                 
-                                    sfdown_tot = sf_tot * ( ((sfdown - sf)/sf)*((sfdown - sf)/sf) +
-                                                            ((sfdown_tth - sf_tth)/sf_tth)*((sfdown_tth - sf_tth)/sf_tth) );
+                                    sfdown_tot = sf_tot - sf_tot * ( ((sfdown - sf)/sf)*((sfdown - sf)/sf) +
+                                                                     ((sfdown_tth - sf_tth)/sf_tth)*((sfdown_tth - sf_tth)/sf_tth) );
                                 }
 
                                 SF.push_back(sf_tot);
