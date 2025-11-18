@@ -11,6 +11,8 @@ JetMakerCfg = {
         "JER": "Summer22_22Sep2023_JRV1_MC",
         "jet_jerc" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-22CDSep23-Summer22-NanoAODv12/latest/jet_jerc.json.gz",
         "jer_smear": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/jer_smear.json.gz",
+        "met_xy_json" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/met_xyCorrections_2022_2022EE.json.gz",
+        "met_xy_era" : "2022"
     },
     'Full2022EEv12': {
         "vetomap": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/jetvetomaps.json.gz",
@@ -20,6 +22,8 @@ JetMakerCfg = {
         "JER": "Summer22EE_22Sep2023_JRV1_MC",
         "jet_jerc" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/jet_jerc.json.gz",
         "jer_smear": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/jer_smear.json.gz",
+        "met_xy_json" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/met_xyCorrections_2022_2022EE.json.gz",
+        "met_xy_era" : "2022EE"
     },
     'Full2023v12': {
         "vetomap": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-23CSep23-Summer23-NanoAODv12/latest/jetvetomaps.json.gz",
@@ -30,6 +34,8 @@ JetMakerCfg = {
         "JER": "Summer23Prompt23_RunCv1234_JRV1_MC",
         "jet_jerc" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-23CSep23-Summer23-NanoAODv12/latest/jet_jerc.json.gz",
         "jer_smear": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/jer_smear.json.gz",
+        "met_xy_json" :	"/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/met_xyCorrections_2023_2023BPix.json.gz",
+        "met_xy_era" : "2023"
     },
     'Full2023BPixv12': {
         "vetomap": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/jetvetomaps.json.gz",
@@ -39,6 +45,8 @@ JetMakerCfg = {
         "JER": "Summer23BPixPrompt23_RunD_JRV1_MC",
         "jet_jerc" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/jet_jerc.json.gz",
         "jer_smear": frameworkPath + "/processor/data/jsonpog-integration/POG/JME/jer_smear.json.gz",
+        "met_xy_json" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/met_xyCorrections_2023_2023BPix.json.gz",
+        "met_xy_era" : "2023BPix"
     },
     'Full2024v15': {
         "vetomap": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/jetvetomaps.json.gz",

@@ -204,10 +204,10 @@ ElectronWP = {
                         "ROOT::VecOps::abs(Electron_dz) <  0.2",
                     ],
                     "Electron_pt <= 20.0": [
-                        "Electron_promptMVA > 0.35",
+                        "Electron_tthMVA > 0.35",
                     ],
                     "Electron_pt > 20.0": [
-                        "Electron_promptMVA > 0.90",
+                        "Electron_tthMVA > 0.90",
                     ],
                 },
                 'tkSF':  {
@@ -357,10 +357,10 @@ ElectronWP = {
                         "ROOT::VecOps::abs(Electron_dz) <  0.2",
                     ],
                     "Electron_pt <= 20.0": [
-                        "Electron_promptMVA > 0.35",
+                        "Electron_tthMVA > 0.35",
                     ],
                     "Electron_pt > 20.0": [
-                        "Electron_promptMVA > 0.90",
+                        "Electron_tthMVA > 0.90",
                     ],
                 },
                 'tkSF':  {
@@ -510,10 +510,10 @@ ElectronWP = {
                         "ROOT::VecOps::abs(Electron_dz) <  0.2",
                     ],
                     "Electron_pt <= 20.0": [
-                        "Electron_promptMVA > 0.35",
+                        "Electron_tthMVA > 0.35",
                     ],
                     "Electron_pt > 20.0": [
-                        "Electron_promptMVA > 0.90",
+                        "Electron_tthMVA > 0.90",
                     ],
                 },
                 'tkSF':  {
@@ -663,10 +663,10 @@ ElectronWP = {
                         "ROOT::VecOps::abs(Electron_dz) <  0.2",
                     ],
                     "Electron_pt <= 20.0": [
-                        "Electron_promptMVA > 0.35",
+                        "Electron_tthMVA > 0.35",
                     ],
                     "Electron_pt > 20.0": [
-                        "Electron_promptMVA > 0.90",
+                        "Electron_tthMVA > 0.90",
                     ],
                 },
                 'tkSF':  {
@@ -1070,11 +1070,11 @@ MuonWP = {
                     ],
                     "Muon_pt <= 20.0": [
                         "ROOT::VecOps::abs(Muon_dxy) < 0.01",
-                        "Muon_promptMVA > 0.20",
+                        "Muon_tthMVA > 0.20",
                     ],
                     "Muon_pt > 20.0": [
                         "ROOT::VecOps::abs(Muon_dxy) < 0.02",
-                        "Muon_promptMVA > 0.67",
+                        "Muon_tthMVA > 0.67",
                     ],
                 },
                 "idSF": {
@@ -1234,11 +1234,11 @@ MuonWP = {
                     ],
                     "Muon_pt <= 20.0": [
                         "ROOT::VecOps::abs(Muon_dxy) < 0.01",
-                        "Muon_promptMVA > 0.20",
+                        "Muon_tthMVA > 0.20",
                     ],
                     "Muon_pt > 20.0": [
                         "ROOT::VecOps::abs(Muon_dxy) < 0.02",
-                        "Muon_promptMVA > 0.67",
+                        "Muon_tthMVA > 0.67",
                     ],
                 },
                 "idSF": {
@@ -1398,11 +1398,11 @@ MuonWP = {
                     ],
                     "Muon_pt <= 20.0": [
                         "ROOT::VecOps::abs(Muon_dxy) < 0.01",
-                        "Muon_promptMVA > 0.20",
+                        "Muon_tthMVA > 0.20",
                     ],
                     "Muon_pt > 20.0": [
                         "ROOT::VecOps::abs(Muon_dxy) < 0.02",
-                        "Muon_promptMVA > 0.67",
+                        "Muon_tthMVA > 0.67",
                     ],
                 },
                 "idSF": {
@@ -1562,11 +1562,11 @@ MuonWP = {
                     ],
                     "Muon_pt <= 20.0": [
                         "ROOT::VecOps::abs(Muon_dxy) < 0.01",
-                        "Muon_promptMVA > 0.20",
+                        "Muon_tthMVA > 0.20",
                     ],
                     "Muon_pt > 20.0": [
                         "ROOT::VecOps::abs(Muon_dxy) < 0.02",
-                        "Muon_promptMVA > 0.67",
+                        "Muon_tthMVA > 0.67",
                     ],
                 },
                 "idSF": {

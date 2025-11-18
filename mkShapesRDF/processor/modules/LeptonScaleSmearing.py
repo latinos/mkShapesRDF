@@ -70,28 +70,17 @@ class LeptonScaleSmearing(Module):
     def runModule(self, df, values):
         # Note that the elecset_scale is a CompoundCorrection object
 
-        if "2024" in self.year_key:            
-            ROOT.gROOT.ProcessLine(
-                f'auto cset = correction::CorrectionSet::from_file("{self.muoncorrection_file}");'
-                f'auto elecset = correction::CorrectionSet::from_file("{self.elecorrection_file}");'
-                f'correction::CompoundCorrection::Ref elecset_scale = elecset->compound().at("Scale");'
-                #f'correction::CompoundCorrection::Ref elecset_smear = elecset->compound().at("SmearAndSyst");'
-                f'auto elecset_smear = elecset->at("EGMSmearAndSyst_ElePT_{self.year_key}");'
-            )            
-        else:
-            ROOT.gROOT.ProcessLine(
-                f'auto cset = correction::CorrectionSet::from_file("{self.muoncorrection_file}");'
-                f'auto elecset = correction::CorrectionSet::from_file("{self.elecorrection_file}");'
-                f'correction::CompoundCorrection::Ref elecset_scale = elecset->compound().at("EGMScale_Compound_Ele_{self.year_key}");'
-                f'auto elecset_smear = elecset->at("EGMSmearAndSyst_ElePTsplit_{self.year_key}");'
-            )
+        ROOT.gROOT.ProcessLine(
+            f'auto cset = correction::CorrectionSet::from_file("{self.muoncorrection_file}");'
+            f'auto elecset = correction::CorrectionSet::from_file("{self.elecorrection_file}");'
+            f'correction::CompoundCorrection::Ref elecset_scale = elecset->compound().at("Scale");'
+            #f'correction::CompoundCorrection::Ref elecset_smear = elecset->compound().at("SmearAndSyst");'
+            f'auto elecset_smear = elecset->at("EGMSmearAndSyst_ElePT_{self.year_key}");'
+        )            
 
         ROOT.gROOT.ProcessLine(f'#include "{self.muonscale_path}/MuonScaRe.cc"')
         ROOT.gROOT.ProcessLine(f'#include "{self.macroele_path}/scEta.cc"')
-        if "2024" in self.year_key:
-            ROOT.gROOT.ProcessLine(f'#include "{self.macroele_path}/EleScaRe_2024.cc"')
-        else:
-            ROOT.gROOT.ProcessLine(f'#include "{self.macroele_path}/EleScaRe.cc"')
+        ROOT.gROOT.ProcessLine(f'#include "{self.macroele_path}/EleScaRe.cc"')
         ROOT.gROOT.ProcessLine('#include <TRandom3.h>')
 
         # Function to loop over leptons and run the scale corrections. For more details, refer to the macros.

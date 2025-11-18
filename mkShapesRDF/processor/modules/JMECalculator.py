@@ -75,6 +75,10 @@ class JMECalculator(Module):
         self.JEC_era = ""
         self.JER_era = ""
         self.jsonFileSmearingTool = ""
+
+        self.isXYCorrMET  = False
+        self.isXYCorrJson = ""
+        self.isXYCorrEra  = ""
         
         if self.year in JetMakerCfg.keys():
             self.json = JetMakerCfg[self.year]["jet_jerc"]
@@ -84,6 +88,11 @@ class JMECalculator(Module):
                 self.JEC_era = JetMakerCfg[self.year]["JEC_data"]
             self.JER_era = JetMakerCfg[self.year]["JER"]
             self.jsonFileSmearingTool = JetMakerCfg[self.year]["jer_smear"]
+
+            if "met_xy_json" in JetMakerCfg[self.year]:
+                self.isXYCorrMET = True
+                self.isXYCorrJson = JetMakerCfg[self.year]["met_xy_json"]
+                self.isXYCorrEra = JetMakerCfg[self.year]["met_xy_era"]
 
     def runModule(self, df, values):
         ROOT.gInterpreter.Declare(
@@ -154,7 +163,7 @@ class JMECalculator(Module):
 
         if self.do_Jets:
             if self.do_JER:
-                jerTag          = self.JER_era
+                jerTag = self.JER_era
                 ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", {jesUnc}, {addHEM}, \"{jerTag}\", \"{jsonFileSmearingTool}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
             else:
                 ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", std::vector<std::string>{{}}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
@@ -362,13 +371,26 @@ class JMECalculator(Module):
             unclEnThr       = 15.
             emEnFracThr     = 0.9
             isT1smearedMET  = "false"
+
+            isXYCorrected = "false"
+            met_xy_json = ""
+            met_xy_era = ""
+            if self.isXYCorrMET:
+                isXYCorrected = "true"
+                met_xy_json = self.isXYCorrJson
+                met_xy_era = self.isXYCorrEra
+
+            is_mc = "false"
+            if self.isMC:
+                is_mc = "true"
+            
             for MET in self.met_collections:
                 if self.do_JER and "Puppi" in MET:
                     jerTag          = self.JER_era
                     isT1smearedMET  = "true"
-                    ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc}, {addHEM}, {isT1smearedMET}, \"{jerTag}\", \"{jsonFileSmearingTool}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
+                    ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json}\", \"{met_xy_era}\", {is_mc}, \"{jerTag}\", \"{jsonFileSmearingTool}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
                 else:
-                    ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, std::vector<std::string>{{}}, {addHEM}, {isT1smearedMET}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                    ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, std::vector<std::string>{{}}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json}\", \"{met_xy_era}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
                 calcMET = getattr(ROOT, f"my{MET}VarCalc")
                 METSources = calcMET.available()
                 METSources = calcMET.available()[1:][::2]
@@ -406,7 +428,7 @@ class JMECalculator(Module):
                     cols.append(
                         f"(run<<20) + (luminosityBlock<<10) + event + 1 + int({JetColl}_eta.size()>0 ? {JetColl}_eta[0]/.01 : 0)"
                     )
-    
+                    cols.append("-1.0")    
                     # gen jet coll
                     cols.append("GenJet_pt")
                     cols.append("GenJet_eta")
@@ -417,6 +439,7 @@ class JMECalculator(Module):
                     cols.append("ROOT::RVecI{}") # Jet_genJetIdx
                     cols.append("ROOT::RVecI{}") # Jet_partonFlavour
                     cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
+                    cols.append("run")
                     cols.append("ROOT::RVecF{}") # GenJet_pt
                     cols.append("ROOT::RVecF{}") # GenJet_eta
                     cols.append("ROOT::RVecF{}") # GenJet_phi
@@ -466,10 +489,7 @@ class JMECalculator(Module):
                     cols.append("MET_MetUnclustEnUpDeltaX")
                     cols.append("MET_MetUnclustEnUpDeltaY")
 
-                if not self.isMC:
-                    cols.append("(float)run")
-                else:
-                    cols.append("(float)-1.0")
+                cols.append("PV_npvsGood")                    
                                        
                 df = df.Define(
                     f"{MET}Vars", f"my{MET}VarCalc.produce({', '.join(cols)})"
