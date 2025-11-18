@@ -111,7 +111,7 @@ def CMS_lumi(pad, iPeriod, iPosX):
     latex.SetTextAngle(0)
     latex.SetTextColor(rt.kBlack)
 
-    extraTextSize = extraOverCmsTextSize * cmsTextSize
+    extraTextSize = extraOverCmsTextSize * cmsTextSize * 0.7
 
     latex.SetTextFont(42)
     latex.SetTextAlign(31)

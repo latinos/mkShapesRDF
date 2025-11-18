@@ -63,10 +63,16 @@ class Module:
                 bVal = bVal[0]
             if "list" in str(type(aVal)):
                 aVal = aVal[0]
-            return [
-                f"Efficiency of {self.name} module",
-                str(round(bVal.GetValue() / aVal.GetValue() * 100, 3)) + "%",
-            ]
+            if 0 != aVal.GetValue():
+                return [
+                    f"Efficiency of {self.name} module",
+                    str(round(bVal.GetValue() / aVal.GetValue() * 100, 3)) + "%",
+                ]
+            else:
+                return [
+                    f"Efficiency of {self.name} module",
+                    "0.000%",
+                ]
 
         values.append([fun, a, b])
         return df

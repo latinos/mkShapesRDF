@@ -102,6 +102,13 @@ xs_db["WGtoLNuG-1J_PTG200to400"] = ["xsec=0.2908",   "kfact=1.000", "ref=G"]
 xs_db["WGtoLNuG-1J_PTG400to600"] = ["xsec=0.02231",  "kfact=1.000", "ref=G"]
 xs_db["WGtoLNuG-1J_PTG600"]      = ["xsec=0.004907", "kfact=1.000", "ref=G"]
 
+### WG
+xs_db['WGtoLNuG-1J_PTG10to100']  = ["xsec=215.7", "kfact=1.000", "ref=G"]        # XS * BR (W-->lv) = 0.1086*3
+xs_db['WGtoLNuG-1J_PTG100to200'] = ["xsec=0.7236", "kfact=1.000", "ref=G"]
+xs_db['WGtoLNuG-1J_PTG200to400'] = ["xsec=0.09474", "kfact=1.000", "ref=G"]
+xs_db['WGtoLNuG-1J_PTG400to600'] = ["xsec=0.007269", "kfact=1.000", "ref=G"]
+xs_db['WGtoLNuG-1J_PTG600']      = ["xsec=0.001599", "kfact=1.000", "ref=G"]
+
 ### ZZ
 xs_db["ZZ"]        = ["xsec=16.7",   "kfact=1.000", "ref=X"]
 xs_db["ZZTo2L2Nu"] = ["xsec=1.1341", "kfact=1.000", "ref=X"]
