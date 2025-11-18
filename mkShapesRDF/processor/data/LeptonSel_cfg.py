@@ -1750,14 +1750,13 @@ MuonWP = {
                         "Muon_tightId",
                         "ROOT::VecOps::abs(Muon_dz) < 0.1",
                         "Muon_pfIsoId >= 2",
+                        "(Muon_pnScore_prompt + Muon_pnScore_tau) > 0.989",
                     ],
                     "Muon_pt <= 20.0": [
                         "ROOT::VecOps::abs(Muon_dxy) < 0.01",
-                        "Muon_pnScore_prompt > 0.31",
                     ],
                     "Muon_pt > 20.0": [
                         "ROOT::VecOps::abs(Muon_dxy) < 0.02",
-                        "Muon_pnScore_prompt > 0.6",
                     ],
                 },
                 "idSF": {
