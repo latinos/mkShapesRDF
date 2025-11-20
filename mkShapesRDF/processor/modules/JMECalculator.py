@@ -22,7 +22,6 @@ class JMECalculator(Module):
         store_variations=True,
         isMC = True,
         sampleName = "",
-        correctHorns = False
     ):
         """
         JMECalculator module
@@ -65,7 +64,6 @@ class JMECalculator(Module):
         self.store_variations = store_variations
         self.isMC = isMC 
         self.sampleName = sampleName
-        self.correctHorns = correctHorns
         # The isMC flag is used to denote MC samples and is used as a condition to choose the correct JEC key and to ensure that do_JER is set to True only for MC
 
         # This might be redundant, but I think is useful to have a cross-setting to False for these flags
@@ -116,88 +114,6 @@ class JMECalculator(Module):
 
             }
         """
-        )
-
-        ROOT.gInterpreter.Declare(
-            """
-            namespace {
-                // because something goes wrong with linking ROOT::Math::VectorUtil::Phi_mpi_pi
-                template<typename T>
-                T phi_mpi_pi(T angle) {
-                    if ( angle <= M_PI && angle > -M_PI ) {
-                        return angle;
-                    }
-                    if ( angle > 0 ) {
-                        const int n = static_cast<int>(.5*(angle*M_1_PI+1.));
-                        angle -= 2*n*M_PI;
-                    } else {
-                        const int n = static_cast<int>(-.5*(angle*M_1_PI-1.));
-                        angle += 2*n*M_PI;
-                    }
-                    return angle;
-                }
-            }
-
-            RVecI findGenMatched(RVecF Jet_pt, RVecF Jet_eta, RVecF Jet_phi, RVecI Jet_genIdx, RVecF GenJet_pt, RVecF GenJet_eta, RVecF GenJet_phi, float genMatch_maxDR=-1, float genMatch_maxDPT=-1){
-                
-                RVecI Jet_genJetIdx(Jet_pt.size(), -1);
-                
-                // Piece of code mostly copied from https://gitlab.cern.ch/cms-analysis/general/CMSJMECalculators/-/blob/main/src/JetMETVariationsCalculatorBase.cc#L153                
-                auto get_dr2 = [](float phi, float eta, float gen_phi, float gen_eta) -> float {
-                    const auto dphi = phi_mpi_pi(gen_phi - phi);
-                    const auto deta = gen_eta - eta;
-                    return dphi*dphi + deta*deta;
-                };
-                auto check_resolution = [](float pt, float gen_pt, float genMatch_maxDPT) -> bool {
-                    return std::abs(gen_pt - pt) < genMatch_maxDPT;
-                };
-
-                for (unsigned int i=0; i<Jet_pt.size(); i++){
-                    float pt  = Jet_pt[i];
-                    float eta = Jet_eta[i];
-                    float phi = Jet_phi[i];                        
-                    // First check if matched genJet from NanoAOD is acceptable
-                    if (Jet_genIdx[i] >= 0) {
-                        const float dr2 = get_dr2(phi, eta, GenJet_phi[Jet_genIdx[i]], GenJet_eta[Jet_genIdx[i]]);
-                        if ((dr2 < genMatch_maxDR*genMatch_maxDR) && check_resolution(pt, GenJet_pt[Jet_genIdx[i]], genMatch_maxDPT)) {
-                            Jet_genJetIdx[i] = Jet_genIdx[i];
-                            continue;
-                        }
-                    }                    
-                    float dr2Min = 999.9;
-                    int idxBest = -1;
-                    for (unsigned int j=0; j<GenJet_pt.size(); j++){
-                        const auto dr2 = get_dr2(phi, eta, GenJet_phi[Jet_genIdx[i]], GenJet_eta[Jet_genIdx[i]]);
-                        if ( ( dr2 < dr2Min ) && ( dr2 < genMatch_maxDR*genMatch_maxDR ) ) {
-                            if (check_resolution(pt, GenJet_pt[Jet_genIdx[i]], genMatch_maxDPT)) {
-                                dr2Min = dr2;
-                                idxBest = j;
-                            }
-                        }
-                    }
-                    Jet_genJetIdx[i] = idxBest;                                
-                }
-                return Jet_genJetIdx;
-            }
-            """
-        )
-
-        ### Macro to get a value only if a condition is satisfied
-        # designed to not vary jets in the horns 
-        ROOT.gInterpreter.Declare(
-            """
-            RVecF getConditionedValue(RVecF nominal, RVecF corrected, RVecB condition){
-
-                RVecF result(nominal.size(), -99.9);
-                for (unsigned int i=0; i<nominal.size(); i++){
-                    if (condition[i])
-                        result[i] = corrected[i];
-                    else
-                        result[i] = nominal[i];
-                }
-                return result;                
-            }
-            """
         )
         
         from CMSJMECalculators import loadJMESystematicsCalculators
@@ -337,17 +253,8 @@ class JMECalculator(Module):
                 df = df.Define("jetVarsrecipe", f'myJetVariationsCalculator.produce({", ".join(cols_recipe)})')
 
             if self.store_nominal:
-                if self.correctHorns:                
-                    df = df.Define("CleanJet_pt", "jetVars.pt(0)")
-                    df = df.Define("CleanJet_mass", "jetVars.mass(0)")
-                else:
-                    df = df.Define(
-                        "CleanJet_bestGenMatchIdx",
-                        f"findGenMatched(CleanJet_pt, CleanJet_eta, CleanJet_phi, Take(Jet_genJetIdx, CleanJet_jetIdx), GenJet_pt, GenJet_eta, GenJet_phi, {maxDR}, {maxDPT})"
-                    )
-                    df = df.Define("CleanJet_isNotGenInHorns", "abs(CleanJet_eta)>2.6 && abs(CleanJet_eta)<3.1 && CleanJet_bestGenMatchIdx == -1")
-                    df = df.Define("CleanJet_pt", "getConditionedValue(CleanJet_pt, jetVars.pt(0), !CleanJet_isNotGenInHorns)")
-                    df = df.Define("CleanJet_mass", "getConditionedValue(CleanJet_mass, jetVars.mass(0), !CleanJet_isNotGenInHorns)")
+                df = df.Define("CleanJet_pt", "jetVars.pt(0)")
+                df = df.Define("CleanJet_mass", "jetVars.mass(0)")
                     
                 df = df.Define("CleanJet_sorting", "ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(CleanJet_pt))")
 
@@ -373,13 +280,6 @@ class JMECalculator(Module):
                     for j, tag in enumerate(["up", "down"]):
                         variation_pt = f"jetVars.pt({2*i+1+j})"
                         variation_mass = f"jetVars.mass({2*i+1+j})"
-
-                        if self.correctHorns:
-                            variation_pt = f"jetVars.pt({2*i+1+j})"
-                            variation_mass = f"jetVars.mass({2*i+1+j})"
-                        else:
-                            variation_pt = f"getConditionedValue(CleanJet_pt, jetVars.pt({2*i+1+j}), !CleanJet_isNotGenInHorns)"
-                            variation_mass = f"getConditionedValue(CleanJet_mass, jetVars.mass({2*i+1+j}), !CleanJet_isNotGenInHorns)"
                         
                         df = df.Define(
                             f"tmp_CleanJet_pt__JES_{source}_{tag}",
