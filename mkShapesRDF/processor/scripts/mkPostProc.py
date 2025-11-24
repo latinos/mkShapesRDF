@@ -26,9 +26,9 @@ elif "lxplus" in uname: site = 'cern'
 eosDir = Sites[site]["eosDir"]
 
 #: defaultRedirector is the redirector used to access files if the option ``--useRedirector 1`` is used, user might want to change it -> edit ``mkPostProc.py``
-defaultRedirector = "root://cms-xrd-global.cern.ch/"
-# defaultRedirector = "root://xrootd-cms.infn.it/"
-
+#defaultRedirector = "root://cms-xrd-global.cern.ch/"
+#defaultRedirector = "root://xrootd-cms.infn.it/"
+defaultRedirector = "root://cmsxrootd.fnal.gov/"
 
 def defaultParser():
     parser = argparse.ArgumentParser(add_help=False)

@@ -1,4 +1,5 @@
 from mkShapesRDF.processor.framework.module import Module
+from mkShapesRDF.processor.data.LeptonSel_cfg import *
 import os
 import re
 import ROOT
@@ -32,7 +33,7 @@ class LeptonScaleSmearing(Module):
             self.elescale_path = os.path.dirname(os.path.dirname(__file__)).split("processor")[0] + "/processor/data/jsonpog-integration/POG/EGM"
             self.macroele_path = os.path.dirname(os.path.dirname(__file__)).split("processor")[0] + "/processor/data/electron_scale"      
             
-        if "2022" in era or "2023" in era:
+        if "2022" in era or "2023" in era or "2024" in era:
             self.prodTime = "Summer"
         else:
             print("LeptonScaleSmearing")
@@ -42,33 +43,40 @@ class LeptonScaleSmearing(Module):
             
         year = re.findall(r'\d+', era)[0]
         key = era.split("Full20")[1].split("v")[0]
-        self.muoncorrection_file = self.muonscale_path + "/" + year + "_" + self.prodTime + key + ".json"
-        # We use the EtDependent corrections, as recommended here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgammSFandSSRun3
-        self.elecorrection_file = self.elescale_path + "/" + year + "_" + self.prodTime + key + "/electronSS_EtDependent.json.gz"
 
+        # We use the EtDependent corrections, as recommended here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgammSFandSSRun3 
+        self.muoncorrection_file = MuonWP[era]["ScaleAndSmearing"]
+        self.elecorrection_file = ElectronWP[era]["ScaleAndSmearing"]        
+        
         # This section computes the `year_key` needed to access the correct part of the correction files.  
-        # Since valid year_keys are ['2022preEE', '2022postEE', '2023preBPIX', '2023postBPIX'],  
+        # Since valid year_keys are ['2022preEE', '2022postEE', '2023preBPIX', '2023postBPIX', '2024'],  
         # the `year_key` must include at least one letter.  
 
         evaluator = correctionlib.CorrectionSet.from_file(self.elecorrection_file)
         keys = list(evaluator.keys())
-        for key in keys:
-            year_key = key.split('_')[-1]            
-            if any(c.isalpha() for c in year_key):  
+        for key in keys:            
+            year_key = key.split('_')[-1]
+            if not any(c.isalpha() for c in year_key):
                 self.year_key = year_key  
-                break 
+                break
+            else:
+                self.year_key = year_key
+                
+        print(self.elecorrection_file)
         print(self.year_key) 
 
         print(f"LeptonScaleSmearing: running scale and smearing corrections for leptons from {era}")
         
     def runModule(self, df, values):
         # Note that the elecset_scale is a CompoundCorrection object
+
         ROOT.gROOT.ProcessLine(
             f'auto cset = correction::CorrectionSet::from_file("{self.muoncorrection_file}");'
             f'auto elecset = correction::CorrectionSet::from_file("{self.elecorrection_file}");'
-            f'correction::CompoundCorrection::Ref elecset_scale = elecset->compound().at("EGMScale_Compound_Ele_{self.year_key}");'
-            f'auto elecset_smear = elecset->at("EGMSmearAndSyst_ElePTsplit_{self.year_key}");'
-        )
+            f'correction::CompoundCorrection::Ref elecset_scale = elecset->compound().at("Scale");'
+            #f'correction::CompoundCorrection::Ref elecset_smear = elecset->compound().at("SmearAndSyst");'
+            f'auto elecset_smear = elecset->at("EGMSmearAndSyst_ElePT_{self.year_key}");'
+        )            
 
         ROOT.gROOT.ProcessLine(f'#include "{self.muonscale_path}/MuonScaRe.cc"')
         ROOT.gROOT.ProcessLine(f'#include "{self.macroele_path}/scEta.cc"')
