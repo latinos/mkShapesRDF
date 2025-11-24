@@ -187,10 +187,19 @@ Samples['DYto2Tau-2Jets_MLL-10to50'] = {
     'nanoAOD' :'/DYto2Tau_Bin-MLL-10to50_TuneCP5_13p6TeV_powheg-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 Samples['DYto2Tau-2Jets_MLL-50'] = {
-    'nanoAOD' :'/DYto2Tau-2Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v5/NANOAODSIM'
+    'nanoAOD' :'/DYto2Tau-2Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v7/NANOAODSIM'
 }
 Samples['DYto2Tau-2Jets_MLL-50-LO'] = {
-    'nanoAOD' :'/DYto2Tau-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3/NANOAODSIM'
+    'nanoAOD' :'/DYto2Tau-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v5/NANOAODSIM'
+}
+
+# DYG
+Samples['DYGto2LG-1Jets_Bin-MLL-50'] = {
+    'nanoAOD' :'/DYGto2LG-1Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
+}
+
+Samples['DYGto2LG-1Jets_Bin-MLL-4to50'] = {
+    'nanoAOD' :'/DYGto2LG-1Jets_Bin-MLL-4to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 
 #### Single Top !!!!

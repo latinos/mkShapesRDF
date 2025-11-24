@@ -149,6 +149,22 @@ xs_db["DYto2Tau-2Jets_MLL-10to50"] = ["xsec=6660.8", "kfact=1.000", "ref=H"]
 xs_db["DYto2Tau-2Jets_MLL-50"]     = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
 xs_db["DYto2Tau-2Jets_MLL-50-LO"]  = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
 
+xs_db["DYto2Tau-2Jets_MLL-50_0J"]     = ["xsec=1682.0",  "kfact=1.000", "ref=A"] # Tbh, shamelessly copied from Htautau
+xs_db["DYto2Tau-2Jets_MLL-50_1J"]     = ["xsec=318.1",  "kfact=1.000", "ref=A"]
+xs_db["DYto2Tau-2Jets_MLL-50_2J"]     = ["xsec=120.6",  "kfact=1.000", "ref=A"]
+
+# DYG
+xs_db["DYGto2LG-1Jets_MLL-4to50_PTG-10to100"]     = ["xsec=88.17",  "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-4to50_PTG-100to200"]     = ["xsec=0.2413",  "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-4to50_PTG-200"]     = ["xsec=0.02224",  "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-50_PTG-10to100"]     = ["xsec=126.6",  "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-50_PTG-100to200"]     = ["xsec=0.3493",  "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-50_PTG-200to400"]     = ["xsec=0.04331",  "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-50_PTG-400to600"]     = ["xsec=0.00313",  "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-50_PTG-600"]     = ["xsec=0.0006528",  "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_Bin-MLL-50"]     = ["xsec=127.1",  "kfact=1.000", "ref=B"]
+xs_db["DYGto2LG-1Jets_Bin-MLL-4to50"]     = ["xsec=88.45",  "kfact=1.000", "ref=B"]
+
 # QCD
 xs_db["QCD_PT-15to20_MuEnrichedPt5"]    = ["xsec=2960000.0", "kfact=1.000", "ref=G"]
 xs_db["QCD_PT-20to30_MuEnrichedPt5"]    = ["xsec=2679000.0", "kfact=1.000", "ref=G"]
