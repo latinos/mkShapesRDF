@@ -96,11 +96,11 @@ xs_db["ZG"]          = ["xsec=1.075", "kfact=1.000", "ref=X"]
 xs_db["ZG2JtoG2L2J"] = ["xsec=1.075", "kfact=0.1142", "ref=G"]
 
 ### Wg
-xs_db["WGtoLNuG-1J_PTG10to100"]  = ["xsec=662.2",    "kfact=1.000", "ref=G"]
-xs_db["WGtoLNuG-1J_PTG100to200"] = ["xsec=2.221",    "kfact=1.000", "ref=G"]
-xs_db["WGtoLNuG-1J_PTG200to400"] = ["xsec=0.2908",   "kfact=1.000", "ref=G"]
-xs_db["WGtoLNuG-1J_PTG400to600"] = ["xsec=0.02231",  "kfact=1.000", "ref=G"]
-xs_db["WGtoLNuG-1J_PTG600"]      = ["xsec=0.004907", "kfact=1.000", "ref=G"]
+#xs_db["WGtoLNuG-1J_PTG10to100"]  = ["xsec=662.2",    "kfact=1.000", "ref=G"]
+#xs_db["WGtoLNuG-1J_PTG100to200"] = ["xsec=2.221",    "kfact=1.000", "ref=G"]
+#xs_db["WGtoLNuG-1J_PTG200to400"] = ["xsec=0.2908",   "kfact=1.000", "ref=G"]
+#xs_db["WGtoLNuG-1J_PTG400to600"] = ["xsec=0.02231",  "kfact=1.000", "ref=G"]
+#xs_db["WGtoLNuG-1J_PTG600"]      = ["xsec=0.004907", "kfact=1.000", "ref=G"]
 
 ### WG
 xs_db['WGtoLNuG-1J_PTG10to100']  = ["xsec=215.7", "kfact=1.000", "ref=G"]        # XS * BR (W-->lv) = 0.1086*3
@@ -108,6 +108,7 @@ xs_db['WGtoLNuG-1J_PTG100to200'] = ["xsec=0.7236", "kfact=1.000", "ref=G"]
 xs_db['WGtoLNuG-1J_PTG200to400'] = ["xsec=0.09474", "kfact=1.000", "ref=G"]
 xs_db['WGtoLNuG-1J_PTG400to600'] = ["xsec=0.007269", "kfact=1.000", "ref=G"]
 xs_db['WGtoLNuG-1J_PTG600']      = ["xsec=0.001599", "kfact=1.000", "ref=G"]
+xs_db['WGtoLNuG-1J_PTG100']      = ["xsec=0.8352", "kfact=1.000", "ref=B"]
 
 ### ZZ
 xs_db["ZZ"]        = ["xsec=16.7",   "kfact=1.000", "ref=X"]

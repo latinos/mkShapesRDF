@@ -86,25 +86,14 @@ Samples['WW'] = {
     'nanoAOD' :'/WW_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 
-"""    
+
 ##### WGamma !!!!
 
-Samples['WGtoLNuG-1J_PTG10to100'] = {
-    'nanoAOD' :''
-}
-Samples['WGtoLNuG-1J_PTG100to200'] = {
-    'nanoAOD' :''
-}
-Samples['WGtoLNuG-1J_PTG200to400'] = {
-    'nanoAOD' :''
-}
-Samples['WGtoLNuG-1J_PTG400to600'] = {
-    'nanoAOD' :''
-}
-Samples['WGtoLNuG-1J_PTG600'] = {
-    'nanoAOD' :''
+Samples['WGtoLNuG-1J_PTG100'] = {
+    'nanoAOD' : '/WGtoLNuG-1Jets_Bin-PTG-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 
+"""
 #### ZG !!!    
 
 Samples['ZG2JtoG2L2J'] = {  
