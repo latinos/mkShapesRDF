@@ -15,9 +15,9 @@ Clone the repository:
 
     cd mkShapesRDF
 
-In case you want to use the framework in its latest stable version, move to the most recent tag:
+In case you want to use the framework in its latest stable version (i.e., to post-process Run 3 samples from 2022 to 2024) move to the most recent tag:
 
-    git checkout tags/Run3_production_v1
+    git checkout tags/Run3_production_2022_2024
 
 The previous step can be skipped if you want to develop new features in the framework. In any case, you have to run the following command to complete the installation:
 
