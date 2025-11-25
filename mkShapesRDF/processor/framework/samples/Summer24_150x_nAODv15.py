@@ -86,25 +86,14 @@ Samples['WW'] = {
     'nanoAOD' :'/WW_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 
-"""    
+
 ##### WGamma !!!!
 
-Samples['WGtoLNuG-1J_PTG10to100'] = {
-    'nanoAOD' :''
-}
-Samples['WGtoLNuG-1J_PTG100to200'] = {
-    'nanoAOD' :''
-}
-Samples['WGtoLNuG-1J_PTG200to400'] = {
-    'nanoAOD' :''
-}
-Samples['WGtoLNuG-1J_PTG400to600'] = {
-    'nanoAOD' :''
-}
-Samples['WGtoLNuG-1J_PTG600'] = {
-    'nanoAOD' :''
+Samples['WGtoLNuG-1J_PTG100'] = {
+    'nanoAOD' : '/WGtoLNuG-1Jets_Bin-PTG-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 
+"""
 #### ZG !!!    
 
 Samples['ZG2JtoG2L2J'] = {  
@@ -187,10 +176,19 @@ Samples['DYto2Tau-2Jets_MLL-10to50'] = {
     'nanoAOD' :'/DYto2Tau_Bin-MLL-10to50_TuneCP5_13p6TeV_powheg-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 Samples['DYto2Tau-2Jets_MLL-50'] = {
-    'nanoAOD' :'/DYto2Tau-2Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v5/NANOAODSIM'
+    'nanoAOD' :'/DYto2Tau-2Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v7/NANOAODSIM'
 }
 Samples['DYto2Tau-2Jets_MLL-50-LO'] = {
-    'nanoAOD' :'/DYto2Tau-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3/NANOAODSIM'
+    'nanoAOD' :'/DYto2Tau-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v5/NANOAODSIM'
+}
+
+# DYG
+Samples['DYGto2LG-1Jets_Bin-MLL-50'] = {
+    'nanoAOD' :'/DYGto2LG-1Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
+}
+
+Samples['DYGto2LG-1Jets_Bin-MLL-4to50'] = {
+    'nanoAOD' :'/DYGto2LG-1Jets_Bin-MLL-4to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 
 #### Single Top !!!!
