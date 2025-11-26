@@ -250,36 +250,21 @@ def main():
         run locally
         No TTree was created for
         Warning in <Snapshot>: A lazy Snapshot action was booked but never triggered.
-        TClass::Init:0: RuntimeWarning: no dictionary for class edm::Hash<1> is available                                                                                                                   
-        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ProcessHistory is available                                                                                                            
-        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ProcessConfiguration is available                                                                                                      
-        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ParameterSetBlob is available                                                                                                          
-        TClass::Init:0: RuntimeWarning: no dictionary for class pair<edm::Hash<1>,edm::ParameterSetBlob> is available       
-
-        input_line_2310:2:56: warning: 'ECompressionAlgorithm' is deprecated: will be removed in ROOT v6.36: Use RCompressionSetting::EAlgorithm instead [-Wdeprecated-declarations]
-        std::is_same<unsigned int, std::underlying_type<ROOT::ECompressionAlgorithm>::type>::value;
-                                                               ^
-        /cvmfs/sft.cern.ch/lcg/releases/ROOT/6.34.02-18eb6/x86_64-el9-gcc11-opt/include/Compression.h:117:6: note: 'ECompressionAlgorithm' has been explicitly marked deprecated here
-        enum R__DEPRECATED(6, 36, "Use RCompressionSetting::EAlgorithm instead") ECompressionAlgorithm {
-             ^
-        /cvmfs/sft.cern.ch/lcg/releases/ROOT/6.34.02-18eb6/x86_64-el9-gcc11-opt/include/ROOT/RConfig.hxx:513:3: note: expanded from macro 'R__DEPRECATED'
-          _R__JOIN3_(_R__DEPRECATED_,MAJOR,MINOR)("will be removed in ROOT v" #MAJOR "." #MINOR ": " REASON)
-          ^
-        /cvmfs/sft.cern.ch/lcg/releases/ROOT/6.34.02-18eb6/x86_64-el9-gcc11-opt/include/ROOT/RConfig.hxx:452:30: note: expanded from macro '_R__JOIN3_'
-        #   define _R__JOIN3_(F,X,Y) _NAME3_(F,X,Y)
-                                     ^
-        /cvmfs/sft.cern.ch/lcg/releases/ROOT/6.34.02-18eb6/x86_64-el9-gcc11-opt/include/ROOT/RConfig.hxx:435:39: note: expanded from macro '_NAME3_'
-        #   define _NAME3_(name1,name2,name3) name1##name2##name3
-                                              ^
-        <scratch space>:13:1: note: expanded from here
-        _R__DEPRECATED_636
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::Hash<1> is available
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ProcessHistory is available
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ProcessConfiguration is available
+        TClass::Init:0: RuntimeWarning: no dictionary for class edm::ParameterSetBlob is available
+        TClass::Init:0: RuntimeWarning: no dictionary for class pair<edm::Hash<1>,edm::ParameterSetBlob> is available
+        ECompressionAlgorithm
+        R__DEPRECATED
+        expanded from here
+        <scratch space>
+        std::is_same
+        Info in <ACLiC>
+        RConfig.hxx 
+        define _R__JOIN3_ 
+        define _NAME3_ 
         ^
-        /cvmfs/sft.cern.ch/lcg/releases/ROOT/6.34.02-18eb6/x86_64-el9-gcc11-opt/include/ROOT/RConfig.hxx:489:37: note: expanded from macro '_R__DEPRECATED_636'
-        # define _R__DEPRECATED_636(REASON) _R__DEPRECATED_LATER(REASON)
-                                            ^
-        /cvmfs/sft.cern.ch/lcg/releases/ROOT/6.34.02-18eb6/x86_64-el9-gcc11-opt/include/ROOT/RConfig.hxx:463:56: note: expanded from macro '_R__DEPRECATED_LATER'
-        #   define _R__DEPRECATED_LATER(REASON) __attribute__((deprecated(REASON)))
-                                                               ^
         """
         normalErrs = normalErrs.split("\n")
         normalErrs = list(map(lambda k: k.strip(" ").strip("\t"), normalErrs))
