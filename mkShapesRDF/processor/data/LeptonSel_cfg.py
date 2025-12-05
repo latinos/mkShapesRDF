@@ -109,14 +109,14 @@ ElectronWP = {
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
                         "Electron_pt>10",
-                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
-                        "Electron_mvaIso_WP80",
-                        "Electron_convVeto",
+                        #"ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        #"Electron_mvaIso_WP80",
+                        #"Electron_convVeto",
                     ],
                 },
-                'tkSF':  {
-                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz"]
-                } ,
+                #'tkSF':  {
+                #    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz"]
+                #} ,
                 'wpSF':  {
                     '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
@@ -262,9 +262,9 @@ ElectronWP = {
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
                         "Electron_pt>10",
-                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
-                        "Electron_mvaIso_WP80",
-                        "Electron_convVeto",
+                        #"ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        #"Electron_mvaIso_WP80",
+                        #"Electron_convVeto",
                     ],
                 },
                 'tkSF':  {
@@ -415,9 +415,9 @@ ElectronWP = {
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
                         "Electron_pt>10",
-                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
-                        "Electron_mvaIso_WP80",
-                        "Electron_convVeto",
+                        #"ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        #"Electron_mvaIso_WP80",
+                        #"Electron_convVeto",
                     ],
                 },
                 'tkSF':  {
@@ -568,9 +568,9 @@ ElectronWP = {
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
                         "Electron_pt>10",
-                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
-                        "Electron_mvaIso_WP80",
-                        "Electron_convVeto",
+                        #"ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        #"Electron_mvaIso_WP80",
+                        #"Electron_convVeto",
                     ],
                 },
                 'tkSF':  {
