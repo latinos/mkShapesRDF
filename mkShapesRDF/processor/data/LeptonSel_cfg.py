@@ -114,9 +114,9 @@ ElectronWP = {
                         #"Electron_convVeto",
                     ],
                 },
-                #'tkSF':  {
-                #    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz"]
-                #} ,
+                'tkSF':  {
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz"]
+                } ,
                 'wpSF':  {
                     '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
@@ -732,6 +732,19 @@ ElectronWP = {
                     '1-1' : ["2024", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electronID.json.gz'],
                 } ,
                 #'fakeW' : 'data/fake_prompt_rates/',
+            },
+            "testrecipes":{
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "Electron_pt>20",
+                        #"ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        #"Electron_mvaIso_WP80",
+                        #"Electron_convVeto",
+                    ],
+                },
+                'wpSF':  {
+                    '1-1' : ["2024", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electronID.json.gz'],
+                } ,
             },
             "mvaWinter22V2Iso_WP90": {
                 "cuts": {
