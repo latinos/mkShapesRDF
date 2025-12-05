@@ -854,34 +854,34 @@ class LeptonSF(Module):
 
                                 sf_id     = cset_muon_"""
                                 + wp
-                                + """_idSF->evaluate({abs(eta), pt, "nominal"});
+                                + """_idSF->evaluate({eta, pt, "nominal"});
                                 sf_idstat = cset_muon_"""
                                 + wp
-                                + """_idSF->evaluate({abs(eta), pt, "stat"});
+                                + """_idSF->evaluate({eta, pt, "stat"});
                                 sf_idsyst = cset_muon_"""
                                 + wp
-                                + """_idSF->evaluate({abs(eta), pt, "syst"});
+                                + """_idSF->evaluate({eta, pt, "syst"});
 
                                 sf_iso     = cset_muon_"""
                                 + wp
-                                + """_isoSF->evaluate({abs(eta), pt, "nominal"});
+                                + """_isoSF->evaluate({eta, pt, "nominal"});
                                 sf_isostat = cset_muon_"""
                                 + wp
-                                + """_isoSF->evaluate({abs(eta), pt, "stat"});
+                                + """_isoSF->evaluate({eta, pt, "stat"});
                                 sf_isosyst = cset_muon_"""
                                 + wp
-                                + """_isoSF->evaluate({abs(eta), pt, "syst"});
+                                + """_isoSF->evaluate({eta, pt, "syst"});
 
                                 if (hasTTHMVA){
                                     sf_tth     = cset_muon_"""
                                     + wp
-                                    + """_tthSF->evaluate({abs(eta), pt, "nominal"});
+                                    + """_tthSF->evaluate({eta, pt, "nominal"});
                                     sf_tthstat = cset_muon_"""
                                     + wp
-                                    + """_tthSF->evaluate({abs(eta), pt, "stat"});
+                                    + """_tthSF->evaluate({eta, pt, "stat"});
                                     sf_tthsyst = cset_muon_"""
                                     + wp
-                                    + """_tthSF->evaluate({abs(eta), pt, "syst"});
+                                    + """_tthSF->evaluate({eta, pt, "syst"});
                                 }else{
                                     sf_tth     = 1.0;
                                     sf_tthstat = 0.0;
