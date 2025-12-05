@@ -105,7 +105,7 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
-            "wp80iso_POG":{
+            "testrecipes":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
                         "Electron_pt>10",
@@ -258,7 +258,7 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
-            "wp80iso_POG":{
+            "testrecipes":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
                         "Electron_pt>10",
@@ -411,7 +411,7 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
-            "wp80iso_POG":{
+            "testrecipes":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
                         "Electron_pt>10",
@@ -564,7 +564,7 @@ ElectronWP = {
             },
         },
         "TightObjWP": {
-            "wp80iso_POG":{
+            "testrecipes":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
                         "Electron_pt>10",
