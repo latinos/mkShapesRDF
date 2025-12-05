@@ -51,8 +51,8 @@ JetMakerCfg = {
     'Full2024v15': {
         "vetomap": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/jetvetomaps.json.gz",
         "vetokey": "Summer24Prompt24_RunBCDEFGHI_V1",
-        "JEC": "Summer24Prompt24_V1_MC",
-        "JEC_data" : "Summer24Prompt24_V1_DATA",
+        "JEC": "Summer24Prompt24_V2_MC",
+        "JEC_data" : "Summer24Prompt24_V2_DATA",
         "JER": "Summer23BPixPrompt23_RunD_JRV1_MC",        
         "jet_jerc" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/jet_jerc.json.gz",
         "jer_smear": frameworkPath + "/processor/data/jer_smear/jer_smear_run3.json.gz",
