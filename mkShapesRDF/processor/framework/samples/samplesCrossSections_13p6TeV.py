@@ -124,11 +124,11 @@ xs_db["WZZ"] = ["xsec=0.06206", "kfact=1.000", "ref=X"]
 xs_db["ZZZ"] = ["xsec=0.01591", "kfact=1.000", "ref=X"]
 
 # W+Jets
-xs_db["WToLNu-2Jets"] = ["xsec=67710.0", "kfact=1.000", "ref=G"]
+xs_db["WToLNu-2Jets"] = ["xsec=63396.0", "kfact=1.000", "ref=G"]
 
-xs_db["WToENu-2Jet"] = ["xsec=22570.0", "kfact=1.000", "ref=G"]
-xs_db["WToMuNu-2Jet"] = ["xsec=22570.0", "kfact=1.000", "ref=G"]
-xs_db["WToTauNu-2Jet"] = ["xsec=22570.0", "kfact=1.000", "ref=G"]
+xs_db["WToENu-2Jet"] = ["xsec=21132.0", "kfact=1.000", "ref=G"]
+xs_db["WToMuNu-2Jet"] = ["xsec=21132.0", "kfact=1.000", "ref=G"]
+xs_db["WToTauNu-2Jet"] = ["xsec=21132.0", "kfact=1.000", "ref=G"]
 
 xs_db["WToLNu-1Jet-LO"] = ["xsec=9084.0", "kfact=1.000", "ref=G"]
 xs_db["WToLNu-2Jet-LO"] = ["xsec=2925.0", "kfact=1.000", "ref=G"]
