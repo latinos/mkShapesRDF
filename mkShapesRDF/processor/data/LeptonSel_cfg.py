@@ -115,10 +115,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2022v12/wp80iso/',
             },
@@ -131,10 +131,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2022v12/wp90iso/',
             },
@@ -156,7 +156,7 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
                     '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "passingMVA90_HWW", 'data/scale_factor/Full2022v12/electron.json'],
@@ -181,7 +181,7 @@ ElectronWP = {
                      ],
                  },
                  'tkSF':  {
-                     '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz"]
+                     '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electron.json.gz"]
                  } ,
                  'wpSF':  {
                      '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "passingTTHMVA", 'data/scale_factor/Full2022v12/electron.json'],
@@ -211,10 +211,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                     '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz"]
+                     '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electron.json.gz"]
                  },
                 'wpSF':  {
-                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz'],
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electron.json.gz'],
                 },
                 #'tthMvaSF':  {
                 #    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "passingTTHMVA_HWW", 'data/scale_factor/Full2024v15/electron.json'], # To be added
@@ -222,7 +222,7 @@ ElectronWP = {
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electronSS_EtDependent.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electronSS_EtDependent.json.gz",
     },
     "Full2022EEv12": {
         "VetoObjWP": {
@@ -268,10 +268,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2022EEv12/wp80iso/',
             },
@@ -284,10 +284,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electron.json.gz'],
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electron.json.gz'],
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2022EEv12/wp90iso/',
             },
@@ -309,7 +309,7 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
                     '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "passingMVA90_HWW", 'data/scale_factor/Full2022EEv12/electron.json'],
@@ -334,7 +334,7 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
                     '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "passingTTHMVA", 'data/scale_factor/Full2022EEv12/electron.json'],
@@ -364,10 +364,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electron.json.gz"]
                 },
                 'wpSF':  {
-                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electron.json.gz'],
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electron.json.gz'],
                 },
                 #'tthMvaSF':  {
                 #    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "passingTTHMVA_HWW", 'data/scale_factor/Full2024v15/electron.json'], # To be added
@@ -375,7 +375,7 @@ ElectronWP = {
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electronSS_EtDependent.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electronSS_EtDependent.json.gz",
     },
     "Full2023v12": {
         "VetoObjWP": {
@@ -421,10 +421,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2023PromptC", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2023v12/wp80iso/',
             },
@@ -437,10 +437,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2023PromptC", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electron.json.gz'],
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electron.json.gz'],
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2023v12/wp90iso/',
             },
@@ -462,7 +462,7 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
                     '1-1' : ["2023PromptC", "Electron-ID-SF", "passingMVA90_HWW", 'data/scale_factor/Full2023v12/electron.json'],
@@ -487,7 +487,7 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
                     '1-1' : ["2023PromptC", "Electron-ID-SF", "passingTTHMVA", 'data/scale_factor/Full2023v12/electron.json'],
@@ -517,10 +517,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electron.json.gz"]
                 },
                 'wpSF':  {
-                    '1-1' : ["2023PromptC", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electron.json.gz'],
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electron.json.gz'],
                 },
                 #'tthMvaSF':  {
                 #    '1-1' : ["2023PromptC", "Electron-ID-SF", "passingTTHMVA_HWW", 'data/scale_factor/Full2024v15/electron.json'], # To be added
@@ -528,7 +528,7 @@ ElectronWP = {
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electronSS_EtDependent.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electronSS_EtDependent.json.gz",
     },
     "Full2023BPixv12": {
         "VetoObjWP": {
@@ -574,10 +574,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2023PromptD", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2023BPixv12/wp80iso/',
             },
@@ -590,10 +590,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2023PromptD", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz'],
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electron.json.gz'],
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2023BPixv12/wp90iso/',
             },
@@ -615,7 +615,7 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
                     '1-1' : ["2023PromptD", "Electron-ID-SF", "passingMVA90_HWW", 'data/scale_factor/Full2023BPixv12/electron.json'],
@@ -640,7 +640,7 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
                     '1-1' : ["2023PromptD", "Electron-ID-SF", "passingTTHMVA", 'data/scale_factor/Full2023BPixv12/electron.json'],
@@ -670,10 +670,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz"]
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electron.json.gz"]
                 },
                 'wpSF':  {
-                    '1-1' : ["2023PromptD", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz'],
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electron.json.gz'],
                 },
                 #'tthMvaSF':  {
                 #    '1-1' : ["2023PromptD", "Electron-ID-SF", "passingTTHMVA_HWW", 'data/scale_factor/Full2024v15/electron.json'], # To be added
@@ -681,7 +681,7 @@ ElectronWP = {
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electronSS_EtDependent.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electronSS_EtDependent.json.gz",
     },
     "Full2024v15": {
         "VetoObjWP": {
@@ -726,24 +726,24 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz"]
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2024", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz'],
+                    '1-1' : ["2024", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
                 } ,
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
             "testrecipes":{
                 "cuts": {
                     "ROOT::RVecB (Electron_pt.size(), true)": [
-                        "Electron_pt>20",
+                        "Electron_pt>10",
                         #"ROOT::VecOps::abs(Electron_eta) < 2.5",
                         #"Electron_mvaIso_WP80",
                         #"Electron_convVeto",
                     ],
                 },
                 'wpSF':  {
-                    '1-1' : ["2024", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz'],
+                    '1-1' : ["2024", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
                 } ,
             },
             "mvaWinter22V2Iso_WP90": {
@@ -764,13 +764,14 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz"]
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz"]
                 },
-                'wpSF':  { 
-                    '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "passingMVA90_HWW", 'data/scale_factor/Full2024v15/electron.json'],
-                } ,
+                # What do we need to use here?
+                #'wpSF':  { 
+                #    '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "passingMVA90_HWW", 'data/scale_factor/Full2024v15/electron.json'],
+                #} ,
                 'wpSF':  {
-                    '1-1' : ["2024", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz'],
+                    '1-1' : ["2024", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
                 },
                 'tthMvaSF':  {
                     '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "NUM_passingMVA90_HWW_DEN_wp90iso", 'data/scale_factor/Full2024v15/electron.json'],
@@ -795,10 +796,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  { 
-                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz"]
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz"]
                 },
                 'wpSF':  {
-                    '1-1' : ["2024", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz'],
+                    '1-1' : ["2024", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
                 },
                 'tthMvaSF':  {
                     '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "NUM_passingTTHMVA_DEN_LooseID", 'data/scale_factor/Full2024v15/electron.json'],
@@ -828,10 +829,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz"]
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz"]
                 },
                 'wpSF':  {
-                    '1-1' : ["2024", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz'],
+                    '1-1' : ["2024", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
                 },
                 'tthMvaSF':  {
                     '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "passingTTHMVA_HWW", 'data/scale_factor/Full2024v15/electron.json'],
@@ -839,7 +840,7 @@ ElectronWP = {
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electronSS_EtDependent.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electronSS_EtDependent.json.gz",
     },
 }
 
@@ -989,10 +990,10 @@ MuonWP = {
                     ],
                 },
                 "idSF": {
-                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22CDSep23-Summer22-NanoAODv12/latest/muon_Z.json.gz"],
+                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22CDSep23-Summer22-NanoAODv12/2025-08-14/muon_Z.json.gz"],
                 },
                 "isoSF": {
-                    "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22CDSep23-Summer22-NanoAODv12/latest/muon_Z.json.gz"],
+                    "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22CDSep23-Summer22-NanoAODv12/2025-08-14/muon_Z.json.gz"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2022v12/cut_Tight_HWW/",
             },
@@ -1102,7 +1103,7 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2022v12/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22CDSep23-Summer22-NanoAODv12/latest/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22CDSep23-Summer22-NanoAODv12/2025-08-14/muon_scalesmearing.json.gz",
     },
     "Full2022EEv12": {
         # ------------                                                                                                                                                  
@@ -1150,10 +1151,10 @@ MuonWP = {
                     ],
                 },
                 "idSF": {
-                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/muon_Z.json.gz"],
+                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-08-14/muon_Z.json.gz"],
                 },
                 "isoSF": {
-                    "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/muon_Z.json.gz"],
+                    "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-08-14/muon_Z.json.gz"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2022EEv12/cut_Tight_HWW/",
             },
@@ -1266,7 +1267,7 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-08-14/muon_scalesmearing.json.gz",
     },
     "Full2023v12": {
         # ------------                                                                                                                                                  
@@ -1314,10 +1315,10 @@ MuonWP = {
                     ],
                 },
                 "idSF": {
-                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23CSep23-Summer23-NanoAODv12/latest/muon_Z.json.gz"],
+                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23CSep23-Summer23-NanoAODv12/2025-08-14/muon_Z.json.gz"],
                 },
                 "isoSF": {
-                    "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23CSep23-Summer23-NanoAODv12/latest/muon_Z.json.gz"],
+                    "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23CSep23-Summer23-NanoAODv12/2025-08-14/muon_Z.json.gz"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2023v12/cut_Tight_HWW/",
             },
@@ -1430,7 +1431,7 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2023v12/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },        
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23CSep23-Summer23-NanoAODv12/latest/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23CSep23-Summer23-NanoAODv12/2025-08-14/muon_scalesmearing.json.gz",
     },
     "Full2023BPixv12": {
         # ------------                                                                                                                                                  
@@ -1478,10 +1479,10 @@ MuonWP = {
                     ],
                 },
                 "idSF": {
-                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/muon_Z.json.gz"],
+                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-08-14/muon_Z.json.gz"],
                 },
                 "isoSF": {
-                    "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/muon_Z.json.gz"],
+                    "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-08-14/muon_Z.json.gz"],
                 },
                 "fakeW": "data/fake_prompt_rates/Full2023BPixv12/cut_Tight_HWW/",
             },
@@ -1594,7 +1595,7 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2023BPixv12/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-08-14/muon_scalesmearing.json.gz",
     },
     "Full2024v15": {
         # ------------
@@ -1641,10 +1642,10 @@ MuonWP = {
                     ],
                 },
                 "idSF": {
-                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/muon_Z.json.gz"],
+                    "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-11-27/muon_Z.json.gz"],
                 },
                 "isoSF": {
-                    "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/muon_Z.json.gz"],
+                    "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-11-27/muon_Z.json.gz"],
                 },
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_POG/",
             },
@@ -1784,6 +1785,6 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_PNet/",  
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-11-27/muon_scalesmearing.json.gz",
     },
 }

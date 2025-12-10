@@ -25,8 +25,8 @@ relPosX = 0.045
 relPosY = 0.035
 relExtraDY = 1.2
 
-extraOverCmsTextSize = 0.76
-# extraOverCmsTextSize  = 0.96
+#extraOverCmsTextSize = 0.76
+extraOverCmsTextSize  = 0.96
 
 lumi_13TeV = "20.1 fb^{-1}"
 lumi_136TeV = ""
