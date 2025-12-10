@@ -1093,9 +1093,9 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2022v12/muonSF_latinos_HWW.json"],
                 },
-                #"tthMvaSF": {
-                #    "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2022v12/muonSF_latinos_HWW.json"], # To be added
-                #},
+                "tthMvaSF": {
+                    "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_HWW_DEN_LoosePFIso", "data/scale_factor/Full2022v12/muonSF_latinos_HWW_ttHMVA_alt.json"], # To be added
+                },
                 #"fakeW": "data/fake_prompt_rates/Full2022v12/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },
@@ -1257,9 +1257,9 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2022EEv12/muonSF_latinos_HWW.json"],
                 },
-                #"tthMvaSF": {
-                #    "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2022EEv12/muonSF_latinos_HWW.json"], # To be added
-                #},
+                "tthMvaSF": {
+                    "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_HWW_DEN_LoosePFIso", "data/scale_factor/Full2022EEv12/muonSF_latinos_HWW_ttHMVA_alt.json"], # To be added
+                },
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },
@@ -1421,9 +1421,9 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2023v12/muonSF_latinos_HWW.json"],
                 },
-                #"tthMvaSF": {
-                #    "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2023v12/muonSF_latinos_HWW.json"], # To be added
-                #},
+                "tthMvaSF": {
+                    "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_HWW_DEN_LoosePFIso", "data/scale_factor/Full2023v12/muonSF_latinos_HWW_ttHMVA_alt.json"], # To be added
+                },
                 #"fakeW": "data/fake_prompt_rates/Full2023v12/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },        
@@ -1585,9 +1585,9 @@ MuonWP = {
                 "isoSF": {
                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2023BPixv12/muonSF_latinos_HWW.json"],
                 },
-                #"tthMvaSF": {
-                #    "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2023BPixv12/muonSF_latinos_HWW.json"], # To be added
-                #},
+                "tthMvaSF": {
+                    "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_HWW_DEN_LoosePFIso", "data/scale_factor/Full2023BPixv12/muonSF_latinos_HWW_ttHMVA_alt.json"], # To be added
+                },
                 #"fakeW": "data/fake_prompt_rates/Full2023BPixv12/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },
@@ -1749,7 +1749,7 @@ MuonWP = {
                      "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
                  },
                  "tthMvaSF": {
-                     "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
+                     "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_HWW_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
                  },
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
