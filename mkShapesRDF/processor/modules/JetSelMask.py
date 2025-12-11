@@ -6,21 +6,21 @@ import os
 correctionlib.register_pyroot_binding()
 
 class JetSelMask(Module):
-    def __init__(self, jetId, puJetId, minPt, maxEta, UL2016fix=False, year="",eventMask=False):
+    def __init__(self, jetId, puJetId, minPt, maxEta, UL2016fix=False, year="", doMask = True, eventMask=False):
         super().__init__("JetSelMask")
         self.jetId = jetId
         self.minPt = minPt
         self.maxEta = maxEta
-        self.doMask = False
+        self.doMask = doMask
         self.doJetId = False
         self.UL2016fix = UL2016fix
         self.eventMask = eventMask
         self.year = year
 
         if self.year in JetMakerCfg.keys():
-            self.doMask = True
-            self.pathToJson = JetMakerCfg[year]["vetomap"]
-            self.globalTag = JetMakerCfg[year]["vetokey"]
+            if self.doMask == True:
+                self.pathToJson = JetMakerCfg[year]["vetomap"]
+                self.globalTag = JetMakerCfg[year]["vetokey"]
             if "jetId" in JetMakerCfg[self.year].keys():
                 self.doJetId = True
                 self.jetIdJson = JetMakerCfg[self.year]["jetId"]["json"]
@@ -76,16 +76,16 @@ class JetSelMask(Module):
             )
             df = df.Define(
                 "BaseCleanJetMask",
-                f"(CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= 1)",
+                f"(CleanJet_pt >= {self.minPt} && abs(CleanJet_eta) <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= 1)",
             )
-            print(f"CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= 1")
+            print(f"CleanJet_pt >= {self.minPt} && abs(CleanJet_eta) <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= 1")
             print("Mask applied")
         else:                
             df = df.Define(
                 "BaseCleanJetMask",
-                f"(CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= {self.jetId})",
+                f"(CleanJet_pt >= {self.minPt} && abs(CleanJet_eta) <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= {self.jetId})",
             )
-            print(f"CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= {self.jetId}")
+            print(f"CleanJet_pt >= {self.minPt} && abs(CleanJet_eta) <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= {self.jetId}")
             print("Mask applied")
 
         if self.doMask:
@@ -99,23 +99,21 @@ class JetSelMask(Module):
 
             ROOT.gInterpreter.Declare(
                 """
-                ROOT::RVecB getJetMask(ROOT::RVecF CleanJet_pt,ROOT::RVecF CleanJet_eta, ROOT::RVecF CleanJet_phi, ROOT::RVecF Jet_neEmEF,ROOT::RVecF Jet_chEmEF,ROOT::RVecI CleanJet_jetIdx){
+                bool getJetMask(ROOT::RVecF CleanJet_pt,ROOT::RVecF CleanJet_eta, ROOT::RVecF CleanJet_phi, ROOT::RVecF Jet_neEmEF,ROOT::RVecF Jet_chEmEF,ROOT::RVecI CleanJet_jetIdx){
                     float tmp_value;
                     float cleanJet_EM;
                     float eta, phi;
-                    RVecB CleanJet_isNotVeto = RVecB(CleanJet_pt.size(), true);
                     for (int i=0; i<CleanJet_pt.size(); i++){
                         phi = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{CleanJet_phi[i], 3.1415}), -3.1415});
                         eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{CleanJet_eta[i], 5.19}), -5.19});
                         
                         cleanJet_EM = Jet_neEmEF[CleanJet_jetIdx[i]] + Jet_chEmEF[CleanJet_jetIdx[i]];
                         tmp_value = cset_jet_Map->evaluate({"jetvetomap", eta, phi});
-                    
                         if (cleanJet_EM<0.9 && CleanJet_pt[i]>=15.0 && tmp_value!=0.0){
-                            CleanJet_isNotVeto[i] = false;
+                            return false;
                         }
                     }
-                    return CleanJet_isNotVeto;
+                    return true;
                 }
                 """
             )
@@ -149,13 +147,13 @@ class JetSelMask(Module):
                 df = df.Filter("CleanEventMask")
             
             df = df.Define(
-                "CleanJetMask",
-                "BaseCleanJetMask && getJetMask(CleanJet_pt,CleanJet_eta,CleanJet_phi,Jet_neEmEF,Jet_chEmEF,CleanJet_jetIdx)"
+                "JetVetoMask",
+                "getJetMask(CleanJet_pt,CleanJet_eta,CleanJet_phi,Jet_neEmEF,Jet_chEmEF,CleanJet_jetIdx)"
             )
-
-        else:
-
-            df = df.Define(
+            print("Applying jet veto map")
+            df = df.Filter("JetVetoMask")
+        
+        df = df.Define(
                 "CleanJetMask",
                 "BaseCleanJetMask"
             )
