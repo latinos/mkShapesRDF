@@ -76,7 +76,7 @@ class JetSelMask(Module):
             )
             jetIdCut = "Take(Jet_jetId, CleanJet_jetIdx) >= 1"
         else:
-            jetIdCut = f"Take(Jet_jetId, CleanJet_jetIdx) > {self.jetId}"
+            jetIdCut = f"Take(Jet_jetId, CleanJet_jetIdx) >= {self.jetId}"
 
         df = df.Define("BaseCleanJetMask", f"(CleanJet_pt >= {self.minPt} && abs(CleanJet_eta) <= {self.maxEta} && {jetIdCut})")
         values.append([df.Define("test", "CleanJet_pt.size()").Sum("test"), "Original size of CleanJet"])
