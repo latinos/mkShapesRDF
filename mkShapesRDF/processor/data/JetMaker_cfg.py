@@ -58,7 +58,8 @@ JetMakerCfg = {
         "jer_smear": frameworkPath + "/processor/data/jer_smear/jer_smear_run3.json.gz",
         "jetId": {
             "json": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-02/jetid.json.gz",
-            "key" : "AK4PUPPI_TightLeptonVeto",
+            "key" : "AK4PUPPI_Tight",
+            "key_veto" : "AK4PUPPI_TightLeptonVeto",
         }
     },
 }
