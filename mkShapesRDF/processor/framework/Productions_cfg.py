@@ -74,6 +74,27 @@ Productions = {
         "cmssw": "Full2024v15",
         "year": "2024",
     },
+        "Run2024_ReRecoCDE_PromptFGHI_nAODv15_Full2024v15_EGamma": {
+        "isData": True,
+        "jsonFile": "/processor/data/certification/Cert_Collisions2024_378981_386951_Golden.json",
+        "samples": "../framework/samples/Run2024_ReRecoCDE_PromptFGHI_nAODv15_EGamma.py",
+        "cmssw": "Full2024v15",
+        "year": "2024",
+    },
+        "Run2024_ReRecoCDE_PromptFGHI_nAODv15_Full2024v15_Muon": {
+        "isData": True,
+        "jsonFile": "/processor/data/certification/Cert_Collisions2024_378981_386951_Golden.json",
+        "samples": "../framework/samples/Run2024_ReRecoCDE_PromptFGHI_nAODv15_Muon.py",
+        "cmssw": "Full2024v15",
+        "year": "2024",
+    },
+        "Run2024_ReRecoCDE_PromptFGHI_nAODv15_Full2024v15_MuonEG": {
+        "isData": True,
+        "jsonFile": "/processor/data/certification/Cert_Collisions2024_378981_386951_Golden.json",
+        "samples": "../framework/samples/Run2024_ReRecoCDE_PromptFGHI_nAODv15_MuonEG.py",
+        "cmssw": "Full2024v15",
+        "year": "2024",
+    },
     #################################### nAODv9 MC ##############################################
     # -------- 2016 MC 106X nAODv8: Full2016v8
     "Summer20UL16_106x_nAODv9_HIPM_Full2016v9": {

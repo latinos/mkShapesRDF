@@ -1696,7 +1696,7 @@ Steps = {
         "do4MC": True,
         "do4Data": True,
         "import": "mkShapesRDF.processor.modules.JetSelMask",
-        "declare": 'jetSelMask = lambda : JetSelMask(2,"loose",15.0,4.7,False,"RPLME_CMSSW",True)',
+        "declare": 'jetSelMask = lambda : JetSelMask(2,"loose",15.0,4.7,False,"RPLME_CMSSW", doMask = True, eventMask=True)',
         "module": "jetSelMask()",
     },
     
@@ -1705,7 +1705,7 @@ Steps = {
         "do4MC": True,
         "do4Data": True,
         "import": "mkShapesRDF.processor.modules.JetSelMask",
-        "declare": 'jetSelMask = lambda : JetSelMask(2,"loose",15.0,4.7,False,"RPLME_CMSSW")',
+        "declare": 'jetSelMask = lambda : JetSelMask(2,"loose",15.0,4.7,False,"RPLME_CMSSW", doMask = True, eventMask = False)',
         "module": "jetSelMask()",
     },
     

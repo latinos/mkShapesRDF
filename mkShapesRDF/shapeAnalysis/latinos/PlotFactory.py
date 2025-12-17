@@ -1815,7 +1815,7 @@ class PlotFactory:
                 CMS_lumi.lumi_8TeV = "18.3 fb^{-1}"
                 CMS_lumi.lumi_13TeV = "100 fb^{-1}"
                 CMS_lumi.writeExtraText = 1
-                CMS_lumi.extraText = "Preliminary"
+                CMS_lumi.extraText = "Private work"
                 if not self._preliminary:
                     CMS_lumi.extraText = "Work in progress"
                 CMS_lumi.relPosX = 0.14

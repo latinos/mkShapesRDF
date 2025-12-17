@@ -479,6 +479,8 @@ class mRDF:
             branches = columns.copy()
             #####
             ##### Temporal fix / remove branches with type: string -> incompatbility with awkward/uproot
+            if "TTTo2L2Nu_10k_nano" in fileName:
+                branches = [b for b in branches if not b.startswith("BeamSpot_")]
             if "BeamSpot_type" in branches:
                 branches.remove("BeamSpot_type")
             if "Photon_seediEtaOriX" in branches:

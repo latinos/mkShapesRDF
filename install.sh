@@ -4,7 +4,7 @@ sourceCommand="echo 'first source of start.sh'"
 
 env=$(hostname)
 
-OS=$(hostnamectl | grep "CPE OS Name")
+OS=$(grep "^CPE_NAME=" /etc/os-release | cut -d= -f2- | tr -d '"')
 echo "OS ""$OS"
 
 echo "Custom install ""$1"
@@ -15,7 +15,7 @@ if [ -z "$1" ]; then
         sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-centos7-gcc11-opt/setup.sh"
     elif [[ "$OS" == *"linux:9"* ]]; then
         echo el9
-	sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_107/x86_64-el9-gcc11-opt/setup.sh"
+	    sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_107/x86_64-el9-gcc11-opt/setup.sh"
     else
         echo "$OS"" not supported"
         exit 1
