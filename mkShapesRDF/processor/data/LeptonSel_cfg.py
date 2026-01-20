@@ -115,10 +115,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electron.json.gz"]
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-03/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2022v12/wp80iso/',
             },
@@ -268,10 +268,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electron.json.gz"]
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-03/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2022EEv12/wp80iso/',
             },
@@ -421,10 +421,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electron.json.gz"]
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2023PromptC", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-03/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2023v12/wp80iso/',
             },
@@ -574,10 +574,10 @@ ElectronWP = {
                     ],
                 },
                 'tkSF':  {
-                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electron.json.gz"]
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz"]
                 } ,
                 'wpSF':  {
-                    '1-1' : ["2023PromptD", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-03/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/latest/electron.json.gz'], ### Correctionlib parameters: [Era, Key, WP, path to json].
                 } ,
                 'fakeW' : 'data/fake_prompt_rates/Full2023BPixv12/wp80iso/',
             },
@@ -743,7 +743,7 @@ ElectronWP = {
                     ],
                 },
                 'wpSF':  {
-                    '1-1' : ["2024Prompt", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/electron.json.gz'],
                 } ,
             },
             "mvaWinter22V2Iso_WP90": {

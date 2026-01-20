@@ -405,7 +405,11 @@ class LeptonSF(Module):
                     if pathToJson.startswith("/cvmfs"):
                         if int(self.year) == 2023 :
                             evaluator = f""" 
-                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}});   
+                            if (std::string("{wp}").find("testrecipes") != std::string::npos) {{
+                                pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], 99999.9f}}),{self.el_minPt}}});
+                            }} else {{
+                                pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}),{self.el_minPt}}});
+                            }}
                             eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}});
                             phi = ele_phi[i];
 
@@ -415,7 +419,11 @@ class LeptonSF(Module):
                             """
                         else:
                             evaluator = f"""
-                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}});
+                            if (std::string("{wp}").find("testrecipes") != std::string::npos) {{
+                                pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], 99999.9f}}),{self.el_minPt}}});
+                            }} else {{
+                                pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}),{self.el_minPt}}});
+                            }}
                             eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}}); 
 
                             sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
@@ -424,7 +432,11 @@ class LeptonSF(Module):
                             """
                     else:
                         evaluator = f"""
-                        pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}});
+                        if (std::string("{wp}").find("testrecipes") != std::string::npos) {{
+                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], 99999.9f}}),{self.el_minPt}}});
+                        }} else {{
+                            pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}),{self.el_minPt}}});
+                        }}
                         eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}}); 
 
                         sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
