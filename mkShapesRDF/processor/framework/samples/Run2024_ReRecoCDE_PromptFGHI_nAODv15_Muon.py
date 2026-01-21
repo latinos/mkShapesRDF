@@ -22,9 +22,9 @@ Samples["Muon0_Run2024H-Prompt-v1"] = {
 Samples["Muon0_Run2024I-Prompt-v1"] = {
     "nanoAOD": "/Muon0/Run2024I-MINIv6NANOv15-v1/NANOAOD",
 }
-#Samples["Muon0_Run2024I-Prompt-v2"] = {  # Is there Run2024I-v2 in nanoAODv15?
-#    "nanoAOD": "",
-#}
+Samples["Muon0_Run2024I-Prompt-v2"] = {
+    "nanoAOD": "/Muon0/Run2024I-MINIv6NANOv15_v2-v1/NANOAOD",
+}
 Samples["Muon1_Run2024C-ReReco-v1"] = {
     "nanoAOD": "/Muon1/Run2024C-MINIv6NANOv15-v1/NANOAOD",
 }
@@ -46,7 +46,7 @@ Samples["Muon1_Run2024H-Prompt-v1"] = {
 Samples["Muon1_Run2024I-Prompt-v1"] = {
     "nanoAOD": "/Muon1/Run2024I-MINIv6NANOv15-v1/NANOAOD",
 }
-#Samples["Muon1_Run2024I-Prompt-v2"] = {
-#    "nanoAOD": "",
-#}
+Samples["Muon1_Run2024I-Prompt-v2"] = {
+    "nanoAOD": "/Muon1/Run2024I-MINIv6NANOv15_v2-v1/NANOAOD",
+}
     
