@@ -22,7 +22,7 @@ Samples["MuonEG_Run2024H-Prompt-v1"] = {
 Samples["MuonEG_Run2024I-Prompt-v1"] = {
     "nanoAOD": "/MuonEG/Run2024I-MINIv6NANOv15-v2/NANOAOD",
 }
-#Samples["MuonEG_Run2024I-Prompt-v2"] = {
-#    "nanoAOD": ""
-#}
+Samples["MuonEG_Run2024I-Prompt-v2"] = {
+    "nanoAOD": "/MuonEG/Run2024I-MINIv6NANOv15_v2-v2/NANOAOD"
+}
     

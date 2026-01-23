@@ -22,9 +22,9 @@ Samples["EGamma0_Run2024H-Prompt-v1"] = {
 Samples["EGamma0_Run2024I-Prompt-v1"] = {
     "nanoAOD": "/EGamma0/Run2024I-MINIv6NANOv15-v1/NANOAOD",
 }
-#Samples["EGamma0_Run2024I-Prompt-v2"] = {
-#    "nanoAOD": "",
-#}
+Samples["EGamma0_Run2024I-Prompt-v2"] = {
+    "nanoAOD": "/EGamma0/Run2024I-MINIv6NANOv15_v2-v1/NANOAOD",
+}
 Samples["EGamma1_Run2024C-ReReco-v1"] = {
     "nanoAOD": "/EGamma1/Run2024C-MINIv6NANOv15-v1/NANOAOD",
 }
@@ -46,7 +46,7 @@ Samples["EGamma1_Run2024H-Prompt-v1"] = {
 Samples["EGamma1_Run2024I-Prompt-v1"] = {
     "nanoAOD": "/EGamma1/Run2024I-MINIv6NANOv15-v1/NANOAOD",
 }
-#Samples["EGamma1_Run2024I-Prompt-v2"] = {
-#    "nanoAOD": "",
-#}
+Samples["EGamma1_Run2024I-Prompt-v2"] = {
+    "nanoAOD": "/EGamma1/Run2024I-MINIv6NANOv15_v2-v1/NANOAOD",
+}
     
