@@ -170,7 +170,7 @@ Samples['TTTo4Q'] = {
 ###### TTX
 
 Samples['TTNuNu'] = {
-    'nanoAOD' : '/TTNuNu_TuneCP5_13p6TeV_amcatnlo-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v3/NANOAODSIM'
+    'nanoAOD' : '/TTNuNu_TuneCP5_13p6TeV_amcatnlo-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2/NANOAODSIM'
 }
 
 Samples['TTLL_MLL-4to50'] = {
@@ -182,7 +182,7 @@ Samples['TTLL_MLL-50'] = {
 }
 
 Samples['TTZ-ZtoQQ'] = {
-    'nanoAOD' : '/TTZ-ZtoQQ-1Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v3/NANOAODSIM'
+    'nanoAOD' : '/TTZ-ZtoQQ-1Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2/NANOAODSIM'
 }
 
 Samples['TTLNu'] = {
