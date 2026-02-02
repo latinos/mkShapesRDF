@@ -20,6 +20,7 @@ xs_db = {}
 # https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageBR
 # BR (H-->WW) = 0.2152
 # BR (H-->tt) = 0.06256
+# BR (H-->bb) = 0.5824
 # BR (H-->ZZ) = 0.02641
 
 # https://pdg.lbl.gov/2024/listings/rpp2024-list-w-boson.pdf
@@ -92,8 +93,8 @@ xs_db["TTLL_MLL-50"] = ["xsec=0.08646", "kfact=1.000", "ref=G"]
 xs_db["TTZ-ZtoQQ"] = ["xsec=0.6603", "kfact=1.000", "ref=G"]
 xs_db["TTLNu"] = ["xsec=0.2505", "kfact=1.000", "ref=G"]
 xs_db["TTW-WtoQQ"] = ["xsec=0.4678", "kfact=1.000", "ref=G"]
-xs_db["TTHtoNon2B"] = ["xsec=0.5742", "kfact=1.000", "ref=G"]
-xs_db["TTHto2B"] = ["xsec=0.5742", "kfact=1.000", "ref=G"]
+xs_db["TTHtoNon2B"] = ["xsec=0.2398", "kfact=1.000", "ref=G"] # 0.5742 * [1 - BR(H->bb)] = 0.5742 * (1 - 0.5824) = 0.2398
+xs_db["TTHto2B"] = ["xsec=0.3344", "kfact=1.000", "ref=G"] # 0.5742 * BR(H->bb) = 0.5742 * 0.5824 = 0.3344
 xs_db["TTTT"] = ["xsec=0.009652", "kfact=1.000", "ref=G"]
 
 ### TXX
