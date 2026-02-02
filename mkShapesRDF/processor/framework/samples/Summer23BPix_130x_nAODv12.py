@@ -234,7 +234,7 @@ Samples['DYJetsToLL_M-50-LO'] = {
 }
 
 Samples['DYto2L-2Jets_MLL-10to50'] = {
-    'nanoAOD' :'/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2_ext1-v3/NANOAODSIM'
+    'nanoAOD' :'/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2_ext1-v4/NANOAODSIM'
 }
 
 Samples['DYto2L-2Jets_MLL-50'] = {
