@@ -97,8 +97,8 @@ xs_db["TTHto2B"] = ["xsec=0.5742", "kfact=1.000", "ref=G"]
 xs_db["TTTT"] = ["xsec=0.009652", "kfact=1.000", "ref=G"]
 
 ### TXX
-xs_db["THW"] = ["xsec=0.133", "kfact=1.000", "ref=C"]
-xs_db["THQ"] = ["xsec=0.744", "kfact=1.000", "ref=C"]
+xs_db["THW"] = ["xsec=0.133", "kfact=1.000", "ref=G"]
+xs_db["THQ"] = ["xsec=0.744", "kfact=1.000", "ref=G"]
 #xs_db["TWZ"] = ["xsec=", "kfact=1.000", "ref=C"]
 
 ### WZ
