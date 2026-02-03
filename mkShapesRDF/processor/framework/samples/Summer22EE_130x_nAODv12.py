@@ -322,6 +322,63 @@ Samples['TTToSemiLeptonic_TuneCP5Down'] = {
     'nanoAOD' :'/TTtoLNu2Q_TuneCP5Down_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
 }
 
+Samples['TTTo4Q'] = {
+    'nanoAOD' :'/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
+}
+
+###### TTX
+
+Samples['TTNuNu'] = {
+    'nanoAOD' : '/TTNuNu_TuneCP5_13p6TeV_amcatnlo-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
+}
+
+Samples['TTLL_MLL-4to50'] = {
+    'nanoAOD' : '/TTLL_MLL-4to50_TuneCP5_13p6TeV_amcatnlo-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v3/NANOAODSIM'
+}
+
+Samples['TTLL_MLL-50'] = {
+    'nanoAOD' : '/TTLL_MLL-50_TuneCP5_13p6TeV_amcatnlo-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v3/NANOAODSIM'
+}
+
+Samples['TTZ-ZtoQQ'] = {
+    'nanoAOD' : '/TTZ-ZtoQQ-1Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
+}
+
+Samples['TTLNu'] = {
+    'nanoAOD' : '/TTLNu-1Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22EENanoAODv12-mg35x_130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
+}
+
+Samples['TTW-WtoQQ'] = {
+    'nanoAOD' : '/TTW-WtoQQ-1Jets_TuneCP5_13p6TeV_amcatnloFXFXold-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
+}
+
+Samples['TTHtoNon2B'] = {
+    'nanoAOD' : '/TTHtoNon2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
+}
+
+Samples['TTHto2B'] = {
+    'nanoAOD' : '/TTHto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v3/NANOAODSIM'
+}
+
+Samples['TTTT'] = {
+    'nanoAOD' : '/TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v1/NANOAODSIM'
+}
+
+###### TXX
+
+Samples['THW'] = {
+    'nanoAOD' : '/THW_ctcvcp_HIncl_M-125_5FS_TuneCP5_13p6TeV_madgraph-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v3/NANOAODSIM/'
+}
+
+Samples['THQ'] = {
+    'nanoAOD' : '/THQ_ctcvcp_HIncl_M-125_4FS_TuneCP5_13p6TeV_madgraph-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v3/NANOAODSIM'
+}
+
+'''
+Samples['TWZ'] = {
+    'nanoAOD' : ''
+}
+'''
 
 #### WJets !!!!
 

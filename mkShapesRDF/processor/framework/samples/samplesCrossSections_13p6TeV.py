@@ -20,6 +20,7 @@ xs_db = {}
 # https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageBR
 # BR (H-->WW) = 0.2152
 # BR (H-->tt) = 0.06256
+# BR (H-->bb) = 0.5824
 # BR (H-->ZZ) = 0.02641
 
 # https://pdg.lbl.gov/2024/listings/rpp2024-list-w-boson.pdf
@@ -73,6 +74,7 @@ xs_db["TTTo2L2Nu_TuneCP5Down"]        = ["xsec=98.036", "kfact=1.000", "ref=C"]
 xs_db["TTToSemiLeptonic"]             = ["xsec=406.82", "kfact=1.000", "ref=C"] # 923.6 * 0.6760 * 0.1086 * 3 * 2 
 xs_db["TTToSemiLeptonic_TuneCP5Up"]   = ["xsec=406.82", "kfact=1.000", "ref=C"]
 xs_db["TTToSemiLeptonic_TuneCP5Down"] = ["xsec=406.82", "kfact=1.000", "ref=C"]
+xs_db["TTTo4Q"]                       = ["xsec=419.69", "kfact=1.000", "ref=C"] # 923.6 * 0.6741 * 0.6741
 
 xs_db["ST_tW_top"]        = ["xsec=19.30", "kfact=1.000", "ref=D"] # 43.95 * 2*(3*0.1086*0.6741)
 xs_db["ST_tW_antitop"]    = ["xsec=19.30", "kfact=1.000", "ref=D"] # 43.95 * 2*(3*0.1086*0.6741)
@@ -83,6 +85,22 @@ xs_db["ST_t-channel_top"]     = ["xsec=145.0", "kfact=1.000", "ref=D"]
 xs_db["ST_t-channel_antitop"] = ["xsec=87.2",  "kfact=1.000", "ref=D"]
 xs_db["ST_s-channel_plus"]    = ["xsec=2.360", "kfact=1.000", "ref=D"] # 7.244 * (3*0.1086)
 xs_db["ST_s-channel_minus"]   = ["xsec=1.477", "kfact=1.000", "ref=D"] # 4.534 * (3*0.1086)
+
+### TTX
+xs_db["TTNuNu"] = ["xsec=0.1638", "kfact=1.000", "ref=G"]
+xs_db["TTLL_MLL-4to50"] = ["xsec=0.03949", "kfact=1.000", "ref=G"]
+xs_db["TTLL_MLL-50"] = ["xsec=0.08646", "kfact=1.000", "ref=G"]
+xs_db["TTZ-ZtoQQ"] = ["xsec=0.6603", "kfact=1.000", "ref=G"]
+xs_db["TTLNu"] = ["xsec=0.2505", "kfact=1.000", "ref=G"]
+xs_db["TTW-WtoQQ"] = ["xsec=0.4678", "kfact=1.000", "ref=G"]
+xs_db["TTHtoNon2B"] = ["xsec=0.2398", "kfact=1.000", "ref=G"] # 0.5742 * [1 - BR(H->bb)] = 0.5742 * (1 - 0.5824) = 0.2398
+xs_db["TTHto2B"] = ["xsec=0.3344", "kfact=1.000", "ref=G"] # 0.5742 * BR(H->bb) = 0.5742 * 0.5824 = 0.3344
+xs_db["TTTT"] = ["xsec=0.009652", "kfact=1.000", "ref=G"]
+
+### TXX
+xs_db["THW"] = ["xsec=0.133", "kfact=1.000", "ref=G"]
+xs_db["THQ"] = ["xsec=0.744", "kfact=1.000", "ref=G"]
+#xs_db["TWZ"] = ["xsec=", "kfact=1.000", "ref=C"]
 
 ### WZ
 xs_db["WZTo3LNu"]  = ["xsec=5.32",    "kfact=1.000", "ref=A"] # (XS(pp->e- e+ μ-  ̄vμ) + XS(pp->e- e+ μ+ vμ)) * 9 * BR(ZW->ll lv) / BR(ZW->ee mv)  (0.2385 + 0.3474) * 9 *  0.0036552588 / 0.0036255296
@@ -195,7 +213,6 @@ xs_db['QCD_PT-30to80_bcToE']   = ["xsec=1322000.0", "kfact=1.000", "ref=G"]
 xs_db['QCD_PT-80to170_bcToE']  = ["xsec=74510.0",   "kfact=1.000", "ref=G"]
 xs_db['QCD_PT-170to250_bcToE'] = ["xsec=3898.0",    "kfact=1.000", "ref=G"]
 xs_db['QCD_PT-250toInf_bcToE'] = ["xsec=963.4",     "kfact=1.000", "ref=G"]
-
 
 # THIS IS OLD, AND COMES FROM RUN 2 UL!!
 #
