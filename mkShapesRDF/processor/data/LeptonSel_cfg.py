@@ -1784,3 +1784,10 @@ MuonWP = {
         "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-11-27/muon_scalesmearing.json.gz",
     },
 }
+# ============================================================
+# Temporary Full2025v15 lepton configuration
+# Use Full2024v15 lepton definitions until official 2025 POG
+# ============================================================
+
+ElectronWP["Full2025v15"] = ElectronWP["Full2024v15"]
+MuonWP["Full2025v15"]     = MuonWP["Full2024v15"]
