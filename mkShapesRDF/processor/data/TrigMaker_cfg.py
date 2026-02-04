@@ -1348,33 +1348,33 @@ Trigger = {
                },
     },
     'Full2025v15'  :  {
-        # Run2025 Prompt B–G      #triggers are copied from 2024 in trigger/Full2025v15..to be Modified accordingly
+        # Run2025 Prompt B–G      #triggers efficiencies are used from 2024.to be Modified accordingly once available.
         1  :  { 'begin' : 391658 , 'end'   : 398903 ,'lumi'  : 0.0,   # have to fill lumi
 
                 'LegEffData' : {
-                    'DoubleEleLegHigPt' : 'Full2025v15/data/EGM_MVAid/Ele23_Ele12_leg1_pt_eta_efficiency.json',
-                    'DoubleEleLegLowPt' : 'Full2025v15/data/EGM_MVAid/Ele23_Ele12_leg2_pt_eta_efficiency.json',
-                    'SingleEle'         : 'Full2025v15/data/EGM_MVAid/Ele30_pt_eta_efficiency.json',
-                    'DoubleMuLegHigPt'  : 'Full2025v15/data/Muons/Mu17_Mu8_leg1_pt_eta_efficiency.json',
-                    'DoubleMuLegLowPt'  : 'Full2025v15/data/Muons/Mu17_Mu8_leg2_pt_eta_efficiency.json',
-                    'SingleMu'          : 'Full2025v15/data/Muons/IsoMu24_pt_eta_efficiency.json',
-                    'MuEleLegHigPt'     : 'Full2025v15/data/Muons/Mu23_pt_eta_efficiency.json',
-                    'MuEleLegLowPt'     : 'Full2025v15/data/EGM_MVAid/Ele23_Ele12_leg2_pt_eta_efficiency.json',
-                    'EleMuLegHigPt'     : 'Full2025v15/data/EGM_MVAid/Ele23_Ele12_leg1_pt_eta_efficiency.json',
-                    'EleMuLegLowPt'     : 'Full2025v15/data/Muons/Mu17_Mu8_leg2_pt_eta_efficiency.json',
+                    'DoubleEleLegHigPt' : 'Full2024v15/data/EGM_MVAid/Ele23_Ele12_leg1_pt_eta_efficiency.json',
+                    'DoubleEleLegLowPt' : 'Full2024v15/data/EGM_MVAid/Ele23_Ele12_leg2_pt_eta_efficiency.json',
+                    'SingleEle'         : 'Full2024v15/data/EGM_MVAid/Ele30_pt_eta_efficiency.json',
+                    'DoubleMuLegHigPt'  : 'Full2024v15/data/Muons/Mu17_Mu8_leg1_pt_eta_efficiency.json',
+                    'DoubleMuLegLowPt'  : 'Full2024v15/data/Muons/Mu17_Mu8_leg2_pt_eta_efficiency.json',
+                    'SingleMu'          : 'Full2024v15/data/Muons/IsoMu24_pt_eta_efficiency.json',
+                    'MuEleLegHigPt'     : 'Full2024v15/data/Muons/Mu23_pt_eta_efficiency.json',
+                    'MuEleLegLowPt'     : 'Full2024v15/data/EGM_MVAid/Ele23_Ele12_leg2_pt_eta_efficiency.json',
+                    'EleMuLegHigPt'     : 'Full2024v15/data/EGM_MVAid/Ele23_Ele12_leg1_pt_eta_efficiency.json',
+                    'EleMuLegLowPt'     : 'Full2024v15/data/Muons/Mu17_Mu8_leg2_pt_eta_efficiency.json',
                 },
 
                 'LegEffMC' : { # to be changed for mc
-                    'DoubleEleLegHigPt' : 'Full2025v15/mc/EGM_MVAid/Ele23_Ele12_leg1_pt_eta_efficiency.json',
-                    'DoubleEleLegLowPt' : 'Full2025v15/mc/EGM_MVAid/Ele23_Ele12_leg2_pt_eta_efficiency.json',
-                    'SingleEle'         : 'Full2025v15/mc/EGM_MVAid/Ele30_pt_eta_efficiency.json',
-                    'DoubleMuLegHigPt'  : 'Full2025v15/mc/Muons/Mu17_Mu8_leg1_pt_eta_efficiency.json',
-                    'DoubleMuLegLowPt'  : 'Full2025v15/mc/Muons/Mu17_Mu8_leg2_pt_eta_efficiency.json',
-                    'SingleMu'          : 'Full2025v15/mc/Muons/IsoMu24_pt_eta_efficiency.json',
-                    'MuEleLegHigPt'     : 'Full2025v15/mc/Muons/Mu23_pt_eta_efficiency.json',
-                    'MuEleLegLowPt'     : 'Full2025v15/mc/EGM_MVAid/Ele23_Ele12_leg2_pt_eta_efficiency.json',
-                    'EleMuLegHigPt'     : 'Full2025v15/mc/EGM_MVAid/Ele23_Ele12_leg1_pt_eta_efficiency.json',
-                    'EleMuLegLowPt'     : 'Full2025v15/mc/Muons/Mu17_Mu8_leg2_pt_eta_efficiency.json',
+                    'DoubleEleLegHigPt' : 'Full2024v15/mc/EGM_MVAid/Ele23_Ele12_leg1_pt_eta_efficiency.json',
+                    'DoubleEleLegLowPt' : 'Full2024v15/mc/EGM_MVAid/Ele23_Ele12_leg2_pt_eta_efficiency.json',
+                    'SingleEle'         : 'Full2024v15/mc/EGM_MVAid/Ele30_pt_eta_efficiency.json',
+                    'DoubleMuLegHigPt'  : 'Full2024v15/mc/Muons/Mu17_Mu8_leg1_pt_eta_efficiency.json',
+                    'DoubleMuLegLowPt'  : 'Full2024v15/mc/Muons/Mu17_Mu8_leg2_pt_eta_efficiency.json',
+                    'SingleMu'          : 'Full2024v15/mc/Muons/IsoMu24_pt_eta_efficiency.json',
+                    'MuEleLegHigPt'     : 'Full2024v15/mc/Muons/Mu23_pt_eta_efficiency.json',
+                    'MuEleLegLowPt'     : 'Full2024v15/mc/EGM_MVAid/Ele23_Ele12_leg2_pt_eta_efficiency.json',
+                    'EleMuLegHigPt'     : 'Full2024v15/mc/EGM_MVAid/Ele23_Ele12_leg1_pt_eta_efficiency.json',
+                    'EleMuLegLowPt'     : 'Full2024v15/mc/Muons/Mu17_Mu8_leg2_pt_eta_efficiency.json',
                 },
 
                 'DZEffData' : {
