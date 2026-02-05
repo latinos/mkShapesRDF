@@ -838,7 +838,7 @@ ElectronWP = {
         },
         "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electronSS_EtDependent.json.gz",
     },
-    ###Full2025v15 is just a copy od Full2024v15. to be modified once 
+    ###Full2025v15 is just a copy of Full2024v15. to be modified once 2025 selections available.
     "Full2025v15": {
         "VetoObjWP": {
             "HLTsafe": {
@@ -880,13 +880,13 @@ ElectronWP = {
                         "Electron_mvaIso_WP90",
                         "Electron_convVeto",
                     ],
-                },
+                },# using 2024 SFs while processing only data. To be updated when processing MC
                 'tkSF':  {
                     '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz"]
-                } ,
+                } , # using 2024 SFs while processing only data. To be updated when processing MC
                 'wpSF':  {
                     '1-1' : ["2024Prompt", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
-                } ,
+                } , # using 2024 SFs while processing only data. To be updated when processing MC
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
             "testrecipes":{
@@ -900,7 +900,7 @@ ElectronWP = {
                 },
                 'wpSF':  {
                     '1-1' : ["2024Prompt", "Electron-ID-SF", "wp80iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
-                } ,
+                } , # using 2024 SFs while processing only data. To be updated when processing MC
             },
             "mvaWinter22V2Iso_WP90": {
                 "cuts": {
@@ -921,13 +921,13 @@ ElectronWP = {
                 },
                 'tkSF':  {
                     '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz"]
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing MC
                 'wpSF':  {
                     '1-1' : ["2024Prompt", "Electron-ID-SF", "wp90iso", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing MC
                 'tthMvaSF':  {
                     '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "NUM_passingMVA90_HWW_DEN_wp90iso", 'data/scale_factor/Full2024v15/electron.json'],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing MC
                 #'fakeW' : 'data/fake_prompt_rates/',  
             },
             "cutBased_LooseID_tthMVA_Run3": {
@@ -949,13 +949,13 @@ ElectronWP = {
                 },
                 'tkSF':  { 
                     '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz"]
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing MC
                 'wpSF':  {
                     '1-1' : ["2024Prompt", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing MC
                 'tthMvaSF':  {
                     '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "NUM_passingTTHMVA_DEN_LooseID", 'data/scale_factor/Full2024v15/electron.json'],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing MC
                 #'fakeW' : 'data/fake_prompt_rates/',  
             },
             "cutBased_LooseID_tthMVA_HWW": {
@@ -982,13 +982,13 @@ ElectronWP = {
                 },
                 'tkSF':  {
                     '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz"]
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing MC
                 'wpSF':  {
                     '1-1' : ["2024Prompt", "Electron-ID-SF", "Loose", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-03/electron.json.gz'],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing MC
                 'tthMvaSF':  {
                     '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "passingTTHMVA_HWW", 'data/scale_factor/Full2024v15/electron.json'],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing MC
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
         },
@@ -1941,7 +1941,7 @@ MuonWP = {
     },
 
     "Full2025v15": {
-        # Copied from Full2024v15. 2024 trigger efficiencies must be updated once available.
+        # Copied from Full2024v15. To be updated when processing MC.
         "VetoObjWP": {
             "HLTsafe": {
                 "cuts": {
@@ -1986,10 +1986,10 @@ MuonWP = {
                 },
                 "idSF": {
                     "1-1": ["NUM_TightID_DEN_TrackerMuons", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-11-27/muon_Z.json.gz"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing MC
                 "isoSF": {
                     "1-1": ["NUM_TightPFIso_DEN_TightID", "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-11-27/muon_Z.json.gz"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_POG/",
             },
             "cut_Tight_HWW": {
@@ -2012,10 +2012,10 @@ MuonWP = {
                 },
                 "idSF": {
                     "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                },# using 2024 SFs while processing only data. To be updated when processing also MC
                 "isoSF": {
                     "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_Tight_HWW/",
             },
             "cut_TightID_pfIsoTight_HWW_tthmva_67": {
@@ -2036,13 +2036,13 @@ MuonWP = {
                 },
                 "idSF": {
                     "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 "isoSF": {
                     "1-1": ["NUM_TightPFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_TightIso_tthMVA_DEN_TightPFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_TightPFIso_tthMVA/",
             },
             "cut_TightID_pfIsoLoose_HWW_tthmva_67": {
@@ -2063,13 +2063,13 @@ MuonWP = {
                 },
                 "idSF": {
                     "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 "isoSF": {
                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA/",
             },
             "cut_TightID_pfIsoLoose_HWW_tthmva_HWW": {
@@ -2091,13 +2091,13 @@ MuonWP = {
                  },
                  "idSF": {
                      "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                 },
+                 }, # using 2024 SFs while processing only data. To be updated when processing also MC
                  "isoSF": {
                      "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                 },
+                 }, # using 2024 SFs while processing only data. To be updated when processing also MC
                  "tthMvaSF": {
                      "1-1": ["NUM_TightID_HWW_LooseIso_tthMVA_HWW_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                 },
+                 }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
             "cut_TightID_pfIsoLoose_HWW_PNet": {
@@ -2118,13 +2118,13 @@ MuonWP = {
                 },
                 "idSF": {
                     "1-1": ["NUM_TightID_HWW_DEN_TrackerMuons", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 "isoSF": {
                     "1-1": ["NUM_LoosePFIso_DEN_TightID_HWW", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 "tthMvaSF": {
                     "1-1": ["NUM_TightID_HWW_LooseIso_PNet_DEN_LoosePFIso", "data/scale_factor/Full2024v15/muonSF_latinos_HWW.json"],
-                },
+                }, # using 2024 SFs while processing only data. To be updated when processing also MC
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_PNet/",  
             },
         },

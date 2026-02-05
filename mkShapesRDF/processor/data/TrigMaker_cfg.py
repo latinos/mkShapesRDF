@@ -1349,7 +1349,7 @@ Trigger = {
     },
     'Full2025v15'  :  {
         # Run2025 Prompt B–G      #triggers efficiencies are used from 2024.to be Modified accordingly once available.
-        1  :  { 'begin' : 391658 , 'end'   : 398903 ,'lumi'  : 110.730859276,   # Currently not using the normtag_BRIL.json as per Lumi Recommendations. 
+        1  :  { 'begin' : 391658 , 'end'   : 398903 ,'lumi'  : 110.730859276,   # priliminary values calculated from Golden.json, Currently not using the normtag_BRIL.json as per Lumi Recommendations. 
 
                 'LegEffData' : {
                     'DoubleEleLegHigPt' : 'Full2024v15/data/EGM_MVAid/Ele23_Ele12_leg1_pt_eta_efficiency.json',
