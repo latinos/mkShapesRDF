@@ -95,6 +95,39 @@ Productions = {
         "cmssw": "Full2024v15",
         "year": "2024",
     },
+        "Run2025_PromptBCDEFG_nAODv15_Full2025v15": {
+        "isData": True,
+        "jsonFile": "/processor/data/certification/Cert_Collisions2025_391658_398903_Golden.json",
+        "samples": "../framework/samples/Run2025_PromptBCDEFG_nAODv15.py",
+        "cmssw": "Full2025v15",
+        "year": "2025",
+    },
+
+        "Run2025_PromptBCDEFG_nAODv15_Full2025v15_EGamma": {
+        "isData": True,
+        "jsonFile": "/processor/data/certification/Cert_Collisions2025_391658_398903_Golden.json",
+        "samples": "../framework/samples/Run2025_PromptBCDEFG_nAODv15_EGamma.py",
+        "cmssw": "Full2025v15",
+        "year": "2025",
+    },
+
+        "Run2025_PromptBCDEFG_nAODv15_Full2025v15_Muon": {
+        "isData": True,
+        "jsonFile": "/processor/data/certification/Cert_Collisions2025_391658_398903_Golden.json",
+        "samples": "../framework/samples/Run2025_PromptBCDEFG_nAODv15_Muon.py",
+        "cmssw": "Full2025v15",
+        "year": "2025",
+    },
+
+        "Run2025_PromptBCDEFG_nAODv15_Full2025v15_MuonEG": {
+        "isData": True,
+        "jsonFile": "/processor/data/certification/Cert_Collisions2025_391658_398903_Golden.json",
+        "samples": "../framework/samples/Run2025_PromptBCDEFG_nAODv15_MuonEG.py",
+        "cmssw": "Full2025v15",
+        "year": "2025",
+    },
+
+
     #################################### nAODv9 MC ##############################################
     # -------- 2016 MC 106X nAODv8: Full2016v8
     "Summer20UL16_106x_nAODv9_HIPM_Full2016v9": {
