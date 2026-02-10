@@ -102,7 +102,7 @@ Samples['TTTo4Q'] = {
     'nanoAOD' :'/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
 }
 
-#### Single Top !!!!
+#### Single Top 
 
 Samples['ST_t-channel_top'] = {
     'nanoAOD' :'/TBbarQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'

@@ -112,7 +112,7 @@ Samples['WGtoLNuG-1J_PTG600'] = {
 
 
 """
-#### ZG !!!    
+#### ZG     
 
 Samples['ZG2JtoG2L2J'] = {  
     'nanoAOD' :''
