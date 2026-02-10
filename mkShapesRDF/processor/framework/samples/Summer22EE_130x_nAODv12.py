@@ -140,6 +140,10 @@ Samples['ZG'] = {
 
 ##### WGamma !!!!
 
+Samples['WGtoLNuG-1J'] = {
+    'nanoAOD' : '/WGtoLNuG-1Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
+}
+
 Samples['WGtoLNuG-1J_PTG10to100'] = {
     'nanoAOD' :'/WGtoLNuG-1Jets_PTG-10to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
 }
