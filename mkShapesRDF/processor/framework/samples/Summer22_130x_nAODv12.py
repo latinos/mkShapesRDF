@@ -102,7 +102,7 @@ Samples['TTTo4Q'] = {
     'nanoAOD' :'/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
 }
 
-#### Single Top !!!!
+#### Single Top 
 
 Samples['ST_t-channel_top'] = {
     'nanoAOD' :'/TBbarQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
@@ -332,6 +332,10 @@ Samples['ZG'] = {
 }
 
 ##### WGamma
+
+Samples['WGtoLNuG-1J'] = {
+    'nanoAOD' : '/WGtoLNuG-1Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
 
 Samples['WGtoLNuG-1J_PTG10to100'] = {
     'nanoAOD' :'/WGtoLNuG-1Jets_PTG-10to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
