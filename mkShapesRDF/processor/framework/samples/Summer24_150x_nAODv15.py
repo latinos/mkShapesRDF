@@ -88,9 +88,8 @@ Samples['WW'] = {
 
 ##### WW EWK
 
-Samples['WWewk'] = {
-    'nanoAOD' : '/WWJJto2L2Nu-OS-noTop-EWK_TuneCP5_13p6TeV_madgraph-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
-}
+#Samples['WWewk'] = {
+#}
 
 ##### WGamma
 
