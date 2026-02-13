@@ -495,7 +495,7 @@ class PlotFactory:
                         # only background "filled" histogram
                         if plotdef["isSignal"] == 0:
                             histos[sampleName].SetFillColorAlpha(
-                                self._getColor(plotdef["color"]), 0.60
+                                self._getColor(plotdef["color"]), 1.0
                             )
                             histos[sampleName].SetLineColor(
                                 self._getColor(plotdef["color"])
@@ -788,7 +788,7 @@ class PlotFactory:
                         )
                         if sampleConfiguration["isSignal"] == 0:
                             histos_grouped[sampleNameGroup].SetFillColorAlpha(
-                                self._getColor(sampleConfiguration["color"]), 0.60
+                                self._getColor(sampleConfiguration["color"]), 1.0
                             )
                             histos_grouped[sampleNameGroup].SetLineColor(
                                 self._getColor(sampleConfiguration["color"])
