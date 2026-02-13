@@ -495,7 +495,7 @@ class PlotFactory:
                         # only background "filled" histogram
                         if plotdef["isSignal"] == 0:
                             histos[sampleName].SetFillColorAlpha(
-                                self._getColor(plotdef["color"]), 1.0
+                                self._getColor(plotdef["color"]), 1.0   # If you don't like full opacity (understandble with CAT color scheme: https://cms-analysis.docs.cern.ch/guidelines/plotting/colors/#color-scheme-choice) set alpha to a lower values.
                             )
                             histos[sampleName].SetLineColor(
                                 self._getColor(plotdef["color"])
@@ -788,7 +788,7 @@ class PlotFactory:
                         )
                         if sampleConfiguration["isSignal"] == 0:
                             histos_grouped[sampleNameGroup].SetFillColorAlpha(
-                                self._getColor(sampleConfiguration["color"]), 1.0
+                                self._getColor(sampleConfiguration["color"]), 1.0 # If you don't like full opacity (understandble with CAT color scheme: https://cms-analysis.docs.cern.ch/guidelines/plotting/colors/#color-scheme-choice) set alpha to a lower values.
                             )
                             histos_grouped[sampleNameGroup].SetLineColor(
                                 self._getColor(sampleConfiguration["color"])
@@ -1815,7 +1815,7 @@ class PlotFactory:
                 CMS_lumi.lumi_8TeV = "18.3 fb^{-1}"
                 CMS_lumi.lumi_13TeV = "100 fb^{-1}"
                 CMS_lumi.writeExtraText = 1
-                CMS_lumi.extraText = "Private work"
+                CMS_lumi.extraText = "Preliminary"
                 if not self._preliminary:
                     CMS_lumi.extraText = "Work in progress"
                 CMS_lumi.relPosX = 0.14
