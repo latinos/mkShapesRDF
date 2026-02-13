@@ -43,6 +43,10 @@ Samples['DYGto2LG-1Jets_MLL-4to50_PTG-10to100'] = {
     'nanoAOD' :'/DYGto2LG-1Jets_MLL-4to50_PTG-10to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
 }
 
+Samples['DYGto2LG-1Jets_MLL-4to50_PTG-10to100_ext1'] = {
+    'nanoAOD' :'/DYGto2LG-1Jets_MLL-4to50_PTG-10to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5_ext1-v3/NANOAODSIM'
+}
+
 Samples['DYGto2LG-1Jets_MLL-4to50_PTG-100to200'] = {
     'nanoAOD' :'/DYGto2LG-1Jets_MLL-4to50_PTG-100to200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
 }
