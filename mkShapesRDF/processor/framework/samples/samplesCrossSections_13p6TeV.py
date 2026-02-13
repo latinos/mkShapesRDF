@@ -123,15 +123,15 @@ xs_db["ZG2JtoG2L2J"] = ["xsec=1.075", "kfact=0.1142", "ref=G"]
 #xs_db["WGtoLNuG-1J_PTG600"]      = ["xsec=0.004907", "kfact=1.000", "ref=G"]
 
 ### WG
-xs_db['WGtoLNuG-1J']             = ["xsec=218.8",    "kfact=1.000", "ref=G"] # XSDB * BR(W-->lv) = 671.5 * 0.1086 * 3 (We are not sure why we need to apply BR(W-->lv), but this was done in Run 2 and gives a good closure)
-xs_db['WGtoLNuG-1J_PTG10to100']  = ["xsec=215.7",    "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> Why BR? (We are not sure why we need to apply BR(W-->lv), but this was done in Run 2 and gives a good closure)
-xs_db['WGtoLNuG-1J_PTG100to200'] = ["xsec=0.7236",   "kfact=1.000", "ref=G"]
-xs_db['WGtoLNuG-1J_PTG200to400'] = ["xsec=0.09474",  "kfact=1.000", "ref=G"]
-xs_db['WGtoLNuG-1J_PTG400to600'] = ["xsec=0.007269", "kfact=1.000", "ref=G"]
-xs_db['WGtoLNuG-1J_PTG100']      = ["xsec=0.8352",   "kfact=1.000", "ref=B"]
+xs_db['WGtoLNuG-1J']             = ["xsec=671.5",    "kfact=1.000", "ref=G"] # XSDB 
+xs_db['WGtoLNuG-1J_PTG10to100']  = ["xsec=215.7",    "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
+xs_db['WGtoLNuG-1J_PTG100to200'] = ["xsec=0.7236",   "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
+xs_db['WGtoLNuG-1J_PTG200to400'] = ["xsec=0.09474",  "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
+xs_db['WGtoLNuG-1J_PTG400to600'] = ["xsec=0.007269", "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
+xs_db['WGtoLNuG-1J_PTG100']      = ["xsec=0.8352",   "kfact=1.000", "ref=B"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
 # xs_db['WGtoLNuG-1J_PTG200']      = ["xsec=",   "kfact=1.000", "ref="]
 # xs_db['WGtoLNuG-1J_PTG400']      = ["xsec=0.02661",  "kfact=1.000", "ref=G"]
-xs_db['WGtoLNuG-1J_PTG600']      = ["xsec=0.001599", "kfact=1.000", "ref=G"]
+xs_db['WGtoLNuG-1J_PTG600']      = ["xsec=0.001599", "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
 
 ### ZZ
 xs_db["ZZ"]        = ["xsec=16.7",   "kfact=1.000", "ref=X"]
