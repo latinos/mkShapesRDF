@@ -15,7 +15,7 @@ extraTextFont = 52
 
 # lumiTextSize     = 0.6
 lumiTextSize = 0.9
-lumiTextOffset = 0.2
+lumiTextOffset = 0.0
 
 # cmsTextSize      = 0.75
 cmsTextSize = 0.95
@@ -111,7 +111,7 @@ def CMS_lumi(pad, iPeriod, iPosX):
     latex.SetTextAngle(0)
     latex.SetTextColor(rt.kBlack)
 
-    extraTextSize = extraOverCmsTextSize * cmsTextSize * 0.7
+    extraTextSize = extraOverCmsTextSize * cmsTextSize * 0.8
 
     latex.SetTextFont(42)
     latex.SetTextAlign(31)
