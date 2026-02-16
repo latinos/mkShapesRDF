@@ -62,5 +62,21 @@ JetMakerCfg = {
             "key_veto" : "AK4PUPPI_TightLeptonVeto",
         }
     },
+    'Full2025v15': {  # Jet ID from 2024 for now 
+        "vetomap": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-25Prompt-Winter25-NanoAODv15/2026-02-09/jetvetomaps.json.gz",
+        "vetokey": "Winter25Prompt25_RunCDEFG_V1",
+        "JEC": "Winter25Prompt25_V3_MC",
+        "JEC_data" : "Winter25Prompt25_V3_DATA", 
+        "JER": "Summer23BPixPrompt23_RunD_JRV1_MC",       
+        "jet_jerc" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-25Prompt-Winter25-NanoAODv15/2026-02-09/jet_jerc.json.gz",
+        "jer_smear": frameworkPath + "/processor/data/jer_smear/jer_smear_run3.json.gz", 
+        "jetId": {
+            "json": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-02/jetid.json.gz", 
+            "key" : "AK4PUPPI_Tight",
+            "key_veto" : "AK4PUPPI_TightLeptonVeto",
+       
+        }
+    },
+
 }
 
