@@ -59,6 +59,10 @@ Samples['WZTo3LNu'] = {
     'nanoAOD' :'/WZto3LNu_TuneCP5_13p6TeV_powheg-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 
+Samples['WZTo2L2Q'] = {
+    'nanoAOD' :'/WZto2L2Q_TuneCP5_13p6TeV_powheg-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM
+}
+
 #### ZZ 
 Samples['ZZ'] = {
     'nanoAOD' :'/ZZ_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
