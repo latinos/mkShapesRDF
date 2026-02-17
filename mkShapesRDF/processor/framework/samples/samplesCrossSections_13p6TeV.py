@@ -107,6 +107,7 @@ xs_db["THQ"] = ["xsec=0.744", "kfact=1.000", "ref=G"]
 ### WZ
 xs_db["WZTo3LNu"]  = ["xsec=5.32",    "kfact=1.000", "ref=A"] # (XS(pp->e- e+ μ-  ̄vμ) + XS(pp->e- e+ μ+ vμ)) * 9 * BR(ZW->ll lv) / BR(ZW->ee mv)  (0.2385 + 0.3474) * 9 *  0.0036552588 / 0.0036255296
 xs_db["WZ"]        = ["xsec=53.9",    "kfact=1.000", "ref=A"] # XS(WZTo3LNu) / (3*9*BR(WZ->lv ll))
+xs_db["WZTo2L2Q"]  = ["xsec=3.67",    "kfact=1.000", "ref=A"] # XS(WZ) * 3*BR(Z->ll) * BR(W->qq)
 xs_db["WZToLNu2Q"] = ["xsec=6.44",    "kfact=1.000", "ref=X"]
 xs_db["WZG"]       = ["xsec=0.08425", "kfact=1.000", "ref=X"]
 
