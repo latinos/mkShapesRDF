@@ -1,0 +1,56 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+  BUILD_MKSHAPESRDF:
+    value: "true"
+    options:
+      - "false"
+      - "true"
+    description: "Whether to (re)build mkShapesRDF before testing the LCG release. Otherwise builds are taken from previously cached runs."
+
+  TEST_LCG_RELEASE:
+    value: "all"
+    options:
+      - "all"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-el9-clang16-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-el9-gcc11-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-el9-gcc12-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-el9-gcc13-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_106/x86_64-el9-gcc13-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_107/x86_64-el9-clang16-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_107/x86_64-el9-clang19-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_107/x86_64-el9-gcc11-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_107/x86_64-el9-gcc13-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_107/x86_64-el9-gcc14-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_108/x86_64-el9-clang19-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_108/x86_64-el9-gcc13-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_108/x86_64-el9-gcc14fp-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_108/x86_64-el9-gcc14-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_108/x86_64-el9-gcc15-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_109/x86_64-el9-clang19-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_109/x86_64-el9-gcc13-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_109/x86_64-el9-gcc14fp-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_109/x86_64-el9-gcc14-opt/"
+      - "/cvmfs/sft.cern.ch/lcg/views/LCG_109/x86_64-el9-gcc15-opt/ "
+    description: "Which LCG release to test."
+
+  TEST_ERA:
+    value: "all"
+    options:
+      - "all"
+      - "Full2022v12"
+      - "Full2022EEv12"
+      - "Full2023v12"
+      - "Full2023BPixv12"
+      - "Full2024v15"
+    description: "Which era(s) to test."
+
+  TEST_STEP:
+    value: "all"
+    options:
+      - "all"
+      - "postprocessing"
+      - "mkshapes"
+      - "mkplots"
+      - "none"
+    description: "Which analysis step(s) to test. 'none' triggers all preparation steps to run."

@@ -1,0 +1,20 @@
+workflow:
+  auto_cancel:
+    on_new_commit: interruptible
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+stages:
+  - prepare
+  - ntuples
+  - recipe
+
+include:
+  # global variables
+  - local: .gitlab-ci/variables.yml
+
+  # jobs that fetch input files
+  - local: .gitlab-ci/fetch_files.yml

@@ -1,0 +1,33 @@
+include:
+  - local: .gitlab/ci/templates.yml
+
+#
+# get an EOS access token
+#
+get_eos_token:
+  stage: prepare
+  id_tokens:
+    MY_JOB_JWT:
+      aud: cms-cat-ci-datasets.app.cern.ch
+  variables:
+    EOS_DIRECTORY: /eos/cms/store/group/cat/datasets/recipes
+    SERVICE_URL: https://cms-cat-ci-datasets.app.cern.ch
+    TOKEN_PATH: token.txt
+  before_script:
+    - dnf install -y curl gnupg
+  script:
+    # Request an access token
+    - |
+      curl -H "Authorization: ${MY_JOB_JWT}" "${SERVICE_URL}/api?eospath=${EOS_DIRECTORY}" |
+        tr -d \" >${TOKEN_PATH}
+    # Encrypt the token for an extra layer of safety
+    - gpg --batch --yes --passphrase-file "${PASSPHRASE_FILE}" --pinentry-mode loopback
+        --symmetric ${TOKEN_PATH}
+  rules:
+    - !reference [.snippets, rules, token_trigger_rules]
+  allow_failure: false
+  cache:
+    key: "${CI_JOB_NAME}"
+    policy: push
+    paths:
+      - ${TOKEN_PATH}.gpg

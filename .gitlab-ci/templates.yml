@@ -1,0 +1,195 @@
+#
+# scoped snippets to be used as "!reference"'s
+#
+
+.snippets:
+  rules:
+    skip_on_wrong_release: &skip_on_wrong_release
+      - if: $TEST_LCG_RELEASE != "all" && $TEST_LCG_RELEASE != $LCG_RELEASE
+        when: never
+    skip_on_wrong_test: &skip_on_wrong_test
+      - if: $TEST_STEP != "all" && $TEST_STEP != $STEP_NAME
+        when: never
+    skip_on_wrong_era: &skip_on_wrong_era
+      - if : $TEST_ERA != "all" && $TEST_ERA != $ERA_NAME
+        when: never
+    skip_on_wrong_release_or_recipe:
+      - *skip_on_wrong_release
+      - *skip_on_wrong_test
+    skip_on_wrong_release_or_recipe_or_era:
+      - *skip_on_wrong_release
+      - *skip_on_wrong_test
+      - *skip_on_wrong_era
+    general_trigger_rules: &general_trigger_rules
+      - if: $CI_COMMIT_REF_NAME == "master"
+        when: always
+      - if: $CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "schedule"
+        when: always
+    token_trigger_rules:
+      - changes:
+          compare_to: master
+          paths:
+            - .gitlab/**/*
+            - scripts/**/*
+            - frameworks/**/*  # Triggered by changes to any framework
+        when: always
+      - *general_trigger_rules
+    framework_trigger_rules:
+      - changes:
+          compare_to: master
+          paths:
+            - .gitlab/**/*
+            - scripts/**/*
+            - frameworks/${LCG_RELEASE}/**/*
+        when: always
+      - *general_trigger_rules
+  script:
+    check_framework_name: &check_framework_name
+      - if [ -z "${LCG_RELEASE}" ]; then >&2 echo "LCG_RELEASE empty"; exit 1; fi
+    check_framework_directory: &check_framework_directory
+      - if [ -z "${FRAMEWORK_DIRECTORY}" ]; then >&2 echo "FRAMEWORK_DIRECTORY empty"; exit 1; fi
+    check_framework_name_and_directory:
+      - *check_framework_name
+      - *check_framework_directory
+    check_era_name: &check_era_name
+      - if [ -z "${ERA_NAME}" ]; then >&2 echo "ERA_NAME empty"; exit 1; fi
+    check_recipe_name: &check_recipe_name
+      - if [ -z "${STEP_NAME}" ]; then >&2 echo "STEP_NAME empty"; exit 1; fi
+    set_dataset_variables: &set_dataset_variables
+      # default to mc
+      - export DATASET_KIND="mc" && export DATASET_PREFIX="TTTo2L2Nu"
+      # recipe specific settings
+      - if [ "${STEP_NAME}" = "electron_ss" ]; then export DATASET_KIND="data" && export DATASET_PREFIX="Muon"; fi
+    check_era_and_recipe_names:
+      - *check_era_name
+      - *check_recipe_name
+      - *set_dataset_variables
+    check_test_file: &check_test_file
+      - if [ ! -f "${ABS_TEST_FILE}" ]; then >&2 echo "test file ${ABS_TEST_FILE} not found"; exit 1; fi
+    check_truth_file: &check_truth_file
+      - if [ ! -f "${ABS_TRUTH_FILE}" ]; then >&2 echo "truth file ${ABS_TRUTH_FILE} not found"; exit 1; fi
+    check_test_and_truth_files:
+      - *check_test_file
+      - *check_truth_file
+    check_result_file: &check_result_file
+      - if [ ! -f "${ABS_RESULT_FILE}" ]; then >&2 echo "output file ${ABS_RESULT_FILE} not found"; exit 1; fi
+  eras:
+    all:
+      - "Full2022v12"
+      - "Full2022EEv12"
+      - "Full2023v12"
+      - "Full2023BPixv12"
+      - "Full2024v15"
+
+#
+# templates for framework setup
+#
+
+# generic template
+# required variables:
+#   - LCG_RELEASE: name of the lcg release to install
+#   - FRAMEWORK_DIRECTORY: name of the directory the framework is built in for caching
+# required fields:
+#   - script: the install script
+.framework_build:
+  stage: prepare
+  when: manual
+  variables:
+    # setup, to be overridden by extending job
+    EXTRA_SETUP: true
+    # to be set by extending jobs
+    LCG_RELEASE: ""
+    # to be set by extending jobs
+    FRAMEWORK_DIRECTORY: ""
+  rules:
+    - if: $TEST_LCG_RELEASE != "all" && $TEST_LCG_RELEASE != $LCG_RELEASE
+      when: never
+    - if: $BUILD_MKSHAPESRDF == "true"
+      when: always
+  tags:
+    - cvmfs
+  before_script:
+    - !reference [.snippets, script, check_framework_name_and_directory]
+    # install more packages if needed
+    - ${EXTRA_SETUP}
+    - cd "gitlab_scans"
+    - export BUILD_INITIAL_DIR="${PWD}"
+  script:
+    - export LC_ALL="C.utf8"
+    - ./install.sh
+  cache:
+    key: $CI_JOB_NAME-$CI_COMMIT_REF_NAME
+    policy: push
+    paths:
+      - gitlab_scans/$FRAMEWORK_DIRECTORY
+
+#
+# templates for testing recipes and validating results
+#
+
+# generic template
+# required variables:
+#   - LCG_RELEASE: name of the framework to test
+#   - FRAMEWORK_DIRECTORY: name of the directory the framework was built in for reading caches
+#   - ERA_NAME: name of the era to test in
+#   - STEP_NAME: name of the recipe to test
+# optional variables
+#   - EXTRA_SETUP: additional command to install packages
+# required fields:
+#   - rules: variable-dependent rules defining dependencies through "rules:needs"
+#   - script: the test script
+.recipe:
+  allow_failure: true
+  stage: recipe
+  retry: 2
+  variables:
+    # setup
+    EXTRA_SETUP: dnf install -y gnupg xrootd-client
+    # EOS
+    EOS_MGM_URL: root://eoscms.cern.ch
+    EOS_DIRECTORY: /eos/cms/store/group/cat/datasets/recipes
+    TOKEN_PATH: token.txt
+    # paths
+    MODE: nano  # set to "mini" to use MiniAOD as input
+    RESULT_FILE_NAME: result.txt
+  tags:
+    - cvmfs
+  before_script:
+    # check variables
+    - !reference [.snippets, script, check_framework_name_and_directory]
+    - !reference [.snippets, script, check_era_and_recipe_names]
+    # install more packages if needed
+    - bash -c "${EXTRA_SETUP}"
+    # prepare the test
+    # get the test input file
+    # first decrypt the token
+    # then copy the files
+    - mkdir "${ERA_NAME}"
+    - xrdcp "${EOS_MGM_URL}/${EOS_DIRECTORY}/${TEST_FILE}?authz=${EOS_TOKEN}&xrd.wantprot=unix" "${ERA_NAME}"
+    - xrdcp "${EOS_MGM_URL}/${EOS_DIRECTORY}/${TRUTH_FILE}?authz=${EOS_TOKEN}&xrd.wantprot=unix" "${ERA_NAME}"
+    - !reference [.snippets, script, check_test_and_truth_files]
+    - export LC_ALL="C.utf8"
+  script:
+    # Run the test
+    # Validate the results
+  after_script:
+    # Something
+  cache:
+    - key: ${LCG_RELEASE}_build-${CI_COMMIT_REF_NAME}
+      policy: pull
+      paths:
+        - frameworks/$LCG_RELEASE/$FRAMEWORK_DIRECTORY
+    - key: get_eos_token
+      policy: pull
+      paths:
+        - ${TOKEN_PATH}.gpg
+  artifacts:
+    name: badges
+    when: always
+    paths:
+      - badges/*.svg
+      - badges/*.png
+      - $RESULT_FILE_NAME
+    reports:
+      junit: test_result.xml
+    expire_in: 1 month
