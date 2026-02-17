@@ -95,34 +95,34 @@ Productions = {
         "cmssw": "Full2024v15",
         "year": "2024",
     },
-        "Run2025_PromptBCDEFG_nAODv15_Full2025v15": {
+        "Run2025_PromptCDEFG_nAODv15_Full2025v15": {
         "isData": True,
         "jsonFile": "/processor/data/certification/Cert_Collisions2025_391658_398903_Golden.json",
-        "samples": "../framework/samples/Run2025_PromptBCDEFG_nAODv15.py",
+        "samples": "../framework/samples/Run2025_PromptCDEFG_nAODv15.py",
         "cmssw": "Full2025v15",
         "year": "2025",
     },
 
-        "Run2025_PromptBCDEFG_nAODv15_Full2025v15_EGamma": {
+        "Run2025_PromptCDEFG_nAODv15_Full2025v15_EGamma": {
         "isData": True,
         "jsonFile": "/processor/data/certification/Cert_Collisions2025_391658_398903_Golden.json",
-        "samples": "../framework/samples/Run2025_PromptBCDEFG_nAODv15_EGamma.py",
+        "samples": "../framework/samples/Run2025_PromptCDEFG_nAODv15_EGamma.py",
         "cmssw": "Full2025v15",
         "year": "2025",
     },
 
-        "Run2025_PromptBCDEFG_nAODv15_Full2025v15_Muon": {
+        "Run2025_PromptCDEFG_nAODv15_Full2025v15_Muon": {
         "isData": True,
         "jsonFile": "/processor/data/certification/Cert_Collisions2025_391658_398903_Golden.json",
-        "samples": "../framework/samples/Run2025_PromptBCDEFG_nAODv15_Muon.py",
+        "samples": "../framework/samples/Run2025_PromptCDEFG_nAODv15_Muon.py",
         "cmssw": "Full2025v15",
         "year": "2025",
     },
 
-        "Run2025_PromptBCDEFG_nAODv15_Full2025v15_MuonEG": {
+        "Run2025_PromptCDEFG_nAODv15_Full2025v15_MuonEG": {
         "isData": True,
         "jsonFile": "/processor/data/certification/Cert_Collisions2025_391658_398903_Golden.json",
-        "samples": "../framework/samples/Run2025_PromptBCDEFG_nAODv15_MuonEG.py",
+        "samples": "../framework/samples/Run2025_PromptCDEFG_nAODv15_MuonEG.py",
         "cmssw": "Full2025v15",
         "year": "2025",
     },

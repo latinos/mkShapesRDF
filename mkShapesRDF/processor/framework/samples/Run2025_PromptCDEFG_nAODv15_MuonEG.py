@@ -4,9 +4,6 @@ Samples = {}
 # MuonEG
 ############################################
 
-Samples["MuonEG_Run2025B-Prompt-v1"] = {
-    "nanoAOD": "/MuonEG/Run2025B-PromptReco-v1/NANOAOD",
-}
 Samples["MuonEG_Run2025C-Prompt-v2"] = {
     "nanoAOD": "/MuonEG/Run2025C-PromptReco-v2/NANOAOD",
 }
