@@ -301,7 +301,7 @@ class Snapshot(Module):
             opts.fLazy = True
             opts.fMode = "UPDATE"
             opts.fOverwriteIfExists = True
-            opts.fCompressionAlgorithm = ROOT.ROOT.kLZMA
+            opts.fCompressionAlgorithm = ROOT.RCompressionSetting.EAlgorithm.kLZMA
             opts.fCompressionLevel = 9
             values.append(
                 [
