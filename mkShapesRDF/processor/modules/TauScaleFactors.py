@@ -125,12 +125,13 @@ class TauScaleFactors(Module):
                 int gm = (int)gen[i];
                 if (gm != 0 && gm != 1 && gm != 2 && gm != 3 && gm != 4 && gm != 5 && gm != 6) continue;
                 int decay = (int)dm[i];
-                if (decay != 0 && decay != 1 && decay != 10 && decay != 11) continue;
                 if (pt[i] <= 20 || fabs(eta[i]) >= 2.3 || fabs(dz[i]) >= 0.2 || decay == 5 || decay == 6) continue;
                 if (std::string("{self.era}") == "Full2024v15") {{
+                    if (decay != 0 && decay != 1 && decay != 10 && decay != 11) continue;
                     SF[i] = tau_sfvsjet->evaluate({{ (double)pt[i], decay, gm, "Medium", "VVLoose", "nom", "dm"}});
                 }}
                 else{{
+                    if (decay != 0 && decay != 1 && decay != 2 && decay != 10 && decay != 11) continue;
                     SF[i] = tau_sfvsjet->evaluate({{ (double)pt[i], decay, gm, "Medium", "VVLoose", "nom", "dm"}});
                 }}
                 }}
