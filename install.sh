@@ -38,6 +38,9 @@ if [ "$1" == "docker" ]; then
 fi
 
 python -m venv --system-site-packages myenv
+pyversion=$(ls ${PWD}/myenv/lib64)
+local_python_path=${PWD}/myenv/lib64/$pyversion/site-packages
+export PYTHONPATH=$local_python_path:$PYTHONPATH
 source myenv/bin/activate
 
 if [ "$1" == "docker" ]; then
@@ -73,7 +76,7 @@ cat <<EOF > start.sh
 $sourceCommand
 source `pwd`/myenv/bin/activate
 export STARTPATH=`pwd`/start.sh 
-export PYTHONPATH=`pwd`/myenv/lib64/python3.11/site-packages:\$PYTHONPATH
+export PYTHONPATH=$local_python_path:\$PYTHONPATH
 export PATH=`pwd`/utils/bin:\$PATH
 EOF
 
