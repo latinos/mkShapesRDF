@@ -4,20 +4,15 @@
 
 .snippets:
   rules:
-    skip_on_wrong_release: &skip_on_wrong_release
-      - if: $TEST_LCG_RELEASE != "all" && $TEST_LCG_RELEASE != $LCG_RELEASE
-        when: never
     skip_on_wrong_test: &skip_on_wrong_test
       - if: $TEST_STEP != "all" && $TEST_STEP != $STEP_NAME
         when: never
     skip_on_wrong_era: &skip_on_wrong_era
       - if : $TEST_ERA != "all" && $TEST_ERA != $ERA_NAME
         when: never
-    skip_on_wrong_release_or_recipe:
-      - *skip_on_wrong_release
+    skip_on_wrong_test:
       - *skip_on_wrong_test
-    skip_on_wrong_release_or_recipe_or_era:
-      - *skip_on_wrong_release
+    skip_on_wrong_recipe_or_era:
       - *skip_on_wrong_test
       - *skip_on_wrong_era
     general_trigger_rules: &general_trigger_rules
@@ -31,7 +26,6 @@
           paths:
             - .gitlab/**/*
             - scripts/**/*
-            - frameworks/**/*  # Triggered by changes to any framework
         when: always
       - *general_trigger_rules
     framework_trigger_rules:
@@ -40,12 +34,9 @@
           paths:
             - .gitlab/**/*
             - scripts/**/*
-            - frameworks/${LCG_RELEASE}/**/*
         when: always
       - *general_trigger_rules
   script:
-    check_framework_name: &check_framework_name
-      - if [ -z "${LCG_RELEASE}" ]; then >&2 echo "LCG_RELEASE empty"; exit 1; fi
     check_framework_directory: &check_framework_directory
       - if [ -z "${FRAMEWORK_DIRECTORY}" ]; then >&2 echo "FRAMEWORK_DIRECTORY empty"; exit 1; fi
     check_framework_name_and_directory:
@@ -102,8 +93,6 @@
     # to be set by extending jobs
     FRAMEWORK_DIRECTORY: ""
   rules:
-    - if: $TEST_LCG_RELEASE != "all" && $TEST_LCG_RELEASE != $LCG_RELEASE
-      when: never
     - if: $BUILD_MKSHAPESRDF == "true"
       when: always
   tags:
@@ -129,7 +118,6 @@
 
 # generic template
 # required variables:
-#   - LCG_RELEASE: name of the framework to test
 #   - FRAMEWORK_DIRECTORY: name of the directory the framework was built in for reading caches
 #   - ERA_NAME: name of the era to test in
 #   - STEP_NAME: name of the recipe to test
