@@ -80,7 +80,7 @@ EOF
 
 chmod +x start.sh
 
-mkdir mkShapesRDF/processor/data/jsonpog-integration
+mkdir -p mkShapesRDF/processor/data/jsonpog-integration
 cp -r /cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG mkShapesRDF/processor/data/jsonpog-integration/
 
 
