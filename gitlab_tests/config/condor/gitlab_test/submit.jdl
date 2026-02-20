@@ -1,0 +1,11 @@
+universe = vanilla 
+executable = run.sh
+arguments = $(Folder)
+should_transfer_files = YES
+transfer_input_files = $(Folder)/script.py, /afs/cern.ch/user/s/squinto/private/work/mkShapesRDF_histogramming/mkShapesRDF/include/headers.hh, /afs/cern.ch/user/s/squinto/private/work/mkShapesRDF_histogramming/mkShapesRDF/shapeAnalysis/runner.py
+output = $(Folder)/out.txt
+error  = $(Folder)/err.txt
+log    = $(Folder)/log.txt
+request_cpus   = 1
++JobFlavour = "espresso"
+queue 1 Folder in top_0
