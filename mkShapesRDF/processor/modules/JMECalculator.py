@@ -404,9 +404,9 @@ class JMECalculator(Module):
 
                 JetColl = "newJet"
 
-                df = df.Define("newJet_pt", "CleanJet_pt")
-                df = df.Define("newJet_eta", "CleanJet_eta")
-                df = df.Define("newJet_phi", "CleanJet_phi")
+                df = df.Define("newJet_pt", "Take(Jet_pt, CleanJet_jetIdx)") # Take un-corrected information - avoid double applycation of SF
+                df = df.Define("newJet_eta", "Take(Jet_eta, CleanJet_jetIdx)")
+                df = df.Define("newJet_phi", "Take(Jet_phi, CleanJet_jetIdx)")
                 df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
 
                 cols.append(f"{JetColl}_pt")
