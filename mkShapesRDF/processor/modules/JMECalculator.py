@@ -468,22 +468,22 @@ class JMECalculator(Module):
                     if "Puppi" not in MET:
                         df = df.Define(
                             "PFMET_MetUnclustEnUpDeltaX",
-                            "PFMET_ptUnclusteredUp * std::cos(PFMET_phi)"
+                            "abs(PFMET_pt * std::cos(PFMET_phi) - PFMET_ptUnclusteredUp * std::cos(PFMET_phiUnclusteredUp))"
                         )
                         df = df.Define(
                             "PFMET_MetUnclustEnUpDeltaY",
-                            "PFMET_ptUnclusteredUp * std::sin(PFMET_phi)"
+                            "abs(PFMET_pt * std::sin(PFMET_phi) - PFMET_ptUnclusteredUp * std::cos(PFMET_phiUnclusteredUp))"
                         )
                         cols.append("PFMET_MetUnclustEnUpDeltaX")
                         cols.append("PFMET_MetUnclustEnUpDeltaY")
                     else:
                         df = df.Define(
                             "PuppiMET_MetUnclustEnUpDeltaX",
-                            "PuppiMET_ptUnclusteredUp * std::cos(PuppiMET_phi)"
+                            "abs(PuppiMET_pt * std::cos(PuppiMET_phi) - PuppiMET_ptUnclusteredUp * std::cos(PuppiMET_phiUnclusteredUp))"
                         )
                         df = df.Define(
                             "PuppiMET_MetUnclustEnUpDeltaY",
-                            "PuppiMET_ptUnclusteredUp * std::sin(PuppiMET_phi)"
+                            "abs(PuppiMET_pt * std::sin(PuppiMET_phi) - PuppiMET_ptUnclusteredUp * std::sin(PuppiMET_phiUnclusteredUp))"
                         )
                         cols.append("PuppiMET_MetUnclustEnUpDeltaX")
                         cols.append("PuppiMET_MetUnclustEnUpDeltaY")
