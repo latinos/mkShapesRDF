@@ -124,6 +124,8 @@ Steps = {
             "JES_modules_MC",
             "leptonScale_mc",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "finalSnapshot_JES",
         ]
     },
@@ -205,6 +207,8 @@ Steps = {
             "JES_modules_reduced_MC",
             "leptonScale_mc",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "finalSnapshot_JES",
         ]
     },
@@ -286,6 +290,8 @@ Steps = {
             "JES_modules_reduced_MC",
             "leptonScale_mc",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "finalSnapshot_JES",
         ]
     },
@@ -367,6 +373,8 @@ Steps = {
             "JES_modules_reduced_MC",
             "leptonScale_mc",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "finalSnapshot_JES",
         ]
     },
@@ -446,6 +454,8 @@ Steps = {
             "JES_modules_reducedv15_MC",
             "leptonScale_mc",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "finalSnapshot_JES",
         ]
     },
@@ -648,6 +658,8 @@ Steps = {
             "lepSel",
             "jetSelMask",
             "l2Kin",
+            "l3Kin",
+            "l4Kin",
             "trigData",
             "formulasDATA",
             "finalSnapshot_DATA",
@@ -1357,6 +1369,7 @@ Steps = {
             "jetSelMask",
             "l2Kin",
             "l3Kin",
+            "l4Kin",
             "trigData",
             "formulasDATA",
             "finalSnapshot_DATA",
