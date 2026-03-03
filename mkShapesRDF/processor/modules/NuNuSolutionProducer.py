@@ -208,7 +208,7 @@ class NuNuSolutionProducer(Module):
         }
 
         // Check whether a homogeneous coordinate lies on a conic section defined by "conic".
-        bool satisfiesConic(const TVectorD &v, const TMatrixD &conic, double tol = 1e-6) {
+        bool satisfiesConic(const TVectorD &v, const TMatrixD &conic, double tol = 1e-5) {
             if (v.GetNrows() != 3 || conic.GetNrows() != 3 || conic.GetNcols() != 3) {
                 return false;
             }
@@ -757,8 +757,8 @@ class NuNuSolutionProducer(Module):
                             ROOT::Math::Factory::CreateMinimizer("Minuit2", "Migrad"));
 
                         if (min) {
-                            min->SetTolerance(1e-10);
-                            min->SetPrecision(1e-12);
+                            min->SetTolerance(1e-14);
+                            min->SetPrecision(1e-15);
                             min->SetVariableStepSize(0, 0.01);
                             min->SetVariableStepSize(1, 0.01);
 
@@ -963,21 +963,21 @@ class NuNuSolutionProducer(Module):
 
         # Define b-jet selection criteria
         ROOT.gInterpreter.Declare("""
-std::vector<int> get_bjet_indices(const RVec<Float_t>& Jet_btagDeepFlavB,
+std::vector<int> get_bjet_indices(const RVec<Float_t>& Jet_btag,
                                   const RVec<Float_t>& CleanJet_eta,
                                   const RVec<Float_t>& CleanJet_pt,
                                   const RVec<int>& CleanJet_jetIdx,
                                   const float btag_wp) {
     std::vector<int> bjet_indices;
     for (size_t i = 0; i < CleanJet_pt.size(); ++i) {
-        if (CleanJet_pt[i] > 30 && std::abs(CleanJet_eta[i]) < 2.5 && Jet_btagDeepFlavB[CleanJet_jetIdx[i]] > btag_wp)
+        if (CleanJet_pt[i] > 20 && std::abs(CleanJet_eta[i]) < 2.5 && Jet_btag[CleanJet_jetIdx[i]] > btag_wp)
             bjet_indices.push_back(i);
     }
     return bjet_indices;
     }
         """)
 
-        # Define b-jet selection criteria
+        # Define lepton masses
         ROOT.gInterpreter.Declare("""
 float lepton_mass_from_pdgid(int pdgId) {
     const int absId = std::abs(pdgId);
@@ -1024,21 +1024,6 @@ float lepton_mass_from_pdgid(int pdgId) {
         )
         df = df.Define("met_x", "PuppiMET_pt * TMath::Cos(PuppiMET_phi)")
         df = df.Define("met_y", "PuppiMET_pt * TMath::Sin(PuppiMET_phi)")
-
-        # Define leptons momenta in x and y
-        df = df.Define("l1_pt_x", "pass_bjets ? l1.Px() : -9999.0")
-        df = df.Define("l1_pt_y", "pass_bjets ? l1.Py() : -9999.0")
-        df = df.Define("l1_phi", "pass_bjets ? l1.Phi() : -9999.0")
-        df = df.Define("l2_pt_x", "pass_bjets ? l2.Px() : -9999.0")
-        df = df.Define("l2_pt_y", "pass_bjets ? l2.Py() : -9999.0")
-        df = df.Define("l2_phi", "pass_bjets ? l2.Phi() : -9999.0")
-        # Define b-jet momenta in x and y
-        df = df.Define("b1_pt_x",  "pass_bjets ? b1.Px() : -9999.0")
-        df = df.Define("b1_pt_y",  "pass_bjets ? b1.Py() : -9999.0")
-        df = df.Define("b1_phi",  "pass_bjets ? b1.Phi() : -9999.0")
-        df = df.Define("b2_pt_x",  "pass_bjets ? b2.Px() : -9999.0")
-        df = df.Define("b2_pt_y",  "pass_bjets ? b2.Py() : -9999.0")
-        df = df.Define("b2_phi",  "pass_bjets ? b2.Phi() : -9999.0")
 
         # Build double-neutrino solutions
         df = df.Define(
@@ -1121,7 +1106,7 @@ float lepton_mass_from_pdgid(int pdgId) {
         # MET residual (MET that can't be explained by neutrino momenta)
         df = df.Define(
             "pdark",
-            "pass_bjets ? sqrt(((met_x - nu1_px - nu2_px)*(met_x - nu1_px - nu2_px) + (met_y - nu1_py - nu2_py)*(met_y - nu1_py - nu2_py)) : -9999.0",
+            "pass_bjets ? sqrt(((met_x - nu1_px - nu2_px)*(met_x - nu1_px - nu2_px) + (met_y - nu1_py - nu2_py)*(met_y - nu1_py - nu2_py))) : -9999.0",
         );
 
         # Drop intermediate helper columns to keep the dataframe clean
@@ -1130,12 +1115,8 @@ float lepton_mass_from_pdgid(int pdgId) {
             "l1", "l2", "b1", "b2",
             "dnsol","top1", "top2", "l1_top_rf", "l2_top_rf",
             "H1_flat", "H2_flat", "N1_flat", "N2_flat", "N2_nubar_flat", "nunu_solutions_flat",
-            "pass_bjets",
+            #"pass_bjets",
             "met_x", "met_y",
-            "l1_pt_x", "l1_pt_y", "l1_phi",
-            "l2_pt_x", "l2_pt_y", "l2_phi",
-            "b1_pt_x", "b1_pt_y", "b1_phi",
-            "b2_pt_x", "b2_pt_y", "b2_phi",
             "pass_bjets_float",
             ]
         
