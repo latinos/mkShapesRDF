@@ -101,7 +101,7 @@ class LeptonSel(Module):
             columnsToDrop.append("LeptonMaskHyg_Mu")
         else:
             ### Electron veto
-            for key, cuts in ElectronWP[self.era]["TightObjWP"]["wp80iso_POG"]["cuts"].items():
+            for key, cuts in ElectronWP[self.era]["TightObjWP"]["testrecipes"]["cuts"].items():
                 df = df.Redefine("tmp1", key)
                 df = df.Redefine("tmp2", "(" + cuts[0] + ")")
                 for cut in cuts[1:]:

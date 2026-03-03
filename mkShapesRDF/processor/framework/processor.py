@@ -4,6 +4,7 @@ from mkShapesRDF.processor.framework.Steps_cfg import Steps
 from mkShapesRDF.processor.framework.Sites_cfg import Sites
 from mkShapesRDF.processor.framework.Productions_cfg import Productions
 from mkShapesRDF.lib.search_files import SearchFiles
+import time as time
 import os
 from pathlib import Path
 from math import ceil
@@ -437,8 +438,78 @@ class Processor:
 
                 ROOT.gROOT.SetBatch(True)
                 ROOT.EnableImplicitMT()
-                df = ROOT.RDataFrame("Runs", files)
-                genEventSumw = df.Sum("genEventSumw").GetValue()
+                #df = ROOT.RDataFrame("Runs", files)
+                #genEventSumw = df.Sum("genEventSumw").GetValue()
+                
+                genEventSumw = 0.0                
+                def computeSumW(myfiles, chunksize):
+                    print("\n")
+                    print("Try with cunksize " + str(chunksize))
+                    nIterations = max(ceil(len(myfiles) / chunksize), 1)
+                    genEventSumw_tmp = 0.0
+                    for i in range(nIterations):
+                        print("Iteration: " + str(i))
+                        if ((i+1) * chunksize >= len(files)):
+                            files_tmp = myfiles[i * chunksize:]
+                        else:
+                            files_tmp =	myfiles[i * chunksize : (i+1) * chunksize]
+
+                        df = ROOT.RDataFrame("Runs", files_tmp)
+                        try:
+                            genEventSumw_tmp += df.Sum("genEventSumw").GetValue()
+                            del df
+                        except:
+                            print("\n")
+                            print("Exception: Cannot compute sumW for file or files. Try with lower chunksize.")                            
+                            del df
+                            if (chunksize == 1):
+                                continue                            
+                            print("\n")
+                            print("----------------")
+                            if round(chunksize/2)<20:
+                                genEventSumw_tmp += computeSumW(files_tmp, 1)
+                            else:
+                                genEventSumw_tmp += computeSumW(files_tmp, round(chunksize/2))
+                            print("----------------")
+                            
+                    return genEventSumw_tmp
+
+                genEventSumw += computeSumW(files, len(files))
+
+                print(f"Finally computed sumW: {genEventSumw}")
+                
+                """
+                chunksize = 100
+                nIterations = max(ceil(len(files) / chunksize), 1)
+                for i in range(nIterations):
+                    print("Iteration: " + str(i))
+                    if (i+1) * chunksize > len(files):
+                        files_tmp = files[i * chunksize, -1]
+                    else:
+                        files_tmp = files[i * chunksize, (i+1) * chunksize]
+                        
+                    try:
+                        df = ROOT.RDataFrame("Runs", files_tmp)
+                        genEventSumw_tmp = df.Sum("genEventSumw").GetValue()
+                        genEventSumw += genEventSumw_tmp
+                    except:
+                        print("Cannot compute sumW for 100 files")
+                        print("\n")
+                        print("Try 10 by 10!!!!")
+
+                        chunksize2 = 10
+                        nIterations2 = max(ceil(len(files_tmp) / chunksize2), 1)
+                        for j in range(nIterations2):
+                            if (i+1) * chunksize > len(files_tmp): 
+                                files_tmp2 = files_tmp[i * chunksize, -1]
+                            else:
+                                files_tmp2 = files_tmp[i * chunksize, (i+1) * chunksize]
+
+                            try:
+                                df = ROOT.RDataFrame("Runs", files_tmp2)
+                                genEventSumw += df.Sum("genEventSumw").GetValue()
+                                
+                """
                 sample_fPy = sample_fPy.replace("RPLME_genEventSumw", str(genEventSumw))
 
             for part in range(nParts):

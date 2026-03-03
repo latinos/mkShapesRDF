@@ -20,6 +20,7 @@ xs_db = {}
 # https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageBR
 # BR (H-->WW) = 0.2152
 # BR (H-->tt) = 0.06256
+# BR (H-->bb) = 0.5824
 # BR (H-->ZZ) = 0.02641
 
 # https://pdg.lbl.gov/2024/listings/rpp2024-list-w-boson.pdf
@@ -57,6 +58,8 @@ xs_db["GluGlutoContintoWWtoTauNuENu"]   = ["xsec=0.0790", "kfact=1.000", "ref=A"
 xs_db["GluGlutoContintoWWtoTauNuMuNu"]  = ["xsec=0.0795", "kfact=1.000", "ref=A"]
 xs_db["GluGlutoContintoWWtoTauNuTauNu"] = ["xsec=0.0840", "kfact=1.000", "ref=A"]
 
+xs_db["WWewk"] = ["xsec=0.3304", "kfact=1.000", "ref=G"]
+
 xs_db["WWTo2L2Nu_LL"] = ["xsec=0.488",  "kfact=1.000", "ref=X"] ## 4.598 * 9 * BR(W->lnu) * BR(W->lnu) / BR(W->lnu) = 0.1086
 xs_db["WWTo2L2Nu_TT"] = ["xsec=6.266",  "kfact=1.000", "ref=X"] ## 59.03
 xs_db["WWTo2L2Nu_LT"] = ["xsec=0.911",  "kfact=1.000", "ref=X"] ## 8.582
@@ -73,6 +76,7 @@ xs_db["TTTo2L2Nu_TuneCP5Down"]        = ["xsec=98.036", "kfact=1.000", "ref=C"]
 xs_db["TTToSemiLeptonic"]             = ["xsec=406.82", "kfact=1.000", "ref=C"] # 923.6 * 0.6760 * 0.1086 * 3 * 2 
 xs_db["TTToSemiLeptonic_TuneCP5Up"]   = ["xsec=406.82", "kfact=1.000", "ref=C"]
 xs_db["TTToSemiLeptonic_TuneCP5Down"] = ["xsec=406.82", "kfact=1.000", "ref=C"]
+xs_db["TTTo4Q"]                       = ["xsec=419.69", "kfact=1.000", "ref=C"] # 923.6 * 0.6741 * 0.6741
 
 xs_db["ST_tW_top"]        = ["xsec=19.30", "kfact=1.000", "ref=D"] # 43.95 * 2*(3*0.1086*0.6741)
 xs_db["ST_tW_antitop"]    = ["xsec=19.30", "kfact=1.000", "ref=D"] # 43.95 * 2*(3*0.1086*0.6741)
@@ -84,21 +88,51 @@ xs_db["ST_t-channel_antitop"] = ["xsec=87.2",  "kfact=1.000", "ref=D"]
 xs_db["ST_s-channel_plus"]    = ["xsec=2.360", "kfact=1.000", "ref=D"] # 7.244 * (3*0.1086)
 xs_db["ST_s-channel_minus"]   = ["xsec=1.477", "kfact=1.000", "ref=D"] # 4.534 * (3*0.1086)
 
+### TTX
+xs_db["TTNuNu"] = ["xsec=0.1638", "kfact=1.000", "ref=G"]
+xs_db["TTLL_MLL-4to50"] = ["xsec=0.03949", "kfact=1.000", "ref=G"]
+xs_db["TTLL_MLL-50"] = ["xsec=0.08646", "kfact=1.000", "ref=G"]
+xs_db["TTZ-ZtoQQ"] = ["xsec=0.6603", "kfact=1.000", "ref=G"]
+xs_db["TTLNu"] = ["xsec=0.2505", "kfact=1.000", "ref=G"]
+xs_db["TTW-WtoQQ"] = ["xsec=0.4678", "kfact=1.000", "ref=G"]
+xs_db["TTHtoNon2B"] = ["xsec=0.2398", "kfact=1.000", "ref=G"] # 0.5742 * [1 - BR(H->bb)] = 0.5742 * (1 - 0.5824) = 0.2398
+xs_db["TTHto2B"] = ["xsec=0.3344", "kfact=1.000", "ref=G"] # 0.5742 * BR(H->bb) = 0.5742 * 0.5824 = 0.3344
+xs_db["TTTT"] = ["xsec=0.009652", "kfact=1.000", "ref=G"]
+
+### TXX
+xs_db["THW"] = ["xsec=0.133", "kfact=1.000", "ref=G"]
+xs_db["THQ"] = ["xsec=0.744", "kfact=1.000", "ref=G"]
+#xs_db["TWZ"] = ["xsec=", "kfact=1.000", "ref=C"]
+
 ### WZ
 xs_db["WZTo3LNu"]  = ["xsec=5.32",    "kfact=1.000", "ref=A"] # (XS(pp->e- e+ μ-  ̄vμ) + XS(pp->e- e+ μ+ vμ)) * 9 * BR(ZW->ll lv) / BR(ZW->ee mv)  (0.2385 + 0.3474) * 9 *  0.0036552588 / 0.0036255296
 xs_db["WZ"]        = ["xsec=53.9",    "kfact=1.000", "ref=A"] # XS(WZTo3LNu) / (3*9*BR(WZ->lv ll))
+xs_db["WZTo2L2Q"]  = ["xsec=3.67",    "kfact=1.000", "ref=A"] # XS(WZ) * 3*BR(Z->ll) * BR(W->qq)
 xs_db["WZToLNu2Q"] = ["xsec=6.44",    "kfact=1.000", "ref=X"]
 xs_db["WZG"]       = ["xsec=0.08425", "kfact=1.000", "ref=X"]
 
 ### Zg
-xs_db["ZGToLLG"] = ["xsec=1.075", "kfact=1.000", "ref=X"]
+xs_db["ZGToLLG"]     = ["xsec=1.075", "kfact=1.000", "ref=X"]
+xs_db["ZG"]          = ["xsec=1.075", "kfact=1.000", "ref=X"]
+xs_db["ZG2JtoG2L2J"] = ["xsec=1.075", "kfact=0.1142", "ref=G"]
+
+### Wg
+#xs_db["WGtoLNuG-1J_PTG10to100"]  = ["xsec=662.2",    "kfact=1.000", "ref=G"]
+#xs_db["WGtoLNuG-1J_PTG100to200"] = ["xsec=2.221",    "kfact=1.000", "ref=G"]
+#xs_db["WGtoLNuG-1J_PTG200to400"] = ["xsec=0.2908",   "kfact=1.000", "ref=G"]
+#xs_db["WGtoLNuG-1J_PTG400to600"] = ["xsec=0.02231",  "kfact=1.000", "ref=G"]
+#xs_db["WGtoLNuG-1J_PTG600"]      = ["xsec=0.004907", "kfact=1.000", "ref=G"]
 
 ### WG
-xs_db['WGtoLNuG-1J_PTG10to100']  = ["xsec=215.7", "kfact=1.000", "ref=G"]        # XS * BR (W-->lv) = 0.1086*3
-xs_db['WGtoLNuG-1J_PTG100to200'] = ["xsec=0.7236", "kfact=1.000", "ref=G"]
-xs_db['WGtoLNuG-1J_PTG200to400'] = ["xsec=0.09474", "kfact=1.000", "ref=G"]
-xs_db['WGtoLNuG-1J_PTG400to600'] = ["xsec=0.007269", "kfact=1.000", "ref=G"]
-xs_db['WGtoLNuG-1J_PTG600']      = ["xsec=0.001599", "kfact=1.000", "ref=G"]
+xs_db['WGtoLNuG-1J']             = ["xsec=671.5",    "kfact=1.000", "ref=G"] # XSDB 
+xs_db['WGtoLNuG-1J_PTG10to100']  = ["xsec=215.7",    "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
+xs_db['WGtoLNuG-1J_PTG100to200'] = ["xsec=0.7236",   "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
+xs_db['WGtoLNuG-1J_PTG200to400'] = ["xsec=0.09474",  "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
+xs_db['WGtoLNuG-1J_PTG400to600'] = ["xsec=0.007269", "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
+xs_db['WGtoLNuG-1J_PTG100']      = ["xsec=0.8352",   "kfact=1.000", "ref=B"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
+# xs_db['WGtoLNuG-1J_PTG200']      = ["xsec=",   "kfact=1.000", "ref="]
+# xs_db['WGtoLNuG-1J_PTG400']      = ["xsec=0.02661",  "kfact=1.000", "ref=G"]
+xs_db['WGtoLNuG-1J_PTG600']      = ["xsec=0.001599", "kfact=1.000", "ref=G"] # XS * BR (W-->lv) = 0.1086*3 --> The BR is an error in the config a k-factor should be added to match the XSDB value
 
 ### ZZ
 xs_db["ZZ"]        = ["xsec=16.7",   "kfact=1.000", "ref=X"]
@@ -114,7 +148,14 @@ xs_db["WZZ"] = ["xsec=0.06206", "kfact=1.000", "ref=X"]
 xs_db["ZZZ"] = ["xsec=0.01591", "kfact=1.000", "ref=X"]
 
 # W+Jets
-xs_db["WToLNu-2Jets"] = ["xsec=67710.0", "kfact=1.000", "ref=G"]
+xs_db["WToLNu-2Jets"] = ["xsec=63396.0", "kfact=1.000", "ref=A"]
+
+xs_db["WToENu-2Jet"] = ["xsec=21132.0", "kfact=1.000", "ref=A"]
+xs_db["WToMuNu-2Jet"] = ["xsec=21132.0", "kfact=1.000", "ref=A"]
+xs_db["WToTauNu-2Jet"] = ["xsec=21132.0", "kfact=1.000", "ref=A"]
+
+xs_db["WToLNu-1Jet-LO"] = ["xsec=9084.0", "kfact=1.000", "ref=A"]
+xs_db["WToLNu-2Jet-LO"] = ["xsec=2925.0", "kfact=1.000", "ref=A"]
 
 # DY
 xs_db["DYJetsToLL_M-50-LO"]      = ["xsec=6275.1",  "kfact=1.000", "ref=A"] # 2091.7 * 3
@@ -132,6 +173,23 @@ xs_db["DYto2Mu-2Jets_MLL-50-LO"]  = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
 xs_db["DYto2Tau-2Jets_MLL-10to50"] = ["xsec=6660.8", "kfact=1.000", "ref=H"]
 xs_db["DYto2Tau-2Jets_MLL-50"]     = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
 xs_db["DYto2Tau-2Jets_MLL-50-LO"]  = ["xsec=2091.7",  "kfact=1.000", "ref=A"]
+
+xs_db["DYto2Tau-2Jets_MLL-50_0J"]     = ["xsec=1682.0",  "kfact=1.000", "ref=A"] # Tbh, shamelessly copied from Htautau
+xs_db["DYto2Tau-2Jets_MLL-50_1J"]     = ["xsec=318.1",  "kfact=1.000", "ref=A"]
+xs_db["DYto2Tau-2Jets_MLL-50_2J"]     = ["xsec=120.6",  "kfact=1.000", "ref=A"]
+
+# DYG
+xs_db["DYGto2LG-1Jets_MLL-4to50_PTG-10to100"]      = ["xsec=88.17",     "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-4to50_PTG-10to100_ext1"] = ["xsec=88.17",     "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-4to50_PTG-100to200"]     = ["xsec=0.2413",    "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-4to50_PTG-200"]          = ["xsec=0.02224",   "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-50_PTG-10to100"]         = ["xsec=126.6",     "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-50_PTG-100to200"]        = ["xsec=0.3493",    "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-50_PTG-200to400"]        = ["xsec=0.04331",   "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-50_PTG-400to600"]        = ["xsec=0.00313",   "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_MLL-50_PTG-600"]             = ["xsec=0.0006528", "kfact=1.000", "ref=G"]
+xs_db["DYGto2LG-1Jets_Bin-MLL-50"]                 = ["xsec=127.1",     "kfact=1.000", "ref=B"]
+xs_db["DYGto2LG-1Jets_Bin-MLL-4to50"]              = ["xsec=88.45",     "kfact=1.000", "ref=B"]
 
 # QCD
 xs_db["QCD_PT-15to20_MuEnrichedPt5"]    = ["xsec=2960000.0", "kfact=1.000", "ref=G"]
@@ -162,7 +220,6 @@ xs_db['QCD_PT-30to80_bcToE']   = ["xsec=1322000.0", "kfact=1.000", "ref=G"]
 xs_db['QCD_PT-80to170_bcToE']  = ["xsec=74510.0",   "kfact=1.000", "ref=G"]
 xs_db['QCD_PT-170to250_bcToE'] = ["xsec=3898.0",    "kfact=1.000", "ref=G"]
 xs_db['QCD_PT-250toInf_bcToE'] = ["xsec=963.4",     "kfact=1.000", "ref=G"]
-
 
 # THIS IS OLD, AND COMES FROM RUN 2 UL!!
 #
