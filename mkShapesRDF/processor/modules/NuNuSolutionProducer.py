@@ -1119,6 +1119,12 @@ std::vector<int> get_bjet_indices(const RVec<Float_t>& Jet_btagDeepFlavB,
             "l1", "l2", "b1", "b2",
             "dnsol","top1", "top2", "l1_top_rf", "l2_top_rf",
             "H1_flat", "H2_flat", "N1_flat", "N2_flat", "N2_nubar_flat", "nunu_solutions_flat",
+            "pass_bjets",
+            "met_x", "met_y",
+            "l1_pt_x", "l1_pt_y", "l1_phi",
+            "l2_pt_x", "l2_pt_y", "l2_phi",
+            "b1_pt_x", "b1_pt_y", "b1_phi",
+            "b2_pt_x", "b2_pt_y", "b2_phi",
             "pass_bjets_float",
             ]
         
@@ -1128,4 +1134,3 @@ std::vector<int> get_bjet_indices(const RVec<Float_t>& Jet_btagDeepFlavB,
         # Return the final dataframe
         return df
         
-
