@@ -4,7 +4,7 @@ sourceCommand="echo 'first source of start.sh'"
 
 env=$(hostname)
 
-OS=$(hostnamectl | grep "CPE OS Name")
+OS=$(grep "^CPE_NAME=" /etc/os-release | cut -d= -f2- | tr -d '"')
 echo "OS ""$OS"
 
 echo "Custom install ""$1"
@@ -15,7 +15,7 @@ if [ -z "$1" ]; then
         sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-centos7-gcc11-opt/setup.sh"
     elif [[ "$OS" == *"linux:9"* ]]; then
         echo el9
-        sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_105/x86_64-el9-gcc11-opt/setup.sh"
+        sourceCommand="$sourceCommand""; source /cvmfs/sft.cern.ch/lcg/views/LCG_109/x86_64-el9-gcc13-opt/setup.sh"
     else
         echo "$OS"" not supported"
         exit 1
@@ -38,6 +38,9 @@ if [ "$1" == "docker" ]; then
 fi
 
 python -m venv --system-site-packages myenv
+pyversion=$(ls ${PWD}/myenv/lib64)
+local_python_path=${PWD}/myenv/lib64/$pyversion/site-packages
+export PYTHONPATH=$local_python_path:$PYTHONPATH
 source myenv/bin/activate
 
 if [ "$1" == "docker" ]; then
@@ -72,17 +75,15 @@ cat <<EOF > start.sh
 #!/bin/bash
 $sourceCommand
 source `pwd`/myenv/bin/activate
-export STARTPATH=`pwd`/start.sh
-export JAVA_HOME=/cvmfs/sft.cern.ch/lcg/releases/java/11.0.21p9-cabd2/x86_64-el9-gcc13-opt
-export PATH=\$JAVA_HOME/bin:\$PATH
-export PYTHONPATH=`pwd`/myenv/lib64/python3.9/site-packages:\$PYTHONPATH
+export STARTPATH=`pwd`/start.sh 
+export PYTHONPATH=$local_python_path:\$PYTHONPATH
 export PATH=`pwd`/utils/bin:\$PATH
 EOF
 
 
 chmod +x start.sh
 
-mkdir mkShapesRDF/processor/data/jsonpog-integration
+mkdir -p mkShapesRDF/processor/data/jsonpog-integration
 cp -r /cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG mkShapesRDF/processor/data/jsonpog-integration/
 
 

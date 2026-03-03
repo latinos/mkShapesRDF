@@ -30,7 +30,7 @@ double ele_unc_smear(double Lepton_pt, double Electron_r9, double sc_eta, double
 // Scale correction applied to data
 double ele_scale(double run, double sc_eta, double Electron_r9, double Lepton_pt, double Electron_seedGain)
 {
-    double scale = elecset_scale->evaluate({"scale", run, sc_eta, Electron_r9, abs(sc_eta), Lepton_pt, Electron_seedGain});
+    double scale = elecset_scale->evaluate({"scale", run, sc_eta, Electron_r9, Lepton_pt, Electron_seedGain});
     double data_scale = scale * Lepton_pt;
     return data_scale;
 }
@@ -49,7 +49,7 @@ double ele_smear(double Lepton_pt, double Electron_r9, double sc_eta, double ran
 // all the inputs are needed for the evaluation
 double ele_unc_scale(double run, double sc_eta, double Electron_r9, double Lepton_pt, double Electron_seedGain, double Lepton_newPt, string updn)
 {
-    double unc_scale = elecset_scale->evaluate({"escale", run, sc_eta, Electron_r9, abs(sc_eta), Lepton_pt, Electron_seedGain});
+    double unc_scale = elecset_scale->evaluate({"escale", run, sc_eta, Electron_r9, Lepton_pt, Electron_seedGain});
     double mc_unc_scale = Lepton_newPt;
     if (updn=="up")
     {

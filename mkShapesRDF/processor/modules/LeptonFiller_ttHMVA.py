@@ -29,6 +29,8 @@ class LeptonFiller_ttHMVA(Module):
                 }
 		"""
             )
+
+        ROOT.TMVA.PyMethodBase.PyInitialize();
         
         ROOT.gROOT.ProcessLineSync(f".L {self.script_path}/Muon_tthMVAFiller.cc+")
         ROOT.gInterpreter.Declare(f'Muon_tthMVAFiller evaluateTTH_muon("{self.script_path}/{self.mu_xml}");')
