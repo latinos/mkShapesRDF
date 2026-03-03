@@ -1,9 +1,36 @@
 import ROOT
 from mkShapesRDF.processor.framework.module import Module
+from mkShapesRDF.processor.modules.btag_working_points import (
+    resolve_btag_configuration,
+)
+
 
 class NuSolutionProducer(Module):
-    def __init__(self):
+    def __init__(
+        self,
+        btag_branch=None,
+        btag_wp=None,
+        era=None,
+        btagger="DeepFlavB",
+        working_point="loose",
+    ):
         super().__init__("NuSolutionProducer")
+
+        if btag_branch is not None and btag_wp is not None:
+            self.btag_branch = btag_branch
+            self.btag_wp = float(btag_wp)
+        elif btag_branch is None and btag_wp is None and era is not None:
+            self.btag_branch, self.btag_wp = resolve_btag_configuration(
+                era, btagger, working_point
+            )
+        elif btag_branch is None and btag_wp is None:
+            self.btag_branch = "Jet_btagDeepFlavB"
+            self.btag_wp = 0.0583
+        else:
+            raise ValueError(
+                "Provide both 'btag_branch' and 'btag_wp', or provide neither. "
+                "To use year-dependent WPs, pass 'era', 'btagger', and 'working_point'."
+            )
 
     def runModule(self, df, values):
         ROOT.gInterpreter.Declare("""
@@ -941,10 +968,11 @@ class NuSolutionProducer(Module):
 std::vector<int> get_bjet_indices(const RVec<Float_t>& Jet_btagDeepFlavB,
                                   const RVec<Float_t>& CleanJet_eta,
                                   const RVec<Float_t>& CleanJet_pt,
-                                  const RVec<int>& CleanJet_jetIdx) {
+                                  const RVec<int>& CleanJet_jetIdx,
+                                  const float btag_wp) {
     std::vector<int> bjet_indices;
     for (size_t i = 0; i < CleanJet_pt.size(); ++i) {
-        if (CleanJet_pt[i] > 30 && std::abs(CleanJet_eta[i]) < 2.5 && Jet_btagDeepFlavB[CleanJet_jetIdx[i]] > 0.0583)
+        if (CleanJet_pt[i] > 30 && std::abs(CleanJet_eta[i]) < 2.5 && Jet_btagDeepFlavB[CleanJet_jetIdx[i]] > btag_wp)
             bjet_indices.push_back(i);
     }
     return bjet_indices;
@@ -953,7 +981,7 @@ std::vector<int> get_bjet_indices(const RVec<Float_t>& Jet_btagDeepFlavB,
 
         df = df.Define(
             "bjet_indices",
-            "get_bjet_indices(Jet_btagDeepFlavB, CleanJet_eta, CleanJet_pt, CleanJet_jetIdx)",
+            f"get_bjet_indices({self.btag_branch}, CleanJet_eta, CleanJet_pt, CleanJet_jetIdx, {self.btag_wp})",
         )
         df = df.Define(
             "pass_bjets",
@@ -1100,5 +1128,4 @@ std::vector<int> get_bjet_indices(const RVec<Float_t>& Jet_btagDeepFlavB,
         # Return the final dataframe
         return df
         
-
 
