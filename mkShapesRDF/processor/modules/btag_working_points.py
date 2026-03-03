@@ -6,7 +6,7 @@ B_TAG_BRANCHES = {
 }
 
 B_TAG_WORKING_POINTS = {
-    "2022": {
+    "Full2022v12": {
         "DeepFlavB": {
             "loose": 0.0583,
             "medium": 0.3086,
@@ -29,7 +29,7 @@ B_TAG_WORKING_POINTS = {
             "xxtight": 0.9610,
         },
     },
-    "2022EE": {
+    "Full2022EEv12": {
         "DeepFlavB": {
             "loose": 0.0614,
             "medium": 0.3196,
@@ -52,7 +52,7 @@ B_TAG_WORKING_POINTS = {
             "xxtight": 0.9664,
         },
     },
-    "2023": {
+    "Full2023v12": {
         "DeepFlavB": {
             "loose": 0.0479,
             "medium": 0.2435,
@@ -66,7 +66,7 @@ B_TAG_WORKING_POINTS = {
             "medium": 0.1919,
         },
     },
-    "2023BPix": {
+    "Full2023BPixv12": {
         "DeepFlavB": {
             "loose": 0.0480,
             "medium": 0.2435,
@@ -80,7 +80,7 @@ B_TAG_WORKING_POINTS = {
             "medium": 0.1919,
         },
     },
-    "2024": {
+    "Full2024v15": {
         "DeepFlavB": {
             "loose": 0.0480,
             "medium": 0.2435,
