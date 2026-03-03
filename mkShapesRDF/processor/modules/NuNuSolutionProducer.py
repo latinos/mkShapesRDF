@@ -977,6 +977,17 @@ std::vector<int> get_bjet_indices(const RVec<Float_t>& Jet_btagDeepFlavB,
     }
         """)
 
+        # Define b-jet selection criteria
+        ROOT.gInterpreter.Declare("""
+float lepton_mass_from_pdgid(int pdgId) {
+    const int absId = std::abs(pdgId);
+    if (absId == 11) return 0.000511f;   // electron
+    if (absId == 13) return 0.105658f;   // muon
+    if (absId == 15) return 1.77686f;    // tau
+    return 0.0f;
+}
+        """)
+
         df = df.Define(
             "bjet_indices",
             f"get_bjet_indices({self.btag_branch}, CleanJet_eta, CleanJet_pt, CleanJet_jetIdx, {self.btag_wp})",
@@ -1001,13 +1012,15 @@ std::vector<int> get_bjet_indices(const RVec<Float_t>& Jet_btagDeepFlavB,
         )
         df = df.Define(
             "l1",
-            "TLorentzVector l1; if (!pass_bjets || Lepton_pt.size() < 1) return l1; "
-            "l1.SetPtEtaPhiM(Lepton_pt[0], Lepton_eta[0], Lepton_phi[0], Lepton_mass[0]); return l1;",
+            "TLorentzVector l1; if (!pass_bjets || Lepton_pt.size() < 1 || Lepton_pdgId.size() < 1) return l1; "
+            "const float l1_mass = lepton_mass_from_pdgid(Lepton_pdgId[0]); "
+            "l1.SetPtEtaPhiM(Lepton_pt[0], Lepton_eta[0], Lepton_phi[0], l1_mass); return l1;",
         )
         df = df.Define(
             "l2",
-            "TLorentzVector l2; if (!pass_bjets || Lepton_pt.size() < 2) return l2; "
-            "l2.SetPtEtaPhiM(Lepton_pt[1], Lepton_eta[1], Lepton_phi[1], Lepton_mass[1]); return l2;",
+            "TLorentzVector l2; if (!pass_bjets || Lepton_pt.size() < 2 || Lepton_pdgId.size() < 2) return l2; "
+            "const float l2_mass = lepton_mass_from_pdgid(Lepton_pdgId[1]); "
+            "l2.SetPtEtaPhiM(Lepton_pt[1], Lepton_eta[1], Lepton_phi[1], l2_mass); return l2;",
         )
         df = df.Define("met_x", "PuppiMET_pt * TMath::Cos(PuppiMET_phi)")
         df = df.Define("met_y", "PuppiMET_pt * TMath::Sin(PuppiMET_phi)")
