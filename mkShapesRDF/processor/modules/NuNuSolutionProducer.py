@@ -5,7 +5,7 @@ from mkShapesRDF.processor.modules.btag_working_points import (
 )
 
 
-class NuSolutionProducer(Module):
+class NuNuSolutionProducer(Module):
     def __init__(
         self,
         btag_branch=None,
@@ -14,7 +14,7 @@ class NuSolutionProducer(Module):
         btagger="DeepFlavB",
         working_point="loose",
     ):
-        super().__init__("NuSolutionProducer")
+        super().__init__("NuNuSolutionProducer")
 
         if btag_branch is not None and btag_wp is not None:
             self.btag_branch = btag_branch
@@ -23,13 +23,11 @@ class NuSolutionProducer(Module):
             self.btag_branch, self.btag_wp = resolve_btag_configuration(
                 era, btagger, working_point
             )
-        elif btag_branch is None and btag_wp is None:
-            self.btag_branch = "Jet_btagDeepFlavB"
-            self.btag_wp = 0.0583
         else:
             raise ValueError(
-                "Provide both 'btag_branch' and 'btag_wp', or provide neither. "
-                "To use year-dependent WPs, pass 'era', 'btagger', and 'working_point'."
+                "No b-tag configuration provided. "
+                "Pass either both 'btag_branch' and 'btag_wp', or pass "
+                "'era', 'btagger', and 'working_point' to use year-dependent WPs."
             )
 
     def runModule(self, df, values):
