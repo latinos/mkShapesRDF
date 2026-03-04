@@ -1,9 +1,141 @@
 import ROOT
 from mkShapesRDF.processor.framework.module import Module
-from mkShapesRDF.processor.modules.btag_working_points import (
-    resolve_btag_configuration,
-)
 
+B_TAG_BRANCHES = {
+    "DeepFlavB": "Jet_btagDeepFlavB",
+    "RobustParTAK4B": "Jet_btagRobustParTAK4B",
+    "PNetB": "Jet_btagPNetB",
+    "UParTAK4B": "Jet_btagUParTAK4B",
+}
+
+B_TAG_WORKING_POINTS = {
+    "Full2022v12": {
+        "DeepFlavB": {
+            "loose": 0.0583,
+            "medium": 0.3086,
+            "tight": 0.7183,
+            "xtight": 0.8111,
+            "xxtight": 0.9512,
+        },
+        "RobustParTAK4B": {
+            "loose": 0.0849,
+            "medium": 0.4319,
+            "tight": 0.8482,
+            "xtight": 0.9151,
+            "xxtight": 0.9874,
+        },
+        "PNetB": {
+            "loose": 0.0470,
+            "medium": 0.2450,
+            "tight": 0.6734,
+            "xtight": 0.7862,
+            "xxtight": 0.9610,
+        },
+    },
+    "Full2022EEv12": {
+        "DeepFlavB": {
+            "loose": 0.0614,
+            "medium": 0.3196,
+            "tight": 0.7300,
+            "xtight": 0.8184,
+            "xxtight": 0.9542,
+        },
+        "RobustParTAK4B": {
+            "loose": 0.0897,
+            "medium": 0.4510,
+            "tight": 0.8604,
+            "xtight": 0.9234,
+            "xxtight": 0.9893,
+        },
+        "PNetB": {
+            "loose": 0.0499,
+            "medium": 0.2605,
+            "tight": 0.6915,
+            "xtight": 0.8033,
+            "xxtight": 0.9664,
+        },
+    },
+    "Full2023v12": {
+        "DeepFlavB": {
+            "loose": 0.0479,
+            "medium": 0.2435,
+        },
+        "RobustParTAK4B": {
+            "loose": 0.0681,
+            "medium": 0.3494,
+        },
+        "PNetB": {
+            "loose": 0.0358,
+            "medium": 0.1919,
+        },
+    },
+    "Full2023BPixv12": {
+        "DeepFlavB": {
+            "loose": 0.0480,
+            "medium": 0.2435,
+        },
+        "RobustParTAK4B": {
+            "loose": 0.0683,
+            "medium": 0.3494,
+        },
+        "PNetB": {
+            "loose": 0.0359,
+            "medium": 0.1919,
+        },
+    },
+    "Full2024v15": {
+        "DeepFlavB": {
+            "loose": 0.0480,
+            "medium": 0.2435,
+            "tight": 0.6563,
+            "xtight": 0.7671,
+            "xxtight": 0.9483,
+        },
+        "UParTAK4B": {
+            "loose": 0.0246,
+            "medium": 0.1272,
+            "tight": 0.4648,
+            "xtight": 0.6298,
+            "xxtight": 0.9739,
+        },
+        "PNetB": {
+            "loose": 0.0359,
+            "medium": 0.1919,
+            "tight": 0.6133,
+            "xtight": 0.7544,
+            "xxtight": 0.9688,
+        },
+    },
+}
+
+
+def resolve_btag_configuration(era, btagger, working_point):
+    if era not in B_TAG_WORKING_POINTS:
+        raise ValueError(
+            f"Unsupported era '{era}'. Available eras: {sorted(B_TAG_WORKING_POINTS.keys())}"
+        )
+
+    era_wps = B_TAG_WORKING_POINTS[era]
+    if btagger not in era_wps:
+        raise ValueError(
+            f"Unsupported btagger '{btagger}' for era '{era}'. "
+            f"Available taggers: {sorted(era_wps.keys())}"
+        )
+
+    tagger_wps = era_wps[btagger]
+    if working_point not in tagger_wps:
+        raise ValueError(
+            f"Unsupported working point '{working_point}' for era '{era}' and btagger '{btagger}'. "
+            f"Available working points: {sorted(tagger_wps.keys())}"
+        )
+
+    if btagger not in B_TAG_BRANCHES:
+        raise ValueError(
+            f"No branch mapping configured for btagger '{btagger}'. "
+            f"Available mappings: {sorted(B_TAG_BRANCHES.keys())}"
+        )
+
+    return B_TAG_BRANCHES[btagger], float(tagger_wps[working_point])
 
 class NuNuSolutionProducer(Module):
     def __init__(
@@ -800,6 +932,13 @@ class NuNuSolutionProducer(Module):
                             result.solutions.begin(),
                             result.solutions.end(),
                             [&](const NuPair& a, const NuPair& b) {
+                                const double mA = combinedTTbarMass(a, B1, B2, L1, L2);
+                                const double mB = combinedTTbarMass(b, B1, B2, L1, L2);
+
+                                if (std::isfinite(mA) && std::isfinite(mB) && std::abs(mA - mB) > 1e-9) {
+                                    return mA < mB;
+                                }
+
                                 return pairResidualSq(a) < pairResidualSq(b);
                             }
                         );
@@ -811,10 +950,10 @@ class NuNuSolutionProducer(Module):
                 PairingResult pairing1 = try_pairing(b1, b2, l1, l2);
                 PairingResult pairing2 = try_pairing(b1, b2, l2, l1);
 
-                double residual1 = metResidual(pairing1, met_x, met_y);
-                double residual2 = metResidual(pairing2, met_x, met_y);
+                double score1 = pairingScore(pairing1, b1, b2, l1, l2, met_x, met_y);
+                double score2 = pairingScore(pairing2, b1, b2, l2, l1, met_x, met_y);
 
-                if (residual1 <= residual2) {
+                if (score1 <= score2) {
                     nunu_s = pairing1.solutions;
                     H1.ResizeTo(pairing1.H1.GetNrows(), pairing1.H1.GetNcols());
                     H2.ResizeTo(pairing1.H2.GetNrows(), pairing1.H2.GetNcols());
@@ -939,15 +1078,65 @@ class NuNuSolutionProducer(Module):
                        std::isfinite(pair.second[1]);
             }
 
-            static double metResidual(const PairingResult& res, double met_x, double met_y) {
+            static TLorentzVector neutrinoP4(const std::array<double, 2>& nuPt) {
+                TLorentzVector nu;
+                if (!std::isfinite(nuPt[0]) || !std::isfinite(nuPt[1])) {
+                    nu.SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
+                    return nu;
+                }
+
+                const double px = nuPt[0];
+                const double py = nuPt[1];
+                const double p2 = px * px + py * py;
+                const double e = (p2 > 0.0) ? std::sqrt(p2) : 0.0;
+                nu.SetPxPyPzE(px, py, 0.0, e);
+                return nu;
+            }
+
+            static double combinedTTbarMass(const NuPair& pair,
+                                            const TLorentzVector& B1,
+                                            const TLorentzVector& B2,
+                                            const TLorentzVector& L1,
+                                            const TLorentzVector& L2) {
+                if (!isFinitePair(pair)) {
+                    return std::numeric_limits<double>::infinity();
+                }
+
+                TLorentzVector top1 = B1 + L1 + neutrinoP4(pair.first);
+                TLorentzVector top2 = B2 + L2 + neutrinoP4(pair.second);
+                const double mtt = (top1 + top2).M();
+                return std::isfinite(mtt) ? mtt : std::numeric_limits<double>::infinity();
+            }
+
+            static double metResidual(const NuPair& pair, double met_x, double met_y) {
+                if (!isFinitePair(pair)) {
+                    return std::numeric_limits<double>::infinity();
+                }
+
+                const double sumx = pair.first[0] + pair.second[0];
+                const double sumy = pair.first[1] + pair.second[1];
+                const double residual = std::hypot(sumx - met_x, sumy - met_y);
+                return std::isfinite(residual) ? residual : std::numeric_limits<double>::infinity();
+            }
+
+            static double pairingScore(const PairingResult& res,
+                                       const TLorentzVector& B1,
+                                       const TLorentzVector& B2,
+                                       const TLorentzVector& L1,
+                                       const TLorentzVector& L2,
+                                       double met_x,
+                                       double met_y) {
                 if (res.solutions.empty()) {
                     return std::numeric_limits<double>::infinity();
                 }
+
                 const auto& best = res.solutions.front();
-                double sumx = best.first[0] + best.second[0];
-                double sumy = best.first[1] + best.second[1];
-                double residual = std::hypot(sumx - met_x, sumy - met_y);
-                return residual;
+                const double mtt = combinedTTbarMass(best, B1, B2, L1, L2);
+                if (std::isfinite(mtt)) {
+                    return mtt;
+                }
+
+                return metResidual(best, met_x, met_y);
             }
 
             std::vector<NuPair> nunu_s;
@@ -1115,7 +1304,7 @@ float lepton_mass_from_pdgid(int pdgId) {
             "l1", "l2", "b1", "b2",
             "dnsol","top1", "top2", "l1_top_rf", "l2_top_rf",
             "H1_flat", "H2_flat", "N1_flat", "N2_flat", "N2_nubar_flat", "nunu_solutions_flat",
-            #"pass_bjets",
+            "pass_bjets",
             "met_x", "met_y",
             "pass_bjets_float",
             ]
