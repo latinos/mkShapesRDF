@@ -121,7 +121,7 @@ Steps = {
             "leptonSF",
             "puW",
             "formulasMC",
-            "JES_modules_MC",
+            "JES_modules_reduced_MC",
             "leptonScale_mc",
             "l2Kin",
             "l3Kin",
