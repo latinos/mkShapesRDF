@@ -399,36 +399,33 @@ class JMECalculator(Module):
                 METSources = [str(source).replace('up', '') for source in METSources]
                 print(METSources)
                 
-                # list of columns to be passed to myJetVarCal produce
+                # list of columns to be passed to myMETVarCal produce
                 cols = []
 
                 JetColl = "newJet"
+                
+                # We should use the full Jet collection (before any selection) for the MET corrections
 
-                df = df.Define("newJet_pt", "Take(Jet_pt, CleanJet_jetIdx)") # Take un-corrected information - avoid double applycation of SF
-                df = df.Define("newJet_eta", "Take(Jet_eta, CleanJet_jetIdx)")
-                df = df.Define("newJet_phi", "Take(Jet_phi, CleanJet_jetIdx)")
-                df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
-
-                cols.append(f"{JetColl}_pt")
-                cols.append(f"{JetColl}_eta")
-                cols.append(f"{JetColl}_phi")
-                cols.append(f"Take(Jet_mass, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_rawFactor, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_area, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_muonSubtrFactor, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_neEmEF, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_chEmEF, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
+                cols.append("Jet_pt")
+                cols.append("Jet_eta")
+                cols.append("Jet_phi")
+                cols.append("Jet_mass")
+                cols.append("Jet_rawFactor")
+                cols.append("Jet_area")
+                cols.append("Jet_muonSubtrFactor")
+                cols.append("Jet_neEmEF")
+                cols.append("Jet_chEmEF")
+                cols.append("Jet_jetId")
     
                 # rho
                 cols.append("Rho_fixedGridRhoFastjetAll")
 
                 if self.isMC: 
-                    cols.append(f"Take(Jet_genJetIdx, {JetColl}_jetIdx)")
-                    cols.append(f"Take(Jet_partonFlavour, {JetColl}_jetIdx)")
+                    cols.append("Jet_genJetIdx")
+                    cols.append("Jet_partonFlavour")
                     # seed
                     cols.append(
-                        f"(run<<20) + (luminosityBlock<<10) + event + 1 + int({JetColl}_eta.size()>0 ? {JetColl}_eta[0]/.01 : 0)"
+                        f"(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)"
                     )
                     cols.append("-1.0")    
                     # gen jet coll
@@ -463,33 +460,31 @@ class JMECalculator(Module):
                 cols.append("ROOT::RVecF {}")
                 cols.append("ROOT::RVecF {}")
 
-                ## Not available in nanoAODv15
-                if "v15" in self.year:
-                    if "Puppi" not in MET:
-                        df = df.Define(
-                            "PFMET_MetUnclustEnUpDeltaX",
-                            "abs(PFMET_pt * std::cos(PFMET_phi) - PFMET_ptUnclusteredUp * std::cos(PFMET_phiUnclusteredUp))"
-                        )
-                        df = df.Define(
-                            "PFMET_MetUnclustEnUpDeltaY",
-                            "abs(PFMET_pt * std::sin(PFMET_phi) - PFMET_ptUnclusteredUp * std::cos(PFMET_phiUnclusteredUp))"
-                        )
-                        cols.append("PFMET_MetUnclustEnUpDeltaX")
-                        cols.append("PFMET_MetUnclustEnUpDeltaY")
-                    else:
-                        df = df.Define(
-                            "PuppiMET_MetUnclustEnUpDeltaX",
-                            "abs(PuppiMET_pt * std::cos(PuppiMET_phi) - PuppiMET_ptUnclusteredUp * std::cos(PuppiMET_phiUnclusteredUp))"
-                        )
-                        df = df.Define(
-                            "PuppiMET_MetUnclustEnUpDeltaY",
-                            "abs(PuppiMET_pt * std::sin(PuppiMET_phi) - PuppiMET_ptUnclusteredUp * std::sin(PuppiMET_phiUnclusteredUp))"
-                        )
-                        cols.append("PuppiMET_MetUnclustEnUpDeltaX")
-                        cols.append("PuppiMET_MetUnclustEnUpDeltaY")
-                else:                
-                    cols.append("MET_MetUnclustEnUpDeltaX")
-                    cols.append("MET_MetUnclustEnUpDeltaY")
+                ## Always use the differnces defined as the following, for all Run3 eras.
+                
+
+                if "Puppi" not in MET:
+                    df = df.Define(
+                        "PFMET_MetUnclustEnUpDeltaX",
+                        "abs(PFMET_pt * std::cos(PFMET_phi) - PFMET_ptUnclusteredUp * std::cos(PFMET_phiUnclusteredUp))"
+                    )
+                    df = df.Define(
+                        "PFMET_MetUnclustEnUpDeltaY",
+                        "abs(PFMET_pt * std::sin(PFMET_phi) - PFMET_ptUnclusteredUp * std::cos(PFMET_phiUnclusteredUp))"
+                    )
+                    cols.append("PFMET_MetUnclustEnUpDeltaX")
+                    cols.append("PFMET_MetUnclustEnUpDeltaY")
+                else:
+                    df = df.Define(
+                        "PuppiMET_MetUnclustEnUpDeltaX",
+                        "abs(PuppiMET_pt * std::cos(PuppiMET_phi) - PuppiMET_ptUnclusteredUp * std::cos(PuppiMET_phiUnclusteredUp))"
+                    )
+                    df = df.Define(
+                        "PuppiMET_MetUnclustEnUpDeltaY",
+                        "abs(PuppiMET_pt * std::sin(PuppiMET_phi) - PuppiMET_ptUnclusteredUp * std::sin(PuppiMET_phiUnclusteredUp))"
+                    )
+                    cols.append("PuppiMET_MetUnclustEnUpDeltaX")
+                    cols.append("PuppiMET_MetUnclustEnUpDeltaY")
 
                 cols.append("PV_npvsGood")                    
                                        
@@ -498,8 +493,8 @@ class JMECalculator(Module):
                 )
                 
                 if self.store_nominal:
-                    df = df.Define(f"{MET}_pt", f"CleanJet_pt.size() > 0 ? {MET}Vars.pt(0) : {RawMET}_pt")
-                    df = df.Define(f"{MET}_phi", f"CleanJet_pt.size() > 0 ? {MET}Vars.phi(0) : {RawMET}_phi")
+                    df = df.Define(f"{MET}_pt", f"Jet_pt.size() > 0 ? {MET}Vars.pt(0) : {RawMET}_pt")
+                    df = df.Define(f"{MET}_phi", f"Jet_pt.size() > 0 ? {MET}Vars.phi(0) : {RawMET}_phi")
                 
                 if self.store_variations:
                     for variable in [MET + "_pt", MET + "_phi"]:
