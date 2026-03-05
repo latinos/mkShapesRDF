@@ -4,6 +4,9 @@ Samples = {}
 # MuonEG
 ############################################
 
+Samples["MuonEG_Run2025C-Prompt-v1"] = {
+    "nanoAOD": "/MuonEG/Run2025C-PromptReco-v1/NANOAOD",
+}
 Samples["MuonEG_Run2025C-Prompt-v2"] = {
     "nanoAOD": "/MuonEG/Run2025C-PromptReco-v2/NANOAOD",
 }
@@ -12,6 +15,9 @@ Samples["MuonEG_Run2025D-Prompt-v1"] = {
 }
 Samples["MuonEG_Run2025E-Prompt-v1"] = {
     "nanoAOD": "/MuonEG/Run2025E-PromptReco-v1/NANOAOD",
+}
+Samples["MuonEG_Run2025F-Prompt-v1"] = {
+    "nanoAOD": "/MuonEG/Run2025F-PromptReco-v1/NANOAOD",
 }
 Samples["MuonEG_Run2025F-Prompt-v2"] = {
     "nanoAOD": "/MuonEG/Run2025F-PromptReco-v2/NANOAOD",
