@@ -261,7 +261,7 @@ class LeptonScaleSmearing(Module):
         )
         df = df.Define(
             "MET_LeptonScale",
-            "CorrectMET(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, PuppiMET_pt, PuppiMET_phi)"
+            "CorrectMET(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, MET_pt, MET_phi)"
         )
         self.columnsToDrop.append("PuppiMET_LeptonScale")
         self.columnsToDrop.append("MET_LeptonScale")

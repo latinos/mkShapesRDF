@@ -223,44 +223,12 @@ class LeptonSel(Module):
         )
         columnsToDrop.append("LeptonMask_JC")
 
-        df = df.Define("CleanJetMask", "CleanJet_eta <= 5.0")
-        columnsToDrop.append("CleanJetMask")
-
-        df = df.Define(
-            "CleanJet_Lepton_comb",
-            "ROOT::VecOps::Combinations(CleanJet_pt[CleanJetMask].size(), Lepton_pt[LeptonMask_JC].size())",
-        )
-        columnsToDrop.append("CleanJet_Lepton_comb")
-
-        df = df.Define(
-            "dR2",
-            "ROOT::VecOps::DeltaR2( \
-            Take(CleanJet_eta, CleanJet_Lepton_comb[0]), \
-            Take(Lepton_eta, CleanJet_Lepton_comb[1]), \
-            Take(CleanJet_phi, CleanJet_Lepton_comb[0]), \
-            Take(Lepton_phi, CleanJet_Lepton_comb[1]) \
-        )",
-        )
-        columnsToDrop.append("dR2")
-
-        df = df.Define(
-            "CleanJet_pass",
-            "! reduce_cond_any(dR2<(0.3*0.3), CleanJet_pt[CleanJetMask].size(), Lepton_pt[LeptonMask_JC].size())",
-        )
-        columnsToDrop.append("CleanJet_pass")
-
         branches = ["pt", "eta", "phi", "pdgId", "electronIdx", "muonIdx"]
         
         for prop in branches:
             df = df.Redefine(
                 f"Lepton_{prop}",
                 f"Lepton_{prop}[LeptonMaskHyg_Ele && LeptonMaskHyg_Mu]",
-            )
-
-        branches = ["jetIdx", "pt", "eta", "phi", "mass"]
-        for prop in branches:
-            df = df.Redefine(
-                f"CleanJet_{prop}", f"CleanJet_{prop}[CleanJetMask][CleanJet_pass]"
             )
 
         for col in columnsToDrop:

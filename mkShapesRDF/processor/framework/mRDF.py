@@ -540,7 +540,7 @@ class mRDF:
                         outFile.mktree(treeName, dtypes)
                         continue
                     else:
-                        outFile[treeName] = d
+                        outFile[treeName].extend(d)
                         continue
 
                 outFile[treeName].extend(d)
