@@ -178,7 +178,7 @@ class JMECalculator(Module):
             cols = []
 
             # nre reco jet coll
-            JetColl = "newJet"
+            JetColl = "CorrectedJet"
 
             cols.append("Jet_pt")
             cols.append("Jet_eta")
@@ -211,13 +211,13 @@ class JMECalculator(Module):
                 df = df.Define(f"{JetColl}_mass", "jetVars.mass(0)")
                     
                 df = df.Define(f"{JetColl}_sorting", f"ROOT::VecOps::Reverse(ROOT::VecOps::Argsort({JetColl}_pt))")
-                df = df.Define(f"{JetColl}_pt", f"Take(Jet_pt, {JetColl}_sorting)")
+                df = df.Define(f"{JetColl}_pt", f"Take({JetColl}_pt, {JetColl}_sorting)")
                 df = df.Define(f"{JetColl}_eta", f"Take(Jet_eta, {JetColl}_sorting)")
                 df = df.Define(f"{JetColl}_phi", f"Take(Jet_phi, {JetColl}_sorting)")
-                df = df.Define(f"{JetColl}_mass", f"Take(Jet_mass, {JetColl}_sorting)")
+                df = df.Define(f"{JetColl}_mass", f"Take({JetColl}_mass, {JetColl}_sorting)")
                 df = df.Define(f"{JetColl}_jetIdx", "ROOT::VecOps::Range(nJet)")       
             else:
-                df = df.Define(f"{JetColl}_sorting", "Range(Jet_pt.size())")
+                df = df.Define(f"{JetColl}_sorting", f"Range({JetColl}_pt.size())")
 
             if self.store_variations:
                 for i, source in enumerate(jesSources):
@@ -346,6 +346,7 @@ class JMECalculator(Module):
                 METSources = calcMET.available()
                 METSources = calcMET.available()[1:][::2]
                 METSources = [str(source).replace('up', '') for source in METSources]
+                print("[DEBUG] Available MET sources for variations:")
                 print(METSources)
                 
                 # list of columns to be passed to myJetVarCal produce

@@ -169,11 +169,11 @@ class JetSelMask(Module):
                     """
                 )
 
-                df = df.Define("VetoMaskEE", "getVetoMaskEE(Jet_pt,Jet_eta,Jet_phi,Jet_neEmEF,Jet_chEmEF,Jet_jetId)")
+                df = df.Define("VetoMaskEE", "getVetoMaskEE(CorrectedJet_pt,CorrectedJet_eta,CorrectedJet_phi,Jet_neEmEF,Jet_chEmEF,Jet_jetId)")
                 df = df.Filter("VetoMaskEE")
                 self.columnsToDrop.append("VetoMaskEE")
             
-            df = df.Define("VetoMask", "getVetoMask(Jet_pt,Jet_eta,Jet_phi,Jet_neEmEF,Jet_chEmEF,Jet_jetId)")
+            df = df.Define("VetoMask", "getVetoMask(CorrectedJet_pt,CorrectedJet_eta,CorrectedJet_phi,Jet_neEmEF,Jet_chEmEF,Jet_jetId)")
 
             print("Applying jet veto map")
             df = df.Filter("VetoMask")
@@ -198,28 +198,28 @@ class JetSelMask(Module):
         """)
 
         df = df.Define("LeptonMask_JC", "(Lepton_pt >= 10)")
-        df = df.Define("Jet_Lepton_comb", "ROOT::VecOps::Combinations(Jet_pt.size(), Lepton_pt[LeptonMask_JC].size())")
+        df = df.Define("Jet_Lepton_comb", "ROOT::VecOps::Combinations(CorrectedJet_pt.size(), Lepton_pt[LeptonMask_JC].size())")
 
         df = df.Define("dR2", """
             ROOT::VecOps::DeltaR2(
-                Take(Jet_eta, Jet_Lepton_comb[0]), 
+                Take(CorrectedJet_eta, Jet_Lepton_comb[0]), 
                 Take(Lepton_eta, Jet_Lepton_comb[1]), 
-                Take(Jet_phi, Jet_Lepton_comb[0]), 
+                Take(CorrectedJet_phi, Jet_Lepton_comb[0]), 
                 Take(Lepton_phi, Jet_Lepton_comb[1])
         )""")
 
-        df = df.Define("CleanJet_geometrical", "! reduce_cond_any(dR2 < (0.3*0.3), Jet_pt.size(), Lepton_pt[LeptonMask_JC].size())")
+        df = df.Define("CleanJet_geometrical", "! reduce_cond_any(dR2 < (0.3*0.3), CorrectedJet_pt.size(), Lepton_pt[LeptonMask_JC].size())")
 
-        df = df.Define("CleanJetMask", f"(Jet_pt >= {self.minPt} && abs(Jet_eta) <= {self.maxEta} && Jet_jetId >= {self.jetId}) && CleanJet_geometrical")
+        df = df.Define("CleanJetMask", f"(CorrectedJet_pt >= {self.minPt} && abs(CorrectedJet_eta) <= {self.maxEta} && Jet_jetId >= {self.jetId}) && CleanJet_geometrical")
 
-        values.append([df.Define("test", "Jet_pt.size()").Sum("test"), "Original size of CleanJet"])
+        values.append([df.Define("test", "CorrectedJet_pt.size()").Sum("test"), "Original size of CleanJet"])
 
         print("Branch redefinition!")
 
         
         df = df.Define("CleanJet_jetIdx", "ROOT::VecOps::Range(nJet)[CleanJetMask]")
         for prop in ["pt", "eta", "phi", "mass"]:
-            df = df.Define(f"CleanJet_{prop}", f"Jet_{prop}[CleanJetMask]")
+            df = df.Define(f"CleanJet_{prop}", f"CorrectedJet_{prop}[CleanJetMask]")
 
 
         values.append([df.Define("test", "CleanJet_pt.size()").Sum("test"), "Final size of CleanJet"])

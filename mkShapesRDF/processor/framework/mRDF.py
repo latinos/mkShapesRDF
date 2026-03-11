@@ -535,11 +535,10 @@ class mRDF:
                         dtypes = {}
                         for branch in _events.fields:
                             dtypes[branch] = _events[branch].type
-                        # print(dtypes)
-                        # print('Creating ttree')
                         outFile.mktree(treeName, dtypes)
                         continue
                     else:
+                        outFile.mktree(treeName, d.layout.form if hasattr(d, 'layout') else d)
                         outFile[treeName].extend(d)
                         continue
 
