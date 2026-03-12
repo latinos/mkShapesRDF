@@ -42,11 +42,14 @@ xs_db = {}
 
 ### Higgs
 xs_db["GluGluHToWWTo2L2Nu_M125"] = ["xsec=1.17381", "kfact=1.000", "ref=E"] # 51.960*0.2152*(3*0.108)*(3*0.108)
+xs_db["GluGluHToZZTo4L_M125"] = ["xsec=0.0140", "kfact=1.000", "ref=E"] # 51.960*0.02641*(0.033632+0.033662+0.033696)**2
 xs_db["VBFHToWWTo2L2Nu_M125"]    = ["xsec=0.09187", "kfact=1.000", "ref=E"] #  4.067*0.2152*(3*0.108)*(3*0.108)
 
 ### WW
 xs_db["WW"]        = ["xsec=122.1", "kfact=1.000", "ref=A"]  # (XS(pp -> e mu ve vmu) - XS(gg -> e mu ve vmu)) / (BR(W -> mu vmu)*BR(W -> e ve)) = (1.5589-0.1497)/(0.1078*0.1071)
 xs_db["WWTo2L2Nu"] = ["xsec=12.96", "kfact=1.000", "ref=A"]  # 122.1 * 0.1086 * 0.1086 * 9
+xs_db["WWToLNu2Q"] = ["xsec=53.6", "kfact=1.000", "ref=A"]  # 122.1 * 2 * BR(W->qq) * BR(W->l nu) = 122.1 * 2 * 0.6741 * 0.3258
+xs_db["WWTo4Q"]    = ["xsec=55.5", "kfact=1.000", "ref=A"]  # 122.1 * BR(W->qq)^2 = 122.1 * 0.6741 * 0.6741
 
 xs_db["GluGlutoContintoWWtoENuENu"]     = ["xsec=0.0744", "kfact=1.000", "ref=A"]
 xs_db["GluGlutoContintoWWtoENuMuNu"]    = ["xsec=0.0749", "kfact=1.000", "ref=A"]
@@ -68,6 +71,9 @@ xs_db["ggWW_LL"]      = ["xsec=0.025",  "kfact=1.000", "ref=X"] ## 0.239
 xs_db["ggWW_TT"]      = ["xsec=0.329",  "kfact=1.000", "ref=X"] ## 3.104
 xs_db["ggWW_LT"]      = ["xsec=0.0087", "kfact=1.000", "ref=X"] ## 0.08195
 xs_db["ggWW_TL"]      = ["xsec=0.0087", "kfact=1.000", "ref=X"] ## 0.08195
+
+xs_db["WWG"]        = ["xsec=0.3959", "kfact=1.0", "ref=G"]      # inclusive WWγ
+xs_db["WWGtoLNu2QG"] = ["xsec=0.359", "kfact=1.0", "ref=G"]      # lν qq γ final state
 
 ### Top
 xs_db["TTTo2L2Nu"]                    = ["xsec=98.036", "kfact=1.000", "ref=C"] # 923.6 * (3*0.1086) * (3*0.1086)
@@ -99,17 +105,34 @@ xs_db["TTHtoNon2B"] = ["xsec=0.2398", "kfact=1.000", "ref=G"] # 0.5742 * [1 - BR
 xs_db["TTHto2B"] = ["xsec=0.3344", "kfact=1.000", "ref=G"] # 0.5742 * BR(H->bb) = 0.5742 * 0.5824 = 0.3344
 xs_db["TTTT"] = ["xsec=0.009652", "kfact=1.000", "ref=G"]
 
+### TTG
+xs_db["TTG_PTG-10to100"] = ["xsec=4.22", "kfact=1.000", "ref=G"]
+xs_db["TTG_PTG-100to200"] = ["xsec=0.41", "kfact=1.000", "ref=G"]
+xs_db["TTG_PTG-200"] = ["xsec=0.13", "kfact=1.000", "ref=G"]
+
 ### TXX
 xs_db["THW"] = ["xsec=0.133", "kfact=1.000", "ref=G"]
 xs_db["THQ"] = ["xsec=0.744", "kfact=1.000", "ref=G"]
-#xs_db["TWZ"] = ["xsec=", "kfact=1.000", "ref=C"]
+xs_db["TZQB-ZTo2L"] = ["xsec=0.07968", "kfact=1.000", "ref=G"]
+#xs_db["TWZ"] = ["xsec=", "kfact=1.000", "ref="]
 
 ### WZ
 xs_db["WZTo3LNu"]  = ["xsec=5.32",    "kfact=1.000", "ref=A"] # (XS(pp->e- e+ μ-  ̄vμ) + XS(pp->e- e+ μ+ vμ)) * 9 * BR(ZW->ll lv) / BR(ZW->ee mv)  (0.2385 + 0.3474) * 9 *  0.0036552588 / 0.0036255296
 xs_db["WZ"]        = ["xsec=53.9",    "kfact=1.000", "ref=A"] # XS(WZTo3LNu) / (3*9*BR(WZ->lv ll))
 xs_db["WZTo2L2Q"]  = ["xsec=3.67",    "kfact=1.000", "ref=A"] # XS(WZ) * 3*BR(Z->ll) * BR(W->qq)
-xs_db["WZToLNu2Q"] = ["xsec=6.44",    "kfact=1.000", "ref=X"]
+xs_db["WZToLNu2Q"] = ["xsec=11.87", "kfact=1.000", "ref=A"]  # XS(WZ) * 3* BR(W->l nu) * BR(Z->qq) = 53.9 * 0.3258 * 0.6760
+xs_db["WZToL3Nu"] = ["xsec=3.51", "kfact=1.000", "ref=A"] # 53.9 * (3*0.1086) * 0.20
+xs_db["WZTo2Q2Nu"] = ["xsec=7.26", "kfact=1.000", "ref=A"] # 53.9 * 0.6741 * 0.20
 xs_db["WZG"]       = ["xsec=0.08425", "kfact=1.000", "ref=X"]
+
+### VH
+xs_db["WminusH-HtoBB_WToLNu"] = ["xsec=0.1066", "kfact=1.000", "ref=E"]  # 0.562032 * BR(H->bb) * BR(W->l nu) = 0.562032 * 0.5824 * 0.3258
+xs_db["WplusH-HtoBB_WToLNu"]  = ["xsec=0.1669", "kfact=1.000", "ref=E"]  # 0.880114 * BR(H->bb) * BR(W->l nu) = 0.880114 * 0.5824 * 0.3258
+xs_db["WminusH-HtoBB_WTo2Q"]  = ["xsec=0.2213", "kfact=1.000", "ref=E"]  # 0.562032 * BR(H->bb) * BR(W->qq) = 0.562032 * 0.5824 * 0.6760
+xs_db["WplusH-HtoBB_WTo2Q"]   = ["xsec=0.3467", "kfact=1.000", "ref=E"]  # 0.880114 * BR(H->bb) * BR(W->qq) = 0.880114 * 0.5824 * 0.6760
+
+xs_db["VH-HToNon2B"]          = ["xsec=0.9939", "kfact=1.000", "ref=E"]  # (0.880114 + 0.562032 + 0.9361) * [1 - BR(H->bb)] = 2.378246 * (1 - 0.5824)
+xs_db["ZH-HTo2B_ZTo2Nu"]      = ["xsec=0.1090", "kfact=1.000", "ref=E"]  # 0.9361 * BR(H->bb) * BR(Z->nu nu) = 0.9361 * 0.5824 * 0.2000
 
 ### Zg
 xs_db["ZGToLLG"]     = ["xsec=1.075", "kfact=1.000", "ref=X"]
