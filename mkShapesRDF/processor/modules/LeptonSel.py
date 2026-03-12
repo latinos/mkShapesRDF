@@ -21,21 +21,6 @@ class LeptonSel(Module):
         using namespace ROOT;
         using namespace ROOT::VecOps;
 
-        ROOT::RVecB reduce_cond_any(ROOT::RVecB condition, uint size1, uint size2){
-            ROOT::RVecB r;
-            for (uint i = 0; i < size1; i++){
-                bool c = false;
-                for (uint j = 0; j < size2; j++){
-                    if (condition[i * size2 + j]){
-                        c = true;
-                        break;
-                    }
-                }
-                r.push_back(c);
-            }
-            return r;
-        }
-
         RVecB propagateMask(RVecI Lepton_origIdx, RVecB mask, bool defaultValue){
         RVecB r {};
 
