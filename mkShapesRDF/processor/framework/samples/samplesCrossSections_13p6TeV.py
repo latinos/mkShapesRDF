@@ -113,6 +113,7 @@ xs_db["TTG_PTG-200"] = ["xsec=0.13", "kfact=1.000", "ref=G"]
 ### TXX
 xs_db["THW"] = ["xsec=0.133", "kfact=1.000", "ref=G"]
 xs_db["THQ"] = ["xsec=0.744", "kfact=1.000", "ref=G"]
+xs_db["TZQB-ZTo2L"] = ["xsec=0.07968", "kfact=1.000", "ref=G"]
 #xs_db["TWZ"] = ["xsec=", "kfact=1.000", "ref="]
 
 ### WZ

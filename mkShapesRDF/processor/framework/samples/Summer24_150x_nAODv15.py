@@ -279,6 +279,10 @@ Samples['THQ'] = {
     'nanoAOD' : '/THQ-4FS-ctcvcp_Par-M-125_TuneCP5_13p6TeV_madgraph-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 
+Samples['TZQB-ZTo2L'] = {
+    'nanoAOD' : '/TZQB-Zto2L-4FS_Bin-MLL-30_TuneCP5_13p6TeV_amcatnlo-pythia8/RunIII2024Summer24NanoAODv15-Madgraph_2_6_5_150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
+}
+
 '''
 Samples['TWZ'] = {
     'nanoAOD' : ''
