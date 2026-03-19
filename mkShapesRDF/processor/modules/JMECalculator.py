@@ -80,6 +80,9 @@ class JMECalculator(Module):
         self.isXYCorrJson = ""
         self.isXYCorrEra  = ""
         
+        if year in ["Full2024v15", "Full2025v15"]:
+            self.do_XYMET = False
+        
         if self.year in JetMakerCfg.keys():
             self.json = JetMakerCfg[self.year]["jet_jerc"]
             if self.isMC:
@@ -88,7 +91,6 @@ class JMECalculator(Module):
                 self.JEC_era = JetMakerCfg[self.year]["JEC_data"]
             self.JER_era = JetMakerCfg[self.year]["JER"]
             self.jsonFileSmearingTool = JetMakerCfg[self.year]["jer_smear"]
-
             if self.do_XYMET:
                 self.isXYCorrJson = JetMakerCfg[self.year]["met_xy_json"]
                 self.isXYCorrEra = JetMakerCfg[self.year]["met_xy_era"]

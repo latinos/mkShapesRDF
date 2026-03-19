@@ -17,6 +17,7 @@ class LeptonScaleSmearing(Module):
         self.columnsToDrop = []
         self.muoncorrection_file = ""
         self.elecorrection_file = ""
+        self.era = era
         
         # The JSON files were recently added to cvmfs. If you can't find them in /processor/data/jsonpog-integration/POG/EGM, reinstall mkShapesRDF.
 
@@ -259,18 +260,27 @@ class LeptonScaleSmearing(Module):
             "PuppiMET_LeptonScale",
             "CorrectMET(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, PuppiMET_pt, PuppiMET_phi)"
         )
-        df = df.Define(
-            "MET_LeptonScale",
-            "CorrectMET(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, MET_pt, MET_phi)"
-        )
+        if "24" in self.era or "25" in self.era:
+            df = df.Define(
+                "PFMET_LeptonScale",
+                "CorrectMET(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, PFMET_pt, PFMET_phi)"
+            )
+            df = df.Redefine("PFMET_pt", "PFMET_LeptonScale[0]")
+            df = df.Redefine("PFMET_phi", "PFMET_LeptonScale[1]")
+            self.columnsToDrop.append("PFMET_LeptonScale")
+        else:
+            df = df.Define(
+                "MET_LeptonScale",
+                "CorrectMET(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, MET_pt, MET_phi)"
+            )
+            df = df.Redefine("MET_pt", "MET_LeptonScale[0]")
+            df = df.Redefine("MET_phi", "MET_LeptonScale[1]")
+            self.columnsToDrop.append("MET_LeptonScale")
+
         self.columnsToDrop.append("PuppiMET_LeptonScale")
-        self.columnsToDrop.append("MET_LeptonScale")
         
         df = df.Redefine("PuppiMET_pt", "PuppiMET_LeptonScale[0]")
         df = df.Redefine("PuppiMET_phi", "PuppiMET_LeptonScale[1]")
-
-        df = df.Redefine("MET_pt", "MET_LeptonScale[0]")
-        df = df.Redefine("MET_phi", "MET_LeptonScale[1]")
 
         #### Re-order lepton-pT again
             
