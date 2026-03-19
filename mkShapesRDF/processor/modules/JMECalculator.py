@@ -18,7 +18,7 @@ class JMECalculator(Module):
         do_Jets=True,
         do_MET=True,
         do_JER=True,
-        do_Unclustered=True,
+        do_XYMET=True,
         store_nominal=True,
         store_variations=True,
         isMC = True,
@@ -60,7 +60,7 @@ class JMECalculator(Module):
         self.do_Jets = do_Jets
         self.do_MET = do_MET
         self.do_JER = do_JER
-        self.do_Unclustered = do_Unclustered
+        self.do_XYMET = do_XYMET
         self.store_nominal = store_nominal
         self.store_variations = store_variations
         self.isMC = isMC 
@@ -77,7 +77,6 @@ class JMECalculator(Module):
         self.JER_era = ""
         self.jsonFileSmearingTool = ""
 
-        self.isXYCorrMET  = False
         self.isXYCorrJson = ""
         self.isXYCorrEra  = ""
         
@@ -90,8 +89,7 @@ class JMECalculator(Module):
             self.JER_era = JetMakerCfg[self.year]["JER"]
             self.jsonFileSmearingTool = JetMakerCfg[self.year]["jer_smear"]
 
-            if "met_xy_json" in JetMakerCfg[self.year]:
-                self.isXYCorrMET = True
+            if self.do_XYMET:
                 self.isXYCorrJson = JetMakerCfg[self.year]["met_xy_json"]
                 self.isXYCorrEra = JetMakerCfg[self.year]["met_xy_era"]
 
@@ -314,8 +312,10 @@ class JMECalculator(Module):
 
                     df = df.DropColumns("tmp_*")
 
+            df = df.Define(f"n{JetColl}", f"{JetColl}_pt.size()")
             df = df.DropColumns("jetVars*")
             df = df.DropColumns(f"{JetColl}_sorting")
+            df = df.DropColumns("*preJES*")
         
         if self.do_MET:
             L1JecTag        = "L1FastJet"
@@ -326,7 +326,7 @@ class JMECalculator(Module):
             isXYCorrected = "false"
             met_xy_json = ""
             met_xy_era = ""
-            if self.isXYCorrMET:
+            if self.do_XYMET :
                 isXYCorrected = "true"
                 met_xy_json = self.isXYCorrJson
                 met_xy_era = self.isXYCorrEra
@@ -346,8 +346,6 @@ class JMECalculator(Module):
                 METSources = calcMET.available()
                 METSources = calcMET.available()[1:][::2]
                 METSources = [str(source).replace('up', '') for source in METSources]
-                print("[DEBUG] Available MET sources for variations:")
-                print(METSources)
                 
                 # list of columns to be passed to myJetVarCal produce
                 cols = []

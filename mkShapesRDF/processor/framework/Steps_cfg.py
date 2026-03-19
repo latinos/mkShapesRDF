@@ -1909,7 +1909,7 @@ Steps = {
         "do4Data" : False,
         "import"  : "mkShapesRDF.processor.modules.JMECalculator",
         "declare" : 'jmeCalculator = lambda : JMECalculator(jet_object="AK4PFPuppi", jes_unc=["Total"], \
-        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_Unclustered=True, met_collections = ["PuppiMET", "MET", "RawMET"],do_JER=True, store_nominal=True, store_variations=True, isMC=True, sampleName = "RPLME_SAMPLENAME")',
+        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_XYMET=True, met_collections = ["PuppiMET", "MET", "RawMET"],do_JER=True, store_nominal=True, store_variations=True, isMC=True, sampleName = "RPLME_SAMPLENAME")',
         "module"  : "jmeCalculator()",
     },
 
@@ -1919,7 +1919,7 @@ Steps = {
         "do4Data" : False,
         "import"  : "mkShapesRDF.processor.modules.JMECalculator",
         "declare" : 'jmeCalculator = lambda : JMECalculator(jet_object="AK4PFPuppi", jes_unc=["Regrouped_Absolute", "Regrouped_Absolute_YEAR", "Regrouped_FlavorQCD", "Regrouped_BBEC1", "Regrouped_EC2", "Regrouped_HF", "Regrouped_BBEC1_YEAR", "Regrouped_EC2_YEAR", "Regrouped_RelativeBal", "Regrouped_RelativeSample_YEAR", "Regrouped_HF_YEAR"], \
-        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_Unclustered=True, met_collections = ["PuppiMET", "MET", "RawMET"],do_JER=True, store_nominal=True, store_variations=True, isMC=True, sampleName = "RPLME_SAMPLENAME")',
+        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_XYMET=True, met_collections = ["PuppiMET", "MET", "RawMET"],do_JER=True, store_nominal=True, store_variations=True, isMC=True, sampleName = "RPLME_SAMPLENAME")',
         "module"  : "jmeCalculator()",
     },
 
@@ -1929,7 +1929,7 @@ Steps = {
         "do4Data" : False,
         "import"  : "mkShapesRDF.processor.modules.JMECalculator",
         "declare" : 'jmeCalculator = lambda : JMECalculator(jet_object="AK4PFPuppi", jes_unc=["Regrouped_Absolute", "Regrouped_Absolute_YEAR", "Regrouped_FlavorQCD", "Regrouped_BBEC1", "Regrouped_EC2", "Regrouped_HF", "Regrouped_BBEC1_YEAR", "Regrouped_EC2_YEAR", "Regrouped_RelativeBal", "Regrouped_RelativeSample_YEAR", "Regrouped_HF_YEAR"], \
-        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_Unclustered=True, met_collections = ["PuppiMET", "PFMET"],do_JER=True, store_nominal=True, store_variations=True, isMC=True, sampleName = "RPLME_SAMPLENAME")',
+        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_XYMET=True, met_collections = ["PuppiMET", "PFMET"],do_JER=True, store_nominal=True, store_variations=True, isMC=True, sampleName = "RPLME_SAMPLENAME")',
         "module"  : "jmeCalculator()",
     },
 
@@ -1939,7 +1939,7 @@ Steps = {
         "do4Data" : True,
         "import"  : "mkShapesRDF.processor.modules.JMECalculator",
         "declare" : 'jmeCalculator = lambda : JMECalculator(jet_object="AK4PFPuppi", jes_unc=["Total"], \
-        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_Unclustered=True, met_collections = ["PuppiMET", "MET", "RawMET"],do_JER=False, store_nominal=True, store_variations=False, isMC=False, sampleName = "RPLME_SAMPLENAME")',
+        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_XYMET=True, met_collections = ["PuppiMET", "MET", "RawMET"],do_JER=False, store_nominal=True, store_variations=False, isMC=False, sampleName = "RPLME_SAMPLENAME")',
         "module"  : "jmeCalculator()",
     },
 
@@ -1949,7 +1949,7 @@ Steps = {
         "do4Data" : True,
 	"import"  : "mkShapesRDF.processor.modules.JMECalculator",
         "declare" : 'jmeCalculator = lambda : JMECalculator(jet_object="AK4PFPuppi", jes_unc=["Regrouped_Absolute", "Regrouped_Absolute_YEAR", "Regrouped_FlavorQCD", "Regrouped_BBEC1", "Regrouped_EC2", "Regrouped_HF", "Regrouped_BBEC1_YEAR", "Regrouped_EC2_YEAR", "Regrouped_RelativeBal", "Regrouped_RelativeSample_YEAR", "Regrouped_HF_YEAR"], \
-        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_Unclustered=True, met_collections = ["PuppiMET", "MET", "RawMET"],do_JER=False, store_nominal=True, store_variations=False, isMC=False, sampleName = "RPLME_SAMPLENAME")',
+        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_XYMET=True, met_collections = ["PuppiMET", "MET", "RawMET"],do_JER=False, store_nominal=True, store_variations=False, isMC=False, sampleName = "RPLME_SAMPLENAME")',
 	"module"  : "jmeCalculator()",
     },
 
@@ -1959,7 +1959,7 @@ Steps = {
         "do4Data" : True,
         "import"  : "mkShapesRDF.processor.modules.JMECalculator",
         "declare" : 'jmeCalculator = lambda : JMECalculator(jet_object="AK4PFPuppi", jes_unc=["Regrouped_Absolute", "Regrouped_Absolute_YEAR", "Regrouped_FlavorQCD", "Regrouped_BBEC1", "Regrouped_EC2", "Regrouped_HF", "Regrouped_BBEC1_YEAR", "Regrouped_EC2_YEAR", "Regrouped_RelativeBal", "Regrouped_RelativeSample_YEAR", "Regrouped_HF_YEAR"], \
-        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_Unclustered=True, met_collections = ["PuppiMET", "PFMET"],do_JER=False, store_nominal=True, store_variations=False, isMC=False, sampleName = "RPLME_SAMPLENAME")',
+        year = "RPLME_CMSSW", do_Jets=True, do_MET=True, do_XYMET=True, met_collections = ["PuppiMET", "PFMET"],do_JER=False, store_nominal=True, store_variations=False, isMC=False, sampleName = "RPLME_SAMPLENAME")',
         "module"  : "jmeCalculator()",
     },
     
