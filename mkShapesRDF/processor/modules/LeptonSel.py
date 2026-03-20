@@ -21,21 +21,6 @@ class LeptonSel(Module):
         using namespace ROOT;
         using namespace ROOT::VecOps;
 
-        ROOT::RVecB reduce_cond_any(ROOT::RVecB condition, uint size1, uint size2){
-            ROOT::RVecB r;
-            for (uint i = 0; i < size1; i++){
-                bool c = false;
-                for (uint j = 0; j < size2; j++){
-                    if (condition[i * size2 + j]){
-                        c = true;
-                        break;
-                    }
-                }
-                r.push_back(c);
-            }
-            return r;
-        }
-
         RVecB propagateMask(RVecI Lepton_origIdx, RVecB mask, bool defaultValue){
         RVecB r {};
 
@@ -223,44 +208,12 @@ class LeptonSel(Module):
         )
         columnsToDrop.append("LeptonMask_JC")
 
-        df = df.Define("CleanJetMask", "CleanJet_eta <= 5.0")
-        columnsToDrop.append("CleanJetMask")
-
-        df = df.Define(
-            "CleanJet_Lepton_comb",
-            "ROOT::VecOps::Combinations(CleanJet_pt[CleanJetMask].size(), Lepton_pt[LeptonMask_JC].size())",
-        )
-        columnsToDrop.append("CleanJet_Lepton_comb")
-
-        df = df.Define(
-            "dR2",
-            "ROOT::VecOps::DeltaR2( \
-            Take(CleanJet_eta, CleanJet_Lepton_comb[0]), \
-            Take(Lepton_eta, CleanJet_Lepton_comb[1]), \
-            Take(CleanJet_phi, CleanJet_Lepton_comb[0]), \
-            Take(Lepton_phi, CleanJet_Lepton_comb[1]) \
-        )",
-        )
-        columnsToDrop.append("dR2")
-
-        df = df.Define(
-            "CleanJet_pass",
-            "! reduce_cond_any(dR2<(0.3*0.3), CleanJet_pt[CleanJetMask].size(), Lepton_pt[LeptonMask_JC].size())",
-        )
-        columnsToDrop.append("CleanJet_pass")
-
         branches = ["pt", "eta", "phi", "pdgId", "electronIdx", "muonIdx"]
         
         for prop in branches:
             df = df.Redefine(
                 f"Lepton_{prop}",
                 f"Lepton_{prop}[LeptonMaskHyg_Ele && LeptonMaskHyg_Mu]",
-            )
-
-        branches = ["jetIdx", "pt", "eta", "phi", "mass"]
-        for prop in branches:
-            df = df.Redefine(
-                f"CleanJet_{prop}", f"CleanJet_{prop}[CleanJetMask][CleanJet_pass]"
             )
 
         for col in columnsToDrop:

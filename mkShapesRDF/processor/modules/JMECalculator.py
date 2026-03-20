@@ -2,6 +2,7 @@ import ROOT
 from mkShapesRDF.processor.framework.module import Module
 from mkShapesRDF.processor.data.JetMaker_cfg import JetMakerCfg
 import os
+import re
 
 class JMECalculator(Module):
     """
@@ -17,7 +18,7 @@ class JMECalculator(Module):
         do_Jets=True,
         do_MET=True,
         do_JER=True,
-        do_Unclustered=True,
+        do_XYMET=True,
         store_nominal=True,
         store_variations=True,
         isMC = True,
@@ -59,7 +60,7 @@ class JMECalculator(Module):
         self.do_Jets = do_Jets
         self.do_MET = do_MET
         self.do_JER = do_JER
-        self.do_Unclustered = do_Unclustered
+        self.do_XYMET = do_XYMET
         self.store_nominal = store_nominal
         self.store_variations = store_variations
         self.isMC = isMC 
@@ -76,9 +77,11 @@ class JMECalculator(Module):
         self.JER_era = ""
         self.jsonFileSmearingTool = ""
 
-        self.isXYCorrMET  = False
         self.isXYCorrJson = ""
         self.isXYCorrEra  = ""
+        
+        if year in ["Full2024v15", "Full2025v15"]:
+            self.do_XYMET = False
         
         if self.year in JetMakerCfg.keys():
             self.json = JetMakerCfg[self.year]["jet_jerc"]
@@ -88,9 +91,7 @@ class JMECalculator(Module):
                 self.JEC_era = JetMakerCfg[self.year]["JEC_data"]
             self.JER_era = JetMakerCfg[self.year]["JER"]
             self.jsonFileSmearingTool = JetMakerCfg[self.year]["jer_smear"]
-
-            if "met_xy_json" in JetMakerCfg[self.year]:
-                self.isXYCorrMET = True
+            if self.do_XYMET:
                 self.isXYCorrJson = JetMakerCfg[self.year]["met_xy_json"]
                 self.isXYCorrEra = JetMakerCfg[self.year]["met_xy_era"]
 
@@ -177,98 +178,46 @@ class JMECalculator(Module):
             cols = []
 
             # nre reco jet coll
-            JetColl = "newJet"
+            JetColl = "CorrectedJet"
 
-            df = df.Define("newJet_pt", "CleanJet_pt")
-            df = df.Define("newJet_eta", "CleanJet_eta")
-            df = df.Define("newJet_phi", "CleanJet_phi")
-            df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
-
-            cols.append(f"{JetColl}_pt")
-            cols.append(f"{JetColl}_eta")
-            cols.append(f"{JetColl}_phi")
-            cols.append("CleanJet_mass")
-            cols.append(f"Take(Jet_rawFactor, {JetColl}_jetIdx)")
-            cols.append(f"Take(Jet_area, {JetColl}_jetIdx)")
-            cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
+            cols.append("Jet_pt")
+            cols.append("Jet_eta")
+            cols.append("Jet_phi")
+            cols.append("Jet_mass")
+            cols.append("Jet_rawFactor")
+            cols.append("Jet_area")
+            cols.append("Jet_jetId")
 
             # rho
             cols.append("Rho_fixedGridRhoFastjetAll")
 
-            if self.isMC:
-                cols.append(f"Take(Jet_genJetIdx, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_partonFlavour, {JetColl}_jetIdx)")
+            cols.append("Jet_genJetIdx")
+            cols.append("Jet_partonFlavour")
 
-                # seed
-                cols.append(f"(run<<20) + (luminosityBlock<<10) + event + 1 + int({JetColl}_eta.size()>0 ? {JetColl}_eta[0]/.01 : 0)")
+            # seed
+            cols.append("(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)")
+            cols.append("(float)-1.0")
 
-                # run
-                cols.append("(float)-1.0")
-                
-                # gen jet coll
-                cols.append("GenJet_pt")
-                cols.append("GenJet_eta")
-                cols.append("GenJet_phi")
-                cols.append("GenJet_mass")
-            else:
-                # Basically, this variables are nedded for the smearing and don't exist for data, so we set those to empty vectors
-                cols.append("ROOT::RVecI{}") # Jet_genJetIdx
-                cols.append("ROOT::RVecI{}") # Jet_partonFlavour
-                cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
-                cols.append("(float)run")
-                cols.append("ROOT::RVecF{}") # GenJet_pt
-                cols.append("ROOT::RVecF{}") # GenJet_eta
-                cols.append("ROOT::RVecF{}") # GenJet_phi
-                cols.append("ROOT::RVecF{}") # GenJet_mass
+            # gen jet coll
+            cols.append("GenJet_pt")
+            cols.append("GenJet_eta")
+            cols.append("GenJet_phi")
+            cols.append("GenJet_mass")
 
             df = df.Define("jetVars", f'myJetVariationsCalculator.produce({", ".join(cols)})')
 
-            if "TTTo2L2Nu_10k_nano" == self.sampleName: # the sample name used for recipe is "TTTo2L2Nu_10k_nano" so this condition is basically saying if isrecipe:...
-                cols_recipe = []
-
-                cols_recipe.append("Jet_pt")
-                cols_recipe.append("Jet_eta")
-                cols_recipe.append("Jet_phi")
-                cols_recipe.append("Jet_mass")
-                cols_recipe.append("Jet_rawFactor")
-                cols_recipe.append("Jet_area")
-                cols_recipe.append("Jet_jetId")
-
-                # rho
-                cols_recipe.append("Rho_fixedGridRhoFastjetAll")
-
-                cols_recipe.append("Jet_genJetIdx")
-                cols_recipe.append("Jet_partonFlavour")
-
-                # seed
-                cols_recipe.append("(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)")
-                cols_recipe.append("(float)-1.0")
-
-                # gen jet coll
-                cols_recipe.append("GenJet_pt")
-                cols_recipe.append("GenJet_eta")
-                cols_recipe.append("GenJet_phi")
-                cols_recipe.append("GenJet_mass")
-
-                df = df.Define("jetVarsrecipe", f'myJetVariationsCalculator.produce({", ".join(cols_recipe)})')
-
             if self.store_nominal:
-                df = df.Define("CleanJet_pt", "jetVars.pt(0)")
-                df = df.Define("CleanJet_mass", "jetVars.mass(0)")
+                df = df.Define(f"{JetColl}_pt", "jetVars.pt(0)")
+                df = df.Define(f"{JetColl}_mass", "jetVars.mass(0)")
                     
-                df = df.Define("CleanJet_sorting", "ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(CleanJet_pt))")
-
-                df = df.Define("CleanJet_pt", "Take( CleanJet_pt, CleanJet_sorting)")
-                df = df.Define("CleanJet_eta", "Take( CleanJet_eta, CleanJet_sorting)")
-                df = df.Define("CleanJet_phi", "Take( CleanJet_phi, CleanJet_sorting)")
-                df = df.Define("CleanJet_mass", "Take( CleanJet_mass, CleanJet_sorting)")
-                df = df.Define("CleanJet_jetIdx", "Take( CleanJet_jetIdx, CleanJet_sorting)")
-                if "TTTo2L2Nu_10k_nano" == self.sampleName: # the sample name used for recipe is "TTTo2L2Nu_10k_nano" so this condition is basically saying if isrecipe:...
-                    df = df.Define("Jet_pt_recipe", "jetVarsrecipe.pt(0)")
-                    df = df.Define("Jet_mass_recipe", "jetVarsrecipe.mass(0)")
-                
+                df = df.Define(f"{JetColl}_sorting", f"ROOT::VecOps::Reverse(ROOT::VecOps::Argsort({JetColl}_pt))")
+                df = df.Define(f"{JetColl}_pt", f"Take({JetColl}_pt, {JetColl}_sorting)")
+                df = df.Define(f"{JetColl}_eta", f"Take(Jet_eta, {JetColl}_sorting)")
+                df = df.Define(f"{JetColl}_phi", f"Take(Jet_phi, {JetColl}_sorting)")
+                df = df.Define(f"{JetColl}_mass", f"Take({JetColl}_mass, {JetColl}_sorting)")
+                df = df.Define(f"{JetColl}_jetIdx", "ROOT::VecOps::Range(nJet)")       
             else:
-                df = df.Define("CleanJet_sorting", "Range(CleanJet_pt.size())")
+                df = df.Define(f"{JetColl}_sorting", f"Range({JetColl}_pt.size())")
 
             if self.store_variations:
                 for i, source in enumerate(jesSources):
@@ -282,42 +231,42 @@ class JMECalculator(Module):
                         variation_mass = f"jetVars.mass({2*i+1+j})"
                         
                         df = df.Define(
-                            f"tmp_CleanJet_pt__JES_{source}_{tag}",
+                            f"tmp_{JetColl}_pt__JES_{source}_{tag}",
                             variation_pt,
                         )
                         df = df.Define(
-                            f"tmp_CleanJet_pt__JES_{source}_{tag}_sorting",
-                            f"ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(tmp_CleanJet_pt__JES_{source}_{tag}))",
+                            f"tmp_{JetColl}_pt__JES_{source}_{tag}_sorting",
+                            f"ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(tmp_{JetColl}_pt__JES_{source}_{tag}))",
                         )
                         variations_pt.append(
-                            f"Take(tmp_CleanJet_pt__JES_{source}_{tag}, tmp_CleanJet_pt__JES_{source}_{tag}_sorting)"
+                            f"Take(tmp_{JetColl}_pt__JES_{source}_{tag}, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)"
                         )
 
                         df = df.Define(
-                            f"CleanJet_cleanJetIdx_preJES_{source}_{tag}",
-                            f"tmp_CleanJet_pt__JES_{source}_{tag}_sorting",
+                            f"{JetColl}_JetIdx_preJES_{source}_{tag}",
+                            f"tmp_{JetColl}_pt__JES_{source}_{tag}_sorting",
                         )
 
                         variations_jetIdx.append(
-                            f"Take({JetColl}_jetIdx, tmp_CleanJet_pt__JES_{source}_{tag}_sorting)",
+                            f"Take({JetColl}_jetIdx, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)",
                         )
 
                         df = df.Define(
-                            f"tmp_CleanJet_mass__JES_{source}_{tag}",
-                            f"Take({variation_mass}, tmp_CleanJet_pt__JES_{source}_{tag}_sorting)",
+                            f"tmp_{JetColl}_mass__JES_{source}_{tag}",
+                            f"Take({variation_mass}, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)",
                         )
-                        variations_mass.append(f"tmp_CleanJet_mass__JES_{source}_{tag}")
+                        variations_mass.append(f"tmp_{JetColl}_mass__JES_{source}_{tag}")
 
                         variations_phi.append(
-                            f"Take({JetColl}_phi, tmp_CleanJet_pt__JES_{source}_{tag}_sorting)"
+                            f"Take({JetColl }_phi, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)"
                         )
                         variations_eta.append(
-                            f"Take({JetColl}_eta, tmp_CleanJet_pt__JES_{source}_{tag}_sorting)"
+                            f"Take({JetColl}_eta, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)"
                         )
 
                     tags = ["up", "do"]
                     df = df.Vary(
-                        "CleanJet_pt",
+                        f"{JetColl}_pt",
                         "ROOT::RVec<ROOT::RVecF>{"
                         + variations_pt[0]
                         + ", "
@@ -328,7 +277,7 @@ class JMECalculator(Module):
                     )
 
                     df = df.Vary(
-                        "CleanJet_jetIdx",
+                        f"{JetColl}_jetIdx",
                         "ROOT::RVec<ROOT::RVecI>{" + variations_jetIdx[0]
                         + ", " + variations_jetIdx[1]
                         + "}",
@@ -337,7 +286,7 @@ class JMECalculator(Module):
                     )
 
                     df = df.Vary(
-                        "CleanJet_mass",
+                        f"{JetColl}_mass",
                         "ROOT::RVec<ROOT::RVecF>{" + variations_mass[0]
                         + ", " + variations_mass[1]
                         + "}",
@@ -346,7 +295,7 @@ class JMECalculator(Module):
                     )
 
                     df = df.Vary(
-                        "CleanJet_phi",
+                        f"{JetColl}_phi",
                         "ROOT::RVec<ROOT::RVecF>{" + variations_phi[0]
                         + ", " + variations_phi[1]
                         + "}",
@@ -355,7 +304,7 @@ class JMECalculator(Module):
                     )
 
                     df = df.Vary(
-                        "CleanJet_eta",
+                        f"{JetColl}_eta",
                         "ROOT::RVec<ROOT::RVecF>{" + variations_eta[0]
                         + ", " + variations_eta[1]
                         + "}",
@@ -365,8 +314,10 @@ class JMECalculator(Module):
 
                     df = df.DropColumns("tmp_*")
 
+            df = df.Define(f"n{JetColl}", f"{JetColl}_pt.size()")
             df = df.DropColumns("jetVars*")
-            df = df.DropColumns("CleanJet_sorting")
+            df = df.DropColumns(f"{JetColl}_sorting")
+            df = df.DropColumns("*preJES*")
         
         if self.do_MET:
             L1JecTag        = "L1FastJet"
@@ -377,7 +328,7 @@ class JMECalculator(Module):
             isXYCorrected = "false"
             met_xy_json = ""
             met_xy_era = ""
-            if self.isXYCorrMET:
+            if self.do_XYMET :
                 isXYCorrected = "true"
                 met_xy_json = self.isXYCorrJson
                 met_xy_era = self.isXYCorrEra
@@ -397,38 +348,30 @@ class JMECalculator(Module):
                 METSources = calcMET.available()
                 METSources = calcMET.available()[1:][::2]
                 METSources = [str(source).replace('up', '') for source in METSources]
-                print(METSources)
                 
                 # list of columns to be passed to myJetVarCal produce
                 cols = []
 
-                JetColl = "newJet"
-
-                df = df.Define("newJet_pt", "CleanJet_pt")
-                df = df.Define("newJet_eta", "CleanJet_eta")
-                df = df.Define("newJet_phi", "CleanJet_phi")
-                df = df.Define("newJet_jetIdx", "CleanJet_jetIdx")
-
-                cols.append(f"{JetColl}_pt")
-                cols.append(f"{JetColl}_eta")
-                cols.append(f"{JetColl}_phi")
-                cols.append(f"Take(Jet_mass, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_rawFactor, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_area, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_muonSubtrFactor, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_neEmEF, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_chEmEF, {JetColl}_jetIdx)")
-                cols.append(f"Take(Jet_jetId, {JetColl}_jetIdx)")
+                cols.append("Jet_pt")
+                cols.append("Jet_eta")
+                cols.append("Jet_phi")
+                cols.append("Jet_mass")
+                cols.append("Jet_rawFactor")
+                cols.append("Jet_area")
+                cols.append("Jet_muonSubtrFactor")
+                cols.append("Jet_neEmEF")
+                cols.append("Jet_chEmEF")
+                cols.append("Jet_jetId")
     
                 # rho
                 cols.append("Rho_fixedGridRhoFastjetAll")
 
                 if self.isMC: 
-                    cols.append(f"Take(Jet_genJetIdx, {JetColl}_jetIdx)")
-                    cols.append(f"Take(Jet_partonFlavour, {JetColl}_jetIdx)")
+                    cols.append("Jet_genJetIdx")
+                    cols.append("Jet_partonFlavour")
                     # seed
                     cols.append(
-                        f"(run<<20) + (luminosityBlock<<10) + event + 1 + int({JetColl}_eta.size()>0 ? {JetColl}_eta[0]/.01 : 0)"
+                        f"(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)"
                     )
                     cols.append("-1.0")    
                     # gen jet coll
@@ -463,33 +406,33 @@ class JMECalculator(Module):
                 cols.append("ROOT::RVecF {}")
                 cols.append("ROOT::RVecF {}")
 
-                ## Not available in nanoAODv15
-                if "v15" in self.year:
-                    if "Puppi" not in MET:
+                ## Always use the differences defined as the following, for all Run3 eras.
+                if "Puppi" not in MET:
+                    if "v15" in self.year:
                         df = df.Define(
                             "PFMET_MetUnclustEnUpDeltaX",
-                            "PFMET_ptUnclusteredUp * std::cos(PFMET_phi)"
+                            "PFMET_pt * std::cos(PFMET_phi) - PFMET_ptUnclusteredUp * std::cos(PFMET_phiUnclusteredUp)"
                         )
                         df = df.Define(
                             "PFMET_MetUnclustEnUpDeltaY",
-                            "PFMET_ptUnclusteredUp * std::sin(PFMET_phi)"
+                            "PFMET_pt * std::sin(PFMET_phi) - PFMET_ptUnclusteredUp * std::cos(PFMET_phiUnclusteredUp)"
                         )
                         cols.append("PFMET_MetUnclustEnUpDeltaX")
                         cols.append("PFMET_MetUnclustEnUpDeltaY")
                     else:
-                        df = df.Define(
-                            "PuppiMET_MetUnclustEnUpDeltaX",
-                            "PuppiMET_ptUnclusteredUp * std::cos(PuppiMET_phi)"
-                        )
-                        df = df.Define(
-                            "PuppiMET_MetUnclustEnUpDeltaY",
-                            "PuppiMET_ptUnclusteredUp * std::sin(PuppiMET_phi)"
-                        )
-                        cols.append("PuppiMET_MetUnclustEnUpDeltaX")
-                        cols.append("PuppiMET_MetUnclustEnUpDeltaY")
-                else:                
-                    cols.append("MET_MetUnclustEnUpDeltaX")
-                    cols.append("MET_MetUnclustEnUpDeltaY")
+                        cols.append("MET_MetUnclustEnUpDeltaX")
+                        cols.append("MET_MetUnclustEnUpDeltaY")
+                else :     
+                    df = df.Define(
+                        "PuppiMET_MetUnclustEnUpDeltaX",
+                        "PuppiMET_pt * std::cos(PuppiMET_phi) - PuppiMET_ptUnclusteredUp * std::cos(PuppiMET_phiUnclusteredUp)"
+                    )
+                    df = df.Define(
+                        "PuppiMET_MetUnclustEnUpDeltaY",
+                        "PuppiMET_pt * std::sin(PuppiMET_phi) - PuppiMET_ptUnclusteredUp * std::sin(PuppiMET_phiUnclusteredUp)"
+                    )
+                    cols.append("PuppiMET_MetUnclustEnUpDeltaX")
+                    cols.append("PuppiMET_MetUnclustEnUpDeltaY")
 
                 cols.append("PV_npvsGood")                    
                                        
@@ -498,8 +441,8 @@ class JMECalculator(Module):
                 )
                 
                 if self.store_nominal:
-                    df = df.Define(f"{MET}_pt", f"CleanJet_pt.size() > 0 ? {MET}Vars.pt(0) : {RawMET}_pt")
-                    df = df.Define(f"{MET}_phi", f"CleanJet_pt.size() > 0 ? {MET}Vars.phi(0) : {RawMET}_phi")
+                    df = df.Define(f"{MET}_pt", f"Jet_pt.size() > 0 ? {MET}Vars.pt(0) : {RawMET}_pt")
+                    df = df.Define(f"{MET}_phi", f"Jet_pt.size() > 0 ? {MET}Vars.phi(0) : {RawMET}_phi")
                 
                 if self.store_variations:
                     for variable in [MET + "_pt", MET + "_phi"]:
@@ -514,4 +457,5 @@ class JMECalculator(Module):
                             )
                 df = df.DropColumns(f"{MET}Vars*")
                 print("MET variables run succesfully!")
+
         return df

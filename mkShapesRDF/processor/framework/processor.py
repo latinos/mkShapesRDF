@@ -444,7 +444,7 @@ class Processor:
                 genEventSumw = 0.0                
                 def computeSumW(myfiles, chunksize):
                     print("\n")
-                    print("Try with cunksize " + str(chunksize))
+                    print("Try with chunksize " + str(chunksize))
                     nIterations = max(ceil(len(myfiles) / chunksize), 1)
                     genEventSumw_tmp = 0.0
                     for i in range(nIterations):

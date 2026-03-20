@@ -76,40 +76,6 @@ class LeptonMaker(Module):
             [df.Define("test", "Lepton_pt.size()").Sum("test"), "lepton pt size"]
         )
 
-        # df = df.Define("isCleanJet", " Jet_pt > 9 && ROOT::VecOps::abs(Jet_eta) < 4.7 ")
-        df = df.Define("isCleanJet", "ROOT::RVecB(Jet_pt.size(), true)")
-
-        df = df.Define("CleanJet_pt", "Jet_pt[isCleanJet]")
-
-        # check just to be sure the sorting
-        df = df.Define("CleanJet_sorting", "sortedIndices(CleanJet_pt)")
-
-        df = df.Define("CleanJet_jetIdx", "ROOT::VecOps::Range(nJet)[isCleanJet]")
-        df = df.Redefine("CleanJet_jetIdx", "Take(CleanJet_jetIdx, CleanJet_sorting)")
-        CleanJet_var = ["eta", "phi", "mass"]
-        for prop in CleanJet_var:
-            df = df.Define(f"CleanJet_{prop}", f"Jet_{prop}[isCleanJet]")
-            df = df.Redefine(
-                f"CleanJet_{prop}", f"Take(CleanJet_{prop}, CleanJet_sorting)"
-            )
-
-        values.append([df.Define("test", "Sum(Jet_pt)").Sum("test"), "Sum of Jet pt"])
-        values.append(
-            [df.Define("test", "Jet_pt.size()").Sum("test"), "Size of Jet pt"]
-        )
-
-        values.append(
-            [df.Define("test", "Sum(CleanJet_pt)").Sum("test"), "Sum of CleanJet pt"]
-        )
-        values.append(
-            [
-                df.Define("test", "CleanJet_pt.size()").Sum("test"),
-                "Size of CleanJet pt",
-            ]
-        )
-
         df = df.DropColumns("Lepton_sorting")
-        df = df.DropColumns("isCleanJet")
-        df = df.DropColumns("CleanJet_sorting")
 
         return df
