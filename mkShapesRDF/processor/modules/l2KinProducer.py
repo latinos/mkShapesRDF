@@ -22,6 +22,14 @@ class l2KinProducer(Module):
         )
 
         df = df.Define(
+            "CorrectedJetTight_4DV",
+            "ROOT::VecOps::Construct<ROOT::Math::PtEtaPhiMVector>"
+            "(CorrectedJetTight_pt, CorrectedJetTight_eta, CorrectedJetTight_phi,"
+            # "Take(Jet_mass, CorrectedJetTight_jetIdx))",
+            "CorrectedJetTight_mass)",
+        )
+
+        df = df.Define(
             "MET_4DV", "ROOT::Math::PtEtaPhiMVector" "(PuppiMET_pt, 0, PuppiMET_phi, 0)"
         )
         
@@ -49,7 +57,8 @@ class l2KinProducer(Module):
 
         df = df.Define("_lepOk", "Lepton_pt[Lepton_pt > 0].size()")
         df = df.Define("_tkMetOk", "TkMET_4DV.E() > 0")
-        df = df.Define("_jetOk", "CleanJet_pt[CleanJet_pt > 0].size()")
+        df = df.Define("_jetOk_Tight", "CorrectedJetTight_pt[CorrectedJetTight_pt > 0].size()")
+        df = df.Define("_jetOk_Clean", "CleanJet_pt[CleanJet_pt > 0].size()")
 
 
         # FIXME complete l2kin module!
@@ -236,8 +245,12 @@ class l2KinProducer(Module):
             "_isOk ? (Lepton_4DV[0] + Lepton_4DV[1] + MET_4DV).Pt() : -9999.0",
         )
         df = df.Define(
-            prefix + "pTHjj",
-            "_isOk && _jetOk>=2 ? (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1] + MET_4DV).Pt() : -9999.0",
+            prefix + "pTHjj_Clean",
+            "_isOk && _jetOk_Clean>=2 ? (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1] + MET_4DV).Pt() : -9999.0",
+        )
+        df = df.Define(
+            prefix + "pTHjj_Tight",
+            "_isOk && _jetOk_Tight>=2 ? (Lepton_4DV[0] + Lepton_4DV[1] + CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1] + MET_4DV).Pt() : -9999.0",
         )
         df = df.Define(
             prefix + "recoil",
@@ -335,153 +348,301 @@ class l2KinProducer(Module):
 
         # Lepton(s)-Jet(s) variables
         df = df.Define(
-            prefix + "dphilljet",
-            "_isOk && _jetOk>=1 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), CleanJet_4DV[0].Phi())) : -9999.0",
+            prefix + "dphilljet_Clean",
+            "_isOk && _jetOk_Clean>=1 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), CleanJet_4DV[0].Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphilljetjet",
-            "_isOk && _jetOk>=2 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), (CleanJet_4DV[0] + CleanJet_4DV[1]).Phi())) : -9999.0",
+            prefix + "dphilljetjet_Clean",
+            "_isOk && _jetOk_Clean>=2 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), (CleanJet_4DV[0] + CleanJet_4DV[1]).Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphilljetjet_cut",
-            "_isOk && _jetOk>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), (CleanJet_4DV[0] + CleanJet_4DV[1]).Phi())) : -9999.0",
+            prefix + "dphilljetjet_cut_Clean",
+            "_isOk && _jetOk_Clean>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), (CleanJet_4DV[0] + CleanJet_4DV[1]).Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphijet1met",
-            "_isOk && _jetOk>=1 ? abs(DeltaPhi(CleanJet_4DV[0].Phi(), MET_4DV.Phi())) : -9999.0",
+            prefix + "dphijet1met_Clean",
+            "_isOk && _jetOk_Clean>=1 ? abs(DeltaPhi(CleanJet_4DV[0].Phi(), MET_4DV.Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphijet2met",
-            "_isOk && _jetOk>=2 ? abs(DeltaPhi(CleanJet_4DV[1].Phi(), MET_4DV.Phi())) : -9999.0",
+            prefix + "dphijet2met_Clean",
+            "_isOk && _jetOk_Clean>=2 ? abs(DeltaPhi(CleanJet_4DV[1].Phi(), MET_4DV.Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphilep1jet1",
-            "_isOk && _jetOk>=1 ? abs(DeltaPhi(Lepton_4DV[0].Phi(), CleanJet_4DV[0].Phi())) : -9999.0",
+            prefix + "dphilep1jet1_Clean",
+            "_isOk && _jetOk_Clean>=1 ? abs(DeltaPhi(Lepton_4DV[0].Phi(), CleanJet_4DV[0].Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphilep1jet2",
-            "_isOk && _jetOk>=2 ? abs(DeltaPhi(Lepton_4DV[0].Phi(), CleanJet_4DV[1].Phi())) : -9999.0",
+            prefix + "dphilep1jet2_Clean",
+            "_isOk && _jetOk_Clean>=2 ? abs(DeltaPhi(Lepton_4DV[0].Phi(), CleanJet_4DV[1].Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphilep2jet1",
-            "_isOk && _jetOk>=1 ? abs(DeltaPhi(Lepton_4DV[1].Phi(), CleanJet_4DV[0].Phi())) : -9999.0",
+            prefix + "dphilep2jet1_Clean",
+            "_isOk && _jetOk_Clean>=1 ? abs(DeltaPhi(Lepton_4DV[1].Phi(), CleanJet_4DV[0].Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphilep2jet2",
-            "_isOk && _jetOk>=2 ? abs(DeltaPhi(Lepton_4DV[1].Phi(), CleanJet_4DV[1].Phi())) : -9999.0",
+            prefix + "dphilep2jet2_Clean",
+            "_isOk && _jetOk_Clean>=2 ? abs(DeltaPhi(Lepton_4DV[1].Phi(), CleanJet_4DV[1].Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "detaj1l1",
-            "_isOk && _jetOk>=1 ? abs(CleanJet_eta[0] - Lepton_eta[0]) : -9999.0",
+            prefix + "detaj1l1_Clean",
+            "_isOk && _jetOk_Clean>=1 ? abs(CleanJet_eta[0] - Lepton_eta[0]) : -9999.0",
         )
         df = df.Define(
-            prefix + "detaj1l2",
-            "_isOk && _jetOk>=1 ? abs(CleanJet_eta[0] - Lepton_eta[1]) : -9999.0",
+            prefix + "detaj1l2_Clean",
+            "_isOk && _jetOk_Clean>=1 ? abs(CleanJet_eta[0] - Lepton_eta[1]) : -9999.0",
         )
         df = df.Define(
-            prefix + "detaj2l1",
-            "_isOk && _jetOk>=2 ? abs(CleanJet_eta[1] - Lepton_eta[0]) : -9999.0",
+            prefix + "detaj2l1_Clean",
+            "_isOk && _jetOk_Clean>=2 ? abs(CleanJet_eta[1] - Lepton_eta[0]) : -9999.0",
         )
         df = df.Define(
-            prefix + "detaj2l2",
-            "_isOk && _jetOk>=2 ? abs(CleanJet_eta[1] - Lepton_eta[1]) : -9999.0",
+            prefix + "detaj2l2_Clean",
+            "_isOk && _jetOk_Clean>=2 ? abs(CleanJet_eta[1] - Lepton_eta[1]) : -9999.0",
         )
         df = df.Define(
-            prefix + "mindetajl",
-            "_isOk && _jetOk>=2 ? min({0}detaj1l1, min({0}detaj1l2, min({0}detaj2l1, {0}detaj2l2))) : -9999.0".format(
+            prefix + "dphilljet_Tight",
+            "_isOk && _jetOk_Tight>=1 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), CorrectedJetTight_4DV[0].Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphilljetjet_Tight",
+            "_isOk && _jetOk_Tight>=2 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), (CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphilljetjet_cut_Tight",
+            "_isOk && _jetOk_Tight>=2 && CorrectedJetTight_4DV[0].Pt()>15.0 && CorrectedJetTight_4DV[1].Pt()>15.0 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), (CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphijet1met_Tight",
+            "_isOk && _jetOk_Tight>=1 ? abs(DeltaPhi(CorrectedJetTight_4DV[0].Phi(), MET_4DV.Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphijet2met_Tight",
+            "_isOk && _jetOk_Tight>=2 ? abs(DeltaPhi(CorrectedJetTight_4DV[1].Phi(), MET_4DV.Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphilep1jet1_Tight",
+            "_isOk && _jetOk_Tight>=1 ? abs(DeltaPhi(Lepton_4DV[0].Phi(), CorrectedJetTight_4DV[0].Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphilep1jet2_Tight",
+            "_isOk && _jetOk_Tight>=2 ? abs(DeltaPhi(Lepton_4DV[0].Phi(), CorrectedJetTight_4DV[1].Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphilep2jet1_Tight",
+            "_isOk && _jetOk_Tight>=1 ? abs(DeltaPhi(Lepton_4DV[1].Phi(), CorrectedJetTight_4DV[0].Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphilep2jet2_Tight",
+            "_isOk && _jetOk_Tight>=2 ? abs(DeltaPhi(Lepton_4DV[1].Phi(), CorrectedJetTight_4DV[1].Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "detaj1l1_Tight",
+            "_isOk && _jetOk_Tight>=1 ? abs(CorrectedJetTight_eta[0] - Lepton_eta[0]) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "detaj1l2_Tight",
+            "_isOk && _jetOk_Tight>=1 ? abs(CorrectedJetTight_eta[0] - Lepton_eta[1]) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "detaj2l1_Tight",
+            "_isOk && _jetOk_Tight>=2 ? abs(CorrectedJetTight_eta[1] - Lepton_eta[0]) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "detaj2l2_Tight",
+            "_isOk && _jetOk_Tight>=2 ? abs(CorrectedJetTight_eta[1] - Lepton_eta[1]) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "mindetajl_Clean",
+            "_isOk && _jetOk_Clean>=2 ? min({0}detaj1l1_Clean, min({0}detaj1l2_Clean, min({0}detaj2l1_Clean, {0}detaj2l2_Clean))) : -9999.0".format(
                 prefix
             ),
         )
         df = df.Define(
-            prefix + "dphilep1jj",
-            "_isOk && _jetOk>=2 ? abs(DeltaPhi( Lepton_4DV[0].Phi(), (CleanJet_4DV[0] + CleanJet_4DV[1]).Phi() ) ) : -9999.0",
+            prefix + "dphilep1jj_Clean",
+            "_isOk && _jetOk_Clean>=2 ? abs(DeltaPhi( Lepton_4DV[0].Phi(), (CleanJet_4DV[0] + CleanJet_4DV[1]).Phi() ) ) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphilep2jj",
-            "_isOk && _jetOk>=2 ? abs(DeltaPhi(Lepton_4DV[1].Phi(), (CleanJet_4DV[0] + CleanJet_4DV[1]).Phi())) : -9999.0",
+            prefix + "dphilep2jj_Clean",
+            "_isOk && _jetOk_Clean>=2 ? abs(DeltaPhi(Lepton_4DV[1].Phi(), (CleanJet_4DV[0] + CleanJet_4DV[1]).Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "maxdphilepjj",
-            "_isOk && _jetOk>=2 ? max({0}dphilep1jj, {0}dphilep2jj) : -9999.0".format(
+            prefix + "maxdphilepjj_Clean",
+            "_isOk && _jetOk_Clean>=2 ? max({0}dphilep1jj_Clean, {0}dphilep2jj_Clean) : -9999.0".format(
                 prefix
             ),
         )
         df = df.Define(
-            prefix + "dphilljet_cut",
-            "_isOk && _jetOk>=1 && CleanJet_4DV[0].Pt()>15.0 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), CleanJet_4DV[0].Phi())) : -9999.0",
+            prefix + "dphilljet_cut_Clean",
+            "_isOk && _jetOk_Clean>=1 && CleanJet_4DV[0].Pt()>15.0 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), CleanJet_4DV[0].Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphijet1met_cut",
-            "_isOk && _jetOk>=1 && CleanJet_4DV[0].Pt()>15.0 ? abs(DeltaPhi(CleanJet_4DV[0].Phi(), MET_4DV.Phi())) : -9999.0",
+            prefix + "dphijet1met_cut_Clean",
+            "_isOk && _jetOk_Clean>=1 && CleanJet_4DV[0].Pt()>15.0 ? abs(DeltaPhi(CleanJet_4DV[0].Phi(), MET_4DV.Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphijet2met_cut",
-            "_isOk && _jetOk>=2 && CleanJet_4DV[1].Pt()>15.0 ? abs(DeltaPhi(CleanJet_4DV[1].Phi(), MET_4DV.Phi())) : -9999.0",
+            prefix + "dphijet2met_cut_Clean",
+            "_isOk && _jetOk_Clean>=2 && CleanJet_4DV[1].Pt()>15.0 ? abs(DeltaPhi(CleanJet_4DV[1].Phi(), MET_4DV.Phi())) : -9999.0",
         )
 
         df = df.Define(
-            prefix + "WlepMt_whss",
-            "_isOk ? _jetOk>=2 && {0}dphilep1jj   >  {0}dphilep2jj   ? sqrt( 2 * Lepton_4DV[0].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet1) ) ) : \
-                     _jetOk>=2 && {0}dphilep1jj   <= {0}dphilep2jj   ? sqrt( 2 * Lepton_4DV[1].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet2) ) ) : \
-                     _jetOk==1 && {0}dphilep1jet1 >  {0}dphilep2jet1 ? sqrt( 2 * Lepton_4DV[0].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet1) ) ) : \
-                     _jetOk==1 && {0}dphilep1jet1 <= {0}dphilep2jet1 ? sqrt( 2 * Lepton_4DV[1].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet2) ) ) : \
+            prefix + "mindetajl_Tight",
+            "_isOk && _jetOk_Tight>=2 ? min({0}detaj1l1_Tight, min({0}detaj1l2_Tight, min({0}detaj2l1_Tight, {0}detaj2l2_Tight))) : -9999.0".format(
+                prefix
+            ),
+        )
+        df = df.Define(
+            prefix + "dphilep1jj_Tight",
+            "_isOk && _jetOk_Tight>=2 ? abs(DeltaPhi( Lepton_4DV[0].Phi(), (CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).Phi() ) ) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphilep2jj_Tight",
+            "_isOk && _jetOk_Tight>=2 ? abs(DeltaPhi(Lepton_4DV[1].Phi(), (CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "maxdphilepjj_Tight",
+            "_isOk && _jetOk_Tight>=2 ? max({0}dphilep1jj_Tight, {0}dphilep2jj_Tight) : -9999.0".format(
+                prefix
+            ),
+        )
+        df = df.Define(
+            prefix + "dphilljet_cut_Tight",
+            "_isOk && _jetOk_Tight>=1 && CorrectedJetTight_4DV[0].Pt()>15.0 ? abs(DeltaPhi((Lepton_4DV[0] + Lepton_4DV[1]).Phi(), CorrectedJetTight_4DV[0].Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphijet1met_cut_Tight",
+            "_isOk && _jetOk_Tight>=1 && CorrectedJetTight_4DV[0].Pt()>15.0 ? abs(DeltaPhi(CorrectedJetTight_4DV[0].Phi(), MET_4DV.Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphijet2met_cut_Tight",
+            "_isOk && _jetOk_Tight>=2 && CorrectedJetTight_4DV[1].Pt()>15.0 ? abs(DeltaPhi(CorrectedJetTight_4DV[1].Phi(), MET_4DV.Phi())) : -9999.0",
+        )
+
+        df = df.Define(
+            prefix + "WlepMt_whss_Clean",
+            "_isOk ? _jetOk_Clean>=2 && {0}dphilep1jj_Clean   >  {0}dphilep2jj_Clean   ? sqrt( 2 * Lepton_4DV[0].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet1) ) ) : \
+                     _jetOk_Clean>=2 && {0}dphilep1jj_Clean   <= {0}dphilep2jj_Clean   ? sqrt( 2 * Lepton_4DV[1].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet2) ) ) : \
+                     _jetOk_Clean==1 && {0}dphilep1jet1_Clean >  {0}dphilep2jet1_Clean ? sqrt( 2 * Lepton_4DV[0].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet1) ) ) : \
+                     _jetOk_Clean==1 && {0}dphilep1jet1_Clean <= {0}dphilep2jet1_Clean ? sqrt( 2 * Lepton_4DV[1].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet2) ) ) : \
+            -9999.0 : -9999.0".format(prefix),
+        )
+
+        df = df.Define(
+            prefix + "WlepMt_whss_Tight",
+            "_isOk ? _jetOk_Tight>=2 && {0}dphilep1jj_Tight   >  {0}dphilep2jj_Tight   ? sqrt( 2 * Lepton_4DV[0].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet1) ) ) : \
+                     _jetOk_Tight>=2 && {0}dphilep1jj_Tight   <= {0}dphilep2jj_Tight   ? sqrt( 2 * Lepton_4DV[1].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet2) ) ) : \
+                     _jetOk_Tight==1 && {0}dphilep1jet1_Tight >  {0}dphilep2jet1_Tight ? sqrt( 2 * Lepton_4DV[0].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet1) ) ) : \
+                     _jetOk_Tight==1 && {0}dphilep1jet1_Tight <= {0}dphilep2jet1_Tight ? sqrt( 2 * Lepton_4DV[1].Pt() * MET_4DV.Pt() * (1 - cos({0}dphilmet2) ) ) : \
             -9999.0 : -9999.0".format(prefix),
         )
 
 
         # dijets variables
         df = df.Define(
-            prefix + "njet",
+            prefix + "njet_Clean",
             "CleanJet_pt [CleanJet_pt > 30 && CleanJet_eta < 4.7].size()",
         )
         df = df.Define(
-            prefix + "ptjj",
-            "_jetOk >=2 ? (CleanJet_4DV[0] + CleanJet_4DV[1]).Pt() : -9999.0",
+            prefix + "ptjj_Clean",
+            "_jetOk_Clean >=2 ? (CleanJet_4DV[0] + CleanJet_4DV[1]).Pt() : -9999.0",
         )
         df = df.Define(
-            prefix + "mjj",
-            "_jetOk >=2 ? (CleanJet_4DV[0] + CleanJet_4DV[1]).M() : -9999.0",
+            prefix + "mjj_Clean",
+            "_jetOk_Clean >=2 ? (CleanJet_4DV[0] + CleanJet_4DV[1]).M() : -9999.0",
         )
         df = df.Define(
-            prefix + "dphijj",
-            "_jetOk >= 2 ? DeltaPhi(CleanJet_phi[0], CleanJet_phi[1]) : -9999.0",
+            prefix + "dphijj_Clean",
+            "_jetOk_Clean >= 2 ? DeltaPhi(CleanJet_phi[0], CleanJet_phi[1]) : -9999.0",
         )
         df = df.Define(
-            prefix + "drjj",
-            "_jetOk >= 2 ? DeltaR(CleanJet_eta[0], CleanJet_eta[1], CleanJet_phi[0], CleanJet_phi[1]) : -9999.0",
+            prefix + "drjj_Clean",
+            "_jetOk_Clean >= 2 ? DeltaR(CleanJet_eta[0], CleanJet_eta[1], CleanJet_phi[0], CleanJet_phi[1]) : -9999.0",
         )
         df = df.Define(
-            prefix + "detajj",
-            "_jetOk >=2 ? abs(CleanJet_eta[0] - CleanJet_eta[1]) : -9999.0",
+            prefix + "detajj_Clean",
+            "_jetOk_Clean >=2 ? abs(CleanJet_eta[0] - CleanJet_eta[1]) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphijjmet",
-            "_isOk && _jetOk>=2 ? abs(DeltaPhi((CleanJet_4DV[0] + CleanJet_4DV[1]).Phi(),MET_4DV.Phi())) : -9999.0",
+            prefix + "dphijjmet_Clean",
+            "_isOk && _jetOk_Clean>=2 ? abs(DeltaPhi((CleanJet_4DV[0] + CleanJet_4DV[1]).Phi(),MET_4DV.Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "dphijjmet_cut",
-            "_isOk && _jetOk>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? abs(DeltaPhi((CleanJet_4DV[0] + CleanJet_4DV[1]).Phi(),MET_4DV.Phi())) : -9999.0",
+            prefix + "dphijjmet_cut_Clean",
+            "_isOk && _jetOk_Clean>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? abs(DeltaPhi((CleanJet_4DV[0] + CleanJet_4DV[1]).Phi(),MET_4DV.Phi())) : -9999.0",
         )
         df = df.Define(
-            prefix + "jetpt1_cut",
-            "_isOk && _jetOk>=1 && CleanJet_4DV[0].Pt()>15.0 ? CleanJet_4DV[0].Pt() : -9999.0",
+            prefix + "jetpt1_cut_Clean",
+            "_isOk && _jetOk_Clean>=1 && CleanJet_4DV[0].Pt()>15.0 ? CleanJet_4DV[0].Pt() : -9999.0",
         )
         df = df.Define(
-            prefix + "jetpt2_cut",
-            "_isOk && _jetOk>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? CleanJet_4DV[1].Pt() : -9999.0",
+            prefix + "jetpt2_cut_Clean",
+            "_isOk && _jetOk_Clean>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? CleanJet_4DV[1].Pt() : -9999.0",
         )
         df = df.Define(
-            prefix + "m2ljj20",
-            "_isOk && _jetOk>=1 && CleanJet_4DV[0].Pt()>30.0 ? CleanJet_4DV[1].Pt()>20.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0]).M() : -9999.0",
+            prefix + "m2ljj20_Clean",
+            "_isOk && _jetOk_Clean>=1 && CleanJet_4DV[0].Pt()>30.0 ? CleanJet_4DV[1].Pt()>20.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0]).M() : -9999.0",
         )
         df = df.Define(
-            prefix + "m2ljj30",
-            "_isOk && _jetOk>=1 && CleanJet_4DV[0].Pt()>30.0 ? CleanJet_4DV[1].Pt()>30.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0]).M() : -9999.0",
+            prefix + "m2ljj30_Clean",
+            "_isOk && _jetOk_Clean>=1 && CleanJet_4DV[0].Pt()>30.0 ? CleanJet_4DV[1].Pt()>30.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0]).M() : -9999.0",
         )
         df = df.Define(
-            prefix + "ht",
+            prefix + "ht_Clean",
             "_isOk ? Sum(Lepton_pt[Lepton_pt>0]) + Sum(CleanJet_pt[CleanJet_pt>30]) + MET_4DV.Pt() : -9999.0",
         )
+
+        df = df.Define(
+            prefix + "njet_Tight",
+            "CorrectedJetTight_pt [CorrectedJetTight_pt > 30 && CorrectedJetTight_eta < 4.7].size()",
+        )
+        df = df.Define(
+            prefix + "ptjj_Tight",
+            "_jetOk_Tight >=2 ? (CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).Pt() : -9999.0",
+        )
+        df = df.Define(
+            prefix + "mjj_Tight",
+            "_jetOk_Tight >=2 ? (CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).M() : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphijj_Tight",
+            "_jetOk_Tight >= 2 ? DeltaPhi(CorrectedJetTight_phi[0], CorrectedJetTight_phi[1]) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "drjj_Tight",
+            "_jetOk_Tight >= 2 ? DeltaR(CorrectedJetTight_eta[0], CorrectedJetTight_eta[1], CorrectedJetTight_phi[0], CorrectedJetTight_phi[1]) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "detajj_Tight",
+            "_jetOk_Tight >=2 ? abs(CorrectedJetTight_eta[0] - CorrectedJetTight_eta[1]) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphijjmet_Tight",
+            "_isOk && _jetOk_Tight>=2 ? abs(DeltaPhi((CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).Phi(),MET_4DV.Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "dphijjmet_cut_Tight",
+            "_isOk && _jetOk_Tight>=2 && CorrectedJetTight_4DV[0].Pt()>15.0 && CorrectedJetTight_4DV[1].Pt()>15.0 ? abs(DeltaPhi((CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).Phi(),MET_4DV.Phi())) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "jetpt1_cut_Tight",
+            "_isOk && _jetOk_Tight>=1 && CorrectedJetTight_4DV[0].Pt()>15.0 ? CorrectedJetTight_4DV[0].Pt() : -9999.0",
+        )
+        df = df.Define(
+            prefix + "jetpt2_cut_Tight",
+            "_isOk && _jetOk_Tight>=2 && CorrectedJetTight_4DV[0].Pt()>15.0 && CorrectedJetTight_4DV[1].Pt()>15.0 ? CorrectedJetTight_4DV[1].Pt() : -9999.0",
+        )
+        df = df.Define(
+            prefix + "m2ljj20_Tight",
+            "_isOk && _jetOk_Tight>=1 && CorrectedJetTight_4DV[0].Pt()>30.0 ? CorrectedJetTight_4DV[1].Pt()>20.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).M() : (Lepton_4DV[0] + Lepton_4DV[1] + CorrectedJetTight_4DV[0]).M() : -9999.0",
+        )
+        df = df.Define(
+            prefix + "m2ljj30_Tight",
+            "_isOk && _jetOk_Tight>=1 && CorrectedJetTight_4DV[0].Pt()>30.0 ? CorrectedJetTight_4DV[1].Pt()>30.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).M() : (Lepton_4DV[0] + Lepton_4DV[1] + CorrectedJetTight_4DV[0]).M() : -9999.0",
+        )
+        df = df.Define(
+            prefix + "ht_Tight",
+            "_isOk ? Sum(Lepton_pt[Lepton_pt>0]) + Sum(CorrectedJetTight_pt[CorrectedJetTight_pt>30]) + MET_4DV.Pt() : -9999.0",
+        )
+
         df = df.Define(
             prefix + "PfMetDivSumMet",
             "_isOk && PuppiMET_sumEt>0.0  ? MET_4DV.Pt() / sqrt(PuppiMET_sumEt) : -9999.0",
@@ -505,7 +666,7 @@ class l2KinProducer(Module):
         """)
 
         df = df.Define(
-            prefix + "vht_pt",
+            prefix + "vht_pt_Clean",
             "_isOk ? (Get_vht(Lepton_pt, Lepton_eta, Lepton_phi, CleanJet_pt, CleanJet_eta, CleanJet_phi)).Pt() : -9999.0",
         )
         # df = df.Define(
@@ -515,74 +676,150 @@ class l2KinProducer(Module):
 
         # For VBF training
         df = df.Define(
-            prefix + "ptTOT_cut",
-            "_isOk && _jetOk>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1] + MET_4DV).Pt() : -9999.0",
+            prefix + "ptTOT_cut_Clean",
+            "_isOk && _jetOk_Clean>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1] + MET_4DV).Pt() : -9999.0",
         )
         df = df.Define(
-            prefix + "mTOT_cut",
-            "_isOk && _jetOk>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1] + MET_4DV).M() : -9999.0",
+            prefix + "mTOT_cut_Clean",
+            "_isOk && _jetOk_Clean>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1] + MET_4DV).M() : -9999.0",
         )
         df = df.Define(
-            prefix + "OLV1_cut",
-            "_isOk && _jetOk>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? 2*(Lepton_4DV[0].Eta() - 0.5*((CleanJet_4DV[0] + CleanJet_4DV[1]).Eta())) / ((CleanJet_4DV[0] - CleanJet_4DV[1]).Eta()) : -9999.0",
+            prefix + "OLV1_cut_Clean",
+            "_isOk && _jetOk_Clean>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? 2*(Lepton_4DV[0].Eta() - 0.5*((CleanJet_4DV[0] + CleanJet_4DV[1]).Eta())) / ((CleanJet_4DV[0] - CleanJet_4DV[1]).Eta()) : -9999.0",
         )
         df = df.Define(
-            prefix + "OLV2_cut",
-            "_isOk && _jetOk>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? 2*(Lepton_4DV[1].Eta() - 0.5*((CleanJet_4DV[0] + CleanJet_4DV[1]).Eta())) / ((CleanJet_4DV[0] - CleanJet_4DV[1]).Eta()) : -9999.0",
+            prefix + "OLV2_cut_Clean",
+            "_isOk && _jetOk_Clean>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? 2*(Lepton_4DV[1].Eta() - 0.5*((CleanJet_4DV[0] + CleanJet_4DV[1]).Eta())) / ((CleanJet_4DV[0] - CleanJet_4DV[1]).Eta()) : -9999.0",
         )
         df = df.Define(
-            prefix + "Ceta_cut",
-            "_isOk && _jetOk>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? {0}OLV1_cut + {0}OLV2_cut : -9999.0".format(
+            prefix + "Ceta_cut_Clean",
+            "_isOk && _jetOk_Clean>=2 && CleanJet_4DV[0].Pt()>15.0 && CleanJet_4DV[1].Pt()>15.0 ? {0}OLV1_cut_Clean + {0}OLV2_cut_Clean : -9999.0".format(
+                prefix
+            ),
+        )
+
+        df = df.Define(
+            prefix + "vht_pt_Tight",
+            "_isOk ? (Get_vht(Lepton_pt, Lepton_eta, Lepton_phi, CorrectedJetTight_pt, CorrectedJetTight_eta, CorrectedJetTight_phi)).Pt() : -9999.0",
+        )
+        # df = df.Define(
+        #     prefix + "vht_phi",
+        #     "_isOk ? (Get_vht(Lepton_pt, Lepton_eta, Lepton_phi, CorrectedJetTight_pt, CorrectedJetTight_eta, CorrectedJetTight_phi)).Phi() : -9999.0",
+        # )
+
+        df = df.Define(
+            prefix + "ptTOT_cut_Tight",
+            "_isOk && _jetOk_Tight>=2 && CorrectedJetTight_4DV[0].Pt()>15.0 && CorrectedJetTight_4DV[1].Pt()>15.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1] + MET_4DV).Pt() : -9999.0",
+        )
+        df = df.Define(
+            prefix + "mTOT_cut_Tight",
+            "_isOk && _jetOk_Tight>=2 && CorrectedJetTight_4DV[0].Pt()>15.0 && CorrectedJetTight_4DV[1].Pt()>15.0 ? (Lepton_4DV[0] + Lepton_4DV[1] + CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1] + MET_4DV).M() : -9999.0",
+        )
+        df = df.Define(
+            prefix + "OLV1_cut_Tight",
+            "_isOk && _jetOk_Tight>=2 && CorrectedJetTight_4DV[0].Pt()>15.0 && CorrectedJetTight_4DV[1].Pt()>15.0 ? 2*(Lepton_4DV[0].Eta() - 0.5*((CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).Eta())) / ((CorrectedJetTight_4DV[0] - CorrectedJetTight_4DV[1]).Eta()) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "OLV2_cut_Tight",
+            "_isOk && _jetOk_Tight>=2 && CorrectedJetTight_4DV[0].Pt()>15.0 && CorrectedJetTight_4DV[1].Pt()>15.0 ? 2*(Lepton_4DV[1].Eta() - 0.5*((CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).Eta())) / ((CorrectedJetTight_4DV[0] - CorrectedJetTight_4DV[1]).Eta()) : -9999.0",
+        )
+        df = df.Define(
+            prefix + "Ceta_cut_Tight",
+            "_isOk && _jetOk_Tight>=2 && CorrectedJetTight_4DV[0].Pt()>15.0 && CorrectedJetTight_4DV[1].Pt()>15.0 ? {0}OLV1_cut_Tight + {0}OLV2_cut_Tight : -9999.0".format(
                 prefix
             ),
         )
 
         # WHSS
         df = df.Define( # auxiliary variable
-            prefix + "mlljj20_whss_jet2",
-            "_isOk && _jetOk>=1 && CleanJet_4DV[0].Pt()>30.0 && CleanJet_4DV[1].Pt()>20.0 ? {0}dphilep1jj <= {0}dphilep2jj ? (Lepton_4DV[0] + Lepton_4DV[0] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : (Lepton_4DV[1] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : -9999.0".format(
+            prefix + "mlljj20_whss_jet2_Clean",
+            "_isOk && _jetOk_Clean>=1 && CleanJet_4DV[0].Pt()>30.0 && CleanJet_4DV[1].Pt()>20.0 ? {0}dphilep1jj_Clean <= {0}dphilep2jj_Clean ? (Lepton_4DV[0] + Lepton_4DV[0] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : (Lepton_4DV[1] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : -9999.0".format(
                 prefix
             ),
         )
         df = df.Define( # auxiliary variable
-            prefix + "mlljj20_whss_no_jet2",
-            "_isOk && _jetOk>=1 && CleanJet_4DV[0].Pt()>30.0 && CleanJet_4DV[1].Pt()<=20.0 ? {0}dphilep1jj <= {0}dphilep2jj ? (Lepton_4DV[0] + Lepton_4DV[0] + CleanJet_4DV[0]).M() : (Lepton_4DV[1] + Lepton_4DV[1] + CleanJet_4DV[0]).M() : -9999.0".format(
+            prefix + "mlljj20_whss_no_jet2_Clean",
+            "_isOk && _jetOk_Clean>=1 && CleanJet_4DV[0].Pt()>30.0 && CleanJet_4DV[1].Pt()<=20.0 ? {0}dphilep1jj_Clean <= {0}dphilep2jj_Clean ? (Lepton_4DV[0] + Lepton_4DV[0] + CleanJet_4DV[0]).M() : (Lepton_4DV[1] + Lepton_4DV[1] + CleanJet_4DV[0]).M() : -9999.0".format(
                 prefix
             ),
         )
         df = df.Define(
-            prefix + "mlljj20_whss",
-            "_isOk && _jetOk>=1 && CleanJet_4DV[0].Pt()>30.0 ? CleanJet_4DV[1].Pt()>20.0 ? {0}mlljj20_whss_jet2 : {0}mlljj20_whss_no_jet2 : -9999.0".format(
+            prefix + "mlljj20_whss_Clean",
+            "_isOk && _jetOk_Clean>=1 && CleanJet_4DV[0].Pt()>30.0 ? CleanJet_4DV[1].Pt()>20.0 ? {0}mlljj20_whss_jet2_Clean : {0}mlljj20_whss_no_jet2_Clean : -9999.0".format(
                 prefix
             ),
         )
         df = df.Define(
-            prefix + "mlljj30_whss",
-            "_isOk && _jetOk>=1 && CleanJet_4DV[0].Pt()>30.0 && CleanJet_4DV[1].Pt()>30.0 ? {0}dphilep1jj <= {0}dphilep2jj ? (Lepton_4DV[0] + Lepton_4DV[0] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : (Lepton_4DV[1] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : -9999.0".format(
+            prefix + "mlljj30_whss_Clean",
+            "_isOk && _jetOk_Clean>=1 && CleanJet_4DV[0].Pt()>30.0 && CleanJet_4DV[1].Pt()>30.0 ? {0}dphilep1jj_Clean <= {0}dphilep2jj_Clean ? (Lepton_4DV[0] + Lepton_4DV[0] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : (Lepton_4DV[1] + Lepton_4DV[1] + CleanJet_4DV[0] + CleanJet_4DV[1]).M() : -9999.0".format(
                 prefix
             ),
         )
         df = df.Define( # auxiliary variable
-            prefix + "WlepPt_whss_jet2",
-            "_isOk && _jetOk>=2 ? {0}dphilep1jj > {0}dphilep2jj ? Lepton_4DV[0].Pt() : Lepton_4DV[1].Pt() : -9999.0".format(
+            prefix + "WlepPt_whss_jet2_Clean",
+            "_isOk && _jetOk_Clean>=2 ? {0}dphilep1jj_Clean > {0}dphilep2jj_Clean ? Lepton_4DV[0].Pt() : Lepton_4DV[1].Pt() : -9999.0".format(
                 prefix
             ),
         )
         df = df.Define( # auxiliary variable
-            prefix + "WlepPt_whss_no_jet2",
-            "_isOk && _jetOk==1 ? {0}detaj1l1 > {0}detaj1l2 ? Lepton_4DV[0].Pt() : Lepton_4DV[1].Pt() : -9999.0".format(
+            prefix + "WlepPt_whss_no_jet2_Clean",
+            "_isOk && _jetOk_Clean==1 ? {0}detaj1l1_Clean > {0}detaj1l2_Clean ? Lepton_4DV[0].Pt() : Lepton_4DV[1].Pt() : -9999.0".format(
                 prefix
             ),
         )
         df = df.Define(
-            prefix + "WlepPt_whss",
-            "_isOk && _jetOk>=1 ? _jetOk>=2 ? {0}WlepPt_whss_jet2 : {0}WlepPt_whss_no_jet2 : -9999.0".format(
+            prefix + "WlepPt_whss_Clean",
+            "_isOk && _jetOk_Clean>=1 ? _jetOk_Clean>=2 ? {0}WlepPt_whss_jet2_Clean : {0}WlepPt_whss_no_jet2_Clean : -9999.0".format(
+                prefix
+            ),
+        )
+
+        df = df.Define( # auxiliary variable
+            prefix + "mlljj20_whss_jet2_Tight",
+            "_isOk && _jetOk_Tight>=1 && CorrectedJetTight_4DV[0].Pt()>30.0 && CorrectedJetTight_4DV[1].Pt()>20.0 ? {0}dphilep1jj_Tight <= {0}dphilep2jj_Tight ? (Lepton_4DV[0] + Lepton_4DV[0] + CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).M() : (Lepton_4DV[1] + Lepton_4DV[1] + CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).M() : -9999.0".format(
+                prefix
+            ),
+        )
+        df = df.Define( # auxiliary variable
+            prefix + "mlljj20_whss_no_jet2_Tight",
+            "_isOk && _jetOk_Tight>=1 && CorrectedJetTight_4DV[0].Pt()>30.0 && CorrectedJetTight_4DV[1].Pt()<=20.0 ? {0}dphilep1jj_Tight <= {0}dphilep2jj_Tight ? (Lepton_4DV[0] + Lepton_4DV[0] + CorrectedJetTight_4DV[0]).M() : (Lepton_4DV[1] + Lepton_4DV[1] + CorrectedJetTight_4DV[0]).M() : -9999.0".format(
+                prefix
+            ),
+        )
+        df = df.Define(
+            prefix + "mlljj20_whss_Tight",
+            "_isOk && _jetOk_Tight>=1 && CorrectedJetTight_4DV[0].Pt()>30.0 ? CorrectedJetTight_4DV[1].Pt()>20.0 ? {0}mlljj20_whss_jet2_Tight : {0}mlljj20_whss_no_jet2_Tight : -9999.0".format(
+                prefix
+            ),
+        )
+        df = df.Define(
+            prefix + "mlljj30_whss_Tight",
+            "_isOk && _jetOk_Tight>=1 && CorrectedJetTight_4DV[0].Pt()>30.0 && CorrectedJetTight_4DV[1].Pt()>30.0 ? {0}dphilep1jj_Tight <= {0}dphilep2jj_Tight ? (Lepton_4DV[0] + Lepton_4DV[0] + CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).M() : (Lepton_4DV[1] + Lepton_4DV[1] + CorrectedJetTight_4DV[0] + CorrectedJetTight_4DV[1]).M() : -9999.0".format(
+                prefix
+            ),
+        )
+        df = df.Define( # auxiliary variable
+            prefix + "WlepPt_whss_jet2_Tight",
+            "_isOk && _jetOk_Tight>=2 ? {0}dphilep1jj_Tight > {0}dphilep2jj_Tight ? Lepton_4DV[0].Pt() : Lepton_4DV[1].Pt() : -9999.0".format(
+                prefix
+            ),
+        )
+        df = df.Define( # auxiliary variable
+            prefix + "WlepPt_whss_no_jet2_Tight",
+            "_isOk && _jetOk_Tight==1 ? {0}detaj1l1_Tight > {0}detaj1l2_Tight ? Lepton_4DV[0].Pt() : Lepton_4DV[1].Pt() : -9999.0".format(
+                prefix
+            ),
+        )
+        df = df.Define(
+            prefix + "WlepPt_whss_Tight",
+            "_isOk && _jetOk_Tight>=1 ? _jetOk_Tight>=2 ? {0}WlepPt_whss_jet2_Tight : {0}WlepPt_whss_no_jet2_Tight : -9999.0".format(
                 prefix
             ),
         )
 
         df = df.DropColumns("Lepton_4DV")
         df = df.DropColumns("CleanJet_4DV")
+        df = df.DropColumns("CorrectedJetTight_4DV")
         df = df.DropColumns("MET_4DV")
         df = df.DropColumns("TkMET_4DV")
 
@@ -590,7 +827,8 @@ class l2KinProducer(Module):
         df = df.DropColumns("_isOk3l")
         df = df.DropColumns("_lepOk")
         df = df.DropColumns("_tkMetOk")
-        df = df.DropColumns("_jetOk")
+        df = df.DropColumns("_jetOk_Clean")
+        df = df.DropColumns("_jetOk_Tight")
 
         df = df.DropColumns("Lepton_enhanced_0")
         df = df.DropColumns("Lepton_enhanced_1")

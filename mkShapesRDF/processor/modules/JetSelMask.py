@@ -122,6 +122,7 @@ class JetSelMask(Module):
         df = df.Define("CleanJet_geometrical", "! reduce_cond_any(dR2 < (0.3*0.3), CorrectedJet_pt.size(), Lepton_pt[LeptonMask_JC].size())")
 
         df = df.Define("CleanJetMask", f"(CorrectedJet_pt >= {self.minPt} && abs(CorrectedJet_eta) <= {self.maxEta} && Jet_jetId >= {self.jetId}) && CleanJet_geometrical")
+        df = df.Define("JetMask", f"(CorrectedJet_pt >= {self.minPt} && abs(CorrectedJet_eta) <= {self.maxEta} && Jet_jetId >= {self.jetId})")
 
         values.append([df.Define("test", "CorrectedJet_pt.size()").Sum("test"), "Original size of CleanJet"])
 
@@ -129,8 +130,11 @@ class JetSelMask(Module):
 
         
         df = df.Define("CleanJet_jetIdx", "ROOT::VecOps::Range(nJet)[CleanJetMask]")
+        df = df.Define("CorrectedJetTight_jetIdx", "ROOT::VecOps::Range(nJet)[JetMask]")
+
         for prop in ["pt", "eta", "phi", "mass"]:
             df = df.Define(f"CleanJet_{prop}", f"CorrectedJet_{prop}[CleanJetMask]")
+            df = df.Define(f"CorrectedJetTight_{prop}", f"CorrectedJet_{prop}[JetMask]")
 
 
         values.append([df.Define("test", "CleanJet_pt.size()").Sum("test"), "Final size of CleanJet"])
@@ -139,6 +143,7 @@ class JetSelMask(Module):
         self.columnsToDrop.append("Jet_Lepton_comb")
         self.columnsToDrop.append("dR2")
         self.columnsToDrop.append("CleanJetMask")
+        self.columnsToDrop.append("JetMask")
         for col in self.columnsToDrop:
             df = df.DropColumns(col)
 
