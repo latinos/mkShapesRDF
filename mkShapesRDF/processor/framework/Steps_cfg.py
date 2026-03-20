@@ -1893,7 +1893,16 @@ Steps = {
         "declare": "DressedLeptons = lambda : DressedLeptonProducer(0.3)",
         "module": "DressedLeptons()",
     },
-    
+   
+    "NuNuSolution": {
+        "isChain": False,
+        "do4MC": True,
+        "do4Data": True,
+        "import": "mkShapesRDF.processor.modules.NuNuSolutionProducer",
+        "declare": 'NuNuSolution = lambda : NuNuSolutionProducer(era="RPLME_CMSSW")',
+        "module": "NuNuSolution()",
+    },
+
     "baseW": {
         "isChain": False,
         "do4MC": True,
