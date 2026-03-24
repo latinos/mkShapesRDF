@@ -28,16 +28,6 @@ class l3KinProducer(Module):
         )
 
         df = df.Define(
-            "CorrectedJetTight_4DV",
-            "ROOT::VecOps::Construct<ROOT::Math::PtEtaPhiMVector>"
-            "(CorrectedJetTight_pt, CorrectedJetTight_eta, CorrectedJetTight_phi,"
-            # "Take(Jet_mass, CorrectedJetTight_jetIdx))",
-            # "CorrectedJetTight_mass)",
-            "ROOT::RVecF(CorrectedJetTight_pt.size(), 0))",
-            excludeVariations=["MET*"],
-        )
-
-        df = df.Define(
             "MET_4DV", "ROOT::Math::PtEtaPhiMVector" "(PuppiMET_pt, 0, PuppiMET_phi, 0)"
         )
 
@@ -87,13 +77,8 @@ class l3KinProducer(Module):
         )
 
         df = df.Define(
-            prefix + "WH3l_njet_Clean",
+            prefix + "WH3l_njet",
             "_WH3l_isOk ? CleanJet_pt[CleanJet_pt > 40 && abs(CleanJet_eta) < 4.7].size() : -9999.0",
-            excludeVariations=["MET*"],
-        )
-        df = df.Define(
-            prefix + "WH3l_njet_Tight",
-            "_WH3l_isOk ? CorrectedJetTight_pt[CorrectedJetTight_pt > 40 && abs(CorrectedJetTight_eta) < 4.7].size() : -9999.0",
             excludeVariations=["MET*"],
         )
 
@@ -277,12 +262,6 @@ class l3KinProducer(Module):
             excludeVariations=["MET*"],
         )
 
-        df = df.Define(
-            "ZH3l_CorrectedJetTight_4DV",
-            "CorrectedJetTight_4DV[CorrectedJetTight_pt > 30 && abs(CorrectedJetTight_eta) < 4.7]",
-            excludeVariations=["MET*"],
-        )
-
         # For ZH3l, "l" in these variables *always* refers to the lepton not associated with the Z
         # Once we have the indices of the Z leptons and the X lepton, we can build the ZH3l variables
         ROOT.gInterpreter.Declare(
@@ -345,11 +324,7 @@ class l3KinProducer(Module):
         )
 
         df = df.Define(
-            prefix + "ZH3l_njet_Clean", "ZH3l_CleanJet_4DV.size()", excludeVariations=["MET*"]
-        )
-
-        df = df.Define(
-            prefix + "ZH3l_njet_Tight", "ZH3l_CorrectedJetTight_4DV.size()", excludeVariations=["MET*"]
+            prefix + "ZH3l_njet", "ZH3l_CleanJet_4DV.size()", excludeVariations=["MET*"]
         )
 
         df = df.Define(
@@ -359,16 +334,8 @@ class l3KinProducer(Module):
         )
 
         df = df.Define(
-            prefix + "ZH3l_dmjjmW_Clean",
-            "_ZH3l_isOk && {}ZH3l_njet_Clean >= 2 ? (ZH3l_CleanJet_4DV[0] + ZH3l_CleanJet_4DV[1]).M() - 80.4 : -9999.0".format(
-                prefix
-            ),
-            excludeVariations=["MET*"],
-        )
-
-        df = df.Define(
-            prefix + "ZH3l_dmjjmW_Tight",
-            "_ZH3l_isOk && {}ZH3l_njet_Tight >= 2 ? (ZH3l_CorrectedJetTight_4DV[0] + ZH3l_CorrectedJetTight_4DV[1]).M() - 80.4 : -9999.0".format(
+            prefix + "ZH3l_dmjjmW",
+            "_ZH3l_isOk && {}ZH3l_njet >= 2 ? (ZH3l_CleanJet_4DV[0] + ZH3l_CleanJet_4DV[1]).M() - 80.4 : -9999.0".format(
                 prefix
             ),
             excludeVariations=["MET*"],
@@ -380,85 +347,43 @@ class l3KinProducer(Module):
         )
 
         df = df.Define(
-            prefix + "ZH3l_dphilmetjj_Clean",
-            "_ZH3l_isOk && {}ZH3l_njet_Clean >= 2 ? abs( DeltaPhi( (ZH3l_XLepton + MET_4DV).Phi(), (ZH3l_CleanJet_4DV[0] + ZH3l_CleanJet_4DV[1]).Phi()) ) : -9999.0".format(
+            prefix + "ZH3l_dphilmetjj",
+            "_ZH3l_isOk && {}ZH3l_njet >= 2 ? abs( DeltaPhi( (ZH3l_XLepton + MET_4DV).Phi(), (ZH3l_CleanJet_4DV[0] + ZH3l_CleanJet_4DV[1]).Phi()) ) : -9999.0".format(
                 prefix
             ),
         )
 
         df = df.Define(
-            prefix + "ZH3l_dphilmetj_Clean",
-            "_ZH3l_isOk && {}ZH3l_njet_Clean >= 1 ? abs( DeltaPhi( (ZH3l_XLepton + MET_4DV).Phi(), ZH3l_CleanJet_4DV[0].Phi()) ) : -9999.0".format(
+            prefix + "ZH3l_dphilmetj",
+            "_ZH3l_isOk && {}ZH3l_njet >= 1 ? abs( DeltaPhi( (ZH3l_XLepton + MET_4DV).Phi(), ZH3l_CleanJet_4DV[0].Phi()) ) : -9999.0".format(
                 prefix
             ),
         )
 
         df = df.Define(
-            prefix + "ZH3l_pTlmetjj_Clean",
-            "_ZH3l_isOk && {}ZH3l_njet_Clean >= 2 ? (ZH3l_XLepton + MET_4DV + ZH3l_CleanJet_4DV[0] + ZH3l_CleanJet_4DV[1]).Pt() : -9999.0".format(
+            prefix + "ZH3l_pTlmetjj",
+            "_ZH3l_isOk && {}ZH3l_njet >= 2 ? (ZH3l_XLepton + MET_4DV + ZH3l_CleanJet_4DV[0] + ZH3l_CleanJet_4DV[1]).Pt() : -9999.0".format(
                 prefix
             ),
         )
 
         df = df.Define(
-            prefix + "ZH3l_pTlmetj_Clean",
-            "_ZH3l_isOk && {}ZH3l_njet_Clean >= 1 ? (ZH3l_XLepton + MET_4DV + ZH3l_CleanJet_4DV[0]).Pt() : -9999.0".format(
+            prefix + "ZH3l_pTlmetj",
+            "_ZH3l_isOk && {}ZH3l_njet >= 1 ? (ZH3l_XLepton + MET_4DV + ZH3l_CleanJet_4DV[0]).Pt() : -9999.0".format(
                 prefix
             ),
         )
 
         df = df.Define(
-            prefix + "ZH3l_mTlmetj_Clean",
-            "_ZH3l_isOk && {}ZH3l_njet_Clean >= 1 ? sqrt(pow((MET_4DV.Pt() + ZH3l_XLepton.Pt() + ZH3l_CleanJet_4DV[0].Pt()),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CleanJet_4DV[0]).Px(),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CleanJet_4DV[0]).Py(),2)) : -9999.0".format(
+            prefix + "ZH3l_mTlmetj",
+            "_ZH3l_isOk && {}ZH3l_njet >= 1 ? sqrt(pow((MET_4DV.Pt() + ZH3l_XLepton.Pt() + ZH3l_CleanJet_4DV[0].Pt()),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CleanJet_4DV[0]).Px(),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CleanJet_4DV[0]).Py(),2)) : -9999.0".format(
                 prefix
             ),
         )
 
         df = df.Define(
-            prefix + "ZH3l_mTlmetjj_Clean",
-            "_ZH3l_isOk && {}ZH3l_njet_Clean >= 2 ? sqrt(pow((MET_4DV.Pt() + ZH3l_XLepton.Pt() + ZH3l_CleanJet_4DV[0].Pt() + ZH3l_CleanJet_4DV[1].Pt()),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CleanJet_4DV[0] + ZH3l_CleanJet_4DV[1]).Px(),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CleanJet_4DV[0] + ZH3l_CleanJet_4DV[1]).Py(),2)) : -9999.0".format(
-                prefix
-            ),
-        )
-
-        df = df.Define(
-            prefix + "ZH3l_dphilmetjj_Tight",
-            "_ZH3l_isOk && {}ZH3l_njet_Tight >= 2 ? abs( DeltaPhi( (ZH3l_XLepton + MET_4DV).Phi(), (ZH3l_CorrectedJetTight_4DV[0] + ZH3l_CorrectedJetTight_4DV[1]).Phi()) ) : -9999.0".format(
-                prefix
-            ),
-        )
-
-        df = df.Define(
-            prefix + "ZH3l_dphilmetj_Tight",
-            "_ZH3l_isOk && {}ZH3l_njet_Tight >= 1 ? abs( DeltaPhi( (ZH3l_XLepton + MET_4DV).Phi(), ZH3l_CorrectedJetTight_4DV[0].Phi()) ) : -9999.0".format(
-                prefix
-            ),
-        )
-
-        df = df.Define(
-            prefix + "ZH3l_pTlmetjj_Tight",
-            "_ZH3l_isOk && {}ZH3l_njet_Tight >= 2 ? (ZH3l_XLepton + MET_4DV + ZH3l_CorrectedJetTight_4DV[0] + ZH3l_CorrectedJetTight_4DV[1]).Pt() : -9999.0".format(
-                prefix
-            ),
-        )
-
-        df = df.Define(
-            prefix + "ZH3l_pTlmetj_Tight",
-            "_ZH3l_isOk && {}ZH3l_njet_Tight >= 1 ? (ZH3l_XLepton + MET_4DV + ZH3l_CorrectedJetTight_4DV[0]).Pt() : -9999.0".format(
-                prefix
-            ),
-        )
-
-        df = df.Define(
-            prefix + "ZH3l_mTlmetj_Tight",
-            "_ZH3l_isOk && {}ZH3l_njet_Tight >= 1 ? sqrt(pow((MET_4DV.Pt() + ZH3l_XLepton.Pt() + ZH3l_CorrectedJetTight_4DV[0].Pt()),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CorrectedJetTight_4DV[0]).Px(),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CorrectedJetTight_4DV[0]).Py(),2)) : -9999.0".format(
-                prefix
-            ),
-        )
-
-        df = df.Define(
-            prefix + "ZH3l_mTlmetjj_Tight",
-            "_ZH3l_isOk && {}ZH3l_njet_Tight >= 2 ? sqrt(pow((MET_4DV.Pt() + ZH3l_XLepton.Pt() + ZH3l_CorrectedJetTight_4DV[0].Pt() + ZH3l_CorrectedJetTight_4DV[1].Pt()),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CorrectedJetTight_4DV[0] + ZH3l_CorrectedJetTight_4DV[1]).Px(),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CorrectedJetTight_4DV[0] + ZH3l_CorrectedJetTight_4DV[1]).Py(),2)) : -9999.0".format(
+            prefix + "ZH3l_mTlmetjj",
+            "_ZH3l_isOk && {}ZH3l_njet >= 2 ? sqrt(pow((MET_4DV.Pt() + ZH3l_XLepton.Pt() + ZH3l_CleanJet_4DV[0].Pt() + ZH3l_CleanJet_4DV[1].Pt()),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CleanJet_4DV[0] + ZH3l_CleanJet_4DV[1]).Px(),2) - pow((MET_4DV + ZH3l_XLepton + ZH3l_CleanJet_4DV[0] + ZH3l_CleanJet_4DV[1]).Py(),2)) : -9999.0".format(
                 prefix
             ),
         )
@@ -789,11 +714,9 @@ class l3KinProducer(Module):
 
         df = df.DropColumns("Lepton_4DV")
         df = df.DropColumns("CleanJet_4DV")
-        df = df.DropColumns("CorrectedJetTight_4DV")
         df = df.DropColumns("MET_4DV")
 
         df = df.DropColumns("ZH3l_CleanJet_4DV")
-        df = df.DropColumns("ZH3l_CorrectedJetTight_4DV")
         # df = df.DropColumns("ZH3l_CleanJet_jetIdx")
         df = df.DropColumns("ZH3l_LepIdx")
         df = df.DropColumns("ZLepton1")
