@@ -191,18 +191,29 @@ class JMECalculator(Module):
             # rho
             cols.append("Rho_fixedGridRhoFastjetAll")
 
-            cols.append("Jet_genJetIdx")
-            cols.append("Jet_partonFlavour")
-
-            # seed
-            cols.append("(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)")
-            cols.append("(float)-1.0")
-
-            # gen jet coll
-            cols.append("GenJet_pt")
-            cols.append("GenJet_eta")
-            cols.append("GenJet_phi")
-            cols.append("GenJet_mass")
+            if self.isMC: 
+                cols.append("Jet_genJetIdx")
+                cols.append("Jet_partonFlavour")
+                # seed
+                cols.append(
+                    f"(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)"
+                )
+                cols.append("-1.0")    
+                # gen jet coll
+                cols.append("GenJet_pt")
+                cols.append("GenJet_eta")
+                cols.append("GenJet_phi")
+                cols.append("GenJet_mass")
+            else:
+                # Basically, these variables are nedded for the smearing and don't exist for data, so we set those to empty vectors
+                cols.append("ROOT::RVecI{}") # Jet_genJetIdx
+                cols.append("ROOT::RVecI{}") # Jet_partonFlavour
+                cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
+                cols.append("run")
+                cols.append("ROOT::RVecF{}") # GenJet_pt
+                cols.append("ROOT::RVecF{}") # GenJet_eta
+                cols.append("ROOT::RVecF{}") # GenJet_phi
+                cols.append("ROOT::RVecF{}") # GenJet_mass
 
             df = df.Define("jetVars", f'myJetVariationsCalculator.produce({", ".join(cols)})')
 
