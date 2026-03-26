@@ -538,7 +538,7 @@ class mRDF:
                         outFile.mktree(treeName, dtypes)
                         continue
                     else:
-                        outFile.mktree(treeName, d.layout.form if hasattr(d, 'layout') else d)
+                        outFile[treeName] = d
                         continue
 
                 outFile[treeName].extend(d)
