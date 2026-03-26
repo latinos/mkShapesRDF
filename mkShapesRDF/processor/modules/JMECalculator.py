@@ -162,6 +162,15 @@ class JMECalculator(Module):
 
         print(f"Final JEC tag: {jecTag}")
 
+        # Define the CorrectedJet collection before applying the JEC/JER, as this is needed for the JetSelMask
+        df = df.Define("CorrectedJet_pt", "Jet_pt")
+        df = df.Define("CorrectedJet_mass", "Jet_mass") 
+        df = df.Define("CorrectedJet_eta", "Jet_eta")
+        df = df.Define("CorrectedJet_phi", "Jet_phi")
+        df = df.Define("CorrectedJet_sorting", "ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(CorrectedJet_pt))")
+        df = df.Define("CorrectedJet_jetIdx", "CorrectedJet_sorting")    
+
+
         if self.do_Jets:
             if self.do_JER:
                 jerTag = self.JER_era
@@ -205,7 +214,7 @@ class JMECalculator(Module):
                 cols.append("GenJet_phi")
                 cols.append("GenJet_mass")
             else:
-                # Basically, these variables are nedded for the smearing and don't exist for data, so we set those to empty vectors
+                # Basically, these variables are needed for the smearing and don't exist for data, so we set those to empty vectors
                 cols.append("ROOT::RVecI{}") # Jet_genJetIdx
                 cols.append("ROOT::RVecI{}") # Jet_partonFlavour
                 cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
@@ -218,17 +227,17 @@ class JMECalculator(Module):
             df = df.Define("jetVars", f'myJetVariationsCalculator.produce({", ".join(cols)})')
 
             if self.store_nominal:
-                df = df.Define(f"{JetColl}_pt", "jetVars.pt(0)")
-                df = df.Define(f"{JetColl}_mass", "jetVars.mass(0)")
+                df = df.Redefine(f"{JetColl}_pt", "jetVars.pt(0)")
+                df = df.Redefine(f"{JetColl}_mass", "jetVars.mass(0)")
                     
-                df = df.Define(f"{JetColl}_sorting", f"ROOT::VecOps::Reverse(ROOT::VecOps::Argsort({JetColl}_pt))")
-                df = df.Define(f"{JetColl}_pt", f"Take({JetColl}_pt, {JetColl}_sorting)")
-                df = df.Define(f"{JetColl}_eta", f"Take(Jet_eta, {JetColl}_sorting)")
-                df = df.Define(f"{JetColl}_phi", f"Take(Jet_phi, {JetColl}_sorting)")
-                df = df.Define(f"{JetColl}_mass", f"Take({JetColl}_mass, {JetColl}_sorting)")
-                df = df.Define(f"{JetColl}_jetIdx", "ROOT::VecOps::Range(nJet)")       
+                df = df.Redefine(f"{JetColl}_sorting", f"ROOT::VecOps::Reverse(ROOT::VecOps::Argsort({JetColl}_pt))")
+                df = df.Redefine(f"{JetColl}_pt", f"Take({JetColl}_pt, {JetColl}_sorting)")
+                df = df.Redefine(f"{JetColl}_eta", f"Take(Jet_eta, {JetColl}_sorting)")
+                df = df.Redefine(f"{JetColl}_phi", f"Take(Jet_phi, {JetColl}_sorting)")
+                df = df.Redefine(f"{JetColl}_mass", f"Take({JetColl}_mass, {JetColl}_sorting)")
+                df = df.Redefine(f"{JetColl}_jetIdx", f"{JetColl}_sorting")    
             else:
-                df = df.Define(f"{JetColl}_sorting", f"Range({JetColl}_pt.size())")
+                df = df.Redefine(f"{JetColl}_sorting", f"Range({JetColl}_pt.size())")
 
             if self.store_variations:
                 for i, source in enumerate(jesSources):
