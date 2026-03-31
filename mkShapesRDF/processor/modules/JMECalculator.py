@@ -235,6 +235,7 @@ class JMECalculator(Module):
                 df = df.Redefine(f"{JetColl}_eta", f"Take(Jet_eta, {JetColl}_sorting)")
                 df = df.Redefine(f"{JetColl}_phi", f"Take(Jet_phi, {JetColl}_sorting)")
                 df = df.Redefine(f"{JetColl}_mass", f"Take({JetColl}_mass, {JetColl}_sorting)")
+                df = df.Define(f"tmp_{JetColl}_jetIdx", f"{JetColl}_jetIdx")
                 df = df.Redefine(f"{JetColl}_jetIdx", f"{JetColl}_sorting")    
             else:
                 df = df.Redefine(f"{JetColl}_sorting", f"Range({JetColl}_pt.size())")
@@ -268,7 +269,7 @@ class JMECalculator(Module):
                         )
 
                         variations_jetIdx.append(
-                            f"Take({JetColl}_jetIdx, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)",
+                            f"Take(tmp_{JetColl}_jetIdx, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)",
                         )
 
                         df = df.Define(
@@ -278,10 +279,10 @@ class JMECalculator(Module):
                         variations_mass.append(f"tmp_{JetColl}_mass__JES_{source}_{tag}")
 
                         variations_phi.append(
-                            f"Take({JetColl }_phi, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)"
+                            f"Take(Jet_phi, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)"
                         )
                         variations_eta.append(
-                            f"Take({JetColl}_eta, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)"
+                            f"Take(Jet_eta, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)"
                         )
 
                     tags = ["up", "do"]
