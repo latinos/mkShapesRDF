@@ -129,7 +129,8 @@ class JetSelMask(Module):
         print("Branch redefinition!")
 
         
-        df = df.Define("CleanJet_jetIdx", "ROOT::VecOps::Range(nCorrectedJet)[CleanJetMask]")
+        df = df.Define("CleanJet_correctedjetIdx", "ROOT::VecOps::Range(nCorrectedJet)[CleanJetMask]")
+        df = df.Define("CleanJet_jetIdx", "CorrectedJet_jetIdx[CleanJetMask]")
         for prop in ["pt", "eta", "phi", "mass"]:
             df = df.Define(f"CleanJet_{prop}", f"CorrectedJet_{prop}[CleanJetMask]")
 
