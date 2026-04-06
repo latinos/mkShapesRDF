@@ -272,7 +272,8 @@ def main():
         Info in <ACLiC>
         RConfig.hxx 
         define _R__JOIN3_ 
-        define _NAME3_ 
+        define _NAME3_
+        Info in <hadd>
         ^
         """
         normalErrs = normalErrs.split("\n")

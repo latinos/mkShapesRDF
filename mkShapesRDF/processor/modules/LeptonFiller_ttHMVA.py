@@ -33,10 +33,10 @@ class LeptonFiller_ttHMVA(Module):
         #ROOT.TMVA.PyMethodBase.PyInitialize();
         
         ROOT.gROOT.ProcessLineSync(f".L {self.script_path}/Muon_tthMVAFiller.cc+")
-        ROOT.gInterpreter.Declare(f'Muon_tthMVAFiller evaluateTTH_muon("{self.script_path}/{self.mu_xml}");')
+        ROOT.gInterpreter.ProcessLine(f'Muon_tthMVAFiller evaluateTTH_muon("{self.script_path}/{self.mu_xml}");')
 
         ROOT.gROOT.ProcessLineSync(f".L {self.script_path}/Electron_tthMVAFiller.cc+")
-        ROOT.gInterpreter.Declare(f'Electron_tthMVAFiller evaluateTTH_electron("{self.script_path}/{self.ele_xml}");')
+        ROOT.gInterpreter.ProcessLine(f'Electron_tthMVAFiller evaluateTTH_electron("{self.script_path}/{self.ele_xml}");')
         
         if "Muon_log_dxy" not in df.GetColumnNames():
             df = df.Define("Muon_miniRelIsoNeutral", "Muon_miniPFRelIso_all - Muon_miniPFRelIso_chg")
