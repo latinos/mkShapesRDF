@@ -631,23 +631,25 @@ class TrigMaker(Module):
                 if (eff_data[0]==0.0 || eff_mc[0]==0.0){
                     return sf_unc;
                 }
+
+                float sf = eff_data[0]/eff_mc[0];
                 
-                float SF_stat_d = sqrt( (abs(eff_data[3] - eff_data[0])/eff_data[0])*(abs(eff_data[3] - eff_data[0])/eff_data[0]) + (abs(eff_mc[3]-eff_mc[0])/eff_mc[0])*(abs(eff_mc[3]-eff_mc[0])/eff_mc[0]) )*eff_data[0]/eff_mc[0];
-                float SF_stat_u = sqrt( (abs(eff_data[4] - eff_data[0])/eff_data[0])*(abs(eff_data[4] - eff_data[0])/eff_data[0]) + (abs(eff_mc[4]-eff_mc[0])/eff_mc[0])*(abs(eff_mc[4]-eff_mc[0])/eff_mc[0]) )*eff_data[0]/eff_mc[0];
+                float SF_stat_d = sqrt( (abs(eff_data[3] - eff_data[0])/eff_data[0])*(abs(eff_data[3] - eff_data[0])/eff_data[0]) + (abs(eff_mc[3]-eff_mc[0])/eff_mc[0])*(abs(eff_mc[3]-eff_mc[0])/eff_mc[0]) );
+                float SF_stat_u = sqrt( (abs(eff_data[4] - eff_data[0])/eff_data[0])*(abs(eff_data[4] - eff_data[0])/eff_data[0]) + (abs(eff_mc[4]-eff_mc[0])/eff_mc[0])*(abs(eff_mc[4]-eff_mc[0])/eff_mc[0]) );
                 
                 float SF_syst_d = 0.0;
                 float SF_syst_u = 0.0;
 
                 if (eff_mc[5]!=0.0){
-                        SF_syst_d = eff_data[5]/eff_mc[5];
+                        SF_syst_d = (sf - eff_data[5]/eff_mc[5])/sf;
                 }
 
                 if (eff_mc[6]!=0.0){
-                        SF_syst_u = eff_data[6]/eff_mc[6];
+                        SF_syst_u = (eff_data[6]/eff_mc[6] - sf)/sf;
                 }
 
-                sf_unc[0] = sqrt(SF_stat_d*SF_stat_d + SF_syst_d*SF_syst_d);
-                sf_unc[1] = sqrt(SF_stat_u*SF_stat_u + SF_syst_u*SF_syst_u);
+                sf_unc[0] = sf - sf * sqrt(SF_stat_d*SF_stat_d + SF_syst_d*SF_syst_d);
+                sf_unc[1] = sf + sf * sqrt(SF_stat_u*SF_stat_u + SF_syst_u*SF_syst_u);
                 
                 return sf_unc;
             }
