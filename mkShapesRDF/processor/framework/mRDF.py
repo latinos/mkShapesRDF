@@ -477,6 +477,18 @@ class mRDF:
             nIterations = max(ceil(df.Count().GetValue() / chunksize), 1)
             outFile = uproot.recreate(fileName, compression=uproot.LZMA(9))
             branches = columns.copy()
+
+            # Protection against cases in which we have a last chunk with too few events, since this may create instabilities and crashes
+            print(f"I have {df.Count().GetValue()} events, meaning that I will need {nIterations} chunks of {chunksize} events")
+            events_in_last_chunk = df.Count().GetValue() - (nIterations-1)*chunksize
+            print(f"I have {events_in_last_chunk} events in last chunk")
+            while events_in_last_chunk < 1000:
+                print(f"I want at least 1000 events in the last chunk. I'll increase the chunk size by 1000 events.")
+                chunksize += 1000
+                nIterations = max(ceil(df.Count().GetValue() / chunksize), 1)
+                events_in_last_chunk = df.Count().GetValue() - (nIterations-1)*chunksize
+                print(f"I have now {nIterations} chunks of {chunksize} events. This leaves {events_in_last_chunk} events in the last chunk.")
+            
             #####
             ##### Temporal fix / remove branches with type: string -> incompatbility with awkward/uproot
             if "TTTo2L2Nu_10k_nano" in fileName:
@@ -490,6 +502,7 @@ class mRDF:
             if "nisLoose" in branches:
                 branches.remove("nisLoose")
             _branches = branches.copy()
+
             CollectionsToZip = ['CleanJet','WH3l_dphilmet','WH3l_mtlmet','PFMET','Jet','PuppiMET','Lepton_tightMuon','Lepton_tightElectron','Lepton_isTightElectron','Lepton_isTightMuon','Lepton',
                                 'Muon','Electron','Photon','Gen','LHE','HLT','L1','Tau','IsoTrack','GenPart','LHEPart','TrigObj','LepCut2l','LepCut3l','LepCut4l','NeutrinoGen','SubJet',
                                 'ChsMET','LeptonGen','FatJet','LepSF2l','LepSF3l','LepSF4l','PhotonGen','DressedLepton','GenDressedLepton','SubGenJetAK8','LowPtElectron','VetoLepton',
@@ -506,6 +519,7 @@ class mRDF:
                 branches = list(set(branches).difference(zipBranches))
 
             for i in range(nIterations):
+                print(f"Chunk: {i}")
                 _df = df.Range( i * chunksize, (i+1) * chunksize)                
                 events = ak.from_rdataframe(_df, _branches)
                 def getBranch(events, branch):
