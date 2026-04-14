@@ -244,6 +244,38 @@ xs_db['QCD_PT-80to170_bcToE']  = ["xsec=74510.0",   "kfact=1.000", "ref=G"]
 xs_db['QCD_PT-170to250_bcToE'] = ["xsec=3898.0",    "kfact=1.000", "ref=G"]
 xs_db['QCD_PT-250toInf_bcToE'] = ["xsec=963.4",     "kfact=1.000", "ref=G"]
 
+### AC ggH (dummy values)
+xs_db['H0PM_ToWWTo2L2Nu']    = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['H0PH_ToWWTo2L2Nu']    = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['H0M_ToWWTo2L2Nu']     = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['H0L1_ToWWTo2L2Nu']    = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['H0PHf05_ToWWTo2L2Nu'] = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['H0Mf05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['H0L1f05_ToWWTo2L2Nu'] = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+
+### AC VBF (dummy values)
+xs_db['VBF_H0PM_ToWWTo2L2Nu']      = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['VBF_H0PH_ToWWTo2L2Nu']      = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['VBF_H0M_ToWWTo2L2Nu']       = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['VBF_H0L1_ToWWTo2L2Nu']      = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['VBF_H0PHf05_ToWWTo2L2Nu']   = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['VBF_H0Mf05_ToWWTo2L2Nu']    = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['VBF_H0L1f05_ToWWTo2L2Nu']   = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['VBF_H0LZgf05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['VBF_H0PHZgf05_ToWWTo2L2Nu'] = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['VBF_H0MZgf05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['VBF_H0PHggf05_ToWWTo2L2Nu'] = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['VBF_H0Mggf05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+
+### AC WH (dummy values)
+xs_db['WH_H0PM_ToWWTo2L2Nu']     = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['WH_H0PH_ToWWTo2L2Nu']     = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['WH_H0M_ToWWTo2L2Nu']      = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['WH_H0L1_ToWWTo2L2Nu']     = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['WH_H0PHf05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['WH_H0Mf05_ToWWTo2L2Nu']   = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['WH_H0L1f05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+
 # THIS IS OLD, AND COMES FROM RUN 2 UL!!
 #
 # Detailed references at: https://docs.google.com/spreadsheets/d/1IEfle0H1V3ih2JVFpYckmTd-ACTBqgBRIsFydegGgPQ/edit?usp=sharing
