@@ -482,7 +482,8 @@ class mRDF:
             print(f"I have {df.Count().GetValue()} events, meaning that I will need {nIterations} chunks of {chunksize} events")
             events_in_last_chunk = df.Count().GetValue() - (nIterations-1)*chunksize
             print(f"I have {events_in_last_chunk} events in last chunk")
-            while (events_in_last_chunk < 1000) & (df.Count().GetValue() > 1000):
+            while events_in_last_chunk < 1000:
+                if df.Count().GetValue() < 1000: break
                 print(f"I want at least 1000 events in the last chunk. I'll increase the chunk size by 1000 events.")
                 chunksize += 1000
                 nIterations = max(ceil(df.Count().GetValue() / chunksize), 1)
