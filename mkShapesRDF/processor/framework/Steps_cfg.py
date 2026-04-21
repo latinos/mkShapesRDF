@@ -446,7 +446,7 @@ Steps = {
         ]
     },
 
-    "MCl1loose2024v15__MCCorr2024v15__JERFrom23BPix": {
+    "MCl1loose2024v15__MCCorr2024v15__JERFrom23BPix__fakeSel": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
@@ -465,15 +465,17 @@ Steps = {
             "WGammaStar",
             "DressedLeptons",
             "baseW",
+            "btagPerJet_DeepJet_shape",
+            "btagPerJet_PNet_shape",
+            "btagPerJet_PTransformer_shape",
             "trigMC",
             "leptonSF",
             "puW",
             "formulasMC",
             "leptonScale_mc",
             "l2Kin",
-            "l3Kin",
-            "l4Kin",
-            "finalSnapshot_JES", # why not finalSnapshot_JES? Do we need systematic variations?
+            "fakeSel",
+            "finalSnapshot_MC",
         ]
     },
 
@@ -1523,6 +1525,7 @@ Steps = {
             "addTnPElectron",
         ]
     },
+    
     "MCl1loose2024v15__fakeSel": {
         "isChain" : True,
         "do4MC" : True,
@@ -1549,6 +1552,7 @@ Steps = {
             "finalSnapshot_MC",
         ]
     },
+    
     "MCl2loose2024v15__MCCorr2024v15LeptonOnly__l2tight": {
         "isChain" : True,
         "do4MC" : True,
