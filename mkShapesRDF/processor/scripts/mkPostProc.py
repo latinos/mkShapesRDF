@@ -305,9 +305,10 @@ def main():
                 print("\n\n")
                 toResubmit.append(err)
         toResubmit = list(map(lambda k: "".join(k.split("/")[-2]), toResubmit))
+        print("To resubmit due to error: ")
         print(toResubmit)
-        print('PRINTING NOT FINISHED STUFF')
         notFinished = list(map(lambda k: "".join(k.split("/")[-1]), notFinished))
+        print("Still running jobs: ")
         print(notFinished)
         if len(toResubmit) > 0:
             print("\n\nShould resubmit the following files\n")
