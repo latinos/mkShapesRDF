@@ -132,6 +132,7 @@ Steps = {
             "finalSnapshot_JES",
         ]
     },
+
     # 2022EE
     "DATAl2loose2022EEv12__l2loose": {
         "isChain" : True,
@@ -217,6 +218,7 @@ Steps = {
             "finalSnapshot_JES",
         ]
     },
+
     # 2023
     "DATAl2loose2023v12__l2loose": {
         "isChain" : True,
@@ -302,6 +304,7 @@ Steps = {
             "finalSnapshot_JES",
         ]
     },
+
     # 2023BPix
     "DATAl2loose2023BPixv12__l2loose": {
         "isChain" : True,
@@ -387,6 +390,7 @@ Steps = {
             "finalSnapshot_JES",
         ]
     },
+
     # 2024
     "DATAl2loose2024v15__l2loose": {
         "isChain" : True,
@@ -409,6 +413,7 @@ Steps = {
             "finalSnapshot_DATA",
         ],
     },
+
     "MCl2loose2024v15__MCCorr2024v15__JERFrom23BPix__l2tight": {
         "isChain" : True,
         "do4MC" : True,
@@ -440,15 +445,17 @@ Steps = {
             "finalSnapshot_JES",
         ]
     },
-    "MCl1loose2024v15__MCCorr2024v15__JERFrom23BPix": {
+
+    "MCl1loose2024v15__MCCorr2024v15__JERFrom23BPix__fakeSel": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
         "selection" : '"((nElectron+nMuon)>0)"',
         "subTargets" : [
             "leptonMaker",
-            "lepFiller_tthMVA",
             "lepSel",
+            "jetIDMaker",
+            "JES_modules_reducedv15_MC",
             "jetSelMask",
             "PromptParticlesGenVars",
             "GenVar",
@@ -462,14 +469,13 @@ Steps = {
             "leptonSF",
             "puW",
             "formulasMC",
-            "JES_modules_reducedv15_MC",
+            "fakeSel",
             "leptonScale_mc",
             "l2Kin",
-            "l3Kin",
-            "l4Kin",
-            "finalSnapshot_JES",
+            "finalSnapshot_MC",
         ]
     },
+
     # 2025
     "DATAl2loose2025v15__l2loose": {
         "isChain" : True,
@@ -656,7 +662,9 @@ Steps = {
             "lepFiller_tthMVA",
             "lepSel",
             "jetIDMaker",
+            "JES_modules_reduced_DATA",
             "jetSelMask",
+            "leptonScale_data",
             "l2Kin",
             "trigData",
             "formulasDATA",
@@ -874,15 +882,13 @@ Steps = {
             "lepFiller_tthMVA",
             "lepSel",
             "jetIDMaker",
-            "jetSelMaskFilter",
+            "JES_modules_reduced_DATA",
+            "jetSelMask",
             "leptonScale_data",
             "l2Kin",
-            "l3Kin",
-            "l4Kin",
             "trigData",
             "formulasDATA",
-            "fakeW",
-            "formulasFAKE",
+            "fakeSel",
             "finalSnapshot_DATA",
         ],
     },
@@ -964,10 +970,10 @@ Steps = {
             "lepFiller_tthMVA",
             "lepSel",
             "jetIDMaker",
+            "JES_modules_reduced_DATA",
             "jetSelMask",
+            "leptonScale_data",
             "l2Kin",
-            "l3Kin",
-            "l4Kin",
             "trigData",
             "formulasDATA",
             "fakeSel",
@@ -1016,6 +1022,7 @@ Steps = {
             "addTnPMuon",
         ],
     },
+
     "DATAl2loose2023v12__addTnPElectron": {
         "isChain" : True,
         "do4MC" : False,
@@ -1036,6 +1043,7 @@ Steps = {
             "addTnPElectron",
         ],
     },
+
     "DATAl1loose2023v12__fakeW": {
         "isChain": True,
         "do4MC": False,
@@ -1182,10 +1190,10 @@ Steps = {
             "lepFiller_tthMVA",
             "lepSel",
             "jetIDMaker",
+            "JES_modules_reduced_DATA",
             "jetSelMask",
+            "leptonScale_data",
             "l2Kin",
-            "l3Kin",
-            "l4Kin",
             "trigData",
             "formulasDATA",
             "fakeSel",
@@ -1436,9 +1444,10 @@ Steps = {
             "leptonMaker",
             "lepSel",
             "jetIDMaker",
+            "JES_modules_reducedv15_DATA",
             "jetSelMask",
+            "leptonScale_data",
             "l2Kin",
-            "l3Kin",
             "trigData",
             "formulasDATA",
             "fakeSel",
@@ -1516,6 +1525,7 @@ Steps = {
             "addTnPElectron",
         ]
     },
+    
     "MCl1loose2024v15__fakeSel": {
         "isChain" : True,
         "do4MC" : True,
@@ -1542,6 +1552,7 @@ Steps = {
             "finalSnapshot_MC",
         ]
     },
+    
     "MCl2loose2024v15__MCCorr2024v15LeptonOnly__l2tight": {
         "isChain" : True,
         "do4MC" : True,
