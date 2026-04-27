@@ -558,7 +558,7 @@ class Processor:
             request_memory = 12GB
             request_disk   = 10GB
             requirements = (OpSysAndVer =?= "AlmaLinux9")
-            +JobFlavour = "testmatch"
+            +JobFlavour = "nextweek"
             
             queue 1 Folder in RPLME_ALLSAMPLES
             """
