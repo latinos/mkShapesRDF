@@ -305,13 +305,9 @@ def main():
                 print("\n\n")
                 toResubmit.append(err)
         toResubmit = list(map(lambda k: "".join(k.split("/")[-2]), toResubmit))
-        print("To resubmit due to error: ")
-        print(toResubmit)
         notFinished = list(map(lambda k: "".join(k.split("/")[-1]), notFinished))
-        print("Still running jobs: ")
-        print(notFinished)
         if len(toResubmit) > 0:
-            print("\n\nShould resubmit the following files\n")
+            print("\n\nShould resubmit due to error the following files\n")
             print(
                 "queue 1 Folder in "
                 + " ".join(list(map(lambda k: k.split("/")[-1], toResubmit)))
@@ -332,7 +328,7 @@ def main():
                 )
                 proc.wait()
         if len(notFinished) > 0:
-            print("\n\nShould resubmit the following STILL RUNNING files\n")
+            print("\n\nStill running files\n")
             print(
                 "queue 1 Folder in "
                 + " ".join(list(map(lambda k: k.split("/")[-1], notFinished)))
