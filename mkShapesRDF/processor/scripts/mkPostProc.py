@@ -157,7 +157,7 @@ def operationMode1Parser(parser=None):
         "-r",
         "--resubmit",
         type=int,
-        choices=[0, 1],
+        choices=[0, 1, 2],
         help="0 do not resubmit, 1 resubmit",
         required=False,
         default=0,
@@ -306,6 +306,9 @@ def main():
                 toResubmit.append(err)
         toResubmit = list(map(lambda k: "".join(k.split("/")[-2]), toResubmit))
         print(toResubmit)
+        print('PRINTING NOT FINISHED STUFF')
+        notFinished = list(map(lambda k: "".join(k.split("/")[-1]), notFinished))
+        print(notFinished)
         if len(toResubmit) > 0:
             print("\n\nShould resubmit the following files\n")
             print(
@@ -327,6 +330,28 @@ def main():
                     f"cd {folder}; condor_submit submit.jdl", shell=True
                 )
                 proc.wait()
+        if len(notFinished) > 0:
+            print("\n\nShould resubmit the following STILL RUNNING files\n")
+            print(
+                "queue 1 Folder in "
+                + " ".join(list(map(lambda k: k.split("/")[-1], notFinished)))
+            )
+            if resubmit == 2:
+                with open(f"{folder}/submit.jdl") as file:
+                    txt = file.read()
+
+                lines = txt.split("\n")
+                line = list(filter(lambda k: k.startswith("queue"), lines))[0]
+                lines[lines.index(line)] = (
+                    f'queue 1 Folder in {", ".join(notFinished)}\n '
+                )
+                with open(f"{folder}/submit.jdl", "w") as file:
+                    file.write("\n".join(lines))
+                proc = subprocess.Popen(
+                    f"cd {folder}; condor_submit submit.jdl", shell=True
+                )
+                proc.wait()
+
 
     else:
         print("Invalid operation mode")

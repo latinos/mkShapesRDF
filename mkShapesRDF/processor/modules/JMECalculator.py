@@ -227,16 +227,21 @@ class JMECalculator(Module):
             df = df.Define("jetVars", f'myJetVariationsCalculator.produce({", ".join(cols)})')
 
             if self.store_nominal:
-                df = df.Redefine(f"{JetColl}_pt", "jetVars.pt(0)")
-                df = df.Redefine(f"{JetColl}_mass", "jetVars.mass(0)")
-                    
-                df = df.Redefine(f"{JetColl}_sorting", f"ROOT::VecOps::Reverse(ROOT::VecOps::Argsort({JetColl}_pt))")
-                df = df.Redefine(f"{JetColl}_pt", f"Take({JetColl}_pt, {JetColl}_sorting)")
-                df = df.Redefine(f"{JetColl}_eta", f"Take(Jet_eta, {JetColl}_sorting)")
-                df = df.Redefine(f"{JetColl}_phi", f"Take(Jet_phi, {JetColl}_sorting)")
-                df = df.Redefine(f"{JetColl}_mass", f"Take({JetColl}_mass, {JetColl}_sorting)")
-                df = df.Define(f"tmp_{JetColl}_jetIdx", f"{JetColl}_jetIdx")
-                df = df.Redefine(f"{JetColl}_jetIdx", f"{JetColl}_sorting")    
+                if 'TTTo2L2Nu_10k_nano' not in self.sampleName:
+                    print("Correcting jet order")
+                    df = df.Redefine(f"{JetColl}_pt", "jetVars.pt(0)")
+                    df = df.Redefine(f"{JetColl}_mass", "jetVars.mass(0)")
+                        
+                    df = df.Redefine(f"{JetColl}_sorting", f"ROOT::VecOps::Reverse(ROOT::VecOps::Argsort({JetColl}_pt))")
+                    df = df.Redefine(f"{JetColl}_pt", f"Take({JetColl}_pt, {JetColl}_sorting)")
+                    df = df.Redefine(f"{JetColl}_eta", f"Take(Jet_eta, {JetColl}_sorting)")
+                    df = df.Redefine(f"{JetColl}_phi", f"Take(Jet_phi, {JetColl}_sorting)")
+                    df = df.Redefine(f"{JetColl}_mass", f"Take({JetColl}_mass, {JetColl}_sorting)")
+                    df = df.Define(f"tmp_{JetColl}_jetIdx", f"{JetColl}_jetIdx")
+                    df = df.Redefine(f"{JetColl}_jetIdx", f"{JetColl}_sorting")
+                else:
+                    df = df.Redefine(f"{JetColl}_pt", "jetVars.pt(0)")
+                    df = df.Redefine(f"{JetColl}_mass", "jetVars.mass(0)")  
             else:
                 df = df.Redefine(f"{JetColl}_sorting", f"Range({JetColl}_pt.size())")
 
