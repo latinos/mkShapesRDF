@@ -8,7 +8,7 @@ ROOT.gSystem.Load("libGraf.so")
 
 configurations = os.path.realpath(inspect.getfile(inspect.currentframe()))
 macros = os.path.dirname(configurations) + '/macros/'
-fakerates = os.path.dirname(configurations) + '/FakeRate/'
+fakerates = os.path.dirname(configurations) + '/FakeRate'
 btagmaps = os.path.dirname(configurations) + '/btag/'
 print(macros)
 print(fakerates)
@@ -21,7 +21,7 @@ mc     = [skey for skey in samples if skey not in ('Fake', 'DATA')]
 mc_emb = [skey for skey in samples if skey not in ('Fake', 'DATA')]
 
 # LepSF2l__ele_cutBased_LooseID_tthMVA_Run3__mu_cut_TightID_pfIsoTight_HWW_tthmva_67
-eleWP = 'cutBased_LooseID_tthMVA_Run3'
+eleWP = 'cutBased_MediumID_tthMVA_Run3'
 muWP  = 'cut_TightID_pfIsoTight_HWW_tthmva_67'
 
 aliases['LepWPCut'] = {
@@ -61,7 +61,7 @@ aliases['Lepton_conept'] = {
 # Fake leptons transfer factor
 aliases['fakeW'] = {
     'linesToAdd'     : [f'#include "{macros}fake_rate_reader_class.cc"'],
-    'linesToProcess' : [f"ROOT.gInterpreter.ProcessLine('fake_rate_reader fr_reader = fake_rate_reader(\"{eleWP}\", \"{muWP}\", \"nominal\", 2, \"std\", \"{fakerates}\", \"2024_v15_pt\");')"],
+    'linesToProcess' : [f"ROOT.gInterpreter.ProcessLine('fake_rate_reader fr_reader = fake_rate_reader(\"cutBased_MediumID_tthMVA_Run3\", \"{muWP}\", \"nominal\", 2, \"std\", \"{fakerates}\", \"2024_v15_pt\");')"],
     'expr'           : f'fr_reader(Lepton_pdgId, Lepton_pt, Lepton_eta, Lepton_isTightMuon_{muWP}, Lepton_isTightElectron_{eleWP}, Lepton_muonIdx, CleanJet_pt, nCleanJet)',
     'samples'        : ['Fake']
 }
@@ -152,7 +152,7 @@ for flavour in ['bc', 'light']:
             btagsf += '_' + shift
         aliases[btagsf] = {
             'linesToAdd': [f'#include "{macros}evaluate_btagSF{flavour}.cc"'],
-            'linesToProcess': [f"ROOT.gInterpreter.ProcessLine('btagSF{flavour} btagSF{flavour}_{shift} = btagSF{flavour}(\"{btagmaps}/{eff_map_year}/bTagEff_{eff_map_year}_ttbar_{bAlgo}_loose.root\", \"{year}\");')"],
+            'linesToProcess': [f"ROOT.gInterpreter.ProcessLine('btagSF{flavour} btagSF{flavour}_{shift} = btagSF{flavour}(\"{btagmaps}{eff_map_year}/bTagEff_{eff_map_year}_ttbar_{bAlgo}_loose.root\", \"{year}\");')"],
             'expr': f'btagSF{flavour}_{shift}(CleanJet_pt, CleanJet_eta, CleanJet_jetIdx, nCleanJet, Jet_hadronFlavour, Jet_btag{bAlgo}, "{WP_eval}", "{shift}", "{tagger}","{eff_map_year}")',
             'samples' : mc,
         }
