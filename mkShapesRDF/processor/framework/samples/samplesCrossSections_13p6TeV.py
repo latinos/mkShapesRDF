@@ -34,16 +34,44 @@ xs_db = {}
 # BR (Z-->ee) = 0.033632  
 # BR (Z-->mm) = 0.033662
 # BR (Z-->tt) = 0.033696
-
+# BR (Z-->qq) = 0.69911
 
 # Higgs xs at 125.38 GeV from https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHWG136TeVxsec_extrap
 # ggH - XS = 51.96 pb
-# VBF - XS = 4.067 pb 
+# VBF - XS = 4.067 pb
+# WH  - XS = 1.442 pb
+# W+H - XS = 0.907 pb
+# W-H - XS = 0.585 pb 
+# ZH  - XS = 0.936 pb
+# ggZH - XS = (51.96/48.52) * 0.1227 = 0.1314 pb extrapolated from ggH 13 TeV to 13.6 TeV
+# ttH - XS = 0.564 pb
 
 ### Higgs
 xs_db["GluGluHToWWTo2L2Nu_M125"] = ["xsec=1.17381", "kfact=1.000", "ref=E"] # 51.960*0.2152*(3*0.108)*(3*0.108)
 xs_db["GluGluHToZZTo4L_M125"] = ["xsec=0.0140", "kfact=1.000", "ref=E"] # 51.960*0.02641*(0.033632+0.033662+0.033696)**2
 xs_db["VBFHToWWTo2L2Nu_M125"]    = ["xsec=0.09187", "kfact=1.000", "ref=E"] #  4.067*0.2152*(3*0.108)*(3*0.108)
+
+xs_db["ZH_Hto2Wto2L2Nu_M125"] = ["xsec=0.021145", "kfact=1.000", "ref=E"] # 0.936 * 0.2152*(3*0.108)*(3*0.108) 
+xs_db["ZH_Zto2L_Hto2Wto2L2Nu_M125"] = ["xsec=0.002135", "kfact=1.000", "ref=E"] # 0.936 * (0.033632+0.033662+0.033696)*0.2152*(3*0.108)*(3*0.108)
+xs_db["ZH_Zto2L_Hto2Wto4Q_M125"] = ["xsec=0.009244", "kfact=1.000", "ref=E"] # 0.936 * (0.033632+0.033662+0.033696)*0.2152*0.6741*0.6741
+xs_db["ZH_Zto2L_Hto2WtoLNu2Q_M125"] = ["xsec=0.004443", "kfact=1.000", "ref=E"] # 0.936 * (0.033632+0.033662+0.033696)*0.2152*0.6741*(3*0.108)
+xs_db["ZH_Zto2Q_Hto2Wto2L2Nu_M125"] = ["xsec=0.030756", "kfact=1.000", "ref=E"] # 0.936 * 0.69911*0.2152*0.6741*(3*0.108)
+
+xs_db["GluGluZH_Hto2Wto2L2Nu_M125"] = ["xsec=0.002968", "kfact=1.000", "ref=E"] # 0.1314 * 0.2152*(3*0.108)*(3*0.108)
+xs_db["GluGluZH_Zto2L_Hto2Wto2L2Nu_M125"] = ["xsec=0.000299", "kfact=1.000", "ref=E"] # 0.1314 * (0.033632+0.033662+0.033696)*0.2152*(3*0.108)*(3*0.108)
+xs_db["GluGluZH_Zto2L_Hto2Wto4Q_M125"] = ["xsec=0.001297", "kfact=1.000", "ref=E"] # 0.1314 * (0.033632+0.033662+0.033696)*0.2152*0.6741*0.6741 
+xs_db["GluGluZH_Zto2L_Hto2WtoLNu2Q_M125"] = ["xsec=0.000623", "kfact=1.000", "ref=E"] # 0.1314 * (0.033632+0.033662+0.033696)*0.2152*0.6741*(3*0.108)  
+xs_db["GluGluZH_Zto2Q_Hto2Wto2L2Nu_M125"] = ["xsec=0.004317", "kfact=1.000", "ref=E"] # 0.1314 * 0.69911*0.2152*0.6741*(3*0.108)  
+
+xs_db["HWplusJ_HToWWTo2L2Nu_WToLNu_M125"] = ["xsec=0.006638", "kfact=1.000", "ref=E"] # 0.907 * (3*0.108) * 0.2152*(3*0.108)*(3*0.108)
+xs_db["HWplusJ_HToWWTo2L2Nu_WTo2Q_M125"] = ["xsec=0.013812", "kfact=1.000", "ref=E"] # 0.907 * 0.6741 * 0.2152*(3*0.108)*(3*0.108)  
+xs_db["HWminusJ_HToWWTo2L2Nu_WToLNu_M125"] = ["xsec=0.004281", "kfact=1.000", "ref=E"] # 0.585 * (3*0.108) * 0.2152*(3*0.108)*(3*0.108)  
+xs_db["HWminusJ_HToWWTo2L2Nu_WTo2Q_M125"] = ["xsec=0.008908", "kfact=1.000", "ref=E"] # 0.585 * 0.6741 * 0.2152*(3*0.108)*(3*0.108)
+
+xs_db["ttHToNonbb_M125"] = ["xsec=0.235526", "kfact=1.000", "ref=E"] # 0.564 * (1 - 0.5824)
+
+xs_db["GluGluHToTauTau_M125_Powheg"] = ["xsec=3.250617", "kfact=1.000", "ref=E"] # 51.960 * 0.06256
+xs_db["VBFHToTauTau_M125"] = ["xsec=0.254431", "kfact=1.000", "ref=E"] # 4.067 * 0.06256
 
 ### WW
 xs_db["WW"]        = ["xsec=122.1", "kfact=1.000", "ref=A"]  # (XS(pp -> e mu ve vmu) - XS(gg -> e mu ve vmu)) / (BR(W -> mu vmu)*BR(W -> e ve)) = (1.5589-0.1497)/(0.1078*0.1071)
