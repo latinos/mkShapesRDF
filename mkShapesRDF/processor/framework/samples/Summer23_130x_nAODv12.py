@@ -2,17 +2,61 @@ Samples = {}
 
 ##### Higgs 
 
+# GGH - HWW
 Samples['GluGluHToWWTo2L2Nu_M125'] = {
     'nanoAOD' : '/GluGluHto2Wto2L2Nu_M-125_TuneCP5_13p6TeV_powheg-jhugen752-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2/NANOAODSIM'
 } 
 
+# GGH - HZZ
 Samples['GluGluHToZZTo4L_M125'] = {
     'nanoAOD' : '/GluGluHtoZZto4L_M-125_TuneCP5_13p6TeV_powheg-jhugen-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v3/NANOAODSIM'
 }
 
+# VBF - HWW 
 Samples['VBFHToWWTo2L2Nu_M125'] = {
     'nanoAOD' :	'/VBFHto2Wto2L2Nu_M-125_TuneCP5_13p6TeV_powheg-jhugen752-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2/NANOAODSIM'
 }
+
+# ZH - HWW
+Samples['ZH_Hto2Wto2L2Nu_M125'] = {
+    'nanoAOD' : '/ZH_ZtoAll_Hto2Wto2L2Nu_M-125_TuneCP5_13p6TeV_powheg-minlo-HZJ-jhugenv752-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v3/NANOAODSIM'
+}
+
+# GGZH - HWW
+Samples['GluGluZH_Hto2Wto2L2Nu_M125'] = {
+    'nanoAOD' : '/GluGluZH_ZtoAll_Hto2Wto2L2Nu_M-125_TuneCP5_13p6TeV_powheg-jhugenv752-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v3/NANOAODSIM'
+}
+
+# WH - HWW
+#Samples['HWplusJ_HToWWTo2L2Nu_WToLNu_M125'] = {
+#    'nanoAOD' : ''
+#}
+#Samples['HWplusJ_HToWWTo2L2Nu_WTo2Q_M125'] = {
+#    'nanoAOD' : ''
+#}
+#Samples['HWminusJ_HToWWTo2L2Nu_WToLNu_M125'] = {
+#    'nanoAOD' : ''
+#}
+#Samples['HWminusJ_HToWWTo2L2Nu_WTo2Q_M125'] = {
+#    'nanoAOD' : ''
+#}
+
+
+# TTH - NoBB
+Samples['ttHToNonbb_M125'] = {
+    'nanoAOD' : '/TTHtoNon2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM'
+}
+
+# HTT
+#Samples['GluGluHToTauTau_M125_Powheg'] = {
+#    'nanoAOD' : ''
+#}
+Samples['GluGluHToTauTau_M125_amcatnlo'] = {
+    'nanoAOD': '/GluGluHto2Tau_M-125_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM'
+}
+Samples['VBFHToTauTau_M125'] = {
+    'nanoAOD' : '/VBFHToTauTau_M125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2/NANOAODSIM'
+} 
 
 ##### ggWW  
 
