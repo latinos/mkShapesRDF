@@ -40,10 +40,11 @@ xs_db = {}
 # ggH - XS = 51.96 pb
 # VBF - XS = 4.067 pb
 # WH  - XS = 1.442 pb
-# W+H - XS = 0.907 pb
-# W-H - XS = 0.585 pb 
-# ZH  - XS = 0.936 pb
-# ggZH - XS = (51.96/48.52) * 0.1227 = 0.1314 pb extrapolated from ggH 13 TeV to 13.6 TeV
+# W+H - XS = 0.8801 pb
+# W-H - XS = 0.5620 pb 
+# ZH  - XS = 0.9361 pb
+# qqZH - XS = 0.8014 pb
+# ggZH - XS =  0.1347 pb
 # ttH - XS = 0.564 pb
 
 ### Higgs
@@ -51,22 +52,22 @@ xs_db["GluGluHToWWTo2L2Nu_M125"] = ["xsec=1.17381", "kfact=1.000", "ref=E"] # 51
 xs_db["GluGluHToZZTo4L_M125"] = ["xsec=0.0140", "kfact=1.000", "ref=E"] # 51.960*0.02641*(0.033632+0.033662+0.033696)**2
 xs_db["VBFHToWWTo2L2Nu_M125"]    = ["xsec=0.09187", "kfact=1.000", "ref=E"] #  4.067*0.2152*(3*0.108)*(3*0.108)
 
-xs_db["ZH_Hto2Wto2L2Nu_M125"] = ["xsec=0.021145", "kfact=1.000", "ref=E"] # 0.936 * 0.2152*(3*0.108)*(3*0.108) 
-xs_db["ZH_Zto2L_Hto2Wto2L2Nu_M125"] = ["xsec=0.002135", "kfact=1.000", "ref=E"] # 0.936 * (0.033632+0.033662+0.033696)*0.2152*(3*0.108)*(3*0.108)
-xs_db["ZH_Zto2L_Hto2Wto4Q_M125"] = ["xsec=0.009244", "kfact=1.000", "ref=E"] # 0.936 * (0.033632+0.033662+0.033696)*0.2152*0.6741*0.6741
-xs_db["ZH_Zto2L_Hto2WtoLNu2Q_M125"] = ["xsec=0.004443", "kfact=1.000", "ref=E"] # 0.936 * (0.033632+0.033662+0.033696)*0.2152*0.6741*(3*0.108)
-xs_db["ZH_Zto2Q_Hto2Wto2L2Nu_M125"] = ["xsec=0.030756", "kfact=1.000", "ref=E"] # 0.936 * 0.69911*0.2152*0.6741*(3*0.108)
+xs_db["ZH_Hto2Wto2L2Nu_M125"] = ["xsec=0.018104", "kfact=1.000", "ref=E"] # 0.8014 * 0.2152*(3*0.108)*(3*0.108) 
+xs_db["ZH_Zto2L_Hto2Wto2L2Nu_M125"] = ["xsec=0.001828", "kfact=1.000", "ref=E"] # 0.8014 * (0.033632+0.033662+0.033696)*0.2152*(3*0.108)*(3*0.108)
+xs_db["ZH_Zto2L_Hto2Wto4Q_M125"] = ["xsec=0.007914", "kfact=1.000", "ref=E"] # 0.8014 * (0.033632+0.033662+0.033696)*0.2152*0.6741*0.6741
+xs_db["ZH_Zto2L_Hto2WtoLNu2Q_M125"] = ["xsec=0.003803", "kfact=1.000", "ref=E"] # 0.8014 * (0.033632+0.033662+0.033696)*0.2152*0.6741*(3*0.108)
+xs_db["ZH_Zto2Q_Hto2Wto2L2Nu_M125"] = ["xsec=0.026333", "kfact=1.000", "ref=E"] # 0.8014 * 0.69911*0.2152*0.6741*(3*0.108)
 
-xs_db["GluGluZH_Hto2Wto2L2Nu_M125"] = ["xsec=0.002968", "kfact=1.000", "ref=E"] # 0.1314 * 0.2152*(3*0.108)*(3*0.108)
-xs_db["GluGluZH_Zto2L_Hto2Wto2L2Nu_M125"] = ["xsec=0.000299", "kfact=1.000", "ref=E"] # 0.1314 * (0.033632+0.033662+0.033696)*0.2152*(3*0.108)*(3*0.108)
-xs_db["GluGluZH_Zto2L_Hto2Wto4Q_M125"] = ["xsec=0.001297", "kfact=1.000", "ref=E"] # 0.1314 * (0.033632+0.033662+0.033696)*0.2152*0.6741*0.6741 
-xs_db["GluGluZH_Zto2L_Hto2WtoLNu2Q_M125"] = ["xsec=0.000623", "kfact=1.000", "ref=E"] # 0.1314 * (0.033632+0.033662+0.033696)*0.2152*0.6741*(3*0.108)  
-xs_db["GluGluZH_Zto2Q_Hto2Wto2L2Nu_M125"] = ["xsec=0.004317", "kfact=1.000", "ref=E"] # 0.1314 * 0.69911*0.2152*0.6741*(3*0.108)  
+xs_db["GluGluZH_Hto2Wto2L2Nu_M125"] = ["xsec=0.003043", "kfact=1.000", "ref=E"] # 0.1347 * 0.2152*(3*0.108)*(3*0.108)
+xs_db["GluGluZH_Zto2L_Hto2Wto2L2Nu_M125"] = ["xsec=0.000307", "kfact=1.000", "ref=E"] # 0.1347 * (0.033632+0.033662+0.033696)*0.2152*(3*0.108)*(3*0.108)
+xs_db["GluGluZH_Zto2L_Hto2Wto4Q_M125"] = ["xsec=0.0013303", "kfact=1.000", "ref=E"] # 0.1347 * (0.033632+0.033662+0.033696)*0.2152*0.6741*0.6741 
+xs_db["GluGluZH_Zto2L_Hto2WtoLNu2Q_M125"] = ["xsec=0.000639", "kfact=1.000", "ref=E"] # 0.1347 * (0.033632+0.033662+0.033696)*0.2152*0.6741*(3*0.108)  
+xs_db["GluGluZH_Zto2Q_Hto2Wto2L2Nu_M125"] = ["xsec=0.004426", "kfact=1.000", "ref=E"] # 0.1347 * 0.69911*0.2152*0.6741*(3*0.108)  
 
-xs_db["HWplusJ_HToWWTo2L2Nu_WToLNu_M125"] = ["xsec=0.006638", "kfact=1.000", "ref=E"] # 0.907 * (3*0.108) * 0.2152*(3*0.108)*(3*0.108)
-xs_db["HWplusJ_HToWWTo2L2Nu_WTo2Q_M125"] = ["xsec=0.013812", "kfact=1.000", "ref=E"] # 0.907 * 0.6741 * 0.2152*(3*0.108)*(3*0.108)  
-xs_db["HWminusJ_HToWWTo2L2Nu_WToLNu_M125"] = ["xsec=0.004281", "kfact=1.000", "ref=E"] # 0.585 * (3*0.108) * 0.2152*(3*0.108)*(3*0.108)  
-xs_db["HWminusJ_HToWWTo2L2Nu_WTo2Q_M125"] = ["xsec=0.008908", "kfact=1.000", "ref=E"] # 0.585 * 0.6741 * 0.2152*(3*0.108)*(3*0.108)
+xs_db["HWplusJ_HToWWTo2L2Nu_WToLNu_M125"] = ["xsec=0.006441", "kfact=1.000", "ref=E"] # 0.8801 * (3*0.108) * 0.2152*(3*0.108)*(3*0.108)
+xs_db["HWplusJ_HToWWTo2L2Nu_WTo2Q_M125"] = ["xsec=0.013403", "kfact=1.000", "ref=E"] # 0.8801 * 0.6741 * 0.2152*(3*0.108)*(3*0.108)  
+xs_db["HWminusJ_HToWWTo2L2Nu_WToLNu_M125"] = ["xsec=0.004113", "kfact=1.000", "ref=E"] # 0.5620 * (3*0.108) * 0.2152*(3*0.108)*(3*0.108)  
+xs_db["HWminusJ_HToWWTo2L2Nu_WTo2Q_M125"] = ["xsec=0.008558", "kfact=1.000", "ref=E"] # 0.5620 * 0.6741 * 0.2152*(3*0.108)*(3*0.108)
 
 xs_db["ttHToNonbb_M125"] = ["xsec=0.235526", "kfact=1.000", "ref=E"] # 0.564 * (1 - 0.5824)
 
