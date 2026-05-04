@@ -49,9 +49,9 @@ Samples['ttHToNonbb_M125'] = {
 Samples['GluGluHToTauTau_M125_Powheg'] = {
     'nanoAOD' : '/GluGluHto2Tau_M-125_TuneCP5_13p6TeV_powhegMiNNLO-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM'
 }
-#Samples['VBFHToTauTau_M125'] = {
-#    'nanoAOD' : '' 
-#} 
+Samples['VBFHToTauTau_M125'] = {
+    'nanoAOD' : '/VBFHToTauTau_M125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-Poisson60KeepRAW_130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM' 
+} 
 
 ##### ggWW 
 

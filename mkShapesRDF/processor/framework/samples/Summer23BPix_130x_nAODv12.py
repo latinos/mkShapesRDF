@@ -47,15 +47,15 @@ Samples['ttHToNonbb_M125'] = {
 }
 
 # HTT
-#Samples['GluGluHToTauTau_M125_Powheg'] = {
-#    'nanoAOD' : ''
-#}
+Samples['GluGluHToTauTau_M125_Powheg'] = {
+    'nanoAOD' : '/GluGluHToTauTau_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM'
+}
 Samples['GluGluHToTauTau_M125_amcatnlo'] = {
     'nanoAOD': '/GluGluHto2Tau_M-125_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2/NANOAODSIM'
 }
-#Samples['VBFHToTauTau_M125'] = {
-#    'nanoAOD' : ''
-#} 
+Samples['VBFHToTauTau_M125'] = {
+    'nanoAOD' : '/VBFHToTauTau_M125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2/NANOAODSIM'
+} 
 
 ##### ggWW  
 
