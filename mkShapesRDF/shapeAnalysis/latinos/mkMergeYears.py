@@ -16,6 +16,23 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 ROOT.gROOT.SetBatch(True)
 ROOT.TH1.SetDefaultSumw2(True)
 
+"""
+--------- mkMergeYears.py
+Script to merge the histograms of different years (e.g. Run 2, Run 3, ...) into a single root file, 
+summing the histograms of the different years and properly handling the nuisances.
+
+- To run the code locally, merging all cuts and variables in one go:
+    python mkMergeYears.py --inDir rootFiles/ --outDir rootFiles/ --nJobs X (where X is the number of parallel jobs to run, e.g. 10)
+
+- To run the code locally, merging only a specific cut and variable:
+    python mkMergeYears.py --inDir rootFiles/ --outDir rootFiles/ --onlyCut cutName --onlyVar varName
+
+- To submit the code to condor, merging only a specific cut and variable:
+    python mkMergeYears.py --inDir rootFiles/ --outDir rootFiles/ --onlyCut cutName --onlyVar varName --doSubmit
+
+If last option is used, remember to do hadd of the temporary files at the end, with:
+    hadd -fk rootFiles/histos_tag.root rootFiles/histos_tag__ALL__*.root
+"""
 
 def defaultParser():
     parser = argparse.ArgumentParser(add_help=False)
@@ -124,7 +141,7 @@ class MergerFactory:
             old_root_file_name = outDir + "/mkShapes__" + folder["tag"] + ".root"
             new_root_file_name = outDir + "/year_" + folderHR + "_histos_" + folder["tag"] + ".root"
             print (" Partial: old_root_file_name = ", old_root_file_name)
-            # os.system ("cp " + old_root_file_name + "   " + new_root_file_name )
+            os.system ("cp " + old_root_file_name + "   " + new_root_file_name )
 
             self._filesIn[folderHR] = new_root_file_name
 
@@ -468,8 +485,8 @@ request_cpus   = 1
 request_memory = 12GB
 request_disk   = 10GB 
 requirements = (OpSysAndVer =?= "AlmaLinux9") 
-+JobFlavour = "testmatch"
-     
++JobFlavour = "longlunch"
+
 queue 1 Folder in ALLTAGS
 """
             
