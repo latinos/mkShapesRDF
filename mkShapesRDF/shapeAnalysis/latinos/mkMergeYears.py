@@ -278,40 +278,40 @@ class MergerFactory:
 
             # loop over variables
             for variableName, variable in variables.items():
-                mkDirectory = True
                 print ("   variable = ", variableName )  #, " :: ", variable
                 folder_name = cutName + "/" + variableName
                 # print (" while adding nominals folder_name = ", folder_name)
 
+                ## Store all keys using uproot
+                allKeys = {}
+                for folderHR in self._filesIn.keys() :
+                    fileIn = self._filesIn[folderHR]
+                    with uproot.open(fileIn) as f:
+                        allKeys[folderHR] = np.unique([ key.split(";")[0] for key in f[folder_name].keys() ])
+                        # print(f"Number of keys for {folderHR} in {folder_name}: {len(allKeys[folderHR])}")   
+
+                rootIn = {}
+                # loop over years and copy nominals
+                for folderHR in self._filesIn.keys():
+                    fileIn = self._filesIn[folderHR]
+                    # print("Openning file: ", fileIn)
+                    rootIn[folderHR] = ROOT.TFile.Open(fileIn, "READ")
+                
+                # Open output file
+                outFile = ROOT.TFile(self._fileOut, "UPDATE")
+                # create the folder if it does not exist
+                outFile.mkdir(folder_name)
+                outFile.cd(folder_name)
+
                 # loop over samples
                 for sampleName, sample in samples.items():
 
-                    print("        sample: ", sampleName)
-
-                    ## Store all keys using uproot
-                    allKeys = {}
-                    for folderHR in self._filesIn.keys() :
-                        fileIn = self._filesIn[folderHR]
-                        with uproot.open(fileIn) as f:
-                            allKeys[folderHR] = np.unique([ key.split(";")[0] for key in f[folder_name].keys() ])
-                            # print(f"Number of keys for {folderHR} in {folder_name}: {len(allKeys[folderHR])}")                    
+                    print("        sample: ", sampleName)                 
 
                     histos_to_be_summed = []
-                    rootIn = {}
-                    # loop over years and copy nominals
+                    ## loop over years and copy nominals
                     for folderHR in self._filesIn.keys():
-                        fileIn = self._filesIn[folderHR]
-                        # print("Openning file: ", fileIn)
-                        rootIn[folderHR] = ROOT.TFile.Open(fileIn, "READ")
                         histos_to_be_summed.append( rootIn[folderHR].Get(folder_name + "/histo_" + sampleName) )
-                    
-                    # Open output file
-                    outFile = ROOT.TFile(self._fileOut, "UPDATE")
-                    # create the folder if it does not exist
-                    if mkDirectory:
-                        outFile.mkdir(folder_name)
-                        mkDirectory = False
-                    outFile.cd(folder_name)
 
                     # print (" start adding ... ")
                     summed_histo = histos_to_be_summed[0].Clone()
@@ -360,7 +360,7 @@ class MergerFactory:
                             nameTempDown = 'histo_' + str(sampleName) + '_' + (nuisance['name']) + 'Down'
 
                             # print ("nuisanceName = ", nuisanceName)
-                            #print ("   --> nuisance = ", nuisance)
+                            # print ("   --> nuisance = ", nuisance)
 
                             for folderHR in self._filesIn.keys():
                                 
@@ -400,9 +400,9 @@ class MergerFactory:
                             summed_down_histo.SetName (nameTempDown)
                             summed_down_histo.Write()
 
-                    outFile.Close()
-                    for key in rootIn.keys() :
-                        rootIn[key].Close()
+                outFile.Close()
+                for key in rootIn.keys() :
+                    rootIn[key].Close()
 
         return True
 
