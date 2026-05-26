@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from asyncio import subprocess
 import os
 import sys
 import ROOT
@@ -11,6 +12,7 @@ import shutil
 from textwrap import dedent
 from mkShapesRDF.shapeAnalysis.ConfigLib import ConfigLib
 import mkShapesRDF.shapeAnalysis.latinos.LatinosUtils as utils
+from concurrent.futures import ProcessPoolExecutor, as_completed
 ROOT.gROOT.SetBatch(True)
 ROOT.TH1.SetDefaultSumw2(True)
 
@@ -34,6 +36,41 @@ def defaultParser():
         help="Input directory",
         required=False,
         default=f"rootFiles/",
+    )
+
+    parser.add_argument(
+        "-j",
+        "--nJobs",
+        type=int,
+        help="Number of jobs",
+        required=False,
+        default=10,
+    )
+
+    parser.add_argument(
+        "-c",
+        "--onlyCut",
+        type=str,
+        help="Cut to merge (if not specified, merge all cuts)",
+        required=False,
+        default=None,
+    )
+
+    parser.add_argument(
+        "-v",
+        "--onlyVar",
+        type=str,
+        help="Variable to merge (if not specified, merge all variables)",
+        required=False,
+        default=None,
+    )
+
+    parser.add_argument(
+        "-sub",
+        "--doSubmit",
+        action='store_true',
+        help="Submit jobs to condor",
+        default=False,
     )
 
     parser.add_argument(
@@ -75,6 +112,8 @@ class MergerFactory:
     def __init__(self, tag, inDir, outDir, foldersToMerge):
 
         ### Prepare the output keys, output file, and inputs        
+        self.inDir = inDir
+        self.outDir = outDir
         self._fileOut = outDir + '/histos_' + tag + '.root'
         self._filesIn = {}
         self.all_nuisances = {}
@@ -85,7 +124,7 @@ class MergerFactory:
             old_root_file_name = outDir + "/mkShapes__" + folder["tag"] + ".root"
             new_root_file_name = outDir + "/year_" + folderHR + "_histos_" + folder["tag"] + ".root"
             print (" Partial: old_root_file_name = ", old_root_file_name)
-            os.system ("cp " + old_root_file_name + "   " + new_root_file_name )
+            # os.system ("cp " + old_root_file_name + "   " + new_root_file_name )
 
             self._filesIn[folderHR] = new_root_file_name
 
@@ -110,7 +149,7 @@ class MergerFactory:
             print(f"Error reading {filename}: {e}")
             return None
         
-    def getVariedHistos(self, folderHR, folder_name, rootFileIn, sampleName, nuisanceName, nuisance, yearKeys, extra="CMS_"):
+    def getVariedHistos(self, folderHR, folder_name, rootFileIn, sampleName, nuisanceName, nuisance, yearKeys, extra="CMS_") :
         
         nameTemp     = 'histo_' + str(sampleName)
         nameTempUp   = 'histo_' + str(sampleName) + '_' + (nuisance['name']) + 'Up'
@@ -210,7 +249,143 @@ class MergerFactory:
         else :
             return histo_up_to_be_summed, histo_down_to_be_summed, histo_up_to_be_summed_weights, histo_down_to_be_summed_weights, nameTempUp, nameTempDown
 
+    #### Be memory efficient to work with large number of samples and nuisances
+    # 
+    # Avoid copying everything in memory, and instead read the histograms from the root files on the fly, and merge them directly into the output file.
+    # Do it per cut, per sample and per variable, and store the output in each iteration. Open and close the output file at each iteration to avoid keeping everything in memory.
+    #
+    def process_cut_variable(self, cutName, variableName, samples, new_list_of_nuisances):
 
+        print ("process_cut_variable:: cutName = ", cutName, " variableName = ", variableName)
+        folder_name = cutName + "/" + variableName
+        # print (" while adding nominals folder_name = ", folder_name)
+
+        ## Store all keys using uproot
+        allKeys = {}
+        for folderHR in self._filesIn.keys() :
+            fileIn = self._filesIn[folderHR]
+            with uproot.open(fileIn) as f:
+                allKeys[folderHR] = np.unique([ key.split(";")[0] for key in f[folder_name].keys() ])
+                # print(f"Number of keys for {folderHR} in {folder_name}: {len(allKeys[folderHR])}")   
+
+        rootIn = {}
+        # loop over years and copy nominals
+        for folderHR in self._filesIn.keys():
+            fileIn = self._filesIn[folderHR]
+            # print("Openning file: ", fileIn)
+            rootIn[folderHR] = ROOT.TFile.Open(fileIn, "READ")
+        
+        # Open output file
+        tmpFile = self._fileOut.replace(".root", "__ALL__" + cutName + "_" + variableName + ".root")
+        outFile = ROOT.TFile(tmpFile, "RECREATE")
+        # create the folder if it does not exist
+        outFile.mkdir(folder_name)
+        outFile.cd(folder_name)
+
+        # loop over samples
+        for sampleName, sample in samples.items():
+
+            print("        sample: ", sampleName)                 
+
+            histos_to_be_summed = []
+            #rootIn = {}
+            ## loop over years and copy nominals
+            for folderHR in self._filesIn.keys():
+                histos_to_be_summed.append( rootIn[folderHR].Get(folder_name + "/histo_" + sampleName) )
+
+            # print (" start adding ... ")
+            summed_histo = histos_to_be_summed[0].Clone()
+
+            # print ("type = ", type(summed_histo))
+            # print (" the [0] is : ", summed_histo.GetName())
+            
+            for hh in histos_to_be_summed[1:] :  # skip first one
+                summed_histo.Add(hh)
+
+            # print (" now write: ", summed_histo.GetName())
+            summed_histo.Write()
+
+            #
+            # Now let's handle the nuisances
+            #
+
+            # loop over nuisances
+            for nuisanceName, nuisance in new_list_of_nuisances.items():
+
+                histos_up_to_be_summed = []
+                histos_down_to_be_summed = []
+
+                histos_up_to_be_summed_weights = []
+                histos_down_to_be_summed_weights = []
+
+                #
+                # if the combined nuisance type is lnN, don't touch anything, nothing to be done on histograms level
+                #
+                if nuisance['type'] == 'lnN' :
+                    continue
+
+                if "stat" in nuisanceName:
+                    continue
+        
+                if "type" in nuisance.keys() and (nuisance["type"] == "rateParam" or nuisance["type"] == "lnU"):
+                    continue
+
+                if 'name' in nuisance.keys() :
+
+                    if "samples" in nuisance.keys() and sampleName not in nuisance["samples"].keys() :
+                        continue
+
+                    nameTemp     = 'histo_' + str(sampleName)
+                    nameTempUp   = 'histo_' + str(sampleName) + '_' + (nuisance['name']) + 'Up'
+                    nameTempDown = 'histo_' + str(sampleName) + '_' + (nuisance['name']) + 'Down'
+
+                    # print ("nuisanceName = ", nuisanceName)
+                    #print ("   --> nuisance = ", nuisance)
+
+                    for folderHR in self._filesIn.keys():
+                        
+                        histo_up, histo_do, histoW_up, histoW_do, nameTempUp, nameTempDown = self.getVariedHistos(folderHR, folder_name, rootIn[folderHR], sampleName, nuisanceName, nuisance, allKeys[folderHR], extra="CMS_")
+                        histos_up_to_be_summed.append(histo_up)
+                        histos_down_to_be_summed.append(histo_do)
+                        histos_up_to_be_summed_weights.append(histoW_up)
+                        histos_down_to_be_summed_weights.append(histoW_do)
+                else:
+                    # print("nuisance ", nuisanceName, " has no name key, skipping it for histograms merging")
+                    continue
+
+                #
+                # if the nuisance has NO effect on a sample, the histograms are not even created, thus it's not possible to merge them
+                #                
+                if len(histos_up_to_be_summed) >= 1:
+
+                    summed_up_histo = histos_up_to_be_summed[0].Clone()
+                    # print ("histos_up_to_be_summed_weights[ 0 ] = ", histos_up_to_be_summed_weights[0])
+                    summed_up_histo.Scale(histos_up_to_be_summed_weights[0])
+                    ihh = 0
+                    for hh in histos_up_to_be_summed[1:] :  # skip first one
+                        ihh += 1
+                        summed_up_histo.Add(hh, histos_up_to_be_summed_weights[ihh])
+                        # print ("histos_up_to_be_summed_weights[", ihh, "] = ", histos_up_to_be_summed_weights[ihh])
+                    # set the name properly, mentioning the nuisance
+                    summed_up_histo.SetName (nameTempUp)
+                    summed_up_histo.Write()
+
+                    summed_down_histo = histos_down_to_be_summed[0].Clone()
+                    summed_down_histo.Scale(histos_down_to_be_summed_weights[0])
+                    # print ("histos_down_to_be_summed_weights[ 0 ] = ", histos_down_to_be_summed_weights[0])
+                    ihh = 0
+                    for hh in histos_down_to_be_summed[1:] :  # skip first one
+                        ihh += 1
+                        summed_down_histo.Add(hh, histos_down_to_be_summed_weights[ihh])
+                        # print ("histos_down_to_be_summed_weights[", ihh, "] = ", histos_down_to_be_summed_weights[ihh])
+                    summed_down_histo.SetName (nameTempDown)
+                    summed_down_histo.Write()
+
+        outFile.Close()
+        for key in rootIn.keys() :
+            rootIn[key].Close()
+
+        return True
 
     # _____________________________________________________________________________
     def merge(
@@ -222,6 +397,10 @@ class MergerFactory:
         nuisances,
         foldersToMerge,
         foldersToMergeNuisancesFiles,
+        nJobs=10,
+        onlyCut=None,
+        onlyVar=None,
+        doSubmit=False
     ):
         
         print ("merge:: variables = ", variables)
@@ -265,144 +444,87 @@ class MergerFactory:
 
         # print ("all_nuisances = ", self.all_nuisances)
 
+        doMerge = False
+        if doSubmit:
 
-        #### Be memory efficient to work with large number of samples and nuisances
-        # 
-        # Avoid copying everything in memory, and instead read the histograms from the root files on the fly, and merge them directly into the output file.
-        # Do it per cut, per sample and per variable, and store the output in each iteration. Open and close the output file at each iteration to avoid keeping everything in memory.
-        #
+            fSh = ""
+            with open(os.environ['STARTPATH']) as file:
+                for i in file.readlines():
+                    fSh += i
+            fSh += f"cd {os.environ['PWD']} \n"
+            fSh += f"cp {os.path.abspath(__file__)} . \n"
 
-        # loop over cuts
-        for cutName in cuts :
-            print ("cut = ", cutName )
-
-            # loop over variables
-            for variableName, variable in variables.items():
-                print ("   variable = ", variableName )  #, " :: ", variable
-                folder_name = cutName + "/" + variableName
-                # print (" while adding nominals folder_name = ", folder_name)
-
-                ## Store all keys using uproot
-                allKeys = {}
-                for folderHR in self._filesIn.keys() :
-                    fileIn = self._filesIn[folderHR]
-                    with uproot.open(fileIn) as f:
-                        allKeys[folderHR] = np.unique([ key.split(";")[0] for key in f[folder_name].keys() ])
-                        # print(f"Number of keys for {folderHR} in {folder_name}: {len(allKeys[folderHR])}")   
-
-                rootIn = {}
-                # loop over years and copy nominals
-                for folderHR in self._filesIn.keys():
-                    fileIn = self._filesIn[folderHR]
-                    # print("Openning file: ", fileIn)
-                    rootIn[folderHR] = ROOT.TFile.Open(fileIn, "READ")
-                
-                # Open output file
-                outFile = ROOT.TFile(self._fileOut, "UPDATE")
-                # create the folder if it does not exist
-                outFile.mkdir(folder_name)
-                outFile.cd(folder_name)
-
-                # loop over samples
-                for sampleName, sample in samples.items():
-
-                    print("        sample: ", sampleName)                 
-
-                    histos_to_be_summed = []
-                    ## loop over years and copy nominals
-                    for folderHR in self._filesIn.keys():
-                        histos_to_be_summed.append( rootIn[folderHR].Get(folder_name + "/histo_" + sampleName) )
-
-                    # print (" start adding ... ")
-                    summed_histo = histos_to_be_summed[0].Clone()
-
-                    # print ("type = ", type(summed_histo))
-                    # print (" the [0] is : ", summed_histo.GetName())
-
-                    for hh in histos_to_be_summed[1:] :  # skip first one
-                        summed_histo.Add(hh)
-
-                    # print (" now write: ", summed_histo.GetName())
-                    summed_histo.Write()
-
-                    #
-                    # Now let's handle the nuisances
-                    #
-
-                    # loop over nuisances
-                    for nuisanceName, nuisance in new_list_of_nuisances.items():
-
-                        histos_up_to_be_summed = []
-                        histos_down_to_be_summed = []
-
-                        histos_up_to_be_summed_weights = []
-                        histos_down_to_be_summed_weights = []
-
-                        #
-                        # if the combined nuisance type is lnN, don't touch anything, nothing to be done on histograms level
-                        #
-                        if nuisance['type'] == 'lnN' :
-                            continue
-
-                        if "stat" in nuisanceName:
-                            continue
+            fSub = f"""
+universe = vanilla  
+executable = condor/mergeTask/$(Folder)/run.sh  
+   
+arguments = $(Folder) 
+    
+output = condor/mergeTask/$(Folder)/out.txt   
+error  = condor/mergeTask/$(Folder)/err.txt  
+log    = condor/mergeTask/$(Folder)/log.txt 
+   
+request_cpus   = 1  
+request_memory = 12GB
+request_disk   = 10GB 
+requirements = (OpSysAndVer =?= "AlmaLinux9") 
++JobFlavour = "testmatch"
+     
+queue 1 Folder in ALLTAGS
+"""
             
-                        if "type" in nuisance.keys() and (nuisance["type"] == "rateParam" or nuisance["type"] == "lnU"):
-                            continue
+            allTags = []
+            for cutName in cuts:
+                for varName, var in variables.items():
+                    folder_tag = f"{cutName}_{varName}"
+                    folder_path = f"condor/mergeTask/{folder_tag}"
+                    os.makedirs(folder_path, exist_ok=True)
 
-                        if 'name' in nuisance.keys() :
+                    cmd = f"python mkMergeYears.py --inDir {self.inDir} --outDir {self.outDir} --onlyCut {cutName} --onlyVar {varName} \n"
 
-                            if "samples" in nuisance.keys() and sampleName not in nuisance["samples"].keys() :
-                                continue
+                    job_fSh = fSh
+                    job_fSh = job_fSh + "\n"
+                    job_fSh = job_fSh + cmd
 
-                            nameTemp     = 'histo_' + str(sampleName)
-                            nameTempUp   = 'histo_' + str(sampleName) + '_' + (nuisance['name']) + 'Up'
-                            nameTempDown = 'histo_' + str(sampleName) + '_' + (nuisance['name']) + 'Down'
+                    with open(folder_path + "/run.sh", "w") as file:
+                        file.write(job_fSh)
 
-                            # print ("nuisanceName = ", nuisanceName)
-                            # print ("   --> nuisance = ", nuisance)
+                    os.system("chmod +x " + folder_path + "/run.sh")
+                    allTags.append(folder_tag)
 
-                            for folderHR in self._filesIn.keys():
-                                
-                                histo_up, histo_do, histoW_up, histoW_do, nameTempUp, nameTempDown = self.getVariedHistos(folderHR, folder_name, rootIn[folderHR], sampleName, nuisanceName, nuisance, allKeys[folderHR], extra="CMS_")
-                                histos_up_to_be_summed.append(histo_up)
-                                histos_down_to_be_summed.append(histo_do)
-                                histos_up_to_be_summed_weights.append(histoW_up)
-                                histos_down_to_be_summed_weights.append(histoW_do)
-                        else:
-                            # print("nuisance ", nuisanceName, " has no name key, skipping it for histograms merging")
-                            continue
+            fSub = fSub.replace("ALLTAGS", " ".join(allTags))
+            with open("condor_submit.jdl", "w") as file:
+                file.write(fSub)
 
-                        #
-                        # if the nuisance has NO effect on a sample, the histograms are not even created, thus it's not possible to merge them
-                        #
-                        if len(histos_up_to_be_summed) >= 1:
-                            summed_up_histo = histos_up_to_be_summed[0].Clone()
-                            # print ("histos_up_to_be_summed_weights[ 0 ] = ", histos_up_to_be_summed_weights[0])
-                            summed_up_histo.Scale(histos_up_to_be_summed_weights[0])
-                            ihh = 0
-                            for hh in histos_up_to_be_summed[1:] :  # skip first one
-                                ihh += 1
-                                summed_up_histo.Add(hh, histos_up_to_be_summed_weights[ihh])
-                                # print ("histos_up_to_be_summed_weights[", ihh, "] = ", histos_up_to_be_summed_weights[ihh])
-                            # set the name properly, mentioning the nuisance
-                            summed_up_histo.SetName (nameTempUp)
-                            summed_up_histo.Write()
+            print("Submit the condor jobs with: \n")
+            print("condor_submit condor_submit.jdl")
 
-                            summed_down_histo = histos_down_to_be_summed[0].Clone()
-                            summed_down_histo.Scale(histos_down_to_be_summed_weights[0])
-                            # print ("histos_down_to_be_summed_weights[ 0 ] = ", histos_down_to_be_summed_weights[0])
-                            ihh = 0
-                            for hh in histos_down_to_be_summed[1:] :  # skip first one
-                                ihh += 1
-                                summed_down_histo.Add(hh, histos_down_to_be_summed_weights[ihh])
-                                # print ("histos_down_to_be_summed_weights[", ihh, "] = ", histos_down_to_be_summed_weights[ihh])
-                            summed_down_histo.SetName (nameTempDown)
-                            summed_down_histo.Write()
+        elif onlyCut is not None and onlyVar is not None:            
+            self.process_cut_variable(onlyCut, onlyVar, samples, new_list_of_nuisances)
+        elif nJobs == 1:
+            doMerge = True
+            for cutName in cuts:
+                for varName, var in variables.items():
+                    self.process_cut_variable(cutName, varName, samples, new_list_of_nuisances)
+        elif nJobs > 1:
+            doMerge = True
+            with ProcessPoolExecutor(max_workers=nJobs) as executor:
+                futures = {
+                    executor.submit(self.process_cut_variable, cutName, varName, samples, new_list_of_nuisances): (cutName, varName)
+                    for cutName in cuts
+                    for varName, var in variables.items()
+                }
+                for f in as_completed(futures):
+                    cutName, varName = futures[f]
+                    f.result()  # re-raises exceptions
 
-                outFile.Close()
-                for key in rootIn.keys() :
-                    rootIn[key].Close()
+        if doMerge:
+            # Final merge:
+            print (" Now merging all the temporary files into the final output file: ", self._fileOut)
+            subprocess.run(f"hadd -fk {self._fileOut} {self._fileOut.replace('.root', '__ALL__*')}", check=True)
+            # Remove temporary files
+            if os.path.exists(self._fileOut):
+                subprocess.run(f"rm {self._fileOut.replace('.root', '__ALL__*')}", check=True)
 
         return True
 
@@ -440,6 +562,10 @@ def main():
     categoriesmap = utils.flatten_cuts(cuts)
     outDir = args.outDir
     inDir = args.inDir
+    nJobs = args.nJobs
+    onlyCut = args.onlyCut
+    onlyVar = args.onlyVar
+    doSubmit = args.doSubmit
     
     print ("args.tag              = ", tag)
     print ("args.foldersToMerge   = ", opt.foldersToMerge)     
@@ -457,7 +583,11 @@ def main():
        samples,
        nuisances,
        opt.foldersToMerge,
-       foldersToMergeNuisancesFiles
+       foldersToMergeNuisancesFiles,
+       nJobs,
+       onlyCut,
+       onlyVar,
+       doSubmit
     )       
 
     exit()
