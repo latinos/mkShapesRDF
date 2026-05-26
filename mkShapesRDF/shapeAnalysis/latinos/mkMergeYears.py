@@ -199,7 +199,7 @@ class MergerFactory:
                             histo_up_to_be_summed, histo_down_to_be_summed, histo_up_to_be_summed_weights, histo_down_to_be_summed_weights, nameTempUp, nameTempDown = self.getVariedHistos(folderHR, folder_name, rootFileIn, sampleName, oldNuisanceName, nuisance, yearKeys, extra="CMS_")
 
                 if not matched :
-                    print(f"Taking nominal value for {nuisanceName} in {folderHR}!")
+                    # print(f"Taking nominal value for {nuisanceName} in {folderHR}!")
                     histo_up_to_be_summed = rootFileIn.Get(folder_name + "/" + nameTemp )
                     histo_down_to_be_summed = rootFileIn.Get(folder_name + "/" + nameTemp )
                     histo_up_to_be_summed_weights = 1.0
@@ -278,6 +278,7 @@ class MergerFactory:
 
             # loop over variables
             for variableName, variable in variables.items():
+                mkDirectory = True
                 print ("   variable = ", variableName )  #, " :: ", variable
                 folder_name = cutName + "/" + variableName
                 # print (" while adding nominals folder_name = ", folder_name)
@@ -307,8 +308,9 @@ class MergerFactory:
                     # Open output file
                     outFile = ROOT.TFile(self._fileOut, "UPDATE")
                     # create the folder if it does not exist
-                    if not outFile.GetListOfKeys().Contains(folder_name):
+                    if mkDirectory:
                         outFile.mkdir(folder_name)
+                        mkDirectory = False
                     outFile.cd(folder_name)
 
                     # print (" start adding ... ")
@@ -357,7 +359,7 @@ class MergerFactory:
                             nameTempUp   = 'histo_' + str(sampleName) + '_' + (nuisance['name']) + 'Up'
                             nameTempDown = 'histo_' + str(sampleName) + '_' + (nuisance['name']) + 'Down'
 
-                            print ("nuisanceName = ", nuisanceName)
+                            # print ("nuisanceName = ", nuisanceName)
                             #print ("   --> nuisance = ", nuisance)
 
                             for folderHR in self._filesIn.keys():
