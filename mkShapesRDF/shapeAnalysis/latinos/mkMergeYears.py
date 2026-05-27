@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from asyncio import subprocess
+import subprocess
 import os
 import sys
 import ROOT
@@ -538,10 +538,12 @@ queue 1 Folder in ALLTAGS
         if doMerge:
             # Final merge:
             print (" Now merging all the temporary files into the final output file: ", self._fileOut)
-            subprocess.run(f"hadd -fk {self._fileOut} {self._fileOut.replace('.root', '__ALL__*')}", check=True)
+            proc = subprocess.Popen(f"hadd -fk {self._fileOut} {self._fileOut.replace('.root', '__ALL__*')}", shell=True)
+            proc.wait()
             # Remove temporary files
             if os.path.exists(self._fileOut):
-                subprocess.run(f"rm {self._fileOut.replace('.root', '__ALL__*')}", check=True)
+                proc = subprocess.Popen(f"rm {self._fileOut.replace('.root', '__ALL__*')}", shell=True)
+                proc.wait()
 
         return True
 
