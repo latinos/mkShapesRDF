@@ -341,7 +341,7 @@ class MergerFactory:
                 if nuisance['type'] == 'lnN' :
                     continue
 
-                if "stat" in nuisanceName:
+                if nuisanceName == "stat":
                     continue
         
                 if "type" in nuisance.keys() and (nuisance["type"] == "rateParam" or nuisance["type"] == "lnU"):

@@ -247,7 +247,7 @@ def makePlots(samples, variables, nuisance, plot, cuts, lumi, onlyCut=[], plotSt
                             if "cutspost" in nuisance and cutName not in nuisance["cutspost"]:
                                 continue
             
-                            if "stat" in nuisanceName:
+                            if nuisanceName == "stat":
                                 continue
             
                             if "type" in nuisance.keys() and (nuisance["type"] == "rateParam" or nuisance["type"] == "lnU"):
