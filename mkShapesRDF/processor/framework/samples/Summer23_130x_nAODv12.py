@@ -169,6 +169,12 @@ Samples['WWGtoLNu2QG'] = {
     'nanoAOD' : '/WWGtoLNu2QG-4FS_TuneCP5_13p6TeV_amcatnlo-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2/NANOAODSIM'
 }
 
+##### WWewk  
+
+Samples['WpWmJJ_EWK_noTop'] = {
+    'nanoAOD': '/VBS-OSWWto2L2Nu_noTop_TuneCP5_13p6TeV_madgraph-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2/NANOAODSIM'
+}
+
 ##### VH
 
 Samples['WminusH-HtoBB_WToLNu'] = {

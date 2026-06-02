@@ -312,6 +312,12 @@ Samples['GluGlutoContintoWWtoTauNuTauNu'] = {
     'nanoAOD' :'/GluGlutoContintoWWtoTauNuTauNu_TuneCP5_13p6TeV_mcfm701-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
 }
 
+##### WWewk
+
+Samples['WpWmJJ_EWK_noTop'] = {
+    'nanoAOD': '/VBS-OSWWto2L2Nu_noTop_TuneCP5_13p6TeV_madgraph-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
+
 ##### WZ
 
 Samples['WZTo3LNu'] = {
