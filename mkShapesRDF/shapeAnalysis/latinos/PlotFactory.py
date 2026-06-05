@@ -14,6 +14,8 @@ import re
 
 ROOT.gROOT.SetBatch(True)
 
+import shutil
+
 # ----------------------------------------------------- PlotFactory --------------------------------------
 
 
@@ -76,6 +78,18 @@ class PlotFactory:
 
         self._outputDirPlots = outputDirPlots
         os.system("mkdir " + outputDirPlots + "/")
+
+        #
+        # prepare index.php
+        #
+        # it assumes the file index.php exists in the folder PlotsConfigurationsRun3 (as it should)
+        # and you are working from a folder PlotsConfigurationsRun3/<my analysis>/
+        # or  you are working from a folder PlotsConfigurationsRun3/<my analysis>/<sub folder>   --> this is the case for several years analyses
+        #
+        if os.path.exists("../index.php"):
+            shutil.copy2("../index.php", self._outputDirPlots + "/" + "index.php")    # complete target filename given
+        if os.path.exists("../../index.php"):
+            shutil.copy2("../../index.php", self._outputDirPlots + "/" + "index.php") # complete target filename given
 
         #
         # prepare plotter.html
