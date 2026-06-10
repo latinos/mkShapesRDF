@@ -854,9 +854,13 @@ class RunAnalysis:
             _sample = list(filter(lambda k: k[0] == sampleName, self.samples))[0]
             for subsample in list(_sample[6].keys()):
                 # _sample[5] is the original dict, i.e. samples[sampleName]
-                flatten_samples_map = _sample[5].get(
-                    "flatten_samples_map", lambda sname, sub: "%s_%s" % (sname, sub)
+                
+                active_fsm = _sample[5].get(
+                    "flatten_samples_map", 0
                 )
+                if active_fsm == 0:  flatten_samples_map = lambda sname, sub: "%s_%s" % (sname, sub)
+                else: flatten_samples_map = lambda sname, sub: "%s" % (sub)
+                
                 new_subsample_name = flatten_samples_map(sampleName, subsample)
                 self.dfs[new_subsample_name] = {}
                 for index in self.dfs[sampleName].keys():
