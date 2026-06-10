@@ -176,7 +176,7 @@ class JMECalculator(Module):
                 jerTag = self.JER_era
                 ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", {jesUnc}, {addHEM}, \"{jerTag}\", \"{jsonFileSmearingTool}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
             else:
-                ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", std::vector<std::string>{{}}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", {jesUnc}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
             calc = getattr(ROOT, "myJetVariationsCalculator")
             jesSources = calc.available()
             jesSources = calc.available()[1:][::2]
@@ -241,7 +241,8 @@ class JMECalculator(Module):
                     df = df.Redefine(f"{JetColl}_jetIdx", f"{JetColl}_sorting")
                 else:
                     df = df.Redefine(f"{JetColl}_pt", "jetVars.pt(0)")
-                    df = df.Redefine(f"{JetColl}_mass", "jetVars.mass(0)")  
+                    df = df.Redefine(f"{JetColl}_mass", "jetVars.mass(0)")
+                    df = df.Define(f"tmp_{JetColl}_jetIdx", f"{JetColl}_jetIdx") 
             else:
                 df = df.Redefine(f"{JetColl}_sorting", f"Range({JetColl}_pt.size())")
 

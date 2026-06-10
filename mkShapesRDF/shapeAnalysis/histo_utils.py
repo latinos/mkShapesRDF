@@ -140,7 +140,7 @@ def postPlot(hTotal, doFold, unroll=True):
         stats1d[3] = stats2d[3] + stats2d[5]
         hTotal.PutStats(stats1d.GetArray())
 
-        hTotal_rolled.Delete()
+        #hTotal_rolled.Delete()
 
     if unroll and isinstance(hTotal, ROOT.TH3) and hTotal.GetDimension() == 3:
         # --- transform 2D into 1D
