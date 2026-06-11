@@ -261,10 +261,17 @@ class JMECalculator(Module):
                             f"tmp_{JetColl}_pt__JES_{source}_{tag}",
                             variation_pt,
                         )
-                        df = df.Define(
-                            f"tmp_{JetColl}_pt__JES_{source}_{tag}_sorting",
-                            f"ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(tmp_{JetColl}_pt__JES_{source}_{tag}))",
-                        )
+                        if 'TTTo2L2Nu_10k_nano' not in self.sampleName:
+                            df = df.Define(
+                                f"tmp_{JetColl}_pt__JES_{source}_{tag}_sorting",
+                                f"ROOT::VecOps::Reverse(ROOT::VecOps::Argsort(tmp_{JetColl}_pt__JES_{source}_{tag}))",
+                            )
+                        else:
+                            df = df.Define(
+                                f"tmp_{JetColl}_pt__JES_{source}_{tag}_sorting",
+                                f"Range({JetColl}_pt.size())",
+                            )
+
                         variations_pt.append(
                             f"Take(tmp_{JetColl}_pt__JES_{source}_{tag}, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)"
                         )
