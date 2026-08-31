@@ -30,18 +30,30 @@ class btagSFProducerLatinos(Module):
         self.max_abs_eta = """2.49999"""
         self.min_pt = """20.0001"""
 
-        if "2022" or "2023" in era:
+        if ("2022" in era) or ("2023" in era):
+            print ("here era =", era)
             self.prodTime = "Summer"
         else:
             print("btagSFProducerLatinos")
             print("-------------------")
             print("Warning: Production season unknown for " + era)
             print("Please check!!")
+            self.prodTime = ""
 
+        print ("self.prodTime = ", self.prodTime)
+
+        # NB: "era" must be a string
+        print ("era = ", era)
         year = re.findall(r'\d+', era)[0]
-        key = era.split("Full20")[1].split("v")[0]
-        
-        if framework_path:
+        if "Full20" in era:
+            key = era.split("Full20")[1].split("v")[0]
+        else:
+            key = ""
+
+        if "btagging.json.gz" in framework_path:
+            # in this case in the configuration file I have defined exactly the json file and no need for magic
+            pathToJson = framework_path
+        elif framework_path:
             pathToJson = framework_path.split("framework")[0] + "/processor/data/jsonpog-integration/POG/BTV/" + year + "_" + self.prodTime + key + "/btagging.json.gz"
         else:
             pathToJson = os.path.dirname(os.path.dirname(__file__)).split("processor")[0] + "/processor/data/jsonpog-integration/POG/BTV/" + year + "_" + self.prodTime + key + "/btagging.json.gz"
