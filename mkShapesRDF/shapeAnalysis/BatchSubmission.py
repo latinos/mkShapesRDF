@@ -2,9 +2,52 @@ import subprocess
 from pathlib import Path
 import os
 import shutil
+from copy import deepcopy
 
 
 class BatchSubmission:
+    @staticmethod
+    def _select_sample_config(config, sample_name):
+        """Return only configuration entries that apply to ``sample_name``.
+        """
+        selected = {}
+        for name, value in config.items():
+            if not isinstance(value, dict) or "samples" not in value:
+                selected[name] = deepcopy(value)
+                continue
+
+            sample_spec = value["samples"]
+            if sample_name not in sample_spec:
+                continue
+
+            selected[name] = deepcopy(value)
+            if isinstance(sample_spec, dict):
+                selected[name]["samples"] = {
+                    sample_name: deepcopy(sample_spec[sample_name])
+                }
+            elif isinstance(sample_spec, (list, tuple, set)):
+                selected[name]["samples"] = [sample_name]
+
+        return selected
+
+    def _batch_value(self, variable, sample_name):
+        """Get a batch variable, reducing sample-aware collections per job."""
+        value = self.d[variable]
+        if variable in ("aliases", "nuisances"):
+            value = self._select_sample_config(value, sample_name)
+        if variable == "nuisances":
+            for nuisance in value.values():
+                for folder_key in ("folderUp", "folderDown"):
+                    folders = nuisance.get(folder_key)
+                    if isinstance(folders, dict):
+                        nuisance[folder_key] = folders[sample_name]
+        return value
+
+    def _uses_default_runner(self):
+        """Return whether the bundled runner is being submitted."""
+        default_runner = Path(__file__).with_name("runner.py").resolve()
+        return Path(self.runnerPath).resolve() == default_runner
+
     @staticmethod
     def resubmitJobs(batchFolder, tag, samples, dryRun, queue):
         """
@@ -50,6 +93,7 @@ class BatchSubmission:
         d,
         batchVars,
         jdlconfigfile,
+        configFilePath="",
     ):
         self.project_folder = folder
         self.outputPath = outputPath
@@ -62,6 +106,7 @@ class BatchSubmission:
         self.d = d
         self.batchVars = batchVars
         self.jdlconfigfile = jdlconfigfile
+        self.configFilePath = configFilePath
 
         self.folders = []
 
@@ -86,21 +131,22 @@ class BatchSubmission:
 
         txtpy = "from collections import OrderedDict\n"
 
-        _samples = [sample]
-
-        txtpy += f"samples = {str(_samples)}\n"
-
-        for var in self.batchVars:
-            _var = var
-            if not isinstance(var, str):
-                _var = var[0]
-
-            if _var == "samples":
-                continue
-            if isinstance(self.d[_var], int) or isinstance(self.d[_var], float):
-                txtpy += f"{_var} = {self.d[_var]}\n"
-            else:
-                txtpy += f"{_var} = {str(self.d[_var])}\n"
+        if self._uses_default_runner() and len(sample) > 5:
+            sample_config = {key: sample[5][key] for key in ("flatten_samples_map",) if key in sample[5]}
+            sample = sample[:5] + (sample_config,) + sample[6:]
+        
+        txtpy += f"# 0: sample name, 1: files for this job, 2: computed weight, 3: chunk index, 4: isData, 5: reduced original config, 6: subsample definitions (if specified)\n"
+        txtpy += f"samples = {[sample]}\n"
+        
+        if not self._uses_default_runner():
+            for var in self.batchVars:
+                var = var if isinstance(var, str) else var[0]
+        
+                if var == "samples":
+                    continue
+        
+                value = self._batch_value(var, sampleName)
+                txtpy += f"{var} = {value!r}\n"
 
         with open(
             f"{self.batchFolder}/{self.tag}/{sampleName}_{str(i)}/script.py", "w"
@@ -178,14 +224,21 @@ class BatchSubmission:
         txtjdl += "should_transfer_files = YES\n"
 
         if use_jdlconfigfile:
-
-            for key in jdl_dict:
-                if jdl_dict[key] != "":
-
-                    txtjdl += key + " = " + jdl_dict[key] + "\n"
+            job_options = jdl_dict.copy()
+            if self._uses_default_runner():
+                transfer_files = job_options.get("transfer_input_files", "")
+                if self.configFilePath not in transfer_files:
+                    transfer_files = ", ".join(path for path in (transfer_files, self.configFilePath) if path)
+                job_options["transfer_input_files"] = transfer_files
+            for key, value in job_options.items():
+                if value != "":
+                    txtjdl += key + " = " + value + "\n"
         else:
 
-            txtjdl += f"transfer_input_files = $(Folder)/script.py, {self.headersPath}, {self.runnerPath}\n"
+            transfer_files = ["$(Folder)/script.py", self.headersPath, self.runnerPath]
+            if self._uses_default_runner():
+                transfer_files.append(self.configFilePath)
+            txtjdl += f'transfer_input_files = {", ".join(transfer_files)}\n'
 
         txtjdl += "output = $(Folder)/out.txt\n"
         txtjdl += "error  = $(Folder)/err.txt\n"

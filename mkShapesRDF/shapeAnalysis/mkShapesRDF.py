@@ -315,6 +315,7 @@ def main():
                 d,
                 batchVars,
                 globals().get("jdlconfigfile", ""),
+                f"{configsFolder}/config.json",
             )
             batch.createBatches()
             batch.submit(dryRun, queue)

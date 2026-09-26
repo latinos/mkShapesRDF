@@ -1323,7 +1323,36 @@ class RunAnalysis:
 
 
 if __name__ == "__main__":
+    import json
+    import os
+
     ROOT.gInterpreter.Declare('#include "headers.hh"')
     exec(open("script.py").read())
+    configFile = globals().get("configFile", "config.json")
+    if os.path.exists(configFile):
+        with open(configFile) as handle:
+            config = json.load(handle)
+        sampleName = samples[0][0]
+        
+        from mkShapesRDF.shapeAnalysis.BatchSubmission import BatchSubmission
+
+        aliases = BatchSubmission._select_sample_config(config["aliases"], sampleName)
+
+        variables = config["variables"]
+        cuts = config["cuts"]
+
+        nuisances = BatchSubmission._select_sample_config(config["nuisances"], sampleName)
+        for nuisance in nuisances.values():
+            for folderKey in ("folderUp", "folderDown"):
+                folders = nuisance.get(folderKey)
+                if isinstance(folders, dict):
+                    nuisance[folderKey] = folders[sampleName]
+
+        lumi = config["lumi"]
+
+    elif not all(name in globals() for name in ("aliases", "variables", "cuts", "nuisances", "lumi")):
+        raise FileNotFoundError(
+            f"{configFile} was not found and script.py has no inline configuration"
+        )
     runner = RunAnalysis(samples, aliases, variables, cuts, nuisances, lumi)
     runner.run()
