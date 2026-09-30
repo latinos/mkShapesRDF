@@ -538,6 +538,56 @@ Samples['WToLNu-2Jets'] = {
     'nanoAOD' :'/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
 }
 
+# W+Jets (4Jets HT-binned)
+
+Samples['WtoLNu-4Jets_MLNu-0to120_HT-40to100'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-0to120_HT-40to100_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v3/NANOAODSIM'
+}
+
+Samples['WtoLNu-4Jets_MLNu-0to120_HT-100to400'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-0to120_HT-100to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v3/NANOAODSIM'
+}
+
+Samples['WtoLNu-4Jets_MLNu-0to120_HT-400to800'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-0to120_HT-400to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v1/NANOAODSIM'
+}
+
+Samples['WtoLNu-4Jets_MLNu-0to120_HT-800to1500'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-0to120_HT-800to1500_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
+
+Samples['WtoLNu-4Jets_MLNu-0to120_HT-1500to2500'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-0to120_HT-1500to2500_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
+
+Samples['WtoLNu-4Jets_MLNu-0to120_HT-2500'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-0to120_HT-2500_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
+
+
+Samples['WtoLNu-4Jets_MLNu-120_HT-40to100'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-120_HT-40to100_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
+
+Samples['WtoLNu-4Jets_MLNu-120_HT-100to400'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-120_HT-100to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
+
+Samples['WtoLNu-4Jets_MLNu-120_HT-400to800'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-120_HT-400to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
+
+Samples['WtoLNu-4Jets_MLNu-120_HT-800to1500'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-120_HT-800to1500_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
+
+Samples['WtoLNu-4Jets_MLNu-120_HT-1500to2500'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-120_HT-1500to2500_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
+
+Samples['WtoLNu-4Jets_MLNu-120_HT-2500'] = {
+    'nanoAOD':'/WtoLNu-4Jets_MLNu-120_HT-2500_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM'
+}
 
 ##### QCD
 
