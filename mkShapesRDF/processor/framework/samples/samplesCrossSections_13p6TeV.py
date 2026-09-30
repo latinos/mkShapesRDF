@@ -336,7 +336,6 @@ xs_db['WH_H0Mf05_ToWWTo2L2Nu']   = ["xsec=1.00",     "kfact=1.00", "ref=X"]
 xs_db['WH_H0L1f05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
 
 # NPS-26-025 : DMsimp_spin0 samples
-'''
 # ttDM inclusive pseudoscalar
 xs_db['TTDMsimpSpin0_ps_mphi-10'] = ["xsec=0.5036", "kfact=1.000", "ref=I"]
 xs_db['TTDMsimpSpin0_ps_mphi-50'] = ["xsec=0.3467", "kfact=1.000", "ref=I"]
@@ -560,7 +559,6 @@ xs_db['TBDMsimpSpin0_s_mphi-600'] = ["xsec=0.002736", "kfact=1.000", "ref=I"]
 xs_db['TBDMsimpSpin0_s_mphi-700'] = ["xsec=0.001496", "kfact=1.000", "ref=I"]
 xs_db['TBDMsimpSpin0_s_mphi-800'] = ["xsec=0.0008878", "kfact=1.000", "ref=I"]
 xs_db['TBDMsimpSpin0_s_mphi-1000'] = ["xsec=0.0003546", "kfact=1.000", "ref=I"]
-'''
 
 # THIS IS OLD, AND COMES FROM RUN 2 UL!!
 #
