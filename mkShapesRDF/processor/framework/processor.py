@@ -194,7 +194,7 @@ class Processor:
             xsFile = Productions[self.prodName]["xsFile"]
             with open(self.path + xsFile) as file:
                 exec(file.read(), globals())
-            self.fPy += "xs_db = " + str(xs_db) + "\n"  # noqa F821
+            self.fPy += "xs_db = RPLME_XSDB\n"
 
         with open(self.path + Productions[self.prodName]["samples"]) as file:
             exec(file.read(), globals())
@@ -432,6 +432,10 @@ class Processor:
             nParts = ceil(len(files) / self.maxFilesPerJob)
 
             sample_fPy = self.fPy.replace("RPLME_SAMPLENAME", sampleName)
+            if not Productions[self.prodName]["isData"]:
+                sample_fPy = sample_fPy.replace(
+                    "RPLME_XSDB", str({sampleName: xs_db[sampleName]})  # noqa F821
+                )
 
             if "RPLME_genEventSumw" in self.fPy:
                 import ROOT
