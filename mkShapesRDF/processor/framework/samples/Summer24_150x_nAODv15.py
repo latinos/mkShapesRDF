@@ -170,6 +170,20 @@ Samples['WW'] = {
     'nanoAOD' :'/WW_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
 }
 
+###### SS WW 
+
+Samples['VBS_SSWW'] = {
+    'nanoAOD' :'/WpWpJJ-EWK-QCD_TuneCP5_13p6TeV_madgraph-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
+}
+
+Samples['WpWp_EWK_PWG'] = {
+    'nanoAOD' :'/WpWpJJ-EWK_TuneCP5_13p6TeV-powheg-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
+}
+
+Samples['WmWm_EWK_PWG'] = {
+    'nanoAOD' :'/WmWmJJ-EWK_TuneCP5_13p6TeV-powheg-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'
+}
+
 ##### VH
 
 Samples['WminusH-HtoBB_WToLNu'] = {

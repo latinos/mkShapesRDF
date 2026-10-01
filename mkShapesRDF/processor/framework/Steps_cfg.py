@@ -521,6 +521,51 @@ Steps = {
         ],
     },
 
+    # 2026
+    "DATAl2loose2026v15__l2loose": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepSel",
+            "jetIDMaker",
+            "JES_modules_reducedv15_DATA",
+            "jetSelMask",
+            "leptonScale_data",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "finalSnapshot_DATA",
+        ],
+    },
+    "DATAl2loose2026v15__l2tight": {
+        "isChain" : True,
+        "do4MC" : False,
+        "do4Data" : True,
+        "selection" : '"((nElectron+nMuon)>1)"',
+        "subTargets" : [
+            "lumiMask",
+            "leptonMaker",
+            "lepSel",
+            "jetIDMaker",
+            "JES_modules_reducedv15_DATA",
+            "jetSelMask",
+            "leptonScale_data",
+            "l2Kin",
+            "l3Kin",
+            "l4Kin",
+            "trigData",
+            "formulasDATA",
+            "l2tight",
+            "finalSnapshot_DATA",
+        ],
+    },
+
 
 
     #### 2022 -------

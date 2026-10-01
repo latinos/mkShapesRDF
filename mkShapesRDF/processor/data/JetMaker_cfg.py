@@ -76,6 +76,20 @@ JetMakerCfg = {
        
         }
     },
-
+    'Full2026v15': {  # Jet ID from 2024 for now 
+        "vetomap": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-26Prompt-Summer24-NanoAODv15/2026-07-15/jetvetomaps.json.gz",
+        "vetokey": "Summer24Prompt26_RunBCD_V1",
+        "JEC": "Summer24Prompt26_V1_MC",
+        "JEC_data" : "Summer24Prompt26_V1_DATA", 
+        "JER": "Summer24Prompt26_RunBD_JRV1_MC",       
+        "jet_jerc" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-26Prompt-Summer24-NanoAODv15/2026-07-15/jet_jerc.json.gz",
+        "jer_smear": frameworkPath + "/processor/data/jer_smear/jer_smear_run3.json.gz", 
+        "jetId": {
+            "json": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-26Prompt-Summer24-NanoAODv15/2026-07-15/jetid.json.gz", 
+            "tight" : "AK4PUPPI_Tight",
+            "tightleptonveto" : "AK4PUPPI_TightLeptonVeto",
+       
+        }
+    },
 }
 

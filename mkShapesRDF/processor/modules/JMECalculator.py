@@ -71,6 +71,8 @@ class JMECalculator(Module):
         if not self.isMC:
             self.do_JER = False
             self.store_variations = False
+            self.jes_unc = []
+
 
         self.json = ""
         self.JEC_era = ""
@@ -80,7 +82,7 @@ class JMECalculator(Module):
         self.isXYCorrJson = ""
         self.isXYCorrEra  = ""
         
-        if year in ["Full2024v15", "Full2025v15"]:
+        if year in ["Full2024v15", "Full2025v15", "Full2026v15"]:
             self.do_XYMET = False
         
         if self.year in JetMakerCfg.keys():

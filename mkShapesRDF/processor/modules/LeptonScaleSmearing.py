@@ -260,7 +260,7 @@ class LeptonScaleSmearing(Module):
             "PuppiMET_LeptonScale",
             "CorrectMET(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, PuppiMET_pt, PuppiMET_phi)"
         )
-        if "24" in self.era or "25" in self.era:
+        if "24" in self.era or "25" in self.era or "26" in self.era:
             df = df.Define(
                 "PFMET_LeptonScale",
                 "CorrectMET(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, PFMET_pt, PFMET_phi)"

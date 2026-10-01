@@ -115,6 +115,17 @@ xs_db["ggWW_TL"]      = ["xsec=0.0087", "kfact=1.000", "ref=X"] ## 0.08195
 xs_db["WWG"]        = ["xsec=0.3959", "kfact=1.0", "ref=G"]      # inclusive WWγ
 xs_db["WWGtoLNu2QG"] = ["xsec=0.359", "kfact=1.0", "ref=G"]      # lν qq γ final state
 
+### SS WW
+xs_db['VBS_SSWW']           = ["xsec=0.05891", "kfact=1.0", "ref=I"] #inclusive in polarization
+# xs_db['WpWp_EWK_PWG']       = ["xsec=", "kfact=1.0", "ref=I"] #inclusive in polarization, only ++ charge
+# xs_db['WmWm_EWK_PWG']       = ["xsec=", "kfact=1.0", "ref=I"] #inclusive in polarization, only -- charge
+xs_db['VBS_SSWW_LL']        = ["xsec=0.002183", "kfact=1.0", "ref=I"]
+xs_db['VBS_SSWW_WWCM_LL']   = ["xsec=0.003213", "kfact=1.0", "ref=I"]
+xs_db['VBS_SSWW_TL']        = ["xsec=0.01150", "kfact=1.0", "ref=I"]
+xs_db['VBS_SSWW_WWCM_TL']   = ["xsec=0.009951", "kfact=1.0", "ref=I"]
+xs_db['VBS_SSWW_TT']        = ["xsec=0.01762", "kfact=1.0", "ref=I"]
+xs_db['VBS_SSWW_WWCM_TT']   = ["xsec=0.01813", "kfact=1.0", "ref=I"]
+
 ### Top
 xs_db["TTTo2L2Nu"]                    = ["xsec=98.036", "kfact=1.000", "ref=C"] # 923.6 * (3*0.1086) * (3*0.1086)
 xs_db["TTTo2L2Nu_TuneCP5Up"]          = ["xsec=98.036", "kfact=1.000", "ref=C"]
