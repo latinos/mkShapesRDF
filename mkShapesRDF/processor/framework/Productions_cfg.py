@@ -222,4 +222,13 @@ Productions = {
         "xsFile": "../framework/samples/samplesCrossSections_13p6TeV.py",
         "YRver": ["YR4", "13p6TeV"],
     },
+    # ------- Full RunIII MC Summer24 v15 for 24+25+26
+    "Summer24_150x_nAODv15_FullRunIIIv15": {
+        "isData": False,
+        "samples": "../framework/samples/Summer24_150x_nAODv15.py",
+        "cmssw": "FullRunIIIv15",
+        "year": "2024",
+        "xsFile": "../framework/samples/samplesCrossSections_13p6TeV.py",
+        "YRver": ["YR4", "13p6TeV"],
+    },
 }

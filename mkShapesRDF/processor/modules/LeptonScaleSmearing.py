@@ -33,51 +33,91 @@ class LeptonScaleSmearing(Module):
             self.muonscale_path = os.path.dirname(os.path.dirname(__file__)).split("processor")[0] + "/processor/data/muon_scale"
             self.elescale_path = os.path.dirname(os.path.dirname(__file__)).split("processor")[0] + "/processor/data/jsonpog-integration/POG/EGM"
             self.macroele_path = os.path.dirname(os.path.dirname(__file__)).split("processor")[0] + "/processor/data/electron_scale"      
-            
-        if "2022" in era or "2023" in era or "2024" in era:
-            self.prodTime = "Summer"
-        else:
-            print("LeptonScaleSmearing")
-            print("-------------------")
-            print("Warning: Production season unknown for " + era)
-            print("Please check!!")
-            
-        year = re.findall(r'\d+', era)[0]
-        key = era.split("Full20")[1].split("v")[0]
 
         # We use the EtDependent corrections, as recommended here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgammSFandSSRun3 
         self.muoncorrection_file = MuonWP[era]["ScaleAndSmearing"]
-        self.elecorrection_file = ElectronWP[era]["ScaleAndSmearing"]        
-        
+        self.elecorrection_file = ElectronWP[era]["ScaleAndSmearing"]
+
+        self.runPeriods = None
+        if type(MuonWP[era]["ScaleAndSmearing"]) == dict:
+            self.runPeriods = MuonWP[era]["ScaleAndSmearing"].keys() # Assume same runPeriods for electrons and muons
+
         # This section computes the `year_key` needed to access the correct part of the correction files.  
         # Since valid year_keys are ['2022preEE', '2022postEE', '2023preBPIX', '2023postBPIX', '2024'],  
-        # the `year_key` must include at least one letter.  
+        # the `year_key` must include at least one letter.
 
-        evaluator = correctionlib.CorrectionSet.from_file(self.elecorrection_file)
-        keys = list(evaluator.keys())
-        for key in keys:            
-            year_key = key.split('_')[-1]
-            if not any(c.isalpha() for c in year_key):
-                self.year_key = year_key  
-                break
-            else:
-                self.year_key = year_key
+        if self.runPeriods:
+            self.year_key = {}
+            for run in self.runPeriods:
+                evaluator = correctionlib.CorrectionSet.from_file(self.elecorrection_file[run])
+                keys = list(evaluator.keys())
+                for key in keys:
+                    year_key = key.split('_')[-1]
+                    if not any(c.isalpha() for c in year_key):
+                        self.year_key[run] = year_key  
+                        break
+                    else:
+                        self.year_key[run] = year_key
+        else:
+            evaluator = correctionlib.CorrectionSet.from_file(self.elecorrection_file)
+            keys = list(evaluator.keys())
+            for key in keys:
+                year_key = key.split('_')[-1]
+                if not any(c.isalpha() for c in year_key):
+                    self.year_key = year_key  
+                    break
+                else:
+                    self.year_key = year_key
                 
         print(self.elecorrection_file)
-        print(self.year_key) 
+        print(self.year_key)
 
         print(f"LeptonScaleSmearing: running scale and smearing corrections for leptons from {era}")
         
     def runModule(self, df, values):
         # Note that the elecset_scale is a CompoundCorrection object
 
-        ROOT.gROOT.ProcessLine(
-            f'auto cset = correction::CorrectionSet::from_file("{self.muoncorrection_file}");'
-            f'auto elecset = correction::CorrectionSet::from_file("{self.elecorrection_file}");'
-            f'correction::CompoundCorrection::Ref elecset_scale = elecset->compound().at("Scale");'
-            #f'correction::CompoundCorrection::Ref elecset_smear = elecset->compound().at("SmearAndSyst");'
-            f'auto elecset_smear = elecset->at("EGMSmearAndSyst_ElePT_{self.year_key}");'
-        )            
+        if self.runPeriods:
+            for run in self.runPeriods:
+                ROOT.gROOT.ProcessLine(
+                    f'std::shared_ptr<correction::CorrectionSet> cset_{run} = correction::CorrectionSet::from_file("{self.muoncorrection_file[run]}");'
+                    f'std::shared_ptr<correction::CorrectionSet> elecset_{run} = correction::CorrectionSet::from_file("{self.elecorrection_file[run]}");'
+                    f'correction::CompoundCorrection::Ref elecset_scale_{run} = elecset_{run}->compound().at("Scale");'
+                    f'correction::Correction::Ref elecset_smear_{run} = elecset_{run}->at("EGMSmearAndSyst_ElePT_{self.year_key[run]}");'
+                )
+        else:
+            ROOT.gROOT.ProcessLine(
+                f'auto cset = correction::CorrectionSet::from_file("{self.muoncorrection_file}");'
+                f'auto elecset = correction::CorrectionSet::from_file("{self.elecorrection_file}");'
+                f'correction::CompoundCorrection::Ref elecset_scale = elecset->compound().at("Scale");'
+                #f'correction::CompoundCorrection::Ref elecset_smear = elecset->compound().at("SmearAndSyst");'
+                f'auto elecset_smear = elecset->at("EGMSmearAndSyst_ElePT_{self.year_key}");'
+            )            
+
+        #### re-write csets to include run_period as an argument for scale corrections
+        text_to_add = ""
+        if self.runPeriods:
+            # Default-constructed globals; no need to rely on the leftover `run` from the loop
+            ROOT.gROOT.ProcessLine(
+                'std::shared_ptr<correction::CorrectionSet> cset;'
+                'correction::CompoundCorrection::Ref elecset_scale;'
+                'correction::Correction::Ref elecset_smear;'
+            )
+
+            #ROOT.gROOT.ProcessLine(
+            #    f'auto cset = cset_{run};'
+            #    f'correction::CompoundCorrection::Ref elecset_scale = elecset_scale_{run};'
+            #    f'auto elecset_smear = elecset_{run};'
+            #) ## Temporary for initialization
+
+            for run in self.runPeriods:
+                text_to_add += f"""
+                if (run_period == {run}) {{
+                    cset = cset_{run};
+                    elecset_scale = elecset_scale_{run};
+                    elecset_smear = elecset_smear_{run};
+                }}
+                """
 
         ROOT.gROOT.ProcessLine(f'#include "{self.muonscale_path}/MuonScaRe.cc"')
         ROOT.gROOT.ProcessLine(f'#include "{self.macroele_path}/scEta.cc"')
@@ -86,6 +126,7 @@ class LeptonScaleSmearing(Module):
 
         # Function to loop over leptons and run the scale corrections. For more details, refer to the macros.
         if not hasattr(ROOT, "doLeptonScale"):
+
             ROOT.gInterpreter.Declare(
                 """
                 std::vector<RVecF> doLeptonScale(RVecF Lepton_pt,
@@ -100,7 +141,8 @@ class LeptonScaleSmearing(Module):
                                                RVecI Lepton_electronIdx,
                                                RVecF Electron_deltaEtaSC,
                                                float run,
-                                               bool is_data)
+                                               bool is_data,
+                                               int run_period=-1)
                 {
                     
                     float tmpScale_mc;
@@ -112,6 +154,8 @@ class LeptonScaleSmearing(Module):
 
                     static TRandom3 rng(125);
                     
+                    """ + text_to_add + """
+
                     std::vector<RVecF> results = {Lepton_newPt, Lepton_newPt_ScaleUp, Lepton_newPt_ScaleDn, Lepton_newPt_ResUp, Lepton_newPt_ResDn};
                     
                     if (is_data){
@@ -125,7 +169,6 @@ class LeptonScaleSmearing(Module):
                             {
                                 float sc_eta = Lepton_eta[i] + Electron_deltaEtaSC[Lepton_electronIdx[i]];
                                 Lepton_newPt[i] = ele_scale(run, sc_eta, Electron_r9[Lepton_electronIdx[i]], Lepton_pt[i], (float)Electron_seedGain[Lepton_electronIdx[i]]);
-
                             }
                         }
                         results[0] = Lepton_newPt;
@@ -211,7 +254,7 @@ class LeptonScaleSmearing(Module):
         print(isData)
         df = df.Define(
             "Lepton_ScaleSmearing",
-            f"doLeptonScale(Lepton_pt, Lepton_phi, Lepton_eta, Muon_charge, Lepton_pdgId, Lepton_muonIdx, Muon_nTrackerLayers,  Electron_seedGain, Electron_r9, Lepton_electronIdx, Electron_deltaEtaSC, run, {isData})"
+            f"doLeptonScale(Lepton_pt, Lepton_phi, Lepton_eta, Muon_charge, Lepton_pdgId, Lepton_muonIdx, Muon_nTrackerLayers,  Electron_seedGain, Electron_r9, Lepton_electronIdx, Electron_deltaEtaSC, run, {isData}, run_period)"
         )
 
         df = df.Define(
@@ -260,7 +303,7 @@ class LeptonScaleSmearing(Module):
             "PuppiMET_LeptonScale",
             "CorrectMET(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, PuppiMET_pt, PuppiMET_phi)"
         )
-        if "24" in self.era or "25" in self.era:
+        if "24" in self.era or "25" in self.era or "RunIII" in self.era:
             df = df.Define(
                 "PFMET_LeptonScale",
                 "CorrectMET(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, PFMET_pt, PFMET_phi)"

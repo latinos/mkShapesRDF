@@ -72,6 +72,8 @@ class JMECalculator(Module):
             self.do_JER = False
             self.store_variations = False
 
+        self.runPeriods = None
+
         self.json = ""
         self.JEC_era = ""
         self.JER_era = ""
@@ -80,20 +82,51 @@ class JMECalculator(Module):
         self.isXYCorrJson = ""
         self.isXYCorrEra  = ""
         
-        if year in ["Full2024v15", "Full2025v15"]:
-            self.do_XYMET = False
-        
         if self.year in JetMakerCfg.keys():
-            self.json = JetMakerCfg[self.year]["jet_jerc"]
-            if self.isMC:
-                self.JEC_era = JetMakerCfg[self.year]["JEC"]
+            if "1" in JetMakerCfg[self.year].keys(): # Assumes always starts by 1
+                self.runPeriods = JetMakerCfg[self.year].keys()
+            
+            if self.runPeriods:
+
+                self.json = {}
+                self.JEC_era = {}
+                self.JER_era = {}
+                self.jsonFileSmearingTool = {}
+            
+                self.isXYCorrJson = {}
+                self.isXYCorrEra  = {}
+
+                for runP in self.runPeriods:
+                    self.json[runP] = JetMakerCfg[self.year][runP]["jet_jerc"]
+                    if self.isMC:
+                        self.JEC_era[runP] = JetMakerCfg[self.year][runP]["JEC"]
+                    else:
+                        self.JEC_era[runP] = JetMakerCfg[self.year][runP]["JEC_data"]
+                    self.JER_era[runP] = JetMakerCfg[self.year][runP]["JER"]
+                    self.jsonFileSmearingTool[runP] = JetMakerCfg[self.year][runP]["jer_smear"]
+            
+                    if "met_xy_era" not in JetMakerCfg[self.year][runP].keys():
+                        self.do_XYMET = False
+            
+                    if self.do_XYMET:
+                        self.isXYCorrJson[runP] = JetMakerCfg[self.year][runP]["met_xy_json"]
+                        self.isXYCorrEra[runP] = JetMakerCfg[self.year][runP]["met_xy_era"]
+
             else:
-                self.JEC_era = JetMakerCfg[self.year]["JEC_data"]
-            self.JER_era = JetMakerCfg[self.year]["JER"]
-            self.jsonFileSmearingTool = JetMakerCfg[self.year]["jer_smear"]
-            if self.do_XYMET:
-                self.isXYCorrJson = JetMakerCfg[self.year]["met_xy_json"]
-                self.isXYCorrEra = JetMakerCfg[self.year]["met_xy_era"]
+                self.json = JetMakerCfg[self.year]["jet_jerc"]
+                if self.isMC:
+                    self.JEC_era = JetMakerCfg[self.year]["JEC"]
+                else:
+                    self.JEC_era = JetMakerCfg[self.year]["JEC_data"]
+                self.JER_era = JetMakerCfg[self.year]["JER"]
+                self.jsonFileSmearingTool = JetMakerCfg[self.year]["jer_smear"]
+
+                if "met_xy_era" not in JetMakerCfg[self.year].keys():
+                    self.do_XYMET = False
+
+                if self.do_XYMET:
+                    self.isXYCorrJson = JetMakerCfg[self.year]["met_xy_json"]
+                    self.isXYCorrEra = JetMakerCfg[self.year]["met_xy_era"]
 
     def runModule(self, df, values):
         ROOT.gInterpreter.Declare(
@@ -125,20 +158,34 @@ class JMECalculator(Module):
         jetAlgo 	= self.jet_object
         jecTag  	= self.JEC_era
         jes_unc     = self.jes_unc
-        year        = self.year
+        year        = self.year if "FullRunIII" not in self.year else "Full2024v15" ## Take 2024 uncertainty schema for FullRunIII
         jerTag 		= ""
         jsonFileSmearingTool = self.jsonFileSmearingTool
         jecLevel    = "L1L2L3Res"
         L1JecTag    = ""
         ROOT.gROOT.ProcessLine("std::vector<string> jesUnc{}")
-        jesUnc = getattr(ROOT, "jesUnc")
-        for jes_var in jes_unc:
-            if "YEAR" in jes_var:
-                print(jes_var.replace("YEAR", self.year.split("Full")[1].split("v")[0]))
-                jesUnc.push_back(jes_var.replace("YEAR", self.year.split("Full")[1].split("v")[0]))
-            else:
-                print(jes_var)
-                jesUnc.push_back(jes_var)
+        if self.runPeriods:
+            jesUnc = {}
+            for runP in self.runPeriods:
+                ROOT.gROOT.ProcessLine(f"std::vector<string> jesUnc_{runP}{{}}")
+                jesUnc[runP] = getattr(ROOT, f"jesUnc_{runP}")
+                for jes_var in jes_unc:
+                    if "YEAR" in jes_var:
+                        print(jes_var.replace("YEAR", JetMakerCfg[self.year][runP]["year"]))
+                        jesUnc[runP].push_back(jes_var.replace("YEAR", JetMakerCfg[self.year][runP]["year"]))
+                    else:
+                        print(jes_var)
+                        jesUnc[runP].push_back(jes_var)
+        else:
+            jesUnc = getattr(ROOT, "jesUnc")
+            for jes_var in jes_unc:
+                if "YEAR" in jes_var:
+                    print(jes_var.replace("YEAR", self.year.split("Full")[1].split("v")[0]))
+                    jesUnc.push_back(jes_var.replace("YEAR", self.year.split("Full")[1].split("v")[0]))
+                else:
+                    print(jes_var)
+                    jesUnc.push_back(jes_var)
+
         addHEM      = "false"
         smearingTool= "JERSmear"
         maxDR       = 0.2
@@ -174,17 +221,41 @@ class JMECalculator(Module):
         if self.do_Jets:
             if self.do_JER:
                 jerTag = self.JER_era
-                ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", {jesUnc}, {addHEM}, \"{jerTag}\", \"{jsonFileSmearingTool}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
+                if self.runPeriods:
+                    for runP in self.runPeriods:
+                        ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator_{runP} = JetVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", {jesUnc[runP]}, {addHEM}, \"{jerTag[runP]}\", \"{jsonFileSmearingTool[runP]}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
+                else:
+                    ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", {jesUnc}, {addHEM}, \"{jerTag}\", \"{jsonFileSmearingTool}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
             else:
-                ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", {jesUnc}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
-            calc = getattr(ROOT, "myJetVariationsCalculator")
-            jesSources = calc.available()
-            jesSources = calc.available()[1:][::2]
-            jesSources = [str(source).replace('up', '') for source in jesSources]
-            print(jesSources)
+                if self.runPeriods:
+                    for runP in self.runPeriods:
+                        ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator_{runP} = JetVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", {jesUnc[runP]}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                else:
+                    ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", {jesUnc}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+
+            if self.runPeriods:
+                #
+                # The jet uncertainties follow the same order in 2024, 2025, and 2026; with the 
+                # unique difference being the label "2024", "2025", or "2026". Therefore, the naming is 
+                # standardized to "YEAR" for its future analysis, being in reality the per year stat. uncertainty.
+                #
+
+                calc = getattr(ROOT, "myJetVariationsCalculator_1")
+                jesSources = calc.available()
+                jesSources = calc.available()[1:][::2]
+                jesSources = [str(source).replace('up', '') for source in jesSources]
+                jesSources = [str(source).replace(JetMakerCfg[self.year][next(iter(JetMakerCfg[self.year]))]["year"], 'YEAR') for source in jesSources]
+                print(jesSources)
+            else: 
+                calc = getattr(ROOT, "myJetVariationsCalculator")
+                jesSources = calc.available()
+                jesSources = calc.available()[1:][::2]
+                jesSources = [str(source).replace('up', '') for source in jesSources]
+                print(jesSources)
             
             # list of columns to be passed to myJetVarCal produce
             cols = []
+            colsWithType = []
 
             # nre reco jet coll
             JetColl = "CorrectedJet"
@@ -197,34 +268,90 @@ class JMECalculator(Module):
             cols.append("Jet_area")
             cols.append("Jet_jetId")
 
+            colsWithType.append("ROOT::RVecF Jet_pt")
+            colsWithType.append("ROOT::RVecF Jet_eta")
+            colsWithType.append("ROOT::RVecF Jet_phi")
+            colsWithType.append("ROOT::RVecF Jet_mass")
+            colsWithType.append("ROOT::RVecF Jet_rawFactor")
+            colsWithType.append("ROOT::RVecF Jet_area")
+            colsWithType.append("ROOT::RVecI Jet_jetId")
+
             # rho
             cols.append("Rho_fixedGridRhoFastjetAll")
+            colsWithType.append("float Rho_fixedGridRhoFastjetAll")
 
             if self.isMC: 
                 cols.append("Jet_genJetIdx")
                 cols.append("Jet_partonFlavour")
+                colsWithType.append("ROOT::RVecI Jet_genJetIdx")
+                colsWithType.append("ROOT::RVecI Jet_partonFlavour")
+
                 # seed
+                df = df.Define("tmp_seed", "(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)")
                 cols.append(
-                    f"(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)"
+                    f"tmp_seed"
                 )
-                cols.append("-1.0")    
+                colsWithType.append("int tmp_seed=0")
+                cols.append("-1.0")
+                colsWithType.append("int run=-1")
+
                 # gen jet coll
                 cols.append("GenJet_pt")
                 cols.append("GenJet_eta")
                 cols.append("GenJet_phi")
                 cols.append("GenJet_mass")
+                colsWithType.append("ROOT::RVecF GenJet_pt=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF GenJet_eta=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF GenJet_phi=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF GenJet_mass=ROOT::RVecF{}")
             else:
                 # Basically, these variables are needed for the smearing and don't exist for data, so we set those to empty vectors
-                cols.append("ROOT::RVecI{}") # Jet_genJetIdx
-                cols.append("ROOT::RVecI{}") # Jet_partonFlavour
-                cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
+                cols.append("ROOT::RVecI{}") # Jet_genJetIdx                                                                                                                                                                                                                    
+                cols.append("ROOT::RVecI{}") # Jet_partonFlavour                                                                                                                                                                                                                
+                cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data                                                                                              
                 cols.append("run")
-                cols.append("ROOT::RVecF{}") # GenJet_pt
-                cols.append("ROOT::RVecF{}") # GenJet_eta
-                cols.append("ROOT::RVecF{}") # GenJet_phi
-                cols.append("ROOT::RVecF{}") # GenJet_mass
+                cols.append("ROOT::RVecF{}") # GenJet_pt                                                                                                                                                                                                                        
+                cols.append("ROOT::RVecF{}") # GenJet_eta                                                                                                                                                                                                                       
+                cols.append("ROOT::RVecF{}") # GenJet_phi                                                                                                                                                                                                                       
+                cols.append("ROOT::RVecF{}") # GenJet_mass 
 
-            df = df.Define("jetVars", f'myJetVariationsCalculator.produce({", ".join(cols)})')
+                colsWithType.append("ROOT::RVecI Jet_genJetIdx=ROOT::RVecI{}")
+                colsWithType.append("ROOT::RVecI Jet_partonFlavour=ROOT::RVecI{}")
+                colsWithType.append("int seed=0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
+                colsWithType.append("int run=run")
+                colsWithType.append("ROOT::RVecF GenJet_pt=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF GenJet_eta=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF GenJet_phi=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF GenJet_mass=ROOT::RVecF{}")
+
+
+            ### Create a function to handle the corrections per run period
+            text_per_run = ""
+            if self.runPeriods:
+                for runP in self.runPeriods:
+                    text_per_run += f"""
+                    if (runPeriod == {runP}) {{
+                        return myJetVariationsCalculator_{runP}.produce({", ".join(cols)});
+                    }}
+                    """
+
+            ROOT.gInterpreter.Declare(
+                """
+                #include "JetVariationsCalculator.h"
+                #include "CMSCalculatorsUtilities.h"
+
+                JetVariationsCalculator::result_t getPerRunJets(int runPeriod, """ + ", ".join(colsWithType) + """) {
+                    JetVariationsCalculator::result_t result;    
+                    """+text_per_run+"""
+                    return result; // Return an empty result if no matching run period is found
+                }
+                """
+            )
+
+            if self.runPeriods:
+                df = df.Define("jetVars", f'getPerRunJets(run_period, {", ".join(cols)})')
+            else:
+                df = df.Define("jetVars", f'myJetVariationsCalculator.produce({", ".join(cols)})')
 
             if self.store_nominal:
                 if 'TTTo2L2Nu_10k_nano' not in self.sampleName:
@@ -360,12 +487,25 @@ class JMECalculator(Module):
             isT1smearedMET  = "false"
 
             isXYCorrected = "false"
-            met_xy_json = ""
-            met_xy_era = ""
-            if self.do_XYMET :
-                isXYCorrected = "true"
-                met_xy_json = self.isXYCorrJson
-                met_xy_era = self.isXYCorrEra
+            if self.runPeriods:
+                met_xy_json = {}
+                met_xy_era = {}
+                for runP in self.runPeriods:
+                    if self.do_XYMET :
+                        isXYCorrected = "true"
+                        met_xy_json[runP] = self.isXYCorrJson[runP]
+                        met_xy_era[runP] = self.isXYCorrEra[runP]
+                    else:
+                        met_xy_json[runP] = ""
+                        met_xy_era[runP] = ""
+            else:
+                if self.do_XYMET :
+                    isXYCorrected = "true"
+                    met_xy_json = self.isXYCorrJson
+                    met_xy_era = self.isXYCorrEra
+                else:
+                    met_xy_json = ""
+                    met_xy_era = ""
 
             is_mc = "false"
             if self.isMC:
@@ -375,16 +515,33 @@ class JMECalculator(Module):
                 if self.do_JER and "Puppi" in MET:
                     jerTag          = self.JER_era
                     isT1smearedMET  = "true"
-                    ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json}\", \"{met_xy_era}\", {is_mc}, \"{jerTag}\", \"{jsonFileSmearingTool}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
+                    if self.runPeriods:
+                        for runP in self.runPeriods:
+                            ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc_{runP} = Type1METVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc[runP]}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json[runP]}\", \"{met_xy_era[runP]}\", {is_mc}, \"{jerTag[runP]}\", \"{jsonFileSmearingTool[runP]}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
+                    else:
+                        ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json}\", \"{met_xy_era}\", {is_mc}, \"{jerTag}\", \"{jsonFileSmearingTool}\", \"{smearingTool}\", false, true, {maxDR}, {maxDPT});")
                 else:
-                    ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json}\", \"{met_xy_era}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
-                calcMET = getattr(ROOT, f"my{MET}VarCalc")
-                METSources = calcMET.available()
-                METSources = calcMET.available()[1:][::2]
-                METSources = [str(source).replace('up', '') for source in METSources]
+                    if self.runPeriods:
+                        for runP in self.runPeriods:
+                            ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc_{runP} = Type1METVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc[runP]}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json[runP]}\", \"{met_xy_era[runP]}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                    else:
+                        ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json}\", \"{met_xy_era}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+
+                if self.runPeriods:
+                    calcMET = getattr(ROOT, f"my{MET}VarCalc_1")
+                    METSources = calcMET.available()
+                    METSources = calcMET.available()[1:][::2]
+                    METSources = [str(source).replace('up', '') for source in METSources]
+                    METSources = [str(source).replace(JetMakerCfg[self.year][next(iter(JetMakerCfg[self.year]))]["year"], 'YEAR') for source in METSources]
+                else:   
+                    calcMET = getattr(ROOT, f"my{MET}VarCalc")
+                    METSources = calcMET.available()
+                    METSources = calcMET.available()[1:][::2]
+                    METSources = [str(source).replace('up', '') for source in METSources]
                 
                 # list of columns to be passed to myJetVarCal produce
                 cols = []
+                colsWithType = []
 
                 cols.append("Jet_pt")
                 cols.append("Jet_eta")
@@ -393,26 +550,56 @@ class JMECalculator(Module):
                 cols.append("Jet_rawFactor")
                 cols.append("Jet_area")
                 cols.append("Jet_muonSubtrFactor")
+                # muonSubtrFactorPhi for v15 and above
+                if "v12" in self.year:
+                    cols.append("ROOT::RVecF{}")
+                else:
+                    cols.append("Jet_muonSubtrDeltaPhi")
+
                 cols.append("Jet_neEmEF")
                 cols.append("Jet_chEmEF")
                 cols.append("Jet_jetId")
+
+                colsWithType.append("ROOT::RVecF Jet_pt")
+                colsWithType.append("ROOT::RVecF Jet_eta")
+                colsWithType.append("ROOT::RVecF Jet_phi")
+                colsWithType.append("ROOT::RVecF Jet_mass")
+                colsWithType.append("ROOT::RVecF Jet_rawFactor")
+                colsWithType.append("ROOT::RVecF Jet_area")
+                colsWithType.append("ROOT::RVecF Jet_muonSubtrFactor")
+                colsWithType.append("ROOT::RVecF Jet_muonSubtrDeltaPhi")
+                colsWithType.append("ROOT::RVecF Jet_neEmEF")
+                colsWithType.append("ROOT::RVecF Jet_chEmEF")
+                colsWithType.append("ROOT::RVecI Jet_jetId")
     
                 # rho
                 cols.append("Rho_fixedGridRhoFastjetAll")
+                colsWithType.append("float Rho_fixedGridRhoFastjetAll")
 
                 if self.isMC: 
                     cols.append("Jet_genJetIdx")
                     cols.append("Jet_partonFlavour")
+
+                    colsWithType.append("ROOT::RVecI Jet_genJetIdx")
+                    colsWithType.append("ROOT::RVecI Jet_partonFlavour")
+
                     # seed
+                    df = df.Define("tmp_met_seed", "(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)")
                     cols.append(
-                        f"(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)"
+                        f"tmp_met_seed"
                     )
-                    cols.append("-1.0")    
+                    colsWithType.append("int tmp_met_seed=0")
+                    cols.append("-1.0")
+                    colsWithType.append("int run=-1") 
                     # gen jet coll
                     cols.append("GenJet_pt")
                     cols.append("GenJet_eta")
                     cols.append("GenJet_phi")
                     cols.append("GenJet_mass")
+                    colsWithType.append("ROOT::RVecF GenJet_pt=ROOT::RVecF{}")
+                    colsWithType.append("ROOT::RVecF GenJet_eta=ROOT::RVecF{}")
+                    colsWithType.append("ROOT::RVecF GenJet_phi=ROOT::RVecF{}")
+                    colsWithType.append("ROOT::RVecF GenJet_mass=ROOT::RVecF{}")
                 else:
                     # Basically, these variables are nedded for the smearing and don't exist for data, so we set those to empty vectors
                     cols.append("ROOT::RVecI{}") # Jet_genJetIdx
@@ -424,6 +611,15 @@ class JMECalculator(Module):
                     cols.append("ROOT::RVecF{}") # GenJet_phi
                     cols.append("ROOT::RVecF{}") # GenJet_mass
 
+                    colsWithType.append("ROOT::RVecI Jet_genJetIdx=ROOT::RVecI{}")
+                    colsWithType.append("ROOT::RVecI Jet_partonFlavour=ROOT::RVecI{}")
+                    colsWithType.append("int seed=0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
+                    colsWithType.append("int run=run")
+                    colsWithType.append("ROOT::RVecF GenJet_pt=ROOT::RVecF{}")
+                    colsWithType.append("ROOT::RVecF GenJet_eta=ROOT::RVecF{}")
+                    colsWithType.append("ROOT::RVecF GenJet_phi=ROOT::RVecF{}")
+                    colsWithType.append("ROOT::RVecF GenJet_mass=ROOT::RVecF{}")
+
                 if "v15" in self.year:
                     RawMET = "RawPFMET" if "Puppi" not in MET else "RawPuppiMET"
                 else:
@@ -431,14 +627,30 @@ class JMECalculator(Module):
                 cols.append(f"{RawMET}_phi")
                 cols.append(f"{RawMET}_pt")
 
+                colsWithType.append(f"float {RawMET}_phi=0.0")
+                colsWithType.append(f"float {RawMET}_pt=0.0")
+
                 df = df.Define('EmptyLowPtJet', 'ROOT::RVecF{}')
                 cols.append("CorrT1METJet_rawPt")
                 cols.append("CorrT1METJet_eta")
                 cols.append("CorrT1METJet_phi")
                 cols.append("CorrT1METJet_area")
                 cols.append("CorrT1METJet_muonSubtrFactor")
+                if "v12" in self.year:
+                    cols.append("ROOT::RVecF {}")
+                else:
+                    cols.append("CorrT1METJet_muonSubtrDeltaPhi")
                 cols.append("ROOT::RVecF {}")
                 cols.append("ROOT::RVecF {}")
+
+                colsWithType.append("ROOT::RVecF CorrT1METJet_rawPt=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_eta=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_phi=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_area=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_muonSubtrFactor=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_muonSubtrDeltaPhi=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF EmptyLowPtJet_neEmEF=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF EmptyLowPtJet_chEmEF=ROOT::RVecF{}")
 
                 ## Always use the differences defined as the following, for all Run3 eras.
                 if "Puppi" not in MET:
@@ -453,9 +665,15 @@ class JMECalculator(Module):
                         )
                         cols.append("PFMET_MetUnclustEnUpDeltaX")
                         cols.append("PFMET_MetUnclustEnUpDeltaY")
+
+                        colsWithType.append("float PFMET_MetUnclustEnUpDeltaX=0.")
+                        colsWithType.append("float PFMET_MetUnclustEnUpDeltaY=0.")
                     else:
                         cols.append("MET_MetUnclustEnUpDeltaX")
                         cols.append("MET_MetUnclustEnUpDeltaY")
+
+                        colsWithType.append("float MET_MetUnclustEnUpDeltaX=0.")
+                        colsWithType.append("float MET_MetUnclustEnUpDeltaY=0.")
                 else :     
                     df = df.Define(
                         "PuppiMET_MetUnclustEnUpDeltaX",
@@ -468,11 +686,41 @@ class JMECalculator(Module):
                     cols.append("PuppiMET_MetUnclustEnUpDeltaX")
                     cols.append("PuppiMET_MetUnclustEnUpDeltaY")
 
-                cols.append("PV_npvsGood")                    
-                                       
-                df = df.Define(
-                    f"{MET}Vars", f"my{MET}VarCalc.produce({', '.join(cols)})"
+                    colsWithType.append("float PuppiMET_MetUnclustEnUpDeltaX=0.")
+                    colsWithType.append("float PuppiMET_MetUnclustEnUpDeltaY=0.")
+
+                cols.append("PV_npvsGood")
+                colsWithType.append("int PV_npvsGood=0")                
+
+                ### Create a function to handle the corrections per run period
+                text_per_run = ""
+                if self.runPeriods:
+                    for runP in self.runPeriods:
+                        text_per_run += f"""
+                        if (runPeriod == {runP}) {{
+                            return my{MET}VarCalc_{runP}.produce({", ".join(cols)});
+                        }}
+                        """
+            
+                ROOT.gInterpreter.Declare(
+                    """
+                    #include "Type1METVariationsCalculator.h"
+                    #include "CMSCalculatorsUtilities.h"
+            
+                    Type1METVariationsCalculator::result_t getPerRunMET_"""+MET+"""(int runPeriod, """ + ", ".join(colsWithType) + """) {
+                        Type1METVariationsCalculator::result_t result;    
+                        """+text_per_run+"""
+                        return result; // Return an empty result if no matching run period is found
+                    }
+                    """
                 )
+
+                if self.runPeriods:
+                    df = df.Define(f"{MET}Vars", f'getPerRunMET_{MET}(run_period, {", ".join(cols)})')
+                else:
+                    df = df.Define(
+                        f"{MET}Vars", f"my{MET}VarCalc.produce({', '.join(cols)})"
+                    )
                 
                 if self.store_nominal:
                     df = df.Define(f"{MET}_pt", f"Jet_pt.size() > 0 ? {MET}Vars.pt(0) : {RawMET}_pt")
