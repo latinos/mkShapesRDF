@@ -10,3 +10,4 @@ Scripts for shapeAnalaysis
     mkShapesRDF
     mkPlot
     mkDatacards
+    mkCutFlow
