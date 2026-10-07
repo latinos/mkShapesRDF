@@ -13,6 +13,9 @@ class L2TightSelection(Module):
         
     def runModule(self, df, values):
 
+        # Reject short retained collections before evaluating either tight slot.
+        df = df.Filter("Lepton_pt.size() >= 2")
+
         first = True
         
         lepton1_selection = ""

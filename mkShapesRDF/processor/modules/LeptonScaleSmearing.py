@@ -283,14 +283,42 @@ class LeptonScaleSmearing(Module):
         df = df.Redefine("PuppiMET_phi", "PuppiMET_LeptonScale[1]")
 
         #### Re-order lepton-pT again
-            
+
+        # Capture only flat per-lepton arrays. The permutation, correction
+        # temporaries, and already sorted products must never enter this loop.
+        # mRDF propagates a nominal Redefine to its registered variations, so
+        # those generated columns must not also be reordered independently.
+        varied_columns = set(df.GetVariedColumns(df.GetColumnNames()))
+        excluded_columns = set(self.columnsToDrop) | varied_columns | {
+            "Lepton_pt",
+            "Lepton_sorting",
+            "Lepton_rochesterSF",
+        }
+        lepton_columns = []
+        for branch in df.GetColumnNames():
+            if (
+                branch.startswith("Lepton_") or branch == "isLoose"
+            ) and branch not in excluded_columns:
+                column_type = df.df.GetColumnType(branch)
+                if column_type.count("<") == 1 and (
+                    "RVec<" in column_type
+                    or column_type.startswith(("vector<", "std::vector<"))
+                ):
+                    lepton_columns.append(branch)
+
         df = df.Define("Lepton_sorting",     "sortedIndices(Lepton_newPt)")
         df = df.Define("Lepton_rochesterSF", "Take(Lepton_newPt/Lepton_pt, Lepton_sorting)")
         df = df.Redefine("Lepton_pt",        "Take(Lepton_newPt, Lepton_sorting)")
-            
-        for branch in df.GetColumnNames():
-            if branch.startswith("Lepton_") and branch!="Lepton_pt":
-                df = df.Redefine(branch, f"Take({branch}, Lepton_sorting)")
+
+        # Lepton_newPt has no leptonScale/leptonResolution variations. Reorder
+        # the existing pT variations explicitly with the nominal permutation;
+        # downstream kinematics then see the same object associations.
+        for branch in df.GetVariedColumns(["Lepton_pt"]):
+            df = df.Define(
+                branch, f"Take({branch}, Lepton_sorting)", excludeVariations=["*"]
+            )
+        for branch in lepton_columns:
+            df = df.Redefine(branch, f"Take({branch}, Lepton_sorting)")
 
         self.columnsToDrop.append("Lepton_sorting")
 
