@@ -13,7 +13,10 @@ class LeptonSF(Module):
     def __init__(self, era):
         super().__init__("LeptonSF")
         self.era = era
-        self.year = re.findall(r'\d+', era)[0]
+        if "FullRunIII" in self.era:
+            self.year = 242526
+        else:
+            self.year = re.findall(r'\d+', era)[0]
         
         self.mu_maxPt = 199.99
         self.mu_minPt = 10.001
@@ -324,6 +327,10 @@ class LeptonSF(Module):
                                         sf     = cset_electron_Reco->evaluate({Egamma_era, "sf", "RecoBelow20", eta, pt, phi});
                                         sfup   = cset_electron_Reco->evaluate({Egamma_era, "sfup", "RecoBelow20", eta, pt, phi});
                                         sfdown = cset_electron_Reco->evaluate({Egamma_era, "sfdown", "RecoBelow20", eta, pt, phi});
+                                    }else if(year==242526){
+                                        sf     = cset_electron_Reco->evaluate({Egamma_era, "sf", "Reco20to75", eta, 20.01}); // Temporal solution
+                                        sfup   = cset_electron_Reco->evaluate({Egamma_era, "sfup", "Reco20to75", eta, 20.01});
+                                        sfdown = cset_electron_Reco->evaluate({Egamma_era, "sfdown", "Reco20to75", eta, 20.01});
                                     }else{
                                         sf     = cset_electron_Reco->evaluate({Egamma_era, "sf", "RecoBelow20", eta, pt});
                                         sfup   = cset_electron_Reco->evaluate({Egamma_era, "sfup", "RecoBelow20", eta, pt});
@@ -383,7 +390,10 @@ class LeptonSF(Module):
 
                 did_reco = True
 
-            interpret_runP = """"""
+            interpret_runP = """
+            string Egamma_era_wp;
+            string label_wp;
+            """
             for i in range(len(self.SF_dict["electron"][wp]["wpSF"]["data"])):
                 if os.path.exists(self.SF_dict["electron"][wp]["wpSF"]["data"][i]):
                     
@@ -413,9 +423,9 @@ class LeptonSF(Module):
                             eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}});
                             phi = ele_phi[i];
 
-                            sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt, phi}});
-                            sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt, phi}});
-                            sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt, phi}});
+                            sf     = cset_electron_{wp}_wpSF->evaluate({{Egamma_era_wp, "sf", label_wp, eta, pt, phi}});
+                            sfup   = cset_electron_{wp}_wpSF->evaluate({{Egamma_era_wp, "sfup", label_wp, eta, pt, phi}});
+                            sfdown = cset_electron_{wp}_wpSF->evaluate({{Egamma_era_wp, "sfdown", label_wp, eta, pt, phi}});
                             """
                         else:
                             evaluator = f"""
@@ -426,9 +436,9 @@ class LeptonSF(Module):
                             }}
                             eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}}); 
 
-                            sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
-                            sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}});
-                            sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}});
+                            sf     = cset_electron_{wp}_wpSF->evaluate({{Egamma_era_wp, "sf", label_wp, eta, pt}});
+                            sfup   = cset_electron_{wp}_wpSF->evaluate({{Egamma_era_wp, "sfup", label_wp, eta, pt}});
+                            sfdown = cset_electron_{wp}_wpSF->evaluate({{Egamma_era_wp, "sfdown", label_wp, eta, pt}});
                             """
                     else:
                         evaluator = f"""
@@ -439,28 +449,20 @@ class LeptonSF(Module):
                         }}
                         eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}}); 
 
-                        sf     = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
-                        sfup   = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}});
-                        sfdown = cset_electron_{wp}_wpSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}});
+                        sf     = cset_electron_{wp}_wpSF->evaluate({{Egamma_era_wp, "sf", label_wp, eta, pt}});
+                        sfup   = cset_electron_{wp}_wpSF->evaluate({{Egamma_era_wp, "sfup", label_wp, eta, pt}});
+                        sfdown = cset_electron_{wp}_wpSF->evaluate({{Egamma_era_wp, "sfdown", label_wp, eta, pt}});
                         """
 
                         
-                    
-                    interpret_runP = (
-                        interpret_runP
-                        + """ 
-                    if (runP>="""
-                        + str(beginRP)
-                        + """ && runP<="""
-                        + str(endRP)
-                        + """){  
-                        cset_electron_"""
-                        + wp
-                        + """_wpSF = cset_electron_%s_wpSF_%s_%s;
-                    } 
+                    interpret_runP += f"""
+                    if (runP>={beginRP} && runP<={endRP}){{
+                        cset_electron_{wp}_wpSF = cset_electron_{wp}_wpSF_{beginRP}_{endRP};
+                        Egamma_era_wp = "{egamma_era}";
+                        label_wp = "{label}";
+                    }}
                     """
-                        % (wp, beginRP, endRP)
-                    )
+                    
 
                 else:
                     print("Path does not exist for " + wp + " at:")
@@ -469,7 +471,10 @@ class LeptonSF(Module):
 
 
             ###### tthMVA-SF
-            interpret_runP_tthSF = """"""
+            interpret_runP_tthSF = """
+            string Egamma_era_wp_tthMvaSF;
+            string label_wp_tthMvaSF;
+            """
             if ElehasTTHmva:
                 
                 for i in range(len(self.SF_dict["electron"][wp]["tthMvaSF"]["data"])):
@@ -497,51 +502,42 @@ class LeptonSF(Module):
                                 eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}}); 
                                 phi = ele_phi[i];
 
-                                sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt, phi}});
-                                sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt, phi}});
-                                sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt, phi}});
+                                sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{Egamma_era_wp_tthMvaSF, "sf", label_wp_tthMvaSF, eta, pt, phi}});
+                                sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{Egamma_era_wp_tthMvaSF, "sfup", label_wp_tthMvaSF, eta, pt, phi}});
+                                sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{Egamma_era_wp_tthMvaSF, "sfdown", label_wp_tthMvaSF, eta, pt, phi}});
                                 """
                             else:
                                 evaluator_tth = f"""
                                 pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}}); 
                                 eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i]+detasc, {self.el_maxEta}}}), {self.el_minEta}}});
 
-                                sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
-                                sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}});
-                                sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}});
+                                sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{Egamma_era_wp_tthMvaSF, "sf", label_wp_tthMvaSF, eta, pt}});
+                                sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{Egamma_era_wp_tthMvaSF, "sfup", label_wp_tthMvaSF, eta, pt}});
+                                sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{Egamma_era_wp_tthMvaSF, "sfdown", label_wp_tthMvaSF, eta, pt}});
                                 """
                         else:
                             evaluator_tth = f"""
                             pt = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_pt[i], {self.el_maxPt}}}), {self.el_minPt}}}); 
                             eta = ROOT::VecOps::Max(ROOT::RVecF{{ROOT::VecOps::Min(ROOT::RVecF{{ele_eta[i], {self.el_maxEta}}}), {self.el_minEta}}});
 
-                            sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sf", "{label}", eta, pt}});
-                            sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfup", "{label}", eta, pt}});
-                            sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{"{egamma_era}", "sfdown", "{label}", eta, pt}});
+                            sf_tth     = cset_electron_{wp}_tthMvaSF->evaluate({{Egamma_era_wp_tthMvaSF, "sf", label_wp_tthMvaSF, eta, pt}});
+                            sfup_tth   = cset_electron_{wp}_tthMvaSF->evaluate({{Egamma_era_wp_tthMvaSF, "sfup", label_wp_tthMvaSF, eta, pt}});
+                            sfdown_tth = cset_electron_{wp}_tthMvaSF->evaluate({{Egamma_era_wp_tthMvaSF, "sfdown", label_wp_tthMvaSF, eta, pt}});
                             """
-                        
-                        interpret_runP = (
-                            interpret_runP
-                            + """
-                    if (runP>="""
-                            + str(beginRP)
-                            + """ && runP<="""
-                            + str(endRP)
-                            + """){    
-                        cset_electron_"""
-                            + wp
-                            + """_tthMvaSF = cset_electron_%s_tthMvaSF_%s_%s;
-                    }
-                            """
-                            % (wp, beginRP, endRP)
-                        )
+
+                        interpret_runP_tthSF += f"""
+                        if (runP>={beginRP} && runP<={endRP}){{
+                            cset_electron_{wp}_tthMvaSF = cset_electron_{wp}_tthMvaSF_{beginRP}_{endRP};
+                            Egamma_era_wp_tthMvaSF = "{egamma_era}";
+                            label_wp_tthMvaSF = "{label}";
+                        }}
+                        """
                     else:
                         print("Path does not exist for " + wp + " at:")
                         print(self.SF_dict["electron"][wp]["tthMvaSF"]["data"][i])
 
             else:
                 evaluator_tth = """"""
-
 
             #print(evaluator)
             #print(evaluator_tth)
@@ -577,6 +573,10 @@ class LeptonSF(Module):
                         + interpret_runP
                         + """
 
+                        """
+                        + interpret_runP_tthSF
+                        + """
+
                         for (int i=0; i<ele_pt.size(); i++){
                             if (abs(ele_pdgId[i])==11){
                                 
@@ -593,11 +593,9 @@ class LeptonSF(Module):
                                     sfup_tot = 0.0;
                                     sfdown_tot = 0.0;
                                 }else{
-                                    sfup_tot = sf_tot + sf_tot * ( ((sfup - sf)/sf)*((sfup - sf)/sf) +
-                                                                   ((sfup_tth - sf_tth)/sf_tth)*((sfup_tth - sf_tth)/sf_tth) );
+                                    sfup_tot = sf_tot + sf_tot * TMath::Sqrt( ((sfup - sf)/sf)*((sfup - sf)/sf) + ((sfup_tth - sf_tth)/sf_tth)*((sfup_tth - sf_tth)/sf_tth) );
                                 
-                                    sfdown_tot = sf_tot - sf_tot * ( ((sfdown - sf)/sf)*((sfdown - sf)/sf) +
-                                                                     ((sfdown_tth - sf_tth)/sf_tth)*((sfdown_tth - sf_tth)/sf_tth) );
+                                    sfdown_tot = sf_tot - sf_tot * TMath::Sqrt( ((sfdown - sf)/sf)*((sfdown - sf)/sf) + ((sfdown_tth - sf_tth)/sf_tth)*((sfdown_tth - sf_tth)/sf_tth) );
                                 }
 
                                 SF.push_back(sf_tot);
@@ -678,21 +676,11 @@ class LeptonSF(Module):
                         f'correction::Correction::Ref cset_muon_{wp}_idSF_{beginRP}_{endRP} = (correction::Correction::Ref) csetMu{wp}_idSF_{beginRP}_{endRP}->at("{key}");'
                     )
 
-                    interpret_idSF = (
-                        interpret_idSF
-                        + """
-                    if (runP>="""
-                        + str(beginRP)
-                        + """ && runP<="""
-                        + str(endRP)
-                        + """){ 
-                        cset_muon_"""
-                        + wp
-                        + """_idSF = cset_muon_%s_idSF_%s_%s;
-                    }
+                    interpret_idSF += f"""
+                    if (runP>={beginRP} && runP<={endRP}){{
+                        cset_muon_{wp}_idSF = cset_muon_{wp}_idSF_{beginRP}_{endRP};
+                    }}
                     """
-                        % (wp, beginRP, endRP)
-                    )
 
                 else:
                     print("Path does not exist for " + wp + " at:")
@@ -715,21 +703,11 @@ class LeptonSF(Module):
                         f'correction::Correction::Ref cset_muon_{wp}_isoSF_{beginRP}_{endRP} = (correction::Correction::Ref) csetMu{wp}_isoSF_{beginRP}_{endRP}->at("{key}");'
                     )
 
-                    interpret_isoSF = (
-                        interpret_isoSF
-                        + """
-                    if (runP>="""
-                        + str(beginRP)
-                        + """ && runP<="""
-                        + str(endRP)
-                        + """){    
-                        cset_muon_"""
-                        + wp
-                        + """_isoSF = cset_muon_%s_isoSF_%s_%s;
-                    }
+                    interpret_isoSF += f"""
+                    if (runP>={beginRP} && runP<={endRP}){{
+                        cset_muon_{wp}_isoSF = cset_muon_{wp}_isoSF_{beginRP}_{endRP};
+                    }}
                     """
-                        % (wp, beginRP, endRP)
-                    )
                 else:
                     print("Path does not exist for " + wp + " at:")
                     print(self.SF_dict["muon"][wp]["isoSF"]["data"][i])
@@ -752,21 +730,11 @@ class LeptonSF(Module):
                             f'correction::Correction::Ref cset_muon_{wp}_tthMvaSF_{beginRP}_{endRP} = (correction::Correction::Ref) csetMu{wp}_tthMvaSF_{beginRP}_{endRP}->at("{key}");'
                         )
 
-                        interpret_tthSF = (
-                            interpret_tthSF
-                            + """
-                        if (runP>="""
-                            + str(beginRP)
-                            + """ && runP<="""
-                            + str(endRP)
-                            + """){
-                            cset_muon_"""
-                            + wp
-                            + """_tthSF = cset_muon_%s_tthMvaSF_%s_%s; 
-                        }
+                        interpret_tthSF += f"""
+                        if (runP>={beginRP} && runP<={endRP}){{
+                            cset_muon_{wp}_tthSF = cset_muon_{wp}_tthMvaSF_{beginRP}_{endRP};
+                        }}
                         """
-                            % (wp, beginRP, endRP)
-                        )
                     else:
                         print("Path does not exist for " + wp + " at:")
                         print(self.SF_dict["muon"][wp]["tthMvaSF"]["data"][i])
