@@ -241,7 +241,7 @@ class LeptonScaleSmearing(Module):
                             continue;
                         Lepton.SetPtEtaPhiM(Lepton_pt[i], Lepton_eta[i], Lepton_phi[i], 0.0);
                         Lepton_new.SetPtEtaPhiM(Lepton_newPt[i], Lepton_eta[i], Lepton_phi[i], 0.0);
-                        MET = MET + Lepton_new - Lepton;
+                        MET = MET - Lepton_new + Lepton;
                     }
                     return {MET.Pt(), MET.Phi()};
                 }
