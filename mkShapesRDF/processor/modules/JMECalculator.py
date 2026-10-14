@@ -406,7 +406,7 @@ class JMECalculator(Module):
                         )
 
                         variations_jetIdx.append(
-                            f"Take(tmp_{JetColl}_jetIdx, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)",
+                            f"tmp_{JetColl}_pt__JES_{source}_{tag}_sorting",
                         )
 
                         df = df.Define(
