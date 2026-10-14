@@ -91,7 +91,7 @@ class JetSelMask(Module):
             )
 
             if self.eventMask:
-                text_for_runperiods.replace("jetvetomap", "jetvetomap_eep")
+                text_for_runperiods_ee = text_for_runperiods.replace("jetvetomap", "jetvetomap_eep")
                 ROOT.gInterpreter.Declare(
                     """
                     bool getVetoMaskEE(ROOT::RVecF Jet_pt,ROOT::RVecF Jet_eta, ROOT::RVecF Jet_phi, ROOT::RVecF Jet_neEmEF, ROOT::RVecF Jet_chEmEF, ROOT::RVecI Jet_jetId, ROOT::RVecI CorrectedJet_jetIdx, int run_period=-1){
@@ -104,7 +104,7 @@ class JetSelMask(Module):
                             eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{Jet_eta[i], 5.19}), -5.19});
                             Jet_EM = Jet_neEmEF[CorrectedJet_jetIdx[i]] + Jet_chEmEF[CorrectedJet_jetIdx[i]];
                             jet_id_veto = Jet_jetId[CorrectedJet_jetIdx[i]];
-                            """+text_for_runperiods+""" 
+                            """+text_for_runperiods_ee+""" 
                             if (Jet_EM < 0.9 && jet_id_veto == 6 && Jet_pt[i] > 15 && tmp_value!=0.0){
                                 return false;
                             }
