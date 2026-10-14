@@ -208,12 +208,28 @@ class LeptonSel(Module):
         )
         columnsToDrop.append("LeptonMask_JC")
 
+        # Bind the retention mapping before any Lepton column is redefined.
+        # ROOT's lazy Defines above still refer to the original Lepton indices.
+        df = df.Define(
+            "LeptonSel_keepIdx",
+            "ROOT::VecOps::Nonzero(LeptonMaskHyg_Ele && LeptonMaskHyg_Mu)",
+        )
+        columnsToDrop.append("LeptonSel_keepIdx")
+
         branches = ["pt", "eta", "phi", "pdgId", "electronIdx", "muonIdx"]
-        
-        for prop in branches:
+        lepton_columns = [f"Lepton_{prop}" for prop in branches] + ["isLoose"]
+        lepton_columns += [
+            f"Lepton_isTightElectron_{wp}"
+            for wp in ElectronWP[self.era]["TightObjWP"]
+        ]
+        lepton_columns += [
+            f"Lepton_isTightMuon_{wp}" for wp in MuonWP[self.era]["TightObjWP"]
+        ]
+
+        for column in lepton_columns:
             df = df.Redefine(
-                f"Lepton_{prop}",
-                f"Lepton_{prop}[LeptonMaskHyg_Ele && LeptonMaskHyg_Mu]",
+                column,
+                f"ROOT::VecOps::Take({column}, LeptonSel_keepIdx)",
             )
 
         for col in columnsToDrop:
