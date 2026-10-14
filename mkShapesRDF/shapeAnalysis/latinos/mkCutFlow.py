@@ -10,13 +10,11 @@ from pathlib import Path
 import runpy
 import sys
 import zlib
-
 import cloudpickle
 import ROOT
 from tabulate import tabulate
 
 ROOT.gROOT.SetBatch(True)
-
 
 @contextmanager
 def open_root(path):
@@ -29,7 +27,6 @@ def open_root(path):
     finally:
         source.Close()
 
-
 def load_config(config_file, configs_folder):
     if config_file:
         path = Path(config_file)
@@ -38,61 +35,45 @@ def load_config(config_file, configs_folder):
         if not paths:
             raise ValueError("No compiled configuration found; run mkShapesRDF -c 1 first")
         path = max(paths, key=lambda p: (p.stat().st_mtime_ns, p.name))
-
     if not path.exists():
         raise FileNotFoundError(f"Compiled configuration does not exist: {path}")
     if path.stat().st_size == 0:
         raise ValueError(f"Compiled configuration is empty: {path}")
-
     with path.open("rb") as stream:
         return cloudpickle.loads(zlib.decompress(stream.read()))
-
 
 def region_names(cuts):
     """Expand categories without moving their parent relative to other cuts."""
     names = []
-
     for name, cut in cuts.items():
         if isinstance(cut, dict) and cut.get("categories"):
             names.extend(region_names({f"{name}_{category}": definition for category, definition in cut["categories"].items()}))
         else:
             names.append(name)
-
     if len(names) != len(set(names)):
         raise ValueError("Cuts produce duplicate region names")
-
     return names
-
 
 def sample_names(samples):
     names = []
-
     for name, sample in samples.items():
         if "subsamples" in sample:
             naming = sample.get("flatten_samples_map", lambda name, sub: f"{name}_{sub}")
             names.extend(naming(name, sub) for sub in sample["subsamples"])
         else:
             names.append(name)
-
     if len(names) != len(set(names)):
         raise ValueError("Samples produce duplicate names")
-
     return names
-
 
 def select_names(available, selection, label):
     selected = available if selection is None else [name.strip() for name in selection.split(",")]
-
     if not selected or len(selected) != len(set(selected)):
         raise ValueError(f"Select at least one {label}, without duplicates")
-
     unknown = [name for name in selected if name not in available]
-
     if unknown:
         raise ValueError(f"Unknown {label}: {', '.join(unknown)}")
-
     return selected
-
 
 def histogram_yield(histogram, include_flow=False):
     dimension = histogram.GetDimension()
@@ -116,24 +97,18 @@ def histogram_yield(histogram, include_flow=False):
                     bin_number = histogram.GetBin(ix, iy)
                 else:
                     bin_number = histogram.GetBin(ix, iy, iz)
-
                 value = histogram.GetBinContent(bin_number)
                 error = histogram.GetBinError(bin_number)
-
                 yield_value += value
                 variance += error * error
-
     return yield_value, variance
-
 
 def collect_yields(input_file, regions, samples, variable, include_flow=False, tag=None):
     """Return (sum of weights, statistical error) for every region/sample."""
-
     with ExitStack() as stack:
         if Path(input_file).is_dir():
             if not tag:
                 raise ValueError("An input directory requires --tag or a configuration tag")
-
             files = {
                 sample: stack.enter_context(open_root(Path(input_file) / f"plots_{tag}_ALL_{sample}.root"))
                 for sample in samples
@@ -141,12 +116,9 @@ def collect_yields(input_file, regions, samples, variable, include_flow=False, t
         else:
             source = stack.enter_context(open_root(input_file))
             files = dict.fromkeys(samples, source)
-
         rows = []
-
         for region in regions:
             row = []
-
             for sample in samples:
                 key = f"{region}/{variable}/histo_{sample}"
                 histogram = files[sample].Get(key)
@@ -161,35 +133,37 @@ def collect_yields(input_file, regions, samples, variable, include_flow=False, t
 
                 if not math.isfinite(yield_value) or not math.isfinite(variance) or variance < 0:
                     raise ValueError(f"Invalid yield or variance for {key}")
-
                 row.append((yield_value, math.sqrt(variance)))
-
             rows.append(row)
-
         return rows
 
-
-def render_table(regions, samples, yields, table_format="text", precision=2, data=None):
+def render_table(regions, samples, yields, table_format="text", precision=2, data=None, show_errors=True):
     data = set() if data is None else data
 
     if table_format == "csv":
         output = io.StringIO(newline="")
         writer = csv.writer(output)
-        writer.writerow(["cut"] + [column for sample in samples for column in (sample, f"{sample}_stat")])
+        writer.writerow(["cut"] + [column for sample in samples for column in ((sample, f"{sample}_stat") if show_errors else (sample,))])
 
         for region, row in zip(regions, yields):
-            writer.writerow([region] + [value for sample, (value, error) in zip(samples, row) for value in (value, "" if sample in data else error)])
+            writer.writerow([region] + [item for sample, (value, error) in zip(samples, row) for item in ((value, "" if sample in data else error) if show_errors else (value,))])
 
         return output.getvalue()
-
+     
+    pm = "RPLME" if table_format == "latex" else " +/- "
+    
     rows = [
-        [region] + [f"{value:.{precision}f}" if sample in data else f"{value:.{precision}f} +/- {error:.{precision}f}" for sample, (value, error) in zip(samples, row)]
+        [region] + [f"{value:.{precision}f}{pm}{error:.{precision}f}" if show_errors and sample not in data else f"{value:.{precision}f}" for sample, (value, error) in zip(samples, row)]
         for region, row in zip(regions, yields)
     ]
-
+    
     formats = {"text": "simple", "markdown": "github", "latex": "latex"}
-    return tabulate(rows, headers=["Cut"] + samples, tablefmt=formats[table_format], disable_numparse=True) + "\n"
-
+    result = tabulate(rows, headers=["Cut"] + samples, tablefmt=formats[table_format], disable_numparse=True)
+    
+    if table_format == "latex":
+        result = result.replace("RPLME", r" $\pm$ ")
+    
+    return result + "\n"
 
 def defaultParser():
     parser = argparse.ArgumentParser(
@@ -210,12 +184,11 @@ def defaultParser():
     parser.add_argument("--outputDir", default=".", help="Directory for the three CSV tables")
     parser.add_argument("--excludeFlow", action="store_true", help="Exclude underflow and overflow")
     parser.add_argument("--precision", type=int, default=3, help="Displayed yield precision (CSV keeps full precision)")
+    parser.add_argument("--noStatErrors", action="store_true", help="Hide MC statistical errors in tables and CSV reports")
     parser.add_argument("--tag", help="Override the configuration tag")
     parser.add_argument("--format", choices=["text", "markdown", "csv", "latex"], help="Produce a region-by-sample table instead of the three CSV reports")
     parser.add_argument("--outputFile", help="Save a formatted table (defaults to text unless --format is supplied)")
-
     return parser
-
 
 @contextmanager
 def analysis_directory(folder):
@@ -225,91 +198,67 @@ def analysis_directory(folder):
 
     os.chdir(folder)
     sys.path.insert(0, str(Path.cwd()))
-
     try:
         yield
     finally:
         os.chdir(previous)
         sys.path[:] = previous_path
 
-
 def read_configuration(args):
     if args.configFile or args.configsFolder:
         config = load_config(args.configFile, args.configsFolder or "configs")
         cuts = config["cuts"]
-
         if isinstance(cuts.get("cuts"), dict) and "preselections" in cuts:
             cuts = cuts["cuts"]
     else:
         with redirect_stdout(sys.stderr):
             config = runpy.run_path(args.pycfg)
             namespace = runpy.run_path(args.cutsFile or config.get("cutsFile", "cuts.py"), init_globals={**config, "cuts": {}})
-
         cuts = namespace["cuts"]
-
     if (args.configFile or args.configsFolder) and args.cutsFile:
         with redirect_stdout(sys.stderr):
             cuts = runpy.run_path(args.cutsFile, init_globals={**config, "cuts": {}})["cuts"]
-
     return config, cuts
-
 
 def discover_samples(input_file, regions, variable):
     """Discover nominal histograms without dropping genuine sample prefixes."""
     names = set()
-
     with open_root(input_file) as source:
         for region in regions:
             directory = source.GetDirectory(f"{region}/{variable}")
-
             if not directory:
                 raise ValueError(f"Missing histogram directory: {region}/{variable}")
-
             for key in directory.GetListOfKeys():
                 name = key.GetName()
                 classname = key.GetClassName()
-
                 if name.startswith("histo_") and classname.startswith(("TH1", "TH2", "TH3")):
                     sample = name[len("histo_"):]
-
                     if not sample.endswith(("Up", "Down")) and "SPECIAL_NUIS" not in sample:
                         names.add(sample)
-
     if not names:
         raise ValueError("No nominal histograms found")
-
     return sorted(names)
-
 
 def data_samples(config, samples, override=None):
     if override is not None:
         return set(select_names(samples, override, "data sample"))
-
     names = {sample for sample in samples if sample.upper() == "DATA"}
-
     for sample, definition in config.get("samples", {}).items():
         if definition.get("isData"):
             names.update(sample_names({sample: definition}))
-
     for sample, definition in config.get("structure", {}).items():
         if definition.get("isData"):
             names.add(sample)
-
     return names.intersection(samples)
-
 
 def composition_rows(regions, samples, yields, data):
     rows = []
-
     for region, values in zip(regions, yields):
         total = sum(pair[0] for sample, pair in zip(samples, values) if sample not in data)
-
-        for sample, (value, _) in zip(samples, values):
+        for sample, (value, error) in zip(samples, values):
             fraction = None if sample in data or total == 0 else 100.0 * value / total
-            rows.append([region, sample, value, fraction])
-
+            rows.append([region, sample, value, error if sample not in data else "", fraction])
     return rows
-
 
 def write_csv(path, header, rows):
     with path.open("w", newline="") as stream:
@@ -317,30 +266,32 @@ def write_csv(path, header, rows):
         writer.writerow(header)
         writer.writerows(rows)
 
-
-def report(config, regions, samples, yields, data, output_dir, precision):
+def report(config, regions, samples, yields, data, output_dir, precision, show_errors=True):
     tag = str(config["tag"])
     order = sorted(range(len(samples)), key=lambda index: yields[0][index][0], reverse=True)
 
     samples = [samples[index] for index in order]
     yields = [[row[index] for index in order] for row in yields]
 
-    wide = [[sample] + [row[index][0] for row in yields] for index, sample in enumerate(samples)]
-    long = [[region, sample, pair[0]] for region, values in zip(regions, yields) for sample, pair in zip(samples, values)]
+    wide = [
+        [sample] + [
+            f"{row[index][0]:.{precision}f} +/- {row[index][1]:.{precision}f}"
+            if show_errors and sample not in data else f"{row[index][0]:.{precision}f}"
+            for row in yields
+        ]
+        for index, sample in enumerate(samples)
+    ]
+
+    long = [[region, sample, value, error if sample not in data else ""] for region, values in zip(regions, yields) for sample, (value, error) in zip(samples, values)]
     composition = composition_rows(regions, samples, yields, data)
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    paths = [
-        output_dir / f"yields_{tag}.csv",
-        output_dir / f"yields_{tag}_long.csv",
-        output_dir / f"composition_{tag}.csv",
-    ]
+    paths = [output_dir / f"yields_{tag}.csv", output_dir / f"yields_{tag}_long.csv", output_dir / f"composition_{tag}.csv",]
 
     write_csv(paths[0], ["Sample"] + regions, wide)
-    write_csv(paths[1], ["Cut", "Sample", "Yield"], long)
-    write_csv(paths[2], ["Cut", "Sample", "Yield", "Composition_percent"], composition)
-
+    write_csv(paths[1], ["Cut", "Sample", "Yield"] + (["Stat_error"] if show_errors else []), long if show_errors else [row[:3] for row in long])
+    write_csv(paths[2], ["Cut", "Sample", "Yield"] + (["Stat_error"] if show_errors else []) + ["Composition_percent"], composition if show_errors else [row[:3] + row[4:] for row in composition])
     print("NOMINAL YIELDS\n")
     print(tabulate(wide, headers=["Sample"] + regions, floatfmt=f".{precision}f", disable_numparse=True))
 
@@ -348,20 +299,17 @@ def report(config, regions, samples, yields, data, output_dir, precision):
 
     for region in regions:
         print(f"\n--- {region} ---\n")
-
-        for _, sample, value, fraction in sorted((row for row in composition if row[0] == region), key=lambda row: row[2], reverse=True):
+        for _, sample, value, error, fraction in sorted((row for row in composition if row[0] == region), key=lambda row: row[2], reverse=True):
             line = f"{sample:45s}{value:14.{precision}f}"
-
             if sample not in data:
-                line += f"{fraction:10.2f}%" if fraction is not None else "       N/A"
-
+                if show_errors:
+                    line += f" +/- {error:.{precision}f}"
+                line += f" {fraction:10.2f}%" if fraction is not None else "       N/A"
             print(line)
-
     print("\nOUTPUT")
 
     for path in paths:
         print(path.resolve())
-
 
 def main(argv=None):
     parser = defaultParser()
@@ -410,15 +358,13 @@ def main(argv=None):
         yields = collect_yields(input_file, regions, samples, args.variable, not args.excludeFlow, config.get("tag"))
 
         if args.format or args.outputFile:
-            table = render_table(regions, samples, yields, args.format or "text", args.precision, data)
-
+            table = render_table(regions, samples, yields, args.format or "text", args.precision, data, not args.noStatErrors)
             if args.outputFile:
                 Path(args.outputFile).write_text(table)
             else:
                 sys.stdout.write(table)
         else:
-            report(config, regions, samples, yields, data, Path(args.outputDir), args.precision)
-
+            report(config, regions, samples, yields, data, Path(args.outputDir), args.precision, not args.noStatErrors)
 
 if __name__ == "__main__":
     main()
