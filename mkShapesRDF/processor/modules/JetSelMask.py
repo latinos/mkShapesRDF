@@ -17,26 +17,59 @@ class JetSelMask(Module):
         self.eventMask = eventMask
         self.year = year
         self.columnsToDrop = []
+        self.runPeriods = None
 
         if self.year in JetMakerCfg.keys():
+            if "1" in JetMakerCfg[self.year].keys(): # Assumes always starts by 1
+                self.runPeriods = JetMakerCfg[self.year].keys()
+
             if self.doMask == True:
-                self.pathToJson = JetMakerCfg[year]["vetomap"]
-                self.globalTag = JetMakerCfg[year]["vetokey"]
+                if self.runPeriods:
+                    self.pathToJson = {}
+                    self.globalTag = {}
+                    for run in self.runPeriods:
+                        self.pathToJson[run] = JetMakerCfg[self.year][run]["vetomap"]
+                        self.globalTag[run] = JetMakerCfg[self.year][run]["vetokey"]
+                else:
+                    self.pathToJson = JetMakerCfg[self.year]["vetomap"]
+                    self.globalTag = JetMakerCfg[self.year]["vetokey"]
         
     def runModule(self, df, values):
 
         if self.doMask:
 
-            ROOT.gROOT.ProcessLine(
-                f"""
-                auto jetMaskFile = correction::CorrectionSet::from_file("{self.pathToJson}");
-                correction::Correction::Ref cset_jet_Map = (correction::Correction::Ref) jetMaskFile->at("{self.globalTag}");
+            if self.runPeriods:
+                for run in self.runPeriods:
+                    ROOT.gROOT.ProcessLine(
+                        f"""
+                        auto jetMaskFile_{run} = correction::CorrectionSet::from_file("{self.pathToJson[run]}");
+                        correction::Correction::Ref cset_jet_Map_{run} = (correction::Correction::Ref) jetMaskFile_{run}->at("{self.globalTag[run]}");
+                        """
+                    )
+            else:
+                ROOT.gROOT.ProcessLine(
+                    f"""
+                    auto jetMaskFile = correction::CorrectionSet::from_file("{self.pathToJson}");
+                    correction::Correction::Ref cset_jet_Map = (correction::Correction::Ref) jetMaskFile->at("{self.globalTag}");
+                    """
+                )
+
+            text_for_runperiods = ""
+            if self.runPeriods:
+                for runP in self.runPeriods:
+                    text_for_runperiods += f"""
+                    if (run_period == {runP}) {{
+                        tmp_value = cset_jet_Map_{runP}->evaluate({{"jetvetomap", eta, phi}});
+                    }}
+                    """
+            else:
+                text_for_runperiods += f"""
+                tmp_value = cset_jet_Map->evaluate({{"jetvetomap", eta, phi}});
                 """
-            )
 
             ROOT.gInterpreter.Declare(
                 """
-                bool getVetoMask(ROOT::RVecF Jet_pt,ROOT::RVecF Jet_eta, ROOT::RVecF Jet_phi, ROOT::RVecF Jet_neEmEF, ROOT::RVecF Jet_chEmEF, ROOT::RVecI Jet_jetId, ROOT::RVecI CorrectedJet_jetIdx)
+                bool getVetoMask(ROOT::RVecF Jet_pt,ROOT::RVecF Jet_eta, ROOT::RVecF Jet_phi, ROOT::RVecF Jet_neEmEF, ROOT::RVecF Jet_chEmEF, ROOT::RVecI Jet_jetId, ROOT::RVecI CorrectedJet_jetIdx, int run_period=-1)
                 {
                     float tmp_value;
                     float eta, phi;
@@ -47,7 +80,7 @@ class JetSelMask(Module):
                         eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{Jet_eta[i], 5.19}), -5.19});
                         Jet_EM = Jet_neEmEF[CorrectedJet_jetIdx[i]] + Jet_chEmEF[CorrectedJet_jetIdx[i]];
                         jet_id_veto = Jet_jetId[CorrectedJet_jetIdx[i]];
-                        tmp_value = cset_jet_Map->evaluate({"jetvetomap", eta, phi});
+                        """+text_for_runperiods+"""
                         if (Jet_EM < 0.9 && jet_id_veto == 6 && Jet_pt[i] > 15 && tmp_value!=0.0){
                             return false;
                         }
@@ -58,9 +91,10 @@ class JetSelMask(Module):
             )
 
             if self.eventMask:
+                text_for_runperiods.replace("jetvetomap", "jetvetomap_eep")
                 ROOT.gInterpreter.Declare(
                     """
-                    bool getVetoMaskEE(ROOT::RVecF Jet_pt,ROOT::RVecF Jet_eta, ROOT::RVecF Jet_phi, ROOT::RVecF Jet_neEmEF, ROOT::RVecF Jet_chEmEF, ROOT::RVecI Jet_jetId, ROOT::RVecI CorrectedJet_jetIdx){
+                    bool getVetoMaskEE(ROOT::RVecF Jet_pt,ROOT::RVecF Jet_eta, ROOT::RVecF Jet_phi, ROOT::RVecF Jet_neEmEF, ROOT::RVecF Jet_chEmEF, ROOT::RVecI Jet_jetId, ROOT::RVecI CorrectedJet_jetIdx, int run_period=-1){
                         float tmp_value;
                         float eta, phi;
                         float Jet_EM;
@@ -70,7 +104,7 @@ class JetSelMask(Module):
                             eta = ROOT::VecOps::Max(ROOT::RVecF{ROOT::VecOps::Min(ROOT::RVecF{Jet_eta[i], 5.19}), -5.19});
                             Jet_EM = Jet_neEmEF[CorrectedJet_jetIdx[i]] + Jet_chEmEF[CorrectedJet_jetIdx[i]];
                             jet_id_veto = Jet_jetId[CorrectedJet_jetIdx[i]];
-                            tmp_value = cset_jet_Map->evaluate({"jetvetomap_eep", eta, phi});
+                            """+text_for_runperiods+""" 
                             if (Jet_EM < 0.9 && jet_id_veto == 6 && Jet_pt[i] > 15 && tmp_value!=0.0){
                                 return false;
                             }
@@ -80,11 +114,11 @@ class JetSelMask(Module):
                     """
                 )
 
-                df = df.Define("VetoMaskEE", "getVetoMaskEE(CorrectedJet_pt,CorrectedJet_eta,CorrectedJet_phi,Jet_neEmEF,Jet_chEmEF,Jet_jetId,CorrectedJet_jetIdx)")
+                df = df.Define("VetoMaskEE", "getVetoMaskEE(CorrectedJet_pt,CorrectedJet_eta,CorrectedJet_phi,Jet_neEmEF,Jet_chEmEF,Jet_jetId,CorrectedJet_jetIdx,run_period)")
                 df = df.Filter("VetoMaskEE")
                 self.columnsToDrop.append("VetoMaskEE")
-            
-            df = df.Define("VetoMask", "getVetoMask(CorrectedJet_pt,CorrectedJet_eta,CorrectedJet_phi,Jet_neEmEF,Jet_chEmEF,Jet_jetId,CorrectedJet_jetIdx)")
+
+            df = df.Define("VetoMask", "getVetoMask(CorrectedJet_pt,CorrectedJet_eta,CorrectedJet_phi,Jet_neEmEF,Jet_chEmEF,Jet_jetId,CorrectedJet_jetIdx,run_period)")
 
             print("Applying jet veto map")
             df = df.Filter("VetoMask")

@@ -68,6 +68,31 @@ PUCfg = {
         'nvtx_var'    : "Pileup_nTrueInt",
         'doSysVar'    : False ,
     } ,
+    'FullRunIIIv15': {
+        'srcfile'     : "auto" ,
+        'jsonSrc'     :	{ 
+            '1' : "/cvmfs/cms-griddata.cern.ch/cat/metadata/LUM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-02/puWeights_BCDEFGHI.json.gz",
+            '2' : "/cvmfs/cms-griddata.cern.ch/cat/metadata/LUM/Run3-25Prompt-Summer24-NanoAODv15/2026-06-05/puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz",
+            '3' : "/cvmfs/cms-griddata.cern.ch/cat/metadata/LUM/Run3-25Prompt-Summer24-NanoAODv15/2026-06-05/puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz",
+        },
+        'jsonKey'     : { 
+            '1' : "Collisions24_BCDEFGHI_goldenJSON",
+            '2' : "Collisions25_goldenJSON",
+            '3' : "Collisions25_goldenJSON" # To be replaced with the 2026 pp PU weights once they are available
+        },
+        'targetfiles' : { 
+            '1-1' : '/processor/data/PUweights/2024/2024_693mb.root',
+            '2-2' : '/processor/data/PUweights/2025/dataPileupHistogram-2025pp_Golden-69200ub.root',
+            '3-3' : '/processor/data/PUweights/2025/dataPileupHistogram-2025pp_Golden-69200ub.root'
+        } ,
+        'srchist'     : "pileup",
+        'targethist'  : "pileup",
+        'name'        : "puWeight" ,
+        'norm'        : True       ,
+        'verbose'     : False      ,
+        'nvtx_var'    : "Pileup_nTrueInt",
+        'doSysVar'    : False ,
+    } ,
     'Full2022EEv11': {
         'srcfile'     : "auto" ,
         'targetfiles' : { '1-1' : '/processor/data/PUweights/2022/2022_PU.root' } ,

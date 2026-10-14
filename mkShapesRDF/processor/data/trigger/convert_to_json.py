@@ -210,7 +210,13 @@ def convert_to_json(textfile, mode=None):
 
     # Write out converted json
     with open(outname, "w") as fout:
-        fout.write(cset.json(exclude_unset=True, indent=4))
+        #fout.write(cset.json(exclude_unset=True, indent=4))
+    
+        if hasattr(cset, "model_dump_json"):          # pydantic v2
+            out = cset.model_dump_json(exclude_unset=True, indent=4)
+        else:                                          # pydantic v1
+            out = cset.json(exclude_unset=True, indent=4)
+        fout.write(out)
 
 
 if __name__ == "__main__":

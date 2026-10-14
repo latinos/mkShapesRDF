@@ -18,7 +18,7 @@ class TrigMaker(Module):
         isData=False,
         keepRunP=False,
         cfg_path="processor/data/TrigMaker_cfg.py",
-        seeded=False,
+        seeded=True,
         branch_map="",
         computeSF=True
     ):

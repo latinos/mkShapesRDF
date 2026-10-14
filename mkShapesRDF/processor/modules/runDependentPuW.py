@@ -23,6 +23,7 @@ class runDependentPuW(Module):
         self.era = era
         self.PUWeightCfg = PUCfg[era]
         self.files = files
+        self.runPeriods = None
 
         self.base_path = ""
         if "processor" in os.path.dirname(os.path.dirname(__file__)):
@@ -34,19 +35,40 @@ class runDependentPuW(Module):
     def runModule(self, df, values):
         
         ##### If LUM recipie exists, use it. Otherwise, "Latinos" code
-        
-        if "jsonSrc" in self.PUWeightCfg.keys():
+        if ("jsonSrc" in self.PUWeightCfg.keys()):
 
-            lumJson = self.PUWeightCfg["jsonSrc"]
-            keyJson = self.PUWeightCfg["jsonKey"]
-            ROOT.gROOT.ProcessLine(f'auto lumFile = correction::CorrectionSet::from_file("{lumJson}");')
-            ROOT.gROOT.ProcessLine(f'correction::Correction::Ref cset_pu = (correction::Correction::Ref) lumFile->at("{keyJson}");')
+            if type(self.PUWeightCfg["jsonSrc"]) == dict:
+                self.runPeriods = self.PUWeightCfg["jsonSrc"].keys()
+
+            text_to_add = ""
+            if self.runPeriods:
+                text_to_add = """
+                correction::Correction::Ref cset_pu;
+                """
+                for run in self.runPeriods:
+                    lumJson = self.PUWeightCfg["jsonSrc"][run]
+                    keyJson = self.PUWeightCfg["jsonKey"][run]
+                    ROOT.gROOT.ProcessLine(f'auto lumFile_{run} = correction::CorrectionSet::from_file("{lumJson}");')
+                    ROOT.gROOT.ProcessLine(f'correction::Correction::Ref cset_pu_{run} = (correction::Correction::Ref) lumFile_{run}->at("{keyJson}");')
+
+                    text_to_add += f"""
+                    if (run_period == {run}) {{
+                        cset_pu = cset_pu_{run};
+                    }}
+                    """
+            else:
+                lumJson = self.PUWeightCfg["jsonSrc"]
+                keyJson = self.PUWeightCfg["jsonKey"]
+                ROOT.gROOT.ProcessLine(f'auto lumFile = correction::CorrectionSet::from_file("{lumJson}");')
+                ROOT.gROOT.ProcessLine(f'correction::Correction::Ref cset_pu = (correction::Correction::Ref) lumFile->at("{keyJson}");')
             
             ROOT.gInterpreter.Declare(
-		"""
-                RVecF getPUWeights(float Pileup_nTrueInt){
+                """
+                RVecF getPUWeights(float Pileup_nTrueInt, int run_period=-1){
 
                     RVecF result(3, 1.0);
+
+                    """+text_to_add+"""
 
                     result[0] = cset_pu->evaluate({Pileup_nTrueInt,"nominal"});
                     result[1] =	cset_pu->evaluate({Pileup_nTrueInt,"up"});
@@ -61,7 +83,7 @@ class runDependentPuW(Module):
 
             df = df.Define(
                 "PUWeights",
-                f"getPUWeights({self.PUWeightCfg['nvtx_var']})"
+                f"getPUWeights({self.PUWeightCfg['nvtx_var']}, run_period)"
             )
             df = df.Define(
                 name,
