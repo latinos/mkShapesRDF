@@ -73,7 +73,7 @@ class FatJetIDMaker(Module):
                         int multiplicity = FatJet_chMultiplicity[i] + FatJet_neMultiplicity[i];
                         int pass_id = cset_fatjet_id_tight->evaluate({FatJet_eta[i], FatJet_chHEF[i], FatJet_neHEF[i], FatJet_chEmEF[i], FatJet_neEmEF[i], FatJet_muEF[i], FatJet_chMultiplicity[i], FatJet_neMultiplicity[i], multiplicity});
                         int pass_lepveto = cset_fatjet_id_tightlepveto->evaluate({FatJet_eta[i], FatJet_chHEF[i], FatJet_neHEF[i], FatJet_chEmEF[i], FatJet_muEF[i], FatJet_chMultiplicity[i], FatJet_neMultiplicity[i], multiplicity});
-                        FatJet_JetId[i] = 2 * pass_id + 4 * pass_lepveto;
+                        FatJet_JetId[i] = tightLepVeto ? 6 : (tight ? 2 : 0);
                     }
                     return FatJet_JetId;
                 }
