@@ -97,7 +97,7 @@ class JMECalculator(Module):
                 self.isXYCorrEra  = {}
 
                 for runP in self.runPeriods:
-                    self.json[runP] = JetMakerCfg[self.year][runP]["jet_jerc"]
+                    self.json[runP] = JetMakerCfg[self.year][runP]["jet"]["jet_jerc"]
                     if self.isMC:
                         self.JEC_era[runP] = JetMakerCfg[self.year][runP]["JEC"]
                     else:
@@ -113,7 +113,7 @@ class JMECalculator(Module):
                         self.isXYCorrEra[runP] = JetMakerCfg[self.year][runP]["met_xy_era"]
 
             else:
-                self.json = JetMakerCfg[self.year]["jet_jerc"]
+                self.json = JetMakerCfg[self.year]["jet"]["jet_jerc"]
                 if self.isMC:
                     self.JEC_era = JetMakerCfg[self.year]["JEC"]
                 else:
@@ -661,7 +661,7 @@ class JMECalculator(Module):
                         )
                         df = df.Define(
                             "PFMET_MetUnclustEnUpDeltaY",
-                            "PFMET_pt * std::sin(PFMET_phi) - PFMET_ptUnclusteredUp * std::cos(PFMET_phiUnclusteredUp)"
+                            "PFMET_pt * std::sin(PFMET_phi) - PFMET_ptUnclusteredUp * std::sin(PFMET_phiUnclusteredUp)"
                         )
                         cols.append("PFMET_MetUnclustEnUpDeltaX")
                         cols.append("PFMET_MetUnclustEnUpDeltaY")
