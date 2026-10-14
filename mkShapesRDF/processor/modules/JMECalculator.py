@@ -229,9 +229,9 @@ class JMECalculator(Module):
             else:
                 if self.runPeriods:
                     for runP in self.runPeriods:
-                        ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator_{runP} = JetVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", {jesUnc[runP]}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                        ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator_{runP} = JetVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", {jesUnc[runP] if self.isMC else 'std::vector<std::string>{}'}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
                 else:
-                    ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", {jesUnc}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                    ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", {jesUnc if self.isMC else 'std::vector<std::string>{}'}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
 
             if self.runPeriods:
                 #
@@ -280,50 +280,47 @@ class JMECalculator(Module):
             cols.append("Rho_fixedGridRhoFastjetAll")
             colsWithType.append("float Rho_fixedGridRhoFastjetAll")
 
-            if self.isMC: 
+            if self.isMC:
                 cols.append("Jet_genJetIdx")
                 cols.append("Jet_partonFlavour")
                 colsWithType.append("ROOT::RVecI Jet_genJetIdx")
                 colsWithType.append("ROOT::RVecI Jet_partonFlavour")
-
+            
                 # seed
                 df = df.Define("tmp_seed", "(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)")
-                cols.append(
-                    f"tmp_seed"
-                )
-                colsWithType.append("int tmp_seed=0")
-                cols.append("-1.0")
-                colsWithType.append("int run=-1")
-
+                cols.append("tmp_seed")
+                colsWithType.append("int tmp_seed")
+                cols.append("-1")
+                colsWithType.append("int run")
+            
                 # gen jet coll
                 cols.append("GenJet_pt")
                 cols.append("GenJet_eta")
                 cols.append("GenJet_phi")
                 cols.append("GenJet_mass")
-                colsWithType.append("ROOT::RVecF GenJet_pt=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF GenJet_eta=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF GenJet_phi=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF GenJet_mass=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF GenJet_pt")
+                colsWithType.append("ROOT::RVecF GenJet_eta")
+                colsWithType.append("ROOT::RVecF GenJet_phi")
+                colsWithType.append("ROOT::RVecF GenJet_mass")
             else:
-                # Basically, these variables are needed for the smearing and don't exist for data, so we set those to empty vectors
-                cols.append("ROOT::RVecI{}") # Jet_genJetIdx                                                                                                                                                                                                                    
-                cols.append("ROOT::RVecI{}") # Jet_partonFlavour                                                                                                                                                                                                                
-                cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data                                                                                              
+                # Generator-level quantities are unavailable for data
+                cols.append("ROOT::RVecI{}")
+                cols.append("ROOT::RVecI{}")
+                cols.append("0")
                 cols.append("run")
-                cols.append("ROOT::RVecF{}") # GenJet_pt                                                                                                                                                                                                                        
-                cols.append("ROOT::RVecF{}") # GenJet_eta                                                                                                                                                                                                                       
-                cols.append("ROOT::RVecF{}") # GenJet_phi                                                                                                                                                                                                                       
-                cols.append("ROOT::RVecF{}") # GenJet_mass 
-
-                colsWithType.append("ROOT::RVecI Jet_genJetIdx=ROOT::RVecI{}")
-                colsWithType.append("ROOT::RVecI Jet_partonFlavour=ROOT::RVecI{}")
-                colsWithType.append("int seed=0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
-                colsWithType.append("int run=run")
-                colsWithType.append("ROOT::RVecF GenJet_pt=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF GenJet_eta=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF GenJet_phi=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF GenJet_mass=ROOT::RVecF{}")
-
+                cols.append("ROOT::RVecF{}")
+                cols.append("ROOT::RVecF{}")
+                cols.append("ROOT::RVecF{}")
+                cols.append("ROOT::RVecF{}")
+            
+                colsWithType.append("ROOT::RVecI Jet_genJetIdx")
+                colsWithType.append("ROOT::RVecI Jet_partonFlavour")
+                colsWithType.append("int seed")
+                colsWithType.append("int run")
+                colsWithType.append("ROOT::RVecF GenJet_pt")
+                colsWithType.append("ROOT::RVecF GenJet_eta")
+                colsWithType.append("ROOT::RVecF GenJet_phi")
+                colsWithType.append("ROOT::RVecF GenJet_mass")
 
             ### Create a function to handle the corrections per run period
             text_per_run = ""
@@ -409,7 +406,7 @@ class JMECalculator(Module):
                         )
 
                         variations_jetIdx.append(
-                            f"Take(tmp_{JetColl}_jetIdx, tmp_{JetColl}_pt__JES_{source}_{tag}_sorting)",
+                            f"tmp_{JetColl}_pt__JES_{source}_{tag}_sorting",
                         )
 
                         df = df.Define(
@@ -523,9 +520,9 @@ class JMECalculator(Module):
                 else:
                     if self.runPeriods:
                         for runP in self.runPeriods:
-                            ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc_{runP} = Type1METVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc[runP]}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json[runP]}\", \"{met_xy_era[runP]}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                            ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc_{runP} = Type1METVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc[runP] if self.isMC else 'std::vector<std::string>{}'}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json[runP]}\", \"{met_xy_era[runP]}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
                     else:
-                        ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json}\", \"{met_xy_era}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                        ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc if self.isMC else 'std::vector<std::string>{}'}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json}\", \"{met_xy_era}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
 
                 if self.runPeriods:
                     calcMET = getattr(ROOT, f"my{MET}VarCalc_1")
@@ -576,49 +573,47 @@ class JMECalculator(Module):
                 cols.append("Rho_fixedGridRhoFastjetAll")
                 colsWithType.append("float Rho_fixedGridRhoFastjetAll")
 
-                if self.isMC: 
+                if self.isMC:
                     cols.append("Jet_genJetIdx")
                     cols.append("Jet_partonFlavour")
-
                     colsWithType.append("ROOT::RVecI Jet_genJetIdx")
                     colsWithType.append("ROOT::RVecI Jet_partonFlavour")
-
+                
                     # seed
                     df = df.Define("tmp_met_seed", "(run<<20) + (luminosityBlock<<10) + event + 1 + int(Jet_eta.size()>0 ? Jet_eta[0]/.01 : 0)")
-                    cols.append(
-                        f"tmp_met_seed"
-                    )
-                    colsWithType.append("int tmp_met_seed=0")
-                    cols.append("-1.0")
-                    colsWithType.append("int run=-1") 
+                    cols.append("tmp_met_seed")
+                    colsWithType.append("int tmp_met_seed")
+                    cols.append("-1")
+                    colsWithType.append("int run")
+                
                     # gen jet coll
                     cols.append("GenJet_pt")
                     cols.append("GenJet_eta")
                     cols.append("GenJet_phi")
                     cols.append("GenJet_mass")
-                    colsWithType.append("ROOT::RVecF GenJet_pt=ROOT::RVecF{}")
-                    colsWithType.append("ROOT::RVecF GenJet_eta=ROOT::RVecF{}")
-                    colsWithType.append("ROOT::RVecF GenJet_phi=ROOT::RVecF{}")
-                    colsWithType.append("ROOT::RVecF GenJet_mass=ROOT::RVecF{}")
+                    colsWithType.append("ROOT::RVecF GenJet_pt")
+                    colsWithType.append("ROOT::RVecF GenJet_eta")
+                    colsWithType.append("ROOT::RVecF GenJet_phi")
+                    colsWithType.append("ROOT::RVecF GenJet_mass")
                 else:
                     # Basically, these variables are nedded for the smearing and don't exist for data, so we set those to empty vectors
                     cols.append("ROOT::RVecI{}") # Jet_genJetIdx
                     cols.append("ROOT::RVecI{}") # Jet_partonFlavour
-                    cols.append("0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
+                    cols.append("0")
                     cols.append("run")
                     cols.append("ROOT::RVecF{}") # GenJet_pt
                     cols.append("ROOT::RVecF{}") # GenJet_eta
                     cols.append("ROOT::RVecF{}") # GenJet_phi
                     cols.append("ROOT::RVecF{}") # GenJet_mass
-
-                    colsWithType.append("ROOT::RVecI Jet_genJetIdx=ROOT::RVecI{}")
-                    colsWithType.append("ROOT::RVecI Jet_partonFlavour=ROOT::RVecI{}")
-                    colsWithType.append("int seed=0")  # seed, I don't think that setting this to zero points to no calculation, in anycase, this is used only for smearing, which is not done for data
-                    colsWithType.append("int run=run")
-                    colsWithType.append("ROOT::RVecF GenJet_pt=ROOT::RVecF{}")
-                    colsWithType.append("ROOT::RVecF GenJet_eta=ROOT::RVecF{}")
-                    colsWithType.append("ROOT::RVecF GenJet_phi=ROOT::RVecF{}")
-                    colsWithType.append("ROOT::RVecF GenJet_mass=ROOT::RVecF{}")
+                
+                    colsWithType.append("ROOT::RVecI Jet_genJetIdx")
+                    colsWithType.append("ROOT::RVecI Jet_partonFlavour")
+                    colsWithType.append("int seed")
+                    colsWithType.append("int run")
+                    colsWithType.append("ROOT::RVecF GenJet_pt")
+                    colsWithType.append("ROOT::RVecF GenJet_eta")
+                    colsWithType.append("ROOT::RVecF GenJet_phi")
+                    colsWithType.append("ROOT::RVecF GenJet_mass")
 
                 if "v15" in self.year:
                     RawMET = "RawPFMET" if "Puppi" not in MET else "RawPuppiMET"
@@ -627,8 +622,8 @@ class JMECalculator(Module):
                 cols.append(f"{RawMET}_phi")
                 cols.append(f"{RawMET}_pt")
 
-                colsWithType.append(f"float {RawMET}_phi=0.0")
-                colsWithType.append(f"float {RawMET}_pt=0.0")
+                colsWithType.append(f"float {RawMET}_phi")
+                colsWithType.append(f"float {RawMET}_pt")
 
                 df = df.Define('EmptyLowPtJet', 'ROOT::RVecF{}')
                 cols.append("CorrT1METJet_rawPt")
@@ -643,14 +638,14 @@ class JMECalculator(Module):
                 cols.append("ROOT::RVecF {}")
                 cols.append("ROOT::RVecF {}")
 
-                colsWithType.append("ROOT::RVecF CorrT1METJet_rawPt=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF CorrT1METJet_eta=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF CorrT1METJet_phi=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF CorrT1METJet_area=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF CorrT1METJet_muonSubtrFactor=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF CorrT1METJet_muonSubtrDeltaPhi=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF EmptyLowPtJet_neEmEF=ROOT::RVecF{}")
-                colsWithType.append("ROOT::RVecF EmptyLowPtJet_chEmEF=ROOT::RVecF{}")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_rawPt")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_eta")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_phi")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_area")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_muonSubtrFactor")
+                colsWithType.append("ROOT::RVecF CorrT1METJet_muonSubtrDeltaPhi")
+                colsWithType.append("ROOT::RVecF EmptyLowPtJet_neEmEF")
+                colsWithType.append("ROOT::RVecF EmptyLowPtJet_chEmEF")
 
                 ## Always use the differences defined as the following, for all Run3 eras.
                 if "Puppi" not in MET:
@@ -661,19 +656,19 @@ class JMECalculator(Module):
                         )
                         df = df.Define(
                             "PFMET_MetUnclustEnUpDeltaY",
-                            "PFMET_pt * std::sin(PFMET_phi) - PFMET_ptUnclusteredUp * std::cos(PFMET_phiUnclusteredUp)"
+                            "PFMET_pt * std::sin(PFMET_phi) - PFMET_ptUnclusteredUp * std::sin(PFMET_phiUnclusteredUp)"
                         )
                         cols.append("PFMET_MetUnclustEnUpDeltaX")
                         cols.append("PFMET_MetUnclustEnUpDeltaY")
 
-                        colsWithType.append("float PFMET_MetUnclustEnUpDeltaX=0.")
-                        colsWithType.append("float PFMET_MetUnclustEnUpDeltaY=0.")
+                        colsWithType.append("float PFMET_MetUnclustEnUpDeltaX")
+                        colsWithType.append("float PFMET_MetUnclustEnUpDeltaY")
                     else:
                         cols.append("MET_MetUnclustEnUpDeltaX")
                         cols.append("MET_MetUnclustEnUpDeltaY")
 
-                        colsWithType.append("float MET_MetUnclustEnUpDeltaX=0.")
-                        colsWithType.append("float MET_MetUnclustEnUpDeltaY=0.")
+                        colsWithType.append("float MET_MetUnclustEnUpDeltaX")
+                        colsWithType.append("float MET_MetUnclustEnUpDeltaY")
                 else :     
                     df = df.Define(
                         "PuppiMET_MetUnclustEnUpDeltaX",
@@ -686,11 +681,11 @@ class JMECalculator(Module):
                     cols.append("PuppiMET_MetUnclustEnUpDeltaX")
                     cols.append("PuppiMET_MetUnclustEnUpDeltaY")
 
-                    colsWithType.append("float PuppiMET_MetUnclustEnUpDeltaX=0.")
-                    colsWithType.append("float PuppiMET_MetUnclustEnUpDeltaY=0.")
+                    colsWithType.append("float PuppiMET_MetUnclustEnUpDeltaX")
+                    colsWithType.append("float PuppiMET_MetUnclustEnUpDeltaY")
 
                 cols.append("PV_npvsGood")
-                colsWithType.append("int PV_npvsGood=0")                
+                colsWithType.append("int PV_npvsGood")                
 
                 ### Create a function to handle the corrections per run period
                 text_per_run = ""
