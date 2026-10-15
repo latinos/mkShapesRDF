@@ -45,24 +45,21 @@ class MkShapesFatJetVariationsCalculator : public FatJetVariationsCalculator {
       checkSmearingArguments();
     }
     
-    // Evaluate the JER for one subjet https://cms-jme-jerc.docs.cern.ch/application/jer/#implementation
-    std::array<double, 3> factors(double pt, float eta, float phi, const p4compv_t& genpt, const p4compv_t& geneta, const p4compv_t& genphi, int seed, float rho) const {
-      int match = -1;
-      double bestDR2 = 0.04; //DeltaR = 0.2
-      if (m_smearDoGenMatch) {
-        const auto resolution = m_jetPtRes->evaluate({double(eta), pt, double(rho)});
-        for (std::size_t i = 0; i < genpt.size(); ++i) {
-          const double dphi = std::remainder(double(phi) - genphi[i], 2. * M_PI);
-          const double deta = double(eta) - geneta[i];
-          const double dr2 = dphi * dphi + deta * deta;
-          //  
-          if (dr2 < bestDR2 && std::abs(pt - genpt[i]) <= 3. * resolution * pt) {
-            bestDR2 = dr2;
-            match = int(i);
-          }
+    // Evaluate the JER for one subjet https://cms-jme-jerc.docs.cern.ch/application/jer/#implementation, applyJERSmearing performs matching internally
+    std::array<double, 3> factors(double pt, float eta, float phi, int genIdx, const p4compv_t& genpt, const p4compv_t& geneta, const p4compv_t& genphi, int seed, float rho) const {
+        auto safePt = genpt;
+        auto safeEta = geneta;
+        auto safePhi = genphi;
+    
+        // Protect findGenMatch() from invalid indices.
+        if (genIdx < 0 || genIdx >= int(genpt.size())) {
+            genIdx = int(genpt.size());
+            safePt.push_back(0.f);
+            safeEta.push_back(1.e6f);
+            safePhi.push_back(0.f);
         }
-      }
-      return applyJERSmearing(m_jetPtRes, m_jerSmear, m_jetEResSF, m_jetEResSFUnc, match >= 0, pt, eta, phi, match >= 0 ? match : 0, genpt, geneta, genphi, seed, rho);
+    
+        return applyJERSmearing(m_jetPtRes, m_jerSmear, m_jetEResSF, m_jetEResSFUnc, m_smearDoGenMatch, pt, eta, phi, genIdx,safePt, safeEta, safePhi, seed, rho);
     }
   };
 
