@@ -163,7 +163,7 @@ public:
       const p4compv_t& jet_mass, const p4compv_t& jet_rawcorr, const p4compv_t& jet_area,
       const p4compv_t& jet_msoftdrop, const ROOT::RVec<Short_t>& first, const ROOT::RVec<Short_t>& second,
       const p4compv_t& subpt, const p4compv_t& subeta, const p4compv_t& subphi,
-      const p4compv_t& submass, const p4compv_t& subraw,
+      const p4compv_t& submass, const p4compv_t& subraw, const ROOT::RVec<Short_t>& subgenidx,
       const ROOT::RVec<UChar_t>& jet_id, float rho, const ROOT::RVec<Short_t>& genidx,
       int seed, int run, const p4compv_t& genpt, const p4compv_t& geneta,
       const p4compv_t& genphi, const p4compv_t& genmass,
@@ -172,7 +172,7 @@ public:
       const auto n = subpt.size();
     
     // Just some check on the input lengths
-    if (subeta.size() != n || subphi.size() != n || submass.size() != n || subraw.size() != n)
+    if (subeta.size() != n || subphi.size() != n || submass.size() != n || subraw.size() != n || (m_smearSubjets && !subgenidx.empty() && subgenidx.size() != n))
       throw std::invalid_argument("Unaligned SubJet inputs");
     
     if (first.size() != jet_pt.size() || second.size() != jet_pt.size())
@@ -226,10 +226,10 @@ public:
     ROOT::RVec<double> jerNom(n, 1.), jerUp(n, 1.), jerDown(n, 1.);
     if (m_smearSubjets) {
       for (std::size_t i = 0; i < n; ++i) {
-        const int subjetSeed = int((uint64_t(uint32_t(seed)) +
-            0x9e3779b9ULL * (i + 1)) & 0x7fffffffULL);
+        const int subjetSeed = seed + i + 1; 
+        const int genIdx = i < subgenidx.size() ? int(subgenidx[i]) : -1;
         const auto factors = m_subjetSmearer.factors(
-            pt[i], subeta[i], subphi[i], subgenpt, subgeneta, subgenphi, subjetSeed, rho);
+            pt[i], subeta[i], subphi[i], genIdx, subgenpt, subgeneta, subgenphi, subjetSeed, rho);
         for (auto factor : factors)
           if (!std::isfinite(factor) || factor < 0.)
             throw std::runtime_error("Invalid SubJet JER factor");
@@ -262,6 +262,7 @@ public:
       for (const auto& direction : {std::string("up"), std::string("down")}) {
         const auto label = "jes" + source.first + direction;
         const auto index = std::find(labels.begin(), labels.end(), label);
+        if (index == labels.end()) throw std::runtime_error("Missing FatJet variation: " + label);
         const auto position = std::distance(labels.begin(), index);
         setSoftDrop(result, position, groomedMass(
           first, second, pt, subeta, subphi, mass, direction == "up" ? up : down));
@@ -337,9 +338,6 @@ class FatJMECalculator(Module):
         ROOT.gInterpreter.Declare(FATJET_SUBJET_JES_CPP)
 
         periods = self.runPeriods if self.runPeriods else [None]
-        calculators = {}
-        variations = {}
-        sources = []
 
         for period in periods:
             cfg = JetMakerCfg[self.year][period] if period is not None else JetMakerCfg[self.year]
@@ -356,9 +354,11 @@ class FatJMECalculator(Module):
             smearJson      = cfg["jer_smear"] if self.do_JER else ""
             smearingTool   = "JERSmear" if self.do_JER else ""
             jecLevel       = "L1L2L3Res"
-            year           = str(cfg.get("year", re.search(r"20\d{2}", self.year).group(0) if re.search(r"20\d{2}", self.year) else ""))
-            jesUnc         = [source.replace("YEAR", year) for source in self.jes_unc] if self.store_variations else []
-            jesUnc_cpp     = "std::vector<std::string>{" + ",".join(f'"{x}"' for x in jesUnc) + "}"
+            year = cfg["year"] if self.runPeriods else (self.year if "FullRunIII" not in self.year else "Full2024v15").split("Full")[1].split("v")[0]
+            jesUnc = [source.replace("YEAR", year) for source in self.jes_unc] if self.store_variations else []
+            jesUnc_cpp = "std::vector<std::string>{" + ",".join(f'"{x}"' for x in jesUnc) + "}"            
+
+            print(f"AK8 final JEC tag: {jecTag}")
 
             # DATA JEC tags for 2022EE and 2023 pre-BPix.
             if not self.isMC and isinstance(jecTag, list):
@@ -385,20 +385,16 @@ class FatJMECalculator(Module):
                 f'MkShapesFatJetVariationsCalculator {name} = MkShapesFatJetVariationsCalculator(FatJetVariationsCalculator::create("{jsonFile}", "{jetAlgo}", "{jecTag}", "{jecLevel}", {jesUnc_cpp}, false, "{jerTag}", "{smearJson}", "{smearingTool}", false, true, 0.4, 3.0, "{subjetJson}", "{subjetAlgo}", "{subjetTag}", "{jecLevel}"), "{subjetJson}", "{subjetJER}", "{subjetAlgo}", "{smearJson}", true);'
             )
 
-            calculators[period] = name
-            labels = [str(x) for x in getattr(ROOT, name).available()]
-            variations[period] = {label: i for i, label in enumerate(labels)}
-
-            if not labels or labels[0] != "nominal" or len(labels) != len(set(labels)):
-                raise RuntimeError(f"Unexpected FatJet variation layout: {labels}")
-
-            for label in labels[1:]:
-                if not label.endswith(("up", "down")):
-                    raise RuntimeError(f"Unexpected FatJet variation: {label}")
-                source = label[:-2] if label.endswith("up") else label[:-4]
-                source = source.replace(year, "YEAR") if self.runPeriods and year else source
-                if source not in sources:
-                    sources.append(source)
+        # Same source extraction and ordering as JMECalculator.py.
+        if self.runPeriods:
+            calc = getattr(ROOT, f"myFatJetVariationsCalculator_{self.runPeriods[0]}")
+            sources = calc.available()[1:][::2]
+            sources = [str(source).removesuffix("up") for source in sources]
+            sources = [source.replace(str(JetMakerCfg[self.year][self.runPeriods[0]]["year"]), "YEAR") for source in sources]
+        else:
+            calc = getattr(ROOT, "myFatJetVariationsCalculator")
+            sources = calc.available()[1:][::2]
+            sources = [str(source).removesuffix("up") for source in sources]
 
         print("FatJet JES/JER sources:", sources)
 
@@ -434,6 +430,7 @@ class FatJMECalculator(Module):
         cols.append("SubJet_phi")
         cols.append("SubJet_mass")
         cols.append("SubJet_rawFactor")
+        cols.append("SubJet_subGenJetAK8Idx" if self.do_JER and "v15" in self.year else "ROOT::RVec<Short_t>{}")
         cols.append("FatJet_jetId")
         cols.append("Rho_fixedGridRhoFastjetAll")
 
@@ -442,6 +439,7 @@ class FatJMECalculator(Module):
         colsWithType.append("ROOT::RVecF SubJet_phi")
         colsWithType.append("ROOT::RVecF SubJet_mass")
         colsWithType.append("ROOT::RVecF SubJet_rawFactor")
+        colsWithType.append("ROOT::RVec<Short_t> SubJet_subGenJetAK8Idx")
         colsWithType.append("ROOT::RVec<UChar_t> FatJet_jetId")
         colsWithType.append("float Rho_fixedGridRhoFastjetAll")
 
@@ -522,21 +520,9 @@ class FatJMECalculator(Module):
         df = df.Define("CorrectedFatJet_jetIdx", "CorrectedFatJet_sorting", excludeVariations=["*"])
 
         if self.store_variations:
-            for source in sources:
+            for i, source in enumerate(sources):
                 variation = self.jer_variation_name if source == "jer" else source
-
-                indices = []
-                for tag in ("up", "down"):
-                    if self.runPeriods:
-                        index = "0"
-                        for runP in reversed(self.runPeriods):
-                            year = JetMakerCfg[self.year][runP]["year"]
-                            label = source.replace("YEAR", year) + tag
-                            idx = variations[runP].get(label, 0)
-                            index = f"(int(run_period) == {runP} ? {idx} : {index})"
-                    else:
-                        index = str(variations[None].get(source + tag, 0))
-                    indices.append(index)
+                indices = [str(2*i+1+j) for j in range(2)]
 
                 # Sort FatJets according to the varied pt
                 orders = []
@@ -566,3 +552,4 @@ class FatJMECalculator(Module):
         df= df.DropColumns("fatjetVars").DropColumns("fatjet_sort_*").DropColumns("CorrectedFatJet_sorting")
 
         return df
+

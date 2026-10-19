@@ -207,7 +207,7 @@ class JMECalculator(Module):
             elif 'Run2022G' in self.sampleName:
                 jecTag = self.JEC_era[2]
 
-        print(f"Final JEC tag: {jecTag}")
+        print(f"AK4 final JEC tag: {jecTag}")
 
         # Define the CorrectedJet collection before applying the JEC/JER, as this is needed for the JetSelMask
         df = df.Define("CorrectedJet_pt", "Jet_pt")
@@ -229,9 +229,9 @@ class JMECalculator(Module):
             else:
                 if self.runPeriods:
                     for runP in self.runPeriods:
-                        ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator_{runP} = JetVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", {jesUnc[runP]}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                        ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator_{runP} = JetVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", std::vector<std::string>{{}}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
                 else:
-                    ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", {jesUnc}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                    ROOT.gROOT.ProcessLine(f"JetVariationsCalculator myJetVariationsCalculator = JetVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", std::vector<std::string>{{}}, {addHEM}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
 
             if self.runPeriods:
                 #
@@ -251,7 +251,7 @@ class JMECalculator(Module):
                 jesSources = calc.available()
                 jesSources = calc.available()[1:][::2]
                 jesSources = [str(source).replace('up', '') for source in jesSources]
-                print(jesSources)
+                print("Jet JES/JER sources:", jesSources)
             
             # list of columns to be passed to myJetVarCal produce
             cols = []
@@ -523,9 +523,9 @@ class JMECalculator(Module):
                 else:
                     if self.runPeriods:
                         for runP in self.runPeriods:
-                            ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc_{runP} = Type1METVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc[runP]}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json[runP]}\", \"{met_xy_era[runP]}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                            ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc_{runP} = Type1METVariationsCalculator::create(\"{jsonFile[runP]}\", \"{jetAlgo}\", \"{jecTag[runP]}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, std::vector<std::string>{{}}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json[runP]}\", \"{met_xy_era[runP]}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
                     else:
-                        ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, {jesUnc}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json}\", \"{met_xy_era}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
+                        ROOT.gROOT.ProcessLine(f"Type1METVariationsCalculator my{MET}VarCalc = Type1METVariationsCalculator::create(\"{jsonFile}\", \"{jetAlgo}\", \"{jecTag}\", \"{jecLevel}\", \"{L1JecTag}\", {unclEnThr}, {emEnFracThr}, std::vector<std::string>{{}}, {addHEM}, {isT1smearedMET}, {isXYCorrected}, \"{met_xy_json}\", \"{met_xy_era}\", {is_mc}, \"\", \"\", \"\", false, true, {maxDR}, {maxDPT});")
 
                 if self.runPeriods:
                     calcMET = getattr(ROOT, f"my{MET}VarCalc_1")
