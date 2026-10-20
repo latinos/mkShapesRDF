@@ -1174,6 +1174,21 @@ ElectronWP = {
                 },
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
+            "cutBased_TightID_Run3": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_cutBased >= 4",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-15/electron.json.gz"]
+                },
+                'wpSF':  {
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "Tight", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-15/electron.json.gz'],
+                },
+            },
         },
         "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-15/electronSS_EtDependent.json.gz",
     },
@@ -1392,6 +1407,21 @@ ElectronWP = {
                     '1-1' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "cut_MediumID_tthMVA_HWW", 'data/scale_factor/Full2024v15/electron.json'],
                 }, # using 2024 SFs while processing only data. To be updated when processing MC
                 #'fakeW' : 'data/fake_prompt_rates/',
+            },
+            "cutBased_TightID_Run3": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_cutBased >= 4",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-15/electron.json.gz"]
+                },
+                'wpSF':  {
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "Tight", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-15/electron.json.gz'],
+                },
             },
         },
         "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-15/electronSS_EtDependent.json.gz",
@@ -1636,6 +1666,25 @@ ElectronWP = {
                     '1-3' : ["2024PromptCDE+Re-recoFGHI", "Electron-ID-SF", "cut_MediumID_tthMVA_HWW", 'data/scale_factor/Full2024v15/electron.json'],
                 },
                 #'fakeW' : 'data/fake_prompt_rates/',
+            },
+            "cutBased_TightID_Run3": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_cutBased >= 4",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-15/electron.json.gz"], # 2024
+                    '2-2' : ["2025Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-25Prompt-Summer24-NanoAODv15/2026-06-26/electron.json.gz"], # 2025
+                    '3-3' : ["2025Prompt", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-25Prompt-Summer24-NanoAODv15/2026-06-26/electron.json.gz"], # 2026
+                },
+                'wpSF':  {
+                    '1-1' : ["2024Prompt", "Electron-ID-SF", "Tight", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-15/electron.json.gz'],
+                    '2-2' : ["2025Prompt", "Electron-ID-SF", "Tight", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-25Prompt-Summer24-NanoAODv15/2026-06-26/electron.json.gz"], 
+                    '3-3' : ["2025Prompt", "Electron-ID-SF", "Tight", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-25Prompt-Summer24-NanoAODv15/2026-06-26/electron.json.gz"],
+                },
             },
         },
         "ScaleAndSmearing" : {
