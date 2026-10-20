@@ -290,6 +290,21 @@ ElectronWP = {
                 },
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
+            "cutBased_TightID_Run3": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_cutBased >= 4",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-15/electron.json.gz"]
+                },
+                'wpSF':  {
+                    '1-1' : ["2022Re-recoBCD", "Electron-ID-SF", "Tight", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-15/electron.json.gz'],
+                },
+            },
         },
         "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22CDSep23-Summer22-NanoAODv12/2025-12-15/electronSS_EtDependent.json.gz",
     },
@@ -511,6 +526,21 @@ ElectronWP = {
                     '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "cut_MediumID_tthMVA_HWW", 'data/scale_factor/Full2022EEv12/electron.json'],
                 },
                 #'fakeW' : 'data/fake_prompt_rates/',
+            },
+            "cutBased_TightID_Run3": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_cutBased >= 4",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-15/electron.json.gz"]
+                },
+                'wpSF':  {
+                    '1-1' : ["2022Re-recoE+PromptFG", "Electron-ID-SF", "Tight", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-15/electron.json.gz'],
+                },
             },
         },
         "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-12-15/electronSS_EtDependent.json.gz",
@@ -734,6 +764,21 @@ ElectronWP = {
                 },
                 #'fakeW' : 'data/fake_prompt_rates/',
             },
+            "cutBased_TightID_Run3": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_cutBased >= 4",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-15/electron.json.gz"]
+                },
+                'wpSF':  {
+                    '1-1' : ["2023PromptC", "Electron-ID-SF", "Tight", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-15/electron.json.gz'],
+                },
+            },
         },
         "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23CSep23-Summer23-NanoAODv12/2025-12-15/electronSS_EtDependent.json.gz",
     },
@@ -955,6 +1000,21 @@ ElectronWP = {
                     '1-1' : ["2023PromptD", "Electron-ID-SF", "cut_MediumID_tthMVA_HWW", 'data/scale_factor/Full2023BPixv12/electron.json'],
                 },
                 #'fakeW' : 'data/fake_prompt_rates/',
+            },
+            "cutBased_TightID_Run3": {
+                "cuts": {
+                    "ROOT::RVecB (Electron_pt.size(), true)": [
+                        "ROOT::VecOps::abs(Electron_eta) < 2.5",
+                        "Electron_cutBased >= 4",
+                        "Electron_convVeto",
+                    ],
+                },
+                'tkSF':  {
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-15/electron.json.gz"]
+                },
+                'wpSF':  {
+                    '1-1' : ["2023PromptD", "Electron-ID-SF", "Tight", '/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-15/electron.json.gz'],
+                },
             },
         },
         "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-12-15/electronSS_EtDependent.json.gz",
