@@ -97,7 +97,7 @@ class JMECalculator(Module):
                 self.isXYCorrEra  = {}
 
                 for runP in self.runPeriods:
-                    self.json[runP] = JetMakerCfg[self.year][runP]["jet_jerc"]
+                    self.json[runP] = JetMakerCfg[self.year][runP]["jet"]["jet_jerc"]
                     if self.isMC:
                         self.JEC_era[runP] = JetMakerCfg[self.year][runP]["JEC"]
                     else:
@@ -113,7 +113,7 @@ class JMECalculator(Module):
                         self.isXYCorrEra[runP] = JetMakerCfg[self.year][runP]["met_xy_era"]
 
             else:
-                self.json = JetMakerCfg[self.year]["jet_jerc"]
+                self.json = JetMakerCfg[self.year]["jet"]["jet_jerc"]
                 if self.isMC:
                     self.JEC_era = JetMakerCfg[self.year]["JEC"]
                 else:
@@ -207,7 +207,7 @@ class JMECalculator(Module):
             elif 'Run2022G' in self.sampleName:
                 jecTag = self.JEC_era[2]
 
-        print(f"Final JEC tag: {jecTag}")
+        print(f"AK4 final JEC tag: {jecTag}")
 
         # Define the CorrectedJet collection before applying the JEC/JER, as this is needed for the JetSelMask
         df = df.Define("CorrectedJet_pt", "Jet_pt")
@@ -251,7 +251,7 @@ class JMECalculator(Module):
                 jesSources = calc.available()
                 jesSources = calc.available()[1:][::2]
                 jesSources = [str(source).replace('up', '') for source in jesSources]
-                print(jesSources)
+                print("Jet JES/JER sources:", jesSources)
             
             # list of columns to be passed to myJetVarCal produce
             cols = []

@@ -504,7 +504,7 @@ class mRDF:
                 branches.remove("nisLoose")
             _branches = branches.copy()
 
-            CollectionsToZip = ['CleanJet','WH3l_dphilmet','WH3l_mtlmet','PFMET','Jet','PuppiMET','Lepton_tightMuon','Lepton_tightElectron','Lepton_isTightElectron','Lepton_isTightMuon','Lepton',
+            CollectionsToZip = ['CleanJet','CleanFatJet','CorrectedJet','CorrectedFatJet','WH3l_dphilmet','WH3l_mtlmet','PFMET','Jet','PuppiMET','Lepton',
                                 'Muon','Electron','Photon','Gen','LHE','HLT','L1','Tau','IsoTrack','GenPart','LHEPart','TrigObj','LepCut2l','LepCut3l','LepCut4l','NeutrinoGen','SubJet',
                                 'ChsMET','LeptonGen','FatJet','LepSF2l','LepSF3l','LepSF4l','PhotonGen','DressedLepton','GenDressedLepton','SubGenJetAK8','LowPtElectron','VetoLepton',
                                 'BeamSpot','LHEWeight','GenIsolatedPhoton','RawPFMET','TkMET','CorrT1METJet','boostedTau','newJet','GenJet','TriggerEffWeight','TriggerSFWeight',
