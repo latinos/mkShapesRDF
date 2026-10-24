@@ -104,7 +104,7 @@ class JetIDMaker(Module):
                         int multiplicity = Jet_chMultiplicity[i] + Jet_neMultiplicity[i];
                         int pass_id = cset_jet_id_tight->evaluate({Jet_eta[i], Jet_chHEF[i], Jet_neHEF[i], Jet_chEmEF[i], Jet_neEmEF[i], Jet_muEF[i], Jet_chMultiplicity[i], Jet_neMultiplicity[i], multiplicity});
                         int pass_lepveto = cset_jet_id_tightlepveto->evaluate({Jet_eta[i], Jet_chHEF[i], Jet_neHEF[i], Jet_chEmEF[i], Jet_neEmEF[i], Jet_muEF[i], Jet_chMultiplicity[i], Jet_neMultiplicity[i], multiplicity});
-                        Jet_JetId[i] = tightLepVeto ? 6 : (tight ? 2 : 0);
+                        Jet_JetId[i] = pass_lepveto ? 6 : (pass_id ? 2 : 0); 
                     }
                     return Jet_JetId;
                 }
