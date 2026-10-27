@@ -243,14 +243,14 @@ class JMECalculator(Module):
                 calc = getattr(ROOT, "myJetVariationsCalculator_1")
                 jesSources = calc.available()
                 jesSources = calc.available()[1:][::2]
-                jesSources = [str(source).replace('up', '') for source in jesSources]
+                jesSources = [str(source).removesuffix('up') for source in jesSources]
                 jesSources = [str(source).replace(JetMakerCfg[self.year][next(iter(JetMakerCfg[self.year]))]["year"], 'YEAR') for source in jesSources]
                 print(jesSources)
             else: 
                 calc = getattr(ROOT, "myJetVariationsCalculator")
                 jesSources = calc.available()
                 jesSources = calc.available()[1:][::2]
-                jesSources = [str(source).replace('up', '') for source in jesSources]
+                jesSources = [str(source).removesuffix('up') for source in jesSources]
                 print("Jet JES/JER sources:", jesSources)
             
             # list of columns to be passed to myJetVarCal produce
@@ -528,13 +528,13 @@ class JMECalculator(Module):
                     calcMET = getattr(ROOT, f"my{MET}VarCalc_1")
                     METSources = calcMET.available()
                     METSources = calcMET.available()[1:][::2]
-                    METSources = [str(source).replace('up', '') for source in METSources]
+                    METSources = [str(source).removesuffix('up') for source in METSources]
                     METSources = [str(source).replace(JetMakerCfg[self.year][next(iter(JetMakerCfg[self.year]))]["year"], 'YEAR') for source in METSources]
                 else:   
                     calcMET = getattr(ROOT, f"my{MET}VarCalc")
                     METSources = calcMET.available()
                     METSources = calcMET.available()[1:][::2]
-                    METSources = [str(source).replace('up', '') for source in METSources]
+                    METSources = [str(source).removesuffix('up') for source in METSources]
                 
                 # list of columns to be passed to myJetVarCal produce
                 cols = []
