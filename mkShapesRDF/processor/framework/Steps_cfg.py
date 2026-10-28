@@ -2112,19 +2112,10 @@ Steps = {
         "do4MC": True,
         "do4Data": True,
         "import": "mkShapesRDF.processor.modules.FatJetSelMask",
-        "declare": 'fatJetSelMask = lambda : FatJetSelMask(2,200.0,2.4,doMask=True)',
+        "declare": 'fatJetSelMask = lambda : FatJetSelMask(2,200.0,2.4)',
         "module": "fatJetSelMask()",
     },
     
-    "fatJetSel": {
-        "isChain": False,
-        "do4MC": True,
-        "do4Data": True,
-        "import": "mkShapesRDF.processor.modules.FatJetSel",
-        "declare": 'fatJetSel = lambda : FatJetSel(2,200.0,2.4)',
-        "module": "fatJetSel()",
-    },
-
     "fakeSel": {
         "isChain": False,
         "do4MC": True,

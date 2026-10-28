@@ -124,7 +124,7 @@ class MkShapesFatJetVariationsCalculator : public FatJetVariationsCalculator {
   // Reconstruct the soft-drop mass. Per: https://cms-jme-jmar.docs.cern.ch/recommendations/jet-mass/#soft-drop-mass, 
   // "In NanoAOD, FatJet_subJetIdx1 and FatJet_subJetIdx2 index the two soft-drop subjets in the event's SubJet collection"
   static ROOT::RVecF groomedMass(const ROOT::RVec<Short_t>& first, const ROOT::RVec<Short_t>& second, const ROOT::RVec<double>& pt, const p4compv_t& eta, const p4compv_t& phi, const ROOT::RVec<double>& mass, const ROOT::RVec<double>& factors) {
-    ROOT::RVecF result(first.size(), 0.);
+    ROOT::RVecF result(first.size(), -1.0);
     for (std::size_t jet = 0; jet < first.size(); ++jet) {
       if (first[jet] < 0 || second[jet] < 0 ||
           first[jet] >= int(pt.size()) || second[jet] >= int(pt.size())) continue;
@@ -231,7 +231,7 @@ public:
         const auto factors = m_subjetSmearer.factors(
             pt[i], subeta[i], subphi[i], genIdx, subgenpt, subgeneta, subgenphi, subjetSeed, rho);
         for (auto factor : factors)
-          if (!std::isfinite(factor) || factor < 0.)
+          if (!std::isfinite(factor))
             throw std::runtime_error("Invalid SubJet JER factor");
         jerNom[i] = factors[0]; jerUp[i] = factors[1]; jerDown[i] = factors[2];
       }
