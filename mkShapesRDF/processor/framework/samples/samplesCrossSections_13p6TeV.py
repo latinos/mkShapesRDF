@@ -335,6 +335,20 @@ xs_db['WH_H0PHf05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
 xs_db['WH_H0Mf05_ToWWTo2L2Nu']   = ["xsec=1.00",     "kfact=1.00", "ref=X"]
 xs_db['WH_H0L1f05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
 
+### AC ZH (dummy values)
+xs_db['ZH_H0PM_ToWWTo2L2Nu']      = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['ZH_H0PH_ToWWTo2L2Nu']      = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['ZH_H0M_ToWWTo2L2Nu']       = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['ZH_H0L1_ToWWTo2L2Nu']      = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['ZH_H0PHf05_ToWWTo2L2Nu']   = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['ZH_H0Mf05_ToWWTo2L2Nu']    = ["xsec=1.00",     "kfact=1.00", "ref=X"] 
+xs_db['ZH_H0L1f05_ToWWTo2L2Nu']   = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['ZH_H0LZgf05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['ZH_H0PHZgf05_ToWWTo2L2Nu'] = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['ZH_H0MZgf05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['ZH_H0PHggf05_ToWWTo2L2Nu'] = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+xs_db['ZH_H0Mggf05_ToWWTo2L2Nu']  = ["xsec=1.00",     "kfact=1.00", "ref=X"]
+
 # NPS-26-025 : DMsimp_spin0 samples
 # ttDM inclusive pseudoscalar
 xs_db['TTDMsimpSpin0_ps_mphi-10'] = ["xsec=0.5036", "kfact=1.000", "ref=I"]
