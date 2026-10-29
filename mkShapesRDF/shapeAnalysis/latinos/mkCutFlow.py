@@ -153,12 +153,15 @@ def render_table(regions, samples, yields, table_format="text", precision=2, dat
     pm = "RPLME" if table_format == "latex" else " +/- "
     
     rows = [
-        [region] + [f"{value:.{precision}f}{pm}{error:.{precision}f}" if show_errors and sample not in data else f"{value:.{precision}f}" for sample, (value, error) in zip(samples, row)]
-        for region, row in zip(regions, yields)
+        [sample] + [
+            f"{value:.{precision}f}{pm}{error:.{precision}f}" if show_errors and sample not in data else f"{value:.{precision}f}"
+            for value, error in sample_yields
+        ]
+        for sample, sample_yields in zip(samples, zip(*yields))
     ]
     
     formats = {"text": "simple", "markdown": "github", "latex": "latex"}
-    result = tabulate(rows, headers=["Cut"] + samples, tablefmt=formats[table_format], disable_numparse=True)
+    result = tabulate(rows, headers=["Process"] + list(regions), tablefmt=formats[table_format], disable_numparse=True)
     
     if table_format == "latex":
         result = result.replace("RPLME", r" $\pm$ ")
