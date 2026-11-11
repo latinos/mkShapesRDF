@@ -10,7 +10,7 @@ class JetSel(Module):
         self.maxEta = maxEta
         self.UL2016fix = UL2016fix
 
-    def runModue(self, df, values):
+    def runModule(self, df, values):
         # jetId = 2
         # wp = "loose"
         # minPt = 15.0
@@ -31,19 +31,12 @@ class JetSel(Module):
             }
 
         df = df.Define(
-            "CleanJetMask",
-            "(CleanJet_pt <= 50 \
-                && (Take(Jet_puId, CleanJet_jetIdx) \
-                && ROOT::RVecI (CleanJet_pt.size(), {})) \
-                ) || (CleanJet_pt > 50)".format(
-                wp_dict[self.puJetId]
-            ),
-        )
-
-        df = df.Define(
-            "CleanJetMask",
-            f"CleanJetMask && CleanJet_pt >= {self.minPt} && CleanJet_eta <= {self.maxEta} && Take(Jet_jetId, CleanJet_jetIdx) >= {self.jetId}",
-        )
+       "CleanJetMask",
+       f"((CleanJet_pt > 50) || ((Take(Jet_puId, CleanJet_jetIdx) & {puId}) != 0))"
+       f" && CleanJet_pt >= {self.minPt}"
+       f" && abs(CleanJet_eta) <= {self.maxEta}"
+       f" && ((Take(Jet_jetId, CleanJet_jetIdx) & {self.jetId}) == {self.jetId})"
+       )
 
         values.append(
             [
