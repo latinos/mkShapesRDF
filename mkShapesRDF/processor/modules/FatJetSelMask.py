@@ -43,7 +43,8 @@ class FatJetSelMask(Module):
 
         df = df.Define("CleanFatJet_geometrical", f"!reduce_cond_any(FatJet_dR2 < ({self.DeltaRlep}*{self.DeltaRlep}), CorrectedFatJet_pt.size(), Lepton_pt[LeptonMask_FJC].size())")
         df = df.Define("fatjetIdCut", f"((Take(FatJet_jetId, CorrectedFatJet_jetIdx) & {self.jetId}) == {self.jetId})")
-        df = df.Define("CleanFatJetMask", f"(CorrectedFatJet_pt >= {self.minPt} && abs(CorrectedFatJet_eta) <= {self.maxEta} && fatjetIdCut && CleanFatJet_geometrical)")
+        df = df.Define("CleanFatJetMask", f"(CorrectedFatJet_pt >= {self.minPt} && abs(CorrectedFatJet_eta) <= {self.maxEta} && fatjetIdCut)")
+        df = df.Define("CleanFatJet_geometricalMask", "CleanFatJet_geometrical[CleanFatJetMask]")
 
         values.append([df.Define("_fatjet_before", "int(CorrectedFatJet_pt.size())").Sum("_fatjet_before"), "Original size of CorrectedFatJet"])
 

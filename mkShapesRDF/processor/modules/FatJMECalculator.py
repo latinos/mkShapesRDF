@@ -12,15 +12,16 @@ from mkShapesRDF.processor.data.JetMaker_cfg import JetMakerCfg
 # FatJetVariationsCalculator.cc does NOT apply JER to the
 # individual subjets, and uses the AK8 JES evaluator when shifting subjets.
 # Following https://cms-jme-jmar.docs.cern.ch/recommendations/jet-mass/#soft-drop-mass
-# This inclusdes an adapter thhat keeps the native AK8 calculator but
-# recomputes the soft-drop mass using independent AK4 subjet corrections.
+# This adapter uses the official AK4 calculator for subjet variations and 
+# reconstructs their invariant mass.
 
 FATJET_SUBJET_JES_CPP = r'''
 #ifndef MKSHAPES_FATJET_SUBJET_JES
 #define MKSHAPES_FATJET_SUBJET_JES
 
-// Existing CMS jet correction calculator
+// Existing CMS jet correction calculators
 #include "FatJetVariationsCalculator.h"
+#include "JetVariationsCalculator.h"
 
 #include <Math/GenVector/LorentzVector.h>
 #include <Math/GenVector/PtEtaPhiM4D.h>
@@ -29,39 +30,11 @@ FATJET_SUBJET_JES_CPP = r'''
 #include <stdexcept>
 #include <utility>
 #include <cstdint>
+#include <map>
+#include <string>
+#include <vector>
 
 class MkShapesFatJetVariationsCalculator : public FatJetVariationsCalculator {
-
-  // Calculates AK4 subjet JER factors
-  class SubJetSmearer : public JetMETVariationsCalculatorBase {
-  public:
-    void configure(const std::string& json, const std::string& tag, const std::string& algorithm, const std::string& smearJson, bool match) {
-      auto corrections = correction::CorrectionSet::from_file(json);
-      auto smearing = correction::CorrectionSet::from_file(smearJson);
-      const auto suffix = "_" + algorithm;
-      const auto uncertainty = tag + "_SFUncertainty" + suffix;
-      const bool newFormat = hasCorrection(corrections, uncertainty);
-      setSmearing(corrections->at(tag + "_PtResolution" + suffix), corrections->at(tag + "_ScaleFactor" + suffix), newFormat ? corrections->at(uncertainty) : nullptr, smearing->at("JERSmear"), false, newFormat, match, 0.2, 3.0);
-      checkSmearingArguments();
-    }
-    
-    // Evaluate the JER for one subjet https://cms-jme-jerc.docs.cern.ch/application/jer/#implementation, applyJERSmearing performs matching internally
-    std::array<double, 3> factors(double pt, float eta, float phi, int genIdx, const p4compv_t& genpt, const p4compv_t& geneta, const p4compv_t& genphi, int seed, float rho) const {
-        auto safePt = genpt;
-        auto safeEta = geneta;
-        auto safePhi = genphi;
-    
-        // Protect findGenMatch() from invalid indices.
-        if (genIdx < 0 || genIdx >= int(genpt.size())) {
-            genIdx = int(genpt.size());
-            safePt.push_back(0.f);
-            safeEta.push_back(1.e6f);
-            safePhi.push_back(0.f);
-        }
-    
-        return applyJERSmearing(m_jetPtRes, m_jerSmear, m_jetEResSF, m_jetEResSFUnc, m_smearDoGenMatch, pt, eta, phi, genIdx,safePt, safeEta, safePhi, seed, rho);
-    }
-  };
 
   // AK8 corrections while bypassing native subjet corrections
   class AK8OnlyCalculator : public FatJetVariationsCalculator {
@@ -69,61 +42,15 @@ class MkShapesFatJetVariationsCalculator : public FatJetVariationsCalculator {
     explicit AK8OnlyCalculator(FatJetVariationsCalculator base)
         : FatJetVariationsCalculator(std::move(base)) { m_doJECSubjet = false; } // Disable the parent's subjet correction
   };
-  enum class Input {Area, Eta, Pt, Rho, Phi, Run};
-  struct InputSpec {Input input; correction::Variable::VarType type;};
-  using Schema = std::vector<InputSpec>;
   using LorentzVector = ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double>>;
 
-  Schema m_subjetJECInputs;
-  std::map<std::string, Schema> m_subjetJESInputs;
   AK8OnlyCalculator m_ak8Only;
-  SubJetSmearer m_subjetSmearer;
+  JetVariationsCalculator m_ak4Subjets;
   bool m_smearSubjets = false;
-
-  // Possible inputs from correctionlib json
-  static Schema inputSchema(const std::vector<correction::Variable>& inputs) {
-    const std::map<std::string, Input> known = {
-      {"JetA", Input::Area}, {"JetEta", Input::Eta}, {"JetPt", Input::Pt}, {"Rho", Input::Rho}, {"JetPhi", Input::Phi}, {"run", Input::Run}
-    };
-    Schema result;
-    for (const auto& variable : inputs) {
-      const auto found = known.find(variable.name());
-      if (found == known.end())
-        throw std::invalid_argument("Unsupported SubJet correction input: " + variable.name());
-      const auto type = variable.type();
-      if (type != correction::Variable::VarType::real &&
-          !(found->second == Input::Run && type == correction::Variable::VarType::integer))
-        throw std::invalid_argument("Unsupported SubJet correction input type: " + variable.name());
-      result.push_back({found->second, type});
-    }
-    return result;
-  }
-
-  // Building input vector
-  static std::vector<correction::Variable::Type> inputValues(
-      const Schema& schema, double eta, double pt, double phi, double rho, int run) {
-    std::vector<correction::Variable::Type> values;
-    for (const auto& variable : schema) {
-      double value = 0.;
-      switch (variable.input) {
-        case Input::Area: value = 0.; break;
-        case Input::Eta: value = eta; break;
-        case Input::Pt: value = pt; break;
-        case Input::Rho: value = rho; break;
-        case Input::Phi: value = phi; break;
-        case Input::Run: value = run; break;
-      }
-      if (variable.type == correction::Variable::VarType::integer)
-        values.emplace_back(run);
-      else
-        values.emplace_back(value);
-    }
-    return values;
-  }
 
   // Reconstruct the soft-drop mass. Per: https://cms-jme-jmar.docs.cern.ch/recommendations/jet-mass/#soft-drop-mass, 
   // "In NanoAOD, FatJet_subJetIdx1 and FatJet_subJetIdx2 index the two soft-drop subjets in the event's SubJet collection"
-  static ROOT::RVecF groomedMass(const ROOT::RVec<Short_t>& first, const ROOT::RVec<Short_t>& second, const ROOT::RVec<double>& pt, const p4compv_t& eta, const p4compv_t& phi, const ROOT::RVec<double>& mass, const ROOT::RVec<double>& factors) {
+  static ROOT::RVecF groomedMass(const ROOT::RVec<Short_t>& first, const ROOT::RVec<Short_t>& second, const p4compv_t& pt, const p4compv_t& eta, const p4compv_t& phi, const p4compv_t& mass) {
     ROOT::RVecF result(first.size(), -1.0);
     for (std::size_t jet = 0; jet < first.size(); ++jet) {
       if (first[jet] < 0 || second[jet] < 0 ||
@@ -131,8 +58,8 @@ class MkShapesFatJetVariationsCalculator : public FatJetVariationsCalculator {
       const auto i = first[jet], j = second[jet];
       // "Build each stored momentum from SubJet_pt, SubJet_eta, SubJet_phi, and SubJet_mass"
       const auto pair =
-        LorentzVector(pt[i] * factors[i], eta[i], phi[i], mass[i] * factors[i]) +
-        LorentzVector(pt[j] * factors[j], eta[j], phi[j], mass[j] * factors[j]);
+        LorentzVector(pt[i], eta[i], phi[i], mass[i]) +
+        LorentzVector(pt[j], eta[j], phi[j], mass[j]);
       result[jet] = std::abs(pair.M());
     }
     return result;
@@ -145,16 +72,14 @@ class MkShapesFatJetVariationsCalculator : public FatJetVariationsCalculator {
   }
 
 public:
-  explicit MkShapesFatJetVariationsCalculator(FatJetVariationsCalculator base, const std::string& subjetJson = "", const std::string& subjetJER = "", const std::string& algorithm = "AK4PFPuppi", const std::string& smearJson = "", bool genMatch = true) : FatJetVariationsCalculator(base), m_ak8Only(std::move(base)) {
+    explicit MkShapesFatJetVariationsCalculator(FatJetVariationsCalculator base, const std::string& subjetJson, const std::string& subjetJER, const std::string& algorithm, const std::string& smearJson, bool genMatch, const std::string& subjetTag, const std::string& jecLevel, const std::vector<std::string>& jesUnc) : FatJetVariationsCalculator(base), m_ak8Only(std::move(base)), m_ak4Subjets(JetVariationsCalculator::create(subjetJson, algorithm, subjetTag, jecLevel, jesUnc, false, subjetJER, smearJson, subjetJER.empty() ? "" : "JERSmear", false, genMatch, 0.2, 3.0)), m_smearSubjets(!subjetJER.empty()) {
     if (!m_doJECSubjet) return;
-    if (!subjetJER.empty()) {m_subjetSmearer.configure(subjetJson, subjetJER, algorithm, smearJson, genMatch);m_smearSubjets = true;}
-    m_subjetJECInputs = std::visit([](const auto& corrector) {
-      if (!corrector) throw std::invalid_argument("Missing SubJet JEC corrector");
-      return inputSchema(corrector->inputs());
-    }, m_jesSFSubjet);
-    for (const auto& source : m_jesUncSources) {
-      const auto corrector = m_jesUncSourcesSubjet.at(source.first);
-      m_subjetJESInputs.emplace(source.first, inputSchema(corrector->inputs()));
+    const auto labels = available("msoftdrop"), subjetLabels = m_ak4Subjets.available();
+    if (m_smearSubjets != (std::find(subjetLabels.begin(), subjetLabels.end(), "jerup") != subjetLabels.end())) throw std::invalid_argument("SubJet JER configuration mismatch");
+    for (const auto& label : subjetLabels) if (label.compare(0, 13, "jesFlavorPure") == 0) throw std::invalid_argument("FlavorPure JES requires SubJet_partonFlavour");
+    for (const auto& label : labels) {
+      if (label == "nominal" || (!m_smearSubjets && label.compare(0, 3, "jer") == 0)) continue;
+      if (std::find(subjetLabels.begin(), subjetLabels.end(), label) == subjetLabels.end()) throw std::invalid_argument("Missing AK4 SubJet variation: " + label);
     }
   }
 
@@ -202,72 +127,57 @@ public:
     
     auto result = m_ak8Only.produce(
       jet_pt, jet_eta, jet_phi, jet_mass, jet_rawcorr, jet_area, jet_msoftdrop,
-      first, second, subpt, subeta, subphi, submass, subraw, jet_id, rho,
-      safeGenIdx, seed, run, safeGenPt, safeGenEta, safeGenPhi, safeGenMass);
+      p4compv_int(first.begin(), first.end()), p4compv_int(second.begin(), second.end()), subpt, subeta, subphi, submass, subraw, p4compv_int(jet_id.begin(), jet_id.end()), rho,
+      p4compv_int(safeGenIdx.begin(), safeGenIdx.end()), seed, run, safeGenPt, safeGenEta, safeGenPhi, safeGenMass);
     if (!m_doJECSubjet) return result;
 
-    ROOT::RVec<double> pt(subpt), mass(submass);
-    for (std::size_t i = 0; i < n; ++i) {
-      const auto values = inputValues(
-        m_subjetJECInputs, subeta[i], subpt[i] * (1. - subraw[i]), subphi[i], rho, run); 
-      const double correction = std::visit([&](const auto& corrector) {
-        return corrector->evaluate(values);
-      }, m_jesSFSubjet);
-      if (!std::isfinite(correction))
-        throw std::runtime_error("Nonfinite SubJet JEC");
-      if (correction > 0.) {
-        const double factor = (1. - subraw[i]) * correction;
-        pt[i] *= factor;
-        mass[i] *= factor;
-      }
-    }
+    ////////////////////////////////////////////////////////////////
+    //////////////////////// IMPORTAN NOTE //////////////////////// 
+    //////////////////////////////////////////////////////////////
+
+    // NanoAOD does not store SubJet_area, SubJet_jetId or SubJet_partonFlavour: 
+    // area=0 follows CMS PUPPI SubJet JEC
+    // jetId is unused with HEM2018 disabled, setting jetID=0
+    // SubJet_partonFlavour is also unavailable: flavour=0 is used only for non-FlavorPure JES sources.
+
+    const p4compv_t zeroArea(n, 0.f);
+    const p4compv_int zeroJetId(n, 0), flavours(n, 0);
+    const auto subjetLabels = m_ak4Subjets.available();
+    std::vector<p4compv_t> pt(subjetLabels.size(), p4compv_t(n, 0.f)), mass(subjetLabels.size(), p4compv_t(n, 0.f));
 
     // Scale each corrected SubJet four-vector with its own AK4 JER.
-    ROOT::RVec<double> jerNom(n, 1.), jerUp(n, 1.), jerDown(n, 1.);
     if (m_smearSubjets) {
+      auto safeSubGenPt = subgenpt, safeSubGenEta = subgeneta, safeSubGenPhi = subgenphi;
+      const int missing = int(subgenpt.size());
+      safeSubGenPt.push_back(0.f); safeSubGenEta.push_back(1.e6f); safeSubGenPhi.push_back(0.f);
+      const p4compv_t safeSubGenMass(safeSubGenPt.size(), 0.f);
       for (std::size_t i = 0; i < n; ++i) {
-        const int subjetSeed = seed + i + 1; 
-        const int genIdx = i < subgenidx.size() ? int(subgenidx[i]) : -1;
-        const auto factors = m_subjetSmearer.factors(
-            pt[i], subeta[i], subphi[i], genIdx, subgenpt, subgeneta, subgenphi, subjetSeed, rho);
-        for (auto factor : factors)
-          if (!std::isfinite(factor))
-            throw std::runtime_error("Invalid SubJet JER factor");
-        jerNom[i] = factors[0]; jerUp[i] = factors[1]; jerDown[i] = factors[2];
+        const int subjetSeed = seed + i + 1;
+        int genIdx = i < subgenidx.size() ? int(subgenidx[i]) : -1;
+        // Protect findGenMatch() from invalid indices.
+        if (genIdx < 0 || genIdx >= missing) genIdx = missing;
+        const auto corrected = m_ak4Subjets.produce(p4compv_t{subpt[i]}, p4compv_t{subeta[i]}, p4compv_t{subphi[i]}, p4compv_t{submass[i]}, p4compv_t{subraw[i]}, p4compv_t{0.f}, p4compv_int{0}, rho, p4compv_int{genIdx}, p4compv_int{0}, subjetSeed, run, safeSubGenPt, safeSubGenEta, safeSubGenPhi, safeSubGenMass);
+        for (std::size_t j = 0; j < subjetLabels.size(); ++j) {
+          if (!std::isfinite(corrected.pt(j)[0]) || !std::isfinite(corrected.mass(j)[0])) throw std::runtime_error("Invalid SubJet JER/JES corrected four-vector");
+          pt[j][i] = corrected.pt(j)[0]; mass[j][i] = corrected.mass(j)[0];
+        }
       }
+    } else {
+      const auto corrected = m_ak4Subjets.produce(subpt, subeta, subphi, submass, subraw, zeroArea, zeroJetId, rho, p4compv_int(n, -1), flavours, seed, run, {}, {}, {}, {});
+      for (std::size_t j = 0; j < subjetLabels.size(); ++j) { pt[j] = corrected.pt(j); mass[j] = corrected.mass(j); }
     }
-    const auto nominal = groomedMass(first, second, pt, subeta, subphi, mass, jerNom);
+
     const auto labels = available("msoftdrop");
     if (labels.size() != result.size() || labels.size() != result.sizeM())
       throw std::runtime_error("Unsupported FatJet backend result layout");
     std::vector<bool> replaced(labels.size(), false);
-    for (std::size_t i = 0; i < labels.size(); ++i)
-      if (labels[i] == "nominal") {
-        setSoftDrop(result, i, nominal);
-        replaced[i] = true;
-      } else if (labels[i] == "jerup" || labels[i] == "jerdown") {
-        setSoftDrop(result, i, groomedMass(first, second, pt, subeta, subphi,
-            mass, labels[i] == "jerup" ? jerUp : jerDown));
-        replaced[i] = true;
-      }
-
-    for (const auto& source : m_jesUncSourcesSubjet) {
-      ROOT::RVec<double> up(jerNom), down(jerNom);
-      for (std::size_t i = 0; i < n; ++i) {
-        const auto delta = source.second->evaluate(inputValues(
-          m_subjetJESInputs.at(source.first), subeta[i], pt[i] * jerNom[i], subphi[i], rho, run));
-        up[i] *= 1. + delta;
-        down[i] *= 1. - delta;
-      }
-      for (const auto& direction : {std::string("up"), std::string("down")}) {
-        const auto label = "jes" + source.first + direction;
-        const auto index = std::find(labels.begin(), labels.end(), label);
-        if (index == labels.end()) throw std::runtime_error("Missing FatJet variation: " + label);
-        const auto position = std::distance(labels.begin(), index);
-        setSoftDrop(result, position, groomedMass(
-          first, second, pt, subeta, subphi, mass, direction == "up" ? up : down));
-        replaced[position] = true;
-      }
+    for (std::size_t i = 0; i < labels.size(); ++i) {
+      const auto label = (!m_smearSubjets && labels[i].compare(0, 3, "jer") == 0) ? "nominal" : labels[i];
+      const auto index = std::find(subjetLabels.begin(), subjetLabels.end(), label);
+      if (index == subjetLabels.end()) throw std::runtime_error("Missing SubJet variation: " + label);
+      const auto position = std::distance(subjetLabels.begin(), index);
+      setSoftDrop(result, i, groomedMass(first, second, pt[position], subeta, subphi, mass[position]));
+      replaced[i] = true;
     }
     if (std::find(replaced.begin(), replaced.end(), false) != replaced.end())
       throw std::runtime_error("Unsupported FatJet soft-drop variation label");
@@ -382,8 +292,8 @@ class FatJMECalculator(Module):
             name = f"myFatJetVariationsCalculator_{period}" if period is not None else "myFatJetVariationsCalculator"
             
             ROOT.gInterpreter.Declare(
-                f'MkShapesFatJetVariationsCalculator {name} = MkShapesFatJetVariationsCalculator(FatJetVariationsCalculator::create("{jsonFile}", "{jetAlgo}", "{jecTag}", "{jecLevel}", {jesUnc_cpp}, false, "{jerTag}", "{smearJson}", "{smearingTool}", false, true, 0.4, 3.0, "{subjetJson}", "{subjetAlgo}", "{subjetTag}", "{jecLevel}"), "{subjetJson}", "{subjetJER}", "{subjetAlgo}", "{smearJson}", true);'
-            )
+    f'MkShapesFatJetVariationsCalculator {name} = MkShapesFatJetVariationsCalculator(FatJetVariationsCalculator::create("{jsonFile}", "{jetAlgo}", "{jecTag}", "{jecLevel}", {jesUnc_cpp}, false, "{jerTag}", "{smearJson}", "{smearingTool}", false, true, 0.4, 3.0, "{subjetJson}", "{subjetAlgo}", "{subjetTag}", "{jecLevel}"), "{subjetJson}", "{subjetJER}", "{subjetAlgo}", "{smearJson}", true, "{subjetTag}", "{jecLevel}", {jesUnc_cpp});'
+    )
 
         # Same source extraction and ordering as JMECalculator.py.
         if self.runPeriods:

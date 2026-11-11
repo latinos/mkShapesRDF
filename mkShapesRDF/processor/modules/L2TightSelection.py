@@ -38,8 +38,8 @@ class L2TightSelection(Module):
         df = df.Filter(f"{l2tight_selection}")
 
         # Remove temporary corrected AK4/AK8 jet collections
-        df = df.DropColumns("nCorrectedJet").DropColumns("CorrectedJet*")
-        df = df.DropColumns("nCorrectedFatJet").DropColumns("CorrectedFatJet*")
+        df = df.DropColumns("nCorrectedJet").DropColumns("CorrectedJet*").DropColumns("CleanJet_correctedjetIdx")
+        df = df.DropColumns("nCorrectedFatJet").DropColumns("CorrectedFatJet*").DropColumns("CleanFatJet_correctedjetIdx")
 
         return df
 
