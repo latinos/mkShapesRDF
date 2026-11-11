@@ -623,6 +623,21 @@ Samples['WH_H0PHf05_ToWWTo2L2Nu']  = {'nanoAOD' :'/WH0PHf05ph0-Hto2WtoLNu_Fil-2L
 Samples['WH_H0Mf05_ToWWTo2L2Nu']   = {'nanoAOD' :'/WH0Mf05ph0-Hto2WtoLNu_Fil-2LOS_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
 Samples['WH_H0L1f05_ToWWTo2L2Nu']  = {'nanoAOD' :'/WH0L1f05ph0-Hto2WtoLNu_Fil-2LOS_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
 
+### AC ZH
+
+Samples['ZH_H0PM_ToWWTo2L2Nu']      = {'nanoAOD' :'/ZH0PM-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0PH_ToWWTo2L2Nu']      = {'nanoAOD' :'/ZH0PH-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0M_ToWWTo2L2Nu']       = {'nanoAOD' :'/ZH0M-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0L1_ToWWTo2L2Nu']      = {'nanoAOD' :'/ZH0L1-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0PHf05_ToWWTo2L2Nu']   = {'nanoAOD' :'/ZH0PHf05ph0-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0Mf05_ToWWTo2L2Nu']    = {'nanoAOD' :'/ZH0Mf05ph0-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0L1f05_ToWWTo2L2Nu']   = {'nanoAOD' :'/ZH0L1f05ph0-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0LZgf05_ToWWTo2L2Nu']  = {'nanoAOD' :'/ZH0LZgf05ph0-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0PHZgf05_ToWWTo2L2Nu'] = {'nanoAOD' :'/ZH0PHZgf05ph0-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0MZgf05_ToWWTo2L2Nu']  = {'nanoAOD' :'/ZH0MZgf05ph0-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0PHggf05_ToWWTo2L2Nu'] = {'nanoAOD' :'/ZH0PHggf05ph0-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+Samples['ZH_H0Mggf05_ToWWTo2L2Nu']  = {'nanoAOD' :'/ZH0Mggf05ph0-Hto2W_Fil-2L_Par-M-125_TuneCP5_13p6TeV_jhugen-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM'}
+
 
 
 
