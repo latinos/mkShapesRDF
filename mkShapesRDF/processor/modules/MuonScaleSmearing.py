@@ -311,7 +311,7 @@ class MuonScaleSmearing(Module):
                     lepton_columns.append(branch)
 
         df = df.Define("Lepton_sorting",     "sortedIndices(Lepton_newPt)")
-        df = df.Define("Lepton_rochesterSF", "Take(Lepton_newPt/Lepton_pt, Lepton_sorting)")
+        df = df.Redefine("Lepton_rochesterSF", "Take(Lepton_newPt/Lepton_pt, Lepton_sorting)")
         df = df.Redefine("Lepton_pt",        "Take(Lepton_newPt, Lepton_sorting)")
 
         # Lepton_newPt has no leptonScale/leptonResolution variations. Reorder
