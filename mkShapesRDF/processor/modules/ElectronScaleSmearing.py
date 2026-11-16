@@ -211,8 +211,9 @@ class ElectronScaleSmearing(Module):
                     MET.SetPtEtaPhiM(MET_pt, 0.0, MET_phi, 0.0);
                     for (unsigned int i=0; i<Lepton_pt.size(); i++)
                     {
-                        if (abs(Lepton_pdgId[i]) != 11))
+                        if (abs(Lepton_pdgId[i]) != 11){
                             continue;
+                        };
                         Lepton.SetPtEtaPhiM(Lepton_pt[i], Lepton_eta[i], Lepton_phi[i], 0.0);
                         Lepton_new.SetPtEtaPhiM(Lepton_newPt[i], Lepton_eta[i], Lepton_phi[i], 0.0);
                         MET = MET - Lepton_new + Lepton;
@@ -294,10 +295,10 @@ class ElectronScaleSmearing(Module):
             df = df.Redefine("MET_phi", "MET_LeptonScale[1]")
             self.columnsToDrop.append("MET_LeptonScale")
 
-        self.columnsToDrop.append("PuppiMET_LeptonScale")
+        self.columnsToDrop.append("PuppiMET_ElectronScale")
         
-        df = df.Redefine("PuppiMET_pt", "PuppiMET_LeptonScale[0]")
-        df = df.Redefine("PuppiMET_phi", "PuppiMET_LeptonScale[1]")
+        df = df.Redefine("PuppiMET_pt", "PuppiMET_ElectronScale[0]")
+        df = df.Redefine("PuppiMET_phi", "PuppiMET_ElectronScale[1]")
 
         #### Re-order lepton-pT again
 
