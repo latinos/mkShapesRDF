@@ -224,20 +224,20 @@ class MuonScaleSmearing(Module):
         )
         self.columnsToDrop.append("Lepton_newPt")
         if not self.isData:
-            df = df.Redefine(
-                "Lepton_pt_ScaleUp",
+            df = df.Define(
+                "Muon_pt_ScaleUp",
                 "Muon_ScaleSmearing[1]"
             )
-            df = df.Redefine(
-                "Lepton_pt_ScaleDo",
+            df = df.Define(
+                "Muon_pt_ScaleDo",
                 "Muon_ScaleSmearing[2]"
 	        )
-            df = df.Redefine(
-                "Lepton_pt_ResUp",
+            df = df.Define(
+                "Muon_pt_ResUp",
                 "Muon_ScaleSmearing[3]"
 	        )
-            df = df.Redefine(
-                "Lepton_pt_ResDo",
+            df = df.Define(
+                "Muon_pt_ResDo",
                 "Muon_ScaleSmearing[4]"
 	        )
 
@@ -246,18 +246,22 @@ class MuonScaleSmearing(Module):
             tags = ["up", "do"]
             df = df.Vary(
                 "Lepton_pt",
-                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_ScaleUp, Lepton_pt_ScaleDo}",
+                "ROOT::RVec<ROOT::RVecF>{Muon_pt_ScaleUp, Muon_pt_ScaleDo}",
                 ["up", "do"],
                 "muonScale"
             )
             df = df.Vary(
                 "Lepton_pt",
-                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_ResUp, Lepton_pt_ResDo}",
+                "ROOT::RVec<ROOT::RVecF>{Muon_pt_ResUp, Muon_pt_ResDo}",
                 ["up", "do"],
                 "muonResolution"
             )
 
         df = df.DropColumns("Muon_ScaleSmearing")
+        self.columnsToDrop.append("Muon_pt_ScaleUp")
+        self.columnsToDrop.append("Muon_pt_ScaleDo")
+        self.columnsToDrop.append("Muon_pt_ResUp")
+        self.columnsToDrop.append("Muon_pt_ResDo")
 
         ### Recompute MET with the corrected lepton-pT
         df = df.Define(

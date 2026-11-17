@@ -239,19 +239,19 @@ class ElectronScaleSmearing(Module):
         self.columnsToDrop.append("Lepton_newPt")
         if not self.isData:
             df = df.Define(
-                "Lepton_pt_ScaleUp",
+                "Electron_pt_ScaleUp",
                 "Electron_ScaleSmearing[1]"
             )
             df = df.Define(
-                "Lepton_pt_ScaleDo",
+                "Electron_pt_ScaleDo",
                 "Electron_ScaleSmearing[2]"
 	        )
             df = df.Define(
-                "Lepton_pt_ResUp",
+                "Electron_pt_ResUp",
                 "Electron_ScaleSmearing[3]"
 	        )
             df = df.Define(
-                "Lepton_pt_ResDo",
+                "Electron_pt_ResDo",
                 "Electron_ScaleSmearing[4]"
 	        )
 
@@ -260,18 +260,22 @@ class ElectronScaleSmearing(Module):
             tags = ["up", "do"]
             df = df.Vary(
                 "Lepton_pt",
-                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_ScaleUp, Lepton_pt_ScaleDo}",
+                "ROOT::RVec<ROOT::RVecF>{Electron_pt_ScaleUp, Electron_pt_ScaleDo}",
                 ["up", "do"],
                 "electronScale"
             )
             df = df.Vary(
                 "Lepton_pt",
-                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_ResUp, Lepton_pt_ResDo}",
+                "ROOT::RVec<ROOT::RVecF>{Electron_pt_ResUp, Electron_pt_ResDo}",
                 ["up", "do"],
                 "electronResolution"
             )
 
         df = df.DropColumns("Electron_ScaleSmearing")
+        self.columnsToDrop.append("Electron_pt_ScaleUp")
+        self.columnsToDrop.append("Electron_pt_ScaleDo")
+        self.columnsToDrop.append("Electron_pt_ResUp")
+        self.columnsToDrop.append("Electron_pt_ResDo")
 
         ### Recompute MET with the corrected lepton-pT
         df = df.Define(
@@ -280,20 +284,20 @@ class ElectronScaleSmearing(Module):
         )
         if "24" in self.era or "25" in self.era or "RunIII" in self.era:
             df = df.Define(
-                "PFMET_LeptonScale",
+                "PFMET_ElectronScale",
                 "CorrectMETElectron(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, PFMET_pt, PFMET_phi)"
             )
-            df = df.Redefine("PFMET_pt", "PFMET_LeptonScale[0]")
-            df = df.Redefine("PFMET_phi", "PFMET_LeptonScale[1]")
-            self.columnsToDrop.append("PFMET_LeptonScale")
+            df = df.Redefine("PFMET_pt", "PFMET_ElectronScale[0]")
+            df = df.Redefine("PFMET_phi", "PFMET_ElectronScale[1]")
+            self.columnsToDrop.append("PFMET_ElectronScale")
         else:
             df = df.Define(
-                "MET_LeptonScale",
+                "MET_ElectronScale",
                 "CorrectMETElectron(Lepton_pt, Lepton_newPt, Lepton_phi, Lepton_eta, Lepton_pdgId, MET_pt, MET_phi)"
             )
-            df = df.Redefine("MET_pt", "MET_LeptonScale[0]")
-            df = df.Redefine("MET_phi", "MET_LeptonScale[1]")
-            self.columnsToDrop.append("MET_LeptonScale")
+            df = df.Redefine("MET_pt", "MET_ElectronScale[0]")
+            df = df.Redefine("MET_phi", "MET_ElectronScale[1]")
+            self.columnsToDrop.append("MET_ElectronScale")
 
         self.columnsToDrop.append("PuppiMET_ElectronScale")
         
