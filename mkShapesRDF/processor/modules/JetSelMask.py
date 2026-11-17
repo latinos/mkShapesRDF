@@ -28,11 +28,11 @@ class JetSelMask(Module):
                     self.pathToJson = {}
                     self.globalTag = {}
                     for run in self.runPeriods:
-                        self.pathToJson[run] = JetMakerCfg[self.year][run]["vetomap"]
-                        self.globalTag[run] = JetMakerCfg[self.year][run]["vetokey"]
+                        self.pathToJson[run] = JetMakerCfg[self.year][run]['jet']["vetomap"]
+                        self.globalTag[run] = JetMakerCfg[self.year][run]['jet']["vetokey"]
                 else:
-                    self.pathToJson = JetMakerCfg[self.year]["vetomap"]
-                    self.globalTag = JetMakerCfg[self.year]["vetokey"]
+                    self.pathToJson = JetMakerCfg[self.year]['jet']["vetomap"]
+                    self.globalTag = JetMakerCfg[self.year]['jet']["vetokey"]
         
     def runModule(self, df, values):
 
@@ -154,7 +154,7 @@ class JetSelMask(Module):
         )""")
 
         df = df.Define("CleanJet_geometrical", "! reduce_cond_any(dR2 < (0.3*0.3), CorrectedJet_pt.size(), Lepton_pt[LeptonMask_JC].size())")
-        df = df.Define("jetIdCut", f"Take(Jet_jetId, CorrectedJet_jetIdx) >= {self.jetId}")
+        df = df.Define("jetIdCut", f"((Take(Jet_jetId, CorrectedJet_jetIdx) & {self.jetId}) == {self.jetId})")
 
         df = df.Define("CleanJetMask", f"(CorrectedJet_pt >= {self.minPt} && abs(CorrectedJet_eta) <= {self.maxEta} && jetIdCut && CleanJet_geometrical)")
 

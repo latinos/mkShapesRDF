@@ -11,3 +11,4 @@ Scripts for shapeAnalaysis
     mkPlot
     mkDatacards
     mkCutFlow
+    mkPostFitHistos

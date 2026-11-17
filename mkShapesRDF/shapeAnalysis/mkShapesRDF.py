@@ -528,19 +528,19 @@ def main():
         for fileToMerge in filesToMerge:
             os.system(f"echo {fileToMerge} >> filesToMerge_{outputFile}.txt")
         #process = subprocess.Popen(
-        #    f"hadd2 -j 10 {outputFileMap} @filesToMerge_{outputFile}.txt; \
+        #    f"hadd2 -fk -j 10 {outputFileMap} @filesToMerge_{outputFile}.txt; \
         #    rm filesToMerge_{outputFile}.txt",
         #    shell=True,
         #)
         if "/eos/user" in outputFolder or "/ceph/" in outputFolder:
             process = subprocess.Popen(
-                f'hadd2 -j 10 {outputFolder}/{outputFile} @filesToMerge_{outputFile}.txt; \
+                f'hadd2 -fk -j 10 {outputFolder}/{outputFile} @filesToMerge_{outputFile}.txt; \
                 rm filesToMerge_{outputFile}.txt',
                 shell=True,
             )
         else:
             process = subprocess.Popen(
-                f'hadd2 -j 10 {folder}/{outputFolder}/{outputFile} @filesToMerge_{outputFile}.txt; \
+                f'hadd2 -fk -j 10 {folder}/{outputFolder}/{outputFile} @filesToMerge_{outputFile}.txt; \
                 rm filesToMerge_{outputFile}.txt',
                 shell=True,
             )
