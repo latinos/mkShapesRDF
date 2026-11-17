@@ -36,6 +36,10 @@ class L2TightSelection(Module):
         l2tight_selection = f"({lepton1_selection}) && ({lepton2_selection})"
         
         df = df.Filter(f"{l2tight_selection}")
-        
+
+        # Remove temporary corrected AK4/AK8 jet collections
+        df = df.DropColumns("nCorrectedJet").DropColumns("CorrectedJet*").DropColumns("CleanJet_correctedjetIdx")
+        df = df.DropColumns("nCorrectedFatJet").DropColumns("CorrectedFatJet*").DropColumns("CleanFatJet_correctedjetIdx")
+
         return df
 
