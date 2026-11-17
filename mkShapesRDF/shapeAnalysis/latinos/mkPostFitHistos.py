@@ -64,11 +64,6 @@ class LawnMower:
  
     # _____________________________________________________________________________
     def makePostFitPlot(self):
-
-        print("=========================")
-        print("==== makePostFitPlot ====")
-        print("=========================")
-        
         
         fileIn = ROOT.TFile(self._inputFileCombine, "READ")
 
@@ -457,7 +452,7 @@ class LawnMower:
             myhisto.SetBinError(iBin,newerror)
 
 
-if __name__ == '__main__':
+def main():
     sys.argv = argv
     
     print(colored(r'''
@@ -570,6 +565,10 @@ if __name__ == '__main__':
     
     print('... and now closing ...')
         
+
+if __name__ == '__main__':
+    main()
+
        
        
        
