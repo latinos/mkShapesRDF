@@ -104,12 +104,6 @@ class LeptonScaleSmearing(Module):
                 'correction::Correction::Ref elecset_smear;'
             )
 
-            #ROOT.gROOT.ProcessLine(
-            #    f'auto cset = cset_{run};'
-            #    f'correction::CompoundCorrection::Ref elecset_scale = elecset_scale_{run};'
-            #    f'auto elecset_smear = elecset_{run};'
-            #) ## Temporary for initialization
-
             for run in self.runPeriods:
                 text_to_add += f"""
                 if (run_period == {run}) {{
@@ -144,65 +138,112 @@ class LeptonScaleSmearing(Module):
                                                bool is_data,
                                                int run_period=-1)
                 {
-                    
-                    float tmpScale_mc;
-                    RVecF Lepton_newPt = Lepton_pt;
-                    RVecF Lepton_newPt_ScaleUp = Lepton_pt;
-                    RVecF Lepton_newPt_ScaleDn = Lepton_pt;
-                    RVecF Lepton_newPt_ResUp = Lepton_pt;
-                    RVecF Lepton_newPt_ResDn = Lepton_pt;
-
                     static TRandom3 rng(125);
-                    
+
                     """ + text_to_add + """
 
-                    std::vector<RVecF> results = {Lepton_newPt, Lepton_newPt_ScaleUp, Lepton_newPt_ScaleDn, Lepton_newPt_ResUp, Lepton_newPt_ResDn};
-                    
-                    if (is_data){
-                        for (unsigned int i=0; i<Lepton_pt.size(); i++)
+                    const unsigned int n_leptons = Lepton_pt.size();
+                    RVecF Lepton_newPt = Lepton_pt;
+
+                    if (is_data)
+                    {
+                        // Apply data scale corrections per lepton flavour
+                        for (unsigned int i = 0; i < n_leptons; ++i)
                         {
-                            if (abs(Lepton_pdgId[i])==13)
+                            const int abs_pdg = std::abs(Lepton_pdgId[i]);
+                            if (abs_pdg == 13)
                             {
                                 Lepton_newPt[i] = pt_scale(is_data, Lepton_pt[i], Lepton_eta[i], Lepton_phi[i], Muon_charge[Lepton_muonIdx[i]]);
                             }
-                            else if (abs(Lepton_pdgId[i])==11)
+                            else if (abs_pdg == 11)
                             {
-                                float sc_eta = Lepton_eta[i] + Electron_deltaEtaSC[Lepton_electronIdx[i]];
-                                Lepton_newPt[i] = ele_scale(run, sc_eta, Electron_r9[Lepton_electronIdx[i]], Lepton_pt[i], (float)Electron_seedGain[Lepton_electronIdx[i]]);
+                                const float sc_eta = Lepton_eta[i] + Electron_deltaEtaSC[Lepton_electronIdx[i]];
+                                Lepton_newPt[i] = ele_scale(run, sc_eta, Electron_r9[Lepton_electronIdx[i]], Lepton_pt[i], static_cast<float>(Electron_seedGain[Lepton_electronIdx[i]]));
                             }
                         }
-                        results[0] = Lepton_newPt;
-                    }else{
-                        for (unsigned int i=0; i<Lepton_pt.size(); i++)
-                        {
-                            tmpScale_mc = -99.9;
-                            if (abs(Lepton_pdgId[i])==13)
-                            {
-                                tmpScale_mc = pt_scale(is_data, Lepton_pt[i], Lepton_eta[i], Lepton_phi[i], Muon_charge[Lepton_muonIdx[i]]);
-                                Lepton_newPt[i] = pt_resol(tmpScale_mc, Lepton_eta[i], (float)Muon_nTrackerLayers[Lepton_muonIdx[i]]);
-                                Lepton_newPt_ScaleUp[i] = pt_scale_var(Lepton_newPt[i], Lepton_eta[i], Lepton_phi[i], Muon_charge[Lepton_muonIdx[i]], "up");
-                                Lepton_newPt_ScaleDn[i] = pt_scale_var(Lepton_newPt[i], Lepton_eta[i], Lepton_phi[i], Muon_charge[Lepton_muonIdx[i]], "dn");
-                                Lepton_newPt_ResUp[i] = pt_resol_var(tmpScale_mc, Lepton_newPt[i], Lepton_eta[i], "up");
-                                Lepton_newPt_ResDn[i] = pt_resol_var(tmpScale_mc, Lepton_newPt[i], Lepton_eta[i], "dn");
-                            }
-                            else if (abs(Lepton_pdgId[i])==11)
-                            {
-                                float sc_eta = Lepton_eta[i] + Electron_deltaEtaSC[Lepton_electronIdx[i]];
-                                double random_number = rng.Gaus(0.0, 1.0);
-                                Lepton_newPt[i] = ele_smear(Lepton_pt[i], Electron_r9[Lepton_electronIdx[i]], sc_eta, random_number);
-                                Lepton_newPt_ScaleUp[i] = ele_unc_scale(run, sc_eta, Electron_r9[Lepton_electronIdx[i]], Lepton_pt[i], (float)Electron_seedGain[Lepton_electronIdx[i]], Lepton_newPt[i], "up");
-                                Lepton_newPt_ScaleDn[i] = ele_unc_scale(run, sc_eta, Electron_r9[Lepton_electronIdx[i]], Lepton_pt[i], (float)Electron_seedGain[Lepton_electronIdx[i]], Lepton_newPt[i], "dn");
-                                Lepton_newPt_ResUp[i] = ele_unc_smear(Lepton_pt[i], Electron_r9[Lepton_electronIdx[i]], sc_eta, random_number, "up");
-                                Lepton_newPt_ResDn[i] = ele_unc_smear(Lepton_pt[i], Electron_r9[Lepton_electronIdx[i]], sc_eta, random_number, "dn");
-                            }
-                        }
-                        results[0] = Lepton_newPt;
-                        results[1] = Lepton_newPt_ScaleUp;
-                        results[2] = Lepton_newPt_ScaleDn;
-                        results[3] = Lepton_newPt_ResUp;
-                        results[4] = Lepton_newPt_ResDn;                    
+
+                        // Keep variation slots populated with nominal corrected pT in data
+                        return {
+                            Lepton_newPt,
+                            Lepton_newPt, Lepton_newPt, Lepton_newPt, Lepton_newPt,
+                            Lepton_newPt, Lepton_newPt, Lepton_newPt, Lepton_newPt
+                        };
                     }
-                    return results;
+
+                    // Store per-lepton MC scale factors and Gaussian draws so each lepton keeps its own values
+                    RVecF muon_scale_mc(n_leptons, -99.9f);
+                    RVecF ele_rand_gaus(n_leptons, 0.0f);
+
+                    // Step 1: Compute nominal corrected pT for both flavours before evaluating variations
+                    for (unsigned int i = 0; i < n_leptons; ++i)
+                    {
+                        const int abs_pdg = std::abs(Lepton_pdgId[i]);
+                        if (abs_pdg == 13)
+                        {
+                            const float scale_mc = pt_scale(is_data, Lepton_pt[i], Lepton_eta[i], Lepton_phi[i], Muon_charge[Lepton_muonIdx[i]]);
+                            muon_scale_mc[i] = scale_mc;
+                            Lepton_newPt[i] = pt_resol(scale_mc, Lepton_eta[i], static_cast<float>(Muon_nTrackerLayers[Lepton_muonIdx[i]]));
+                        }
+                        else if (abs_pdg == 11)
+                        {
+                            const float sc_eta = Lepton_eta[i] + Electron_deltaEtaSC[Lepton_electronIdx[i]];
+                            const float z = static_cast<float>(rng.Gaus(0.0, 1.0));
+                            ele_rand_gaus[i] = z;
+                            Lepton_newPt[i] = ele_smear(Lepton_pt[i], Electron_r9[Lepton_electronIdx[i]], sc_eta, z);
+                        }
+                    }
+
+                    // Initialize variation vectors from nominal corrected pT so the non-varied flavour stays at nominal
+                    RVecF Lepton_newPt_muoScaleUp = Lepton_newPt;
+                    RVecF Lepton_newPt_muoScaleDn = Lepton_newPt;
+                    RVecF Lepton_newPt_muoResUp   = Lepton_newPt;
+                    RVecF Lepton_newPt_muoResDn   = Lepton_newPt;
+                    RVecF Lepton_newPt_eleScaleUp = Lepton_newPt;
+                    RVecF Lepton_newPt_eleScaleDn = Lepton_newPt;
+                    RVecF Lepton_newPt_eleResUp   = Lepton_newPt;
+                    RVecF Lepton_newPt_eleResDn   = Lepton_newPt;
+
+                    // Step 2: Apply scale and resolution variations starting from the corrected nominal pT
+                    for (unsigned int i = 0; i < n_leptons; ++i)
+                    {
+                        const int abs_pdg = std::abs(Lepton_pdgId[i]);
+                        if (abs_pdg == 13)
+                        {
+                            const int m_idx = Lepton_muonIdx[i];
+                            const float pt_corr = Lepton_newPt[i];
+                            const float scale_mc = muon_scale_mc[i];
+
+                            Lepton_newPt_muoScaleUp[i] = pt_scale_var(pt_corr, Lepton_eta[i], Lepton_phi[i], Muon_charge[m_idx], "up");
+                            Lepton_newPt_muoScaleDn[i] = pt_scale_var(pt_corr, Lepton_eta[i], Lepton_phi[i], Muon_charge[m_idx], "dn");
+                            Lepton_newPt_muoResUp[i]   = pt_resol_var(scale_mc, pt_corr, Lepton_eta[i], "up");
+                            Lepton_newPt_muoResDn[i]   = pt_resol_var(scale_mc, pt_corr, Lepton_eta[i], "dn");
+                        }
+                        else if (abs_pdg == 11)
+                        {
+                            const int e_idx = Lepton_electronIdx[i];
+                            const float sc_eta = Lepton_eta[i] + Electron_deltaEtaSC[e_idx];
+                            const float pt_corr = Lepton_newPt[i];
+                            const double z = static_cast<double>(ele_rand_gaus[i]);
+
+                            Lepton_newPt_eleScaleUp[i] = ele_unc_scale(run, sc_eta, Electron_r9[e_idx], Lepton_pt[i], static_cast<float>(Electron_seedGain[e_idx]), pt_corr, "up");
+                            Lepton_newPt_eleScaleDn[i] = ele_unc_scale(run, sc_eta, Electron_r9[e_idx], Lepton_pt[i], static_cast<float>(Electron_seedGain[e_idx]), pt_corr, "dn");
+                            Lepton_newPt_eleResUp[i]   = ele_unc_smear(Lepton_pt[i], Electron_r9[e_idx], sc_eta, z, "up");
+                            Lepton_newPt_eleResDn[i]   = ele_unc_smear(Lepton_pt[i], Electron_r9[e_idx], sc_eta, z, "dn");
+                        }
+                    }
+
+                    // Preserve exact index order expected by downstream RDataFrame column definitions
+                    return {
+                        Lepton_newPt,
+                        Lepton_newPt_muoScaleUp,
+                        Lepton_newPt_muoScaleDn,
+                        Lepton_newPt_muoResUp,
+                        Lepton_newPt_muoResDn,
+                        Lepton_newPt_eleScaleUp,
+                        Lepton_newPt_eleScaleDn,
+                        Lepton_newPt_eleResUp,
+                        Lepton_newPt_eleResDn
+                    };
                 }
                 """
             )
@@ -264,20 +305,36 @@ class LeptonScaleSmearing(Module):
         self.columnsToDrop.append("Lepton_newPt")
         if not self.isData:
             df = df.Define(
-                "Lepton_pt_ScaleUp",
+                "Lepton_pt_muoScaleUp",
                 "Lepton_ScaleSmearing[1]"
             )
             df = df.Define(
-                "Lepton_pt_ScaleDo",
+                "Lepton_pt_muoScaleDo",
                 "Lepton_ScaleSmearing[2]"
 	        )
             df = df.Define(
-                "Lepton_pt_ResUp",
+                "Lepton_pt_muoResUp",
                 "Lepton_ScaleSmearing[3]"
 	        )
             df = df.Define(
-                "Lepton_pt_ResDo",
+                "Lepton_pt_muoResDo",
                 "Lepton_ScaleSmearing[4]"
+	        )
+            df = df.Define(
+                "Lepton_pt_eleScaleUp",
+                "Lepton_ScaleSmearing[5]"
+            )
+            df = df.Define(
+                "Lepton_pt_eleScaleDo",
+                "Lepton_ScaleSmearing[6]"
+	        )
+            df = df.Define(
+                "Lepton_pt_eleResUp",
+                "Lepton_ScaleSmearing[7]"
+	        )
+            df = df.Define(
+                "Lepton_pt_eleResDo",
+                "Lepton_ScaleSmearing[8]"
 	        )
 
             #### Vary lepton pT for the following l2kin, l3kin, ....
@@ -285,15 +342,27 @@ class LeptonScaleSmearing(Module):
             tags = ["up", "do"]
             df = df.Vary(
                 "Lepton_pt",
-                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_ScaleUp, Lepton_pt_ScaleDo}",
+                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_muoScaleUp, Lepton_pt_muoScaleDo}",
                 ["up", "do"],
-                "leptonScale"
+                "muonScale"
             )
             df = df.Vary(
                 "Lepton_pt",
-                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_ResUp, Lepton_pt_ResDo}",
+                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_muoResUp, Lepton_pt_muoResDo}",
                 ["up", "do"],
-                "leptonResolution"
+                "muonResolution"
+            )
+            df = df.Vary(
+                "Lepton_pt",
+                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_eleScaleUp, Lepton_pt_eleScaleDo}",
+                ["up", "do"],
+                "electronScale"
+            )
+            df = df.Vary(
+                "Lepton_pt",
+                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_eleResUp, Lepton_pt_eleResDo}",
+                ["up", "do"],
+                "electronResolution"
             )
 
         df = df.DropColumns("Lepton_ScaleSmearing")
