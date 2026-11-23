@@ -134,11 +134,15 @@ class LeptonScaleSmearing(Module):
                                                RVecF Electron_r9,
                                                RVecI Lepton_electronIdx,
                                                RVecF Electron_deltaEtaSC,
+                                               ULong64_t event,
+                                               UInt_t luminosityBlock,
                                                float run,
                                                bool is_data,
                                                int run_period=-1)
                 {
-                    static TRandom3 rng(125);
+                    const UInt_t seed = static_cast<UInt_t>(125 + event + luminosityBlock * 100000);
+                    TRandom3 rng(seed);
+                    if (gRandom) gRandom->SetSeed(seed);
 
                     """ + text_to_add + """
 
@@ -295,7 +299,7 @@ class LeptonScaleSmearing(Module):
         print(isData)
         df = df.Define(
             "Lepton_ScaleSmearing",
-            f"doLeptonScale(Lepton_pt, Lepton_phi, Lepton_eta, Muon_charge, Lepton_pdgId, Lepton_muonIdx, Muon_nTrackerLayers,  Electron_seedGain, Electron_r9, Lepton_electronIdx, Electron_deltaEtaSC, run, {isData}, run_period)"
+            f"doLeptonScale(Lepton_pt, Lepton_phi, Lepton_eta, Muon_charge, Lepton_pdgId, Lepton_muonIdx, Muon_nTrackerLayers,  Electron_seedGain, Electron_r9, Lepton_electronIdx, Electron_deltaEtaSC, event, luminosityBlock, run, {isData}, run_period)"
         )
 
         df = df.Define(
@@ -304,68 +308,57 @@ class LeptonScaleSmearing(Module):
         )
         self.columnsToDrop.append("Lepton_newPt")
         if not self.isData:
-            df = df.Define(
-                "Lepton_pt_muoScaleUp",
-                "Lepton_ScaleSmearing[1]"
-            )
-            df = df.Define(
-                "Lepton_pt_muoScaleDo",
-                "Lepton_ScaleSmearing[2]"
-	        )
-            df = df.Define(
-                "Lepton_pt_muoResUp",
-                "Lepton_ScaleSmearing[3]"
-	        )
-            df = df.Define(
-                "Lepton_pt_muoResDo",
-                "Lepton_ScaleSmearing[4]"
-	        )
-            df = df.Define(
-                "Lepton_pt_eleScaleUp",
-                "Lepton_ScaleSmearing[5]"
-            )
-            df = df.Define(
-                "Lepton_pt_eleScaleDo",
-                "Lepton_ScaleSmearing[6]"
-	        )
-            df = df.Define(
-                "Lepton_pt_eleResUp",
-                "Lepton_ScaleSmearing[7]"
-	        )
-            df = df.Define(
-                "Lepton_pt_eleResDo",
-                "Lepton_ScaleSmearing[8]"
-	        )
+            df = df.Define("Lepton_pt_muoScaleUp", "Lepton_ScaleSmearing[1]")
+            df = df.Define("Lepton_pt_muoScaleDo", "Lepton_ScaleSmearing[2]")
+            df = df.Define("Lepton_pt_muoResUp", "Lepton_ScaleSmearing[3]")
+            df = df.Define("Lepton_pt_muoResDo", "Lepton_ScaleSmearing[4]")
+            df = df.Define("Lepton_pt_eleScaleUp", "Lepton_ScaleSmearing[5]")
+            df = df.Define("Lepton_pt_eleScaleDo", "Lepton_ScaleSmearing[6]")
+            df = df.Define("Lepton_pt_eleResUp", "Lepton_ScaleSmearing[7]")
+            df = df.Define("Lepton_pt_eleResDo", "Lepton_ScaleSmearing[8]")
 
-            #### Vary lepton pT for the following l2kin, l3kin, ....
+        # Define the sorting index
+        df = df.Define("Lepton_sorting", "sortedIndices(Lepton_newPt)")
 
-            tags = ["up", "do"]
-            df = df.Vary(
-                "Lepton_pt",
-                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_muoScaleUp, Lepton_pt_muoScaleDo}",
-                ["up", "do"],
-                "muonScale"
-            )
-            df = df.Vary(
-                "Lepton_pt",
-                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_muoResUp, Lepton_pt_muoResDo}",
-                ["up", "do"],
-                "muonResolution"
-            )
-            df = df.Vary(
-                "Lepton_pt",
-                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_eleScaleUp, Lepton_pt_eleScaleDo}",
-                ["up", "do"],
-                "electronScale"
-            )
-            df = df.Vary(
-                "Lepton_pt",
-                "ROOT::RVec<ROOT::RVecF>{Lepton_pt_eleResUp, Lepton_pt_eleResDo}",
-                ["up", "do"],
-                "electronResolution"
-            )
+        # Define the sorted nominal columns
+        df = df.Define("Lepton_pt_sorted", "Take(Lepton_newPt, Lepton_sorting)")
+        df = df.Define("Lepton_eta_sorted", "Take(Lepton_eta, Lepton_sorting)")
+        df = df.Define("Lepton_phi_sorted", "Take(Lepton_phi, Lepton_sorting)")
+        df = df.Define("Lepton_pdgId_sorted", "static_cast<ROOT::VecOps::RVec<int>>(Take(Lepton_pdgId, Lepton_sorting))")
 
-        df = df.DropColumns("Lepton_ScaleSmearing")
+        if not self.isData:
+            systematics = {
+                "muonScale": ["Lepton_pt_muoScaleUp", "Lepton_pt_muoScaleDo"],
+                "muonResolution": ["Lepton_pt_muoResUp", "Lepton_pt_muoResDo"],
+                "electronScale": ["Lepton_pt_eleScaleUp", "Lepton_pt_eleScaleDo"],
+                "electronResolution": ["Lepton_pt_eleResUp", "Lepton_pt_eleResDo"]
+            }
+
+            for syst, (varUp, varDo) in systematics.items():
+                # Define sorted versions of the pT variations
+                df = df.Define(f"{varUp}_sorted", f"Take({varUp}, Lepton_sorting)")
+                df = df.Define(f"{varDo}_sorted", f"Take({varDo}, Lepton_sorting)")
+
+                # Define sorted versions of eta, phi, pdgId (using nominal sorted as they don't change per variation)
+                df = df.Define(f"Lepton_eta_{syst}Up_sorted", "Lepton_eta_sorted")
+                df = df.Define(f"Lepton_eta_{syst}Do_sorted", "Lepton_eta_sorted")
+                df = df.Define(f"Lepton_phi_{syst}Up_sorted", "Lepton_phi_sorted")
+                df = df.Define(f"Lepton_phi_{syst}Do_sorted", "Lepton_phi_sorted")
+                df = df.Define(f"Lepton_pdgId_{syst}Up_sorted", "Lepton_pdgId_sorted")
+                df = df.Define(f"Lepton_pdgId_{syst}Do_sorted", "Lepton_pdgId_sorted")
+
+                # Apply Vary to all columns for this systematic
+                tags = ["up", "do"]
+                df = df.Vary("Lepton_pt",    f"ROOT::RVec<ROOT::RVecF>{{ {varUp}_sorted, {varDo}_sorted }}", tags, syst)
+                df = df.Vary("Lepton_eta",   f"ROOT::RVec<ROOT::RVecF>{{ Lepton_eta_{syst}Up_sorted, Lepton_eta_{syst}Do_sorted }}", tags, syst)
+                df = df.Vary("Lepton_phi",   f"ROOT::RVec<ROOT::RVecF>{{ Lepton_phi_{syst}Up_sorted, Lepton_phi_{syst}Do_sorted }}", tags, syst)
+                df = df.Vary("Lepton_pdgId", f"ROOT::RVec<ROOT::RVecF>{{ Lepton_pdgId_{syst}Up_sorted, Lepton_pdgId_{syst}Do_sorted }}", tags, syst)
+
+        ### Redefine nominals
+        df = df.Redefine("Lepton_pt", "Lepton_pt_sorted")
+        df = df.Redefine("Lepton_eta", "Lepton_eta_sorted")
+        df = df.Redefine("Lepton_phi", "Lepton_phi_sorted")
+        df = df.Redefine("Lepton_pdgId", "Lepton_pdgId_sorted")
 
         ### Recompute MET with the corrected lepton-pT
         df = df.Define(
@@ -394,47 +387,21 @@ class LeptonScaleSmearing(Module):
         df = df.Redefine("PuppiMET_pt", "PuppiMET_LeptonScale[0]")
         df = df.Redefine("PuppiMET_phi", "PuppiMET_LeptonScale[1]")
 
-        #### Re-order lepton-pT again
+        df = df.Define("Lepton_pdgId_fixed", "static_cast<ROOT::VecOps::RVec<int>>(Lepton_pdgId)")
+        df = df.Redefine("Lepton_pdgId", "Lepton_pdgId_fixed")
+        self.columnsToDrop.append("Lepton_pdgId_fixed")
 
-        # Capture only flat per-lepton arrays. The permutation, correction
-        # temporaries, and already sorted products must never enter this loop.
-        # mRDF propagates a nominal Redefine to its registered variations, so
-        # those generated columns must not also be reordered independently.
-        varied_columns = set(df.GetVariedColumns(df.GetColumnNames()))
-        excluded_columns = set(self.columnsToDrop) | varied_columns | {
-            "Lepton_pt",
-            "Lepton_sorting",
-            "Lepton_rochesterSF",
-        }
-        lepton_columns = []
-        for branch in df.GetColumnNames():
-            if (
-                branch.startswith("Lepton_") or branch == "isLoose"
-            ) and branch not in excluded_columns:
-                column_type = df.df.GetColumnType(branch)
-                if column_type.count("<") == 1 and (
-                    "RVec<" in column_type
-                    or column_type.startswith(("vector<", "std::vector<"))
-                ):
-                    lepton_columns.append(branch)
+        # Collect columns to drop
+        self.columnsToDrop.extend([
+            "Lepton_sorting", "Lepton_pt_sorted", "Lepton_eta_sorted",
+            "Lepton_phi_sorted", "Lepton_pdgId_sorted", "Lepton_ScaleSmearing"
+        ])
+        # Also drop the unsorted variation columns defined earlier
+        if not self.isData:
+            for syst in systematics.values():
+                self.columnsToDrop.extend(syst)
 
-        df = df.Define("Lepton_sorting",     "sortedIndices(Lepton_newPt)")
-        df = df.Define("Lepton_rochesterSF", "Take(Lepton_newPt/Lepton_pt, Lepton_sorting)")
-        df = df.Redefine("Lepton_pt",        "Take(Lepton_newPt, Lepton_sorting)")
-
-        # Lepton_newPt has no leptonScale/leptonResolution variations. Reorder
-        # the existing pT variations explicitly with the nominal permutation;
-        # downstream kinematics then see the same object associations.
-        for branch in df.GetVariedColumns(["Lepton_pt"]):
-            df = df.Define(
-                branch, f"Take({branch}, Lepton_sorting)", excludeVariations=["*"]
-            )
-        for branch in lepton_columns:
-            df = df.Redefine(branch, f"Take({branch}, Lepton_sorting)")
-
-        self.columnsToDrop.append("Lepton_sorting")
-
-        for dropBranch in self.columnsToDrop:
-            df = df.DropColumns(dropBranch)
-
+        for col in self.columnsToDrop:
+            if col in df.GetColumnNames():
+                df = df.DropColumns(col)
         return df

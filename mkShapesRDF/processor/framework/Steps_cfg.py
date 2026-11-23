@@ -95,9 +95,7 @@ Steps = {
             "puW",
             "formulasMC",
             "l2tight",
-            "electronScale_mc",
-            "muonScale_mc",
-            #"leptonScale_mc",
+            "leptonScale_mc",
             "l2Kin",
             "l3Kin",
             "l4Kin",
@@ -2323,29 +2321,11 @@ Steps = {
     
     "leptonScale_mc": {
         "isChain": False,
-        "do4MC": False,
-        "do4Data": True,
+        "do4MC": True,
+        "do4Data": False,
         "import": "mkShapesRDF.processor.modules.LeptonScaleSmearing",
         "declare": "LeptonSS = lambda : LeptonScaleSmearing('RPLME_CMSSW', False, 'RPLME_FW')",
         "module": "LeptonSS()",
-    },
-
-    "electronScale_mc": {
-        "isChain": False,
-        "do4MC": False,
-        "do4Data": True,
-        "import": "mkShapesRDF.processor.modules.ElectronScaleSmearing",
-        "declare": "ElectronSS = lambda : ElectronScaleSmearing('RPLME_CMSSW', False, 'RPLME_FW')",
-        "module": "ElectronSS()",
-    },
-
-    "muonScale_mc": {
-        "isChain": False,
-        "do4MC": False,
-        "do4Data": True,
-        "import": "mkShapesRDF.processor.modules.MuonScaleSmearing",
-        "declare": "MuonSS = lambda : MuonScaleSmearing('RPLME_CMSSW', False, 'RPLME_FW')",
-        "module": "MuonSS()",
     },
     
     "formulasDATA": {
