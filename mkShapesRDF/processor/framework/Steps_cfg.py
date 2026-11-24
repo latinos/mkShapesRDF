@@ -809,7 +809,7 @@ Steps = {
             "finalSnapshot_DATA",
         ],
     },
-    "MCl1loose2024v15__MCCorr2024v15__JERFrom23BPix__l1tight": {
+    "MCl1loose2024v15__MCCorr2024v15JetScaling__l1tight": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
@@ -843,7 +843,7 @@ Steps = {
             "finalSnapshot_JES",
         ]
     },
-    "MCl2loose2024v15__MCCorr2024v15__JERFrom23BPix__l2tight": {
+    "MCl2loose2024v15__MCCorr2024v15JetScaling__l2tight": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
@@ -1775,7 +1775,7 @@ Steps = {
     },
 
     # 2024
-    "MCl1loose2024v15__MCCorr2024v15__JERFrom23BPix__fakeSel": {
+    "MCl1loose2024v15__MCCorr2024v15JetScaling__fakeSel": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
