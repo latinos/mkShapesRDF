@@ -414,7 +414,7 @@ Steps = {
         ],
     },
 
-    "MCl2loose2024v15__MCCorr2024v15__JERFrom23BPix__l2tight": {
+    "MCl2loose2024v15__MCCorr2024v15__l2tight": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
@@ -446,7 +446,7 @@ Steps = {
         ]
     },
 
-    "MCl1loose2024v15__MCCorr2024v15__JERFrom23BPix__fakeSel": {
+    "MCl1loose2024v15__MCCorr2024v15__fakeSel": {
         "isChain" : True,
         "do4MC" : True,
         "do4Data" : False,
