@@ -1484,7 +1484,7 @@ ElectronWP = {
                 },
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-12-15/electronSS_EtDependent.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/Run3-25Prompt-Summer24-NanoAODv15/2026-06-26/electronSS_EtDependent.json.gz",
     },
     "FullRunIIIv15": { ### Copy from 2024 configuration. To be modified once dedicated scale factors available
         "VetoObjWP": {
@@ -2014,7 +2014,7 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2022v12/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22CDSep23-Summer22-NanoAODv12/2025-08-14/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22CDSep23-Summer22-NanoAODv12/2026-06-18/muon_scalesmearing.json.gz",
     },
     "Full2022EEv12": {
         # ------------                                                                                                                                                  
@@ -2178,7 +2178,7 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22EFGSep23-Summer22EE-NanoAODv12/2025-08-14/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-22EFGSep23-Summer22EE-NanoAODv12/2026-06-18/muon_scalesmearing.json.gz",
     },
     "Full2023v12": {
         # ------------                                                                                                                                                  
@@ -2342,7 +2342,7 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2023v12/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },        
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23CSep23-Summer23-NanoAODv12/2025-08-14/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23CSep23-Summer23-NanoAODv12/2026-06-18/muon_scalesmearing.json.gz",
     },
     "Full2023BPixv12": {
         # ------------                                                                                                                                                  
@@ -2506,7 +2506,7 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2023BPixv12/cut_TightID_HWW_LoosePFIso_tthMVA_HWW/",
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23DSep23-Summer23BPix-NanoAODv12/2025-08-14/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-23DSep23-Summer23BPix-NanoAODv12/2026-06-18/muon_scalesmearing.json.gz",
     },
     "Full2024v15": {
         # ------------
@@ -2696,7 +2696,7 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_PNet/",  
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-11-27/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2026-06-18/muon_scalesmearing.json.gz",
     },
 
     "Full2025v15": {
@@ -2887,7 +2887,7 @@ MuonWP = {
                 #"fakeW": "data/fake_prompt_rates/Full2024v15/cut_TightID_HWW_LoosePFIso_PNet/",  
             },
         },
-        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-11-27/muon_scalesmearing.json.gz",
+        "ScaleAndSmearing" : "/cvmfs/cms-griddata.cern.ch/cat/metadata/MUO/Run3-25Prompt-Summer24-NanoAODv15/2026-10-27/muon_scalesmearing.json.gz",
     },    
     "FullRunIIIv15": {
         # ------------

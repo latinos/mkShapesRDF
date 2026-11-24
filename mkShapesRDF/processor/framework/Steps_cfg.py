@@ -2690,8 +2690,8 @@ Steps = {
     
     "leptonScale_mc": {
         "isChain": False,
-        "do4MC": False,
-        "do4Data": True,
+        "do4MC": True,
+        "do4Data": False,
         "import": "mkShapesRDF.processor.modules.LeptonScaleSmearing",
         "declare": "LeptonSS = lambda : LeptonScaleSmearing('RPLME_CMSSW', False, 'RPLME_FW')",
         "module": "LeptonSS()",
