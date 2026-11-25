@@ -107,7 +107,7 @@ JetMakerCfg = {
             "vetokey": "Summer24Prompt24_RunBCDEFGHI_V1",
             "jet_jerc": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2026-07-16/jet_jerc.json.gz",
             "jetId": {
-                "fatjet_jerc": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2026-07-16/jetid.json.gz",
+                "json": "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2026-07-16/jetid.json.gz",
                 "tight": "AK4PUPPI_Tight",
                 "tightleptonveto": "AK4PUPPI_TightLeptonVeto",
             },
