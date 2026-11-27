@@ -191,22 +191,6 @@ class JMECalculator(Module):
         maxDR       = 0.2
         maxDPT      = 3
         
-        # For 2023 pre-BPix, we have two sets of corrections based on the computing version.
-        # These conditions ensure that the correct set of corrections is applied.
-        if any(v in self.sampleName for v in ["v1", "v2", "v3"]) and not self.isMC and year == 'Full2023v12':
-            jecTag = self.JEC_era[0]
-        elif "v4" in self.sampleName and not self.isMC and year == 'Full2023v12':
-            jecTag = self.JEC_era[1]
-
-        # The same logic applies for 2022 post-EE data, where the condition is based on the run number.
-        if "22EE" in jsonFile and not self.isMC:
-            if 'Run2022E' in self.sampleName:
-                jecTag = self.JEC_era[0]
-            elif 'Run2022F' in self.sampleName:
-                jecTag = self.JEC_era[1]
-            elif 'Run2022G' in self.sampleName:
-                jecTag = self.JEC_era[2]
-
         print(f"AK4 final JEC tag: {jecTag}")
 
         # Define the CorrectedJet collection before applying the JEC/JER, as this is needed for the JetSelMask

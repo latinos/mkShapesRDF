@@ -7,7 +7,7 @@ frameworkPath = getFrameworkPath() + "mkShapesRDF"
 JetMakerCfg = {
     'Full2022v12': {
         "JEC": "Summer22_22Sep2023_V4_MC",
-        "JEC_data": "Summer22_22Sep2023_RunCD_V4_DATA",
+        "JEC_data": "Summer22_22Sep2023_V4_DATA",
         "JER": "Summer22_22Sep2023_JRV2_MC",
         "jer_smear": frameworkPath + "/processor/data/jer_smear/jer_smear_run3.json.gz",
         "jet": {
